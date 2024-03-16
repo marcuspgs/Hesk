@@ -257,6 +257,11 @@ if (isset($_POST['save']))
         {
             if ($v['use'])
             {
+                // Don't overwrite existing not used fields, but don't require them either if not required by category
+                if ( ! hesk_is_custom_field_in_category($k, $ticket['category'])) {
+                    $v['req'] = 0;
+                }
+
                 if ($v['type'] == 'checkbox')
                 {
                     $tmpvar[$k]='';
@@ -451,7 +456,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
                             $k_value = explode('<br />',$k_value);
                         }
 
-                        $v['req'] = $v['req']==2 ? '<span class="important">*</span>' : '';
+                        $v['req'] = ($v['req']==2 && hesk_is_custom_field_in_category($k, $ticket['category'])) ? '<span class="important">*</span>' : '';
 
                         switch ($v['type']) {
                             /* Radio box */
