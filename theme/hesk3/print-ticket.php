@@ -45,6 +45,12 @@ if (!defined('IN_SCRIPT')) {
             <td><?php echo $hesklang['subject']; ?>:</td>
             <td><b><?php echo $ticket['subject']; ?></b></td>
         </tr>
+        <?php if ($hesk_settings['sequential'] || $showStaffOnlyFields): ?>
+        <tr>
+            <td><?php echo $hesklang['seqid']; ?>:</td>
+            <td><?php echo $ticket['id']; ?></td>
+        </tr>
+        <?php endif; ?>
         <tr>
             <td><?php echo $hesklang['trackID']; ?>:</td>
             <td><?php echo $ticket['trackid']; ?></td>

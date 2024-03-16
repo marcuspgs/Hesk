@@ -501,6 +501,7 @@ function forgot_tid()
 	}
 
 	$tid_list = '';
+    $tid_list_html = '';
 	$name = '';
 
     $email_param = $hesk_settings['email_view_ticket'] ? '&e='.rawurlencode($email) : '';
@@ -514,13 +515,20 @@ $hesklang[subject]: "	. hesk_msgToPlain($my_ticket['subject'], 1, 0) . "
 $hesklang[status]: "	. hesk_get_status_name($my_ticket['status']) . "
 $hesk_settings[hesk_url]/ticket.php?track={$my_ticket['trackid']}{$email_param} " . "
 ";
+
+$tid_list_html .= "
+$hesklang[trackID]: "   . $my_ticket['trackid'] . "
+$hesklang[subject]: "   . hesk_msgToPlain($my_ticket['subject'], 1, 0) . "
+$hesklang[status]: "    . hesk_get_status_name($my_ticket['status']) . "
+<a href=\"$hesk_settings[hesk_url]/ticket.php?track={$my_ticket['trackid']}" . str_replace('&e=', '&amp;e=', $email_param) . "\">{$hesklang['view_ticket']}</a>
+";
 	}
 
 	/* Get e-mail message for customer */
 	list($msg, $html_msg) = hesk_getEmailMessage('forgot_ticket_id','',0,0,1);
     list($msg, $html_msg) = hesk_replace_email_tag('%%NAME%%', $name, $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%NUM%%', $num, $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%LIST_TICKETS%%', $tid_list, $msg, $html_msg, true);
+    list($msg, $html_msg) = hesk_replace_email_tag('%%LIST_TICKETS%%', $tid_list, $msg, $html_msg, true, $tid_list_html);
     list($msg, $html_msg) = hesk_replace_email_tag('%%SITE_TITLE%%',	hesk_msgToPlain($hesk_settings['site_title'], 1),	$msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%FIRST_NAME%%', hesk_full_name_to_first_name($name), $msg, $html_msg);

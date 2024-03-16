@@ -31,15 +31,22 @@ function hesk_insertAtCursor(myField, myValue) {
     }
 }
 
-function hesk_changeAll(myID) {
-  var d = document.form1;
-  var setTo = myID.checked ? true : false;
+function hesk_changeAll(myID, group = 0) {
+    var d = document.form1;
+    var setTo = myID.checked ? true : false;
 
-  for (var i = 0; i < d.elements.length; i++)
-  {
-    if(d.elements[i].type == 'checkbox' && d.elements[i].name != 'checkall')
+    for (var i = 0; i < d.elements.length; i++)
     {
-     d.elements[i].checked = setTo;
+        if(d.elements[i].type == 'checkbox' && d.elements[i].name != 'checkall')
+        {
+            if (group == 0)
+            {
+                d.elements[i].checked = setTo;
+            }
+            else if (d.elements[i].classList.contains(group))
+            {
+                d.elements[i].checked = setTo;
+            }
     }
   }
 }

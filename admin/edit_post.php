@@ -255,7 +255,7 @@ if (isset($_POST['save']))
         // Custom fields
         foreach ($hesk_settings['custom_fields'] as $k=>$v)
         {
-            if ($v['use'] && hesk_is_custom_field_in_category($k, $ticket['category']))
+            if ($v['use'])
             {
                 if ($v['type'] == 'checkbox')
                 {
@@ -444,7 +444,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
                 </div>
                 <?php
                 foreach ($hesk_settings['custom_fields'] as $k=>$v) {
-                    if ($v['use'] && $v['place']==0 && hesk_is_custom_field_in_category($k, $ticket['category']) ) {
+                    if ($v['use'] && $v['place']==0 && (strlen($ticket[$k]) || hesk_is_custom_field_in_category($k, $ticket['category'])) ) {
                         $k_value  = $ticket[$k];
 
                         if ($v['type'] == 'checkbox') {

@@ -389,10 +389,10 @@ if (true)
 
 		// Start ticket row
 		echo '
-		<tr title="'.$ticket['message'].'" class="'.($ticket['owner'] ? '' : 'new').($ticket['priority'] == 'critical' ? ' bg-critical' : '').'">
+		<tr title="'.$ticket['message'].'" class="status-'. $ticket['status'] .' '.($ticket['owner'] ? '' : 'new').($ticket['priority'] == 'critical' ? ' bg-critical' : '').'">
 		<td class="table__first_th sindu_handle">
             <div class="checkbox-custom">
-                <input type="checkbox" id="ticket_check_'.$ticket['id'].'" name="id[]" value="'.$ticket['id'].'">
+                <input type="checkbox" id="ticket_check_'.$ticket['id'].'" name="id[]" value="'.$ticket['id'].'" class="group' . $hesk_settings['hesk-group-count'] . '">
                 <label for="ticket_check_'.$ticket['id'].'">&nbsp;</label>
             </div>
         </td>
@@ -826,6 +826,13 @@ else
 function hesk_print_list_head()
 {
 	global $hesk_settings, $href, $query, $sort_possible, $hesklang;
+
+    // Make sure selecting works correctly when tickets are grouped
+    if (isset($hesk_settings['hesk-group-count'])) {
+        $hesk_settings['hesk-group-count']++;
+    } else {
+        $hesk_settings['hesk-group-count'] = 1;
+    }
 	?>
     <div class="table-wrap">
 	<table class="table sindu-table ticket-list sindu_origin_table" id="default-table">
@@ -833,8 +840,8 @@ function hesk_print_list_head()
     <tr>
         <th class="table__first_th sindu_handle">
             <div class="checkbox-custom">
-                <input type="checkbox" id="ticket_checkall" name="checkall" value="2" onclick="hesk_changeAll(this)">
-                <label for="ticket_checkall">&nbsp;</label>
+                <input type="checkbox" id="ticket_checkall<?php echo $hesk_settings['hesk-group-count']; ?>" name="checkall" value="2" onclick="hesk_changeAll(this, '<?php echo 'group' . $hesk_settings['hesk-group-count'] . "'"; ?>)">
+                <label for="ticket_checkall<?php echo $hesk_settings['hesk-group-count']; ?>">&nbsp;</label>
             </div>
         </th>
         <?php

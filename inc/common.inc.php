@@ -307,9 +307,15 @@ function hesk_unlink($file, $older_than=0)
 	return ( is_file($file) && ( ! $older_than || (time()-filectime($file)) > $older_than ) && @unlink($file) ) ? true : false;
 } // END hesk_unlink()
 
+
 function hesk_copy($old_path, $new_path) {
     return is_file($old_path) && @copy($old_path, $new_path);
-}
+} // END hesk_copy()
+
+
+function hesk_rename($old_path, $new_path) {
+    return is_file($old_path) && @rename($old_path, $new_path);
+} // END hesk_rename()
 
 
 function hesk_unlink_callable($file, $key, $older_than=0)
@@ -2783,8 +2789,8 @@ function hesk_full_name_to_first_name($full_name)
         }
     }
 
-    // If the first name doesn't have at least 3 chars, return the original
-    if(hesk_mb_strlen($first_name) < 3)
+    // If the first name doesn't have at least 2 chars, return the original
+    if(hesk_mb_strlen($first_name) < 2)
     {
         return $full_name;
     }

@@ -15,7 +15,7 @@
 <tr>
 <td width="50%" style="text-align:left;vertical-align:top">
  <ul class="nobullets">
- <li>Version: 3.4.3 from 8th April 2023</li>
+ <li>Version: 3.4.4 from 3rd March 2024</li>
  <li>Developed by: Klemen Stirn, Mike Koch</li>
  <li><a href="https://www.hesk.com">Help Desk Software HESK</a></li>
  <li><a href="https://www.phpjunkyard.com">Free PHP Scripts</a></li>
@@ -33,6 +33,28 @@
 </table>
 
 <h2>HESK 3 CHANGELOG</h2>
+
+<p><b>Changes in 3.4.4</b> - 3rd March 2024<br />
+- added "status-" selectors to the list of tickets table to make customization by status easier<br />
+- fix: list of tickets should have links HTML formatted in HTML emails<br />
+- fix: when changing a ticket category, category-specific custom fields should not be cleared of data<br />
+- fix: when printing a ticket, print also the sequential ID if enabled<br />
+- fix: possible duplicate custom field ID generated<br />
+- fix: use rename instead of copy to move temporary attachments<br />
+- fix: don't load the users page without the edit or view users permission<br />
+- fix: Uncaught TypeError when submitting a note with disabled attachments<br />
+- fix: allow Dynamic Properties in secimg class to avoid PHP 8.2/PHP 9 depreciation errors<br />
+- fix: private KB sub-category shows no articles if only private articles are inside<br />
+- fix: when parsing emails, check if attachments have attachments<br />
+- fix: when detecting first name, valid short first names are ignored<br />
+- fix: undefined $hesklang in an OAuth function<br />
+- fix: allow blob images in TinyMCE<br />
+- fix: reply drafts not deleted on slower requests<br />
+- fix: in grouped ticket lists, apply select all check marks on the selected grouping only<br />
+- fix: wrong status displayed of a resolved ticket to staff who cannot resolve tickets<br />
+- fix: time worked not updated when submitting notes in some cases<br />
+- fix: IMAP not respecting custom port setting<br />
+- updated third-party libraries</p>
 
 <p><b>Changes in 3.4.3</b> - 8th April 2023<br />
 - updates for PHP 8.2 depreciated functionality<br />
@@ -945,7 +967,7 @@
 
 <p>&nbsp;</p>
 
-<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2023. All rights reserved.<br />
+<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2024. All rights reserved.<br />
 &reg; HESK is a registered trademark of Klemen Stirn.</p>
 
 </div>

@@ -437,14 +437,6 @@ $("#toggleAllShow").click(function(event) {
     <form action="find_tickets.php" method="get" name="findby" id="findby" class="show_tickets form">
         <div class="search-option">
             <div class="search-name">
-                <?php echo $hesklang['s_for']; ?>
-            </div>
-            <div class="search-options">
-                <input class="form-control" type="text" name="q" <?php if (isset($q)) {echo 'value="'.$q.'"';} ?>>
-            </div>
-        </div>
-        <div class="search-option">
-            <div class="search-name">
                 <?php echo $hesklang['s_in']; ?>
             </div>
             <div class="search-options">
@@ -476,6 +468,14 @@ $("#toggleAllShow").click(function(event) {
                     <option value="notes" <?php if ($what=='notes') {echo 'selected="selected"';} ?> ><?php echo $hesklang['notes']; ?></option>
                     <option value="ip" <?php if ($what=='ip') {echo 'selected="selected"';} ?> ><?php echo $hesklang['IP_addr']; ?></option>
                 </select>
+            </div>
+        </div>    
+        <div class="search-option">
+            <div class="search-name">
+                <?php echo $hesklang['s_for']; ?>
+            </div>
+            <div class="search-options">
+                <input class="form-control" type="text" name="q" <?php if (isset($q)) {echo 'value="'.$q.'"';} ?>>
             </div>
         </div>
         <div id="topSubmit2" style="display:<?php echo $more2 ? 'none' : 'block' ; ?>">

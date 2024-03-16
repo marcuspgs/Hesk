@@ -358,6 +358,13 @@ function process_results($result,$tempdir)
     	if ( array_key_exists("Attachments", $result) )
         {
             $r["attachments"] = array_merge($r["attachments"], process_attachments($result["Attachments"]) );
+
+            // Attachments to attachments?
+            foreach ($result["Attachments"] as $att) {
+                if (isset($att["Attachments"])) {
+                    $r["attachments"] = array_merge($r["attachments"], process_attachments($att["Attachments"]) );
+                }
+            }
         }
 
     	// Save embedded files (for example embedded images)
@@ -372,6 +379,9 @@ function process_results($result,$tempdir)
 
     // Custom Hesk tag with tracking ID
     $r["X-Hesk-Tracking_ID"] = isset($result["X-Hesk-Tracking_ID"]) ? strtoupper($result["X-Hesk-Tracking_ID"]) : "";
+
+    // Do we have a priority tag?
+    $r["X-Priority"] = isset($result["X-Priority"]) ? strtolower($result["X-Priority"]) : "low";
 
 	return $r;
 }

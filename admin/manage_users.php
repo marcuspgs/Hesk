@@ -28,11 +28,13 @@ hesk_isLoggedIn();
 
 /* Check permissions for this feature */
 $can_man_users = hesk_checkPermission('can_man_users', false);
-$can_view_users = hesk_checkPermission('can_view_users', false);
 
 // This is a sensitive page, double-check user authentication
 if ($can_man_users) {
+    $can_view_users = true;
     hesk_check_user_elevation('manage_users.php');
+} else {
+    $can_view_users = hesk_checkPermission('can_view_users');
 }
 
 /* Possible user features */
@@ -330,7 +332,7 @@ if (hesk_dbNumRows($res) > 0)
 
                 while ($myuser = hesk_dbFetchAssoc($res)) {
 
-                    $can_manage_this_user = compare_user_permissions($myuser['id'], $myuser['isadmin'], explode(',', $myuser['categories']) , explode(',', $myuser['heskprivileges']));
+                    $can_manage_this_user = !$can_man_users ? false : compare_user_permissions($myuser['id'], $myuser['isadmin'], explode(',', $myuser['categories']) , explode(',', $myuser['heskprivileges']));
                     $can_view_this_user = ($can_manage_this_user || $can_view_users) ? true : false;
 
                     if (!$can_view_this_user) {

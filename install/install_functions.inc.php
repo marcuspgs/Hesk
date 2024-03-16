@@ -15,7 +15,7 @@
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 // We will be installing this HESK version:
-define('HESK_NEW_VERSION','3.4.3');
+define('HESK_NEW_VERSION','3.4.4');
 define('REQUIRE_PHP_VERSION','5.6.0');
 define('REQUIRE_MYSQL_VERSION','5.0.7');
 

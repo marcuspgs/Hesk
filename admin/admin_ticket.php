@@ -375,7 +375,7 @@ if (isset($_POST['notemsg']) && hesk_token_check('POST'))
 	$myattachments='';
 
 	// We need message and/or attachments to accept note
-	if ( count($attachments) || strlen($msg) || count($hesk_error_buffer) )
+	if ( (!empty($attachments) && count($attachments)) || strlen($msg) || count($hesk_error_buffer) )
 	{
 		// Any errors?
 		if ( count($hesk_error_buffer) != 0 )
@@ -681,7 +681,7 @@ hesk_handle_messages();
 // Prepare special custom fields
 foreach ($hesk_settings['custom_fields'] as $k=>$v)
 {
-	if ($v['use'] && hesk_is_custom_field_in_category($k, $ticket['category']) )
+	if ($v['use'] && (strlen($ticket[$k]) || hesk_is_custom_field_in_category($k, $ticket['category'])) )
 	{
 		switch ($v['type'])
 		{
@@ -1021,7 +1021,7 @@ $options = array(
             <?php
             foreach ($hesk_settings['custom_fields'] as $k=>$v)
             {
-                if ($v['use'] && $v['place']==0 && hesk_is_custom_field_in_category($k, $ticket['category']) )
+                if ($v['use'] && $v['place']==0 && (strlen($ticket[$k]) || hesk_is_custom_field_in_category($k, $ticket['category'])) )
                 {
 
                     switch ($v['type'])
@@ -1052,7 +1052,7 @@ $options = array(
             /* custom fields after message */
             foreach ($hesk_settings['custom_fields'] as $k=>$v)
             {
-                if ($v['use'] && $v['place'] && hesk_is_custom_field_in_category($k, $ticket['category']) )
+                if ($v['use'] && $v['place'] && (strlen($ticket[$k]) || hesk_is_custom_field_in_category($k, $ticket['category'])) )
                 {
                     switch ($v['type'])
                     {
@@ -1243,6 +1243,19 @@ $options = array(
                         &nbsp;
                         <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
                     </form>
+                    <?php
+                    // Track time worked?
+                    if ($hesk_settings['time_worked']) {
+                        ?>
+                            <script>
+                                $('#notesform').submit(function() {
+                                     $('#time_worked_notes').val($('#time_worked').val());
+                                });
+                            </script>
+                        </section>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </article>
@@ -2223,7 +2236,7 @@ function hesk_printReplyForm() {
 ?>
 <!-- START REPLY FORM -->
 <article class="ticket__body_block">
-    <form method="post" class="form" action="admin_reply_ticket.php" enctype="multipart/form-data" name="form1" onsubmit="force_stop();return true;">
+    <form method="post" class="form" action="admin_reply_ticket.php" enctype="multipart/form-data" name="form1" onsubmit="force_stop();<?php if ($hesk_settings['staff_ticket_formatting'] != 2): ?>clearTimeout(typingTimer);<?php endif; ?>return true;">
         <?php
         /* Ticket assigned to someone else? */
         if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id'] && isset($admins[$ticket['owner']])) {
@@ -2284,10 +2297,6 @@ function hesk_printReplyForm() {
 
                     $(document).ready(function() {
                         setTimeout(updatePauseButton, 1000);
-                    });
-
-                    $('#notesform').submit(function() {
-                         $('#time_worked_notes').val($('#time_worked').val());
                     });
 
                     <?php if ($hesk_settings['new_top'] && $ticket['replies']): ?>

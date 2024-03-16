@@ -12,7 +12,7 @@
  */
 
 /* Check if this is a valid include */
-if (!defined('IN_SCRIPT')) {die('Invalid attempt');} 
+if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 /***************************
 Function hesk_uploadFiles()
@@ -256,9 +256,7 @@ function hesk_moveAttachment($old_name, $new_name) {
     $hesk_settings['temp_server_path'] = dirname(dirname(__FILE__)).'/'.$hesk_settings['attach_dir'].'/temp/';
     $hesk_settings['server_path'] = dirname(dirname(__FILE__)).'/'.$hesk_settings['attach_dir'].'/';
 
-    if (hesk_copy($hesk_settings['temp_server_path'].$old_name, $hesk_settings['server_path'].$new_name)) {
-        hesk_unlink($hesk_settings['temp_server_path'].$old_name);
-    }
+    hesk_rename($hesk_settings['temp_server_path'].$old_name, $hesk_settings['server_path'].$new_name);
 }
 
 function hesk_deleteTempAttachment($file_key, $delete_file = false) {

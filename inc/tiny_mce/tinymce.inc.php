@@ -30,6 +30,7 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
             selector: '<?php echo $selector; ?>',
             convert_urls: false,
             branding: false,
+            promotion: false,
             browser_spellcheck: true,
             contextmenu: 'link useBrowserSpellcheck image table',
             setup: function (editor) {
@@ -38,6 +39,9 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
                 editor.on('KeyUp', function (e) {
                     clearTimeout(<?php echo $onKeyUpTimer; ?>);
                     <?php echo $onKeyUpTimer; ?> = setTimeout(<?php echo $onKeyUpFunction; ?>, <?php echo $onKeyUpTimeout; ?>);
+                }),
+                editor.on('submit', function (e) {
+                    clearTimeout(<?php echo $onKeyUpTimer; ?>);
                 }),
                 <?php endif; ?>
 
@@ -66,6 +70,9 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
             mobile: {
                 toolbar_mode: 'scrolling',
                 height: 300
+            },
+            images_dataimg_filter: function(img) {
+                return img.hasAttribute('internal-blob');
             }
         });
     </script>

@@ -696,7 +696,13 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
 
 } // END hesk_getEmailMessage
 
-function hesk_replace_email_tag($tag, $value, $message, $html_message, $nl2br = false) {
+function hesk_replace_email_tag($tag, $value, $message, $html_message, $nl2br = false, $html_value = false) {
+    if ($html_value) {
+        return array(
+            str_replace($tag, $value, $message),
+            str_replace($tag, ($nl2br ? nl2br($html_value) : $html_value), $html_message)
+        );
+    }
     return array(
         str_replace($tag, $value, $message),
         str_replace($tag, ($nl2br ? nl2br(hesk_htmlspecialchars(trim($value))) : hesk_htmlspecialchars(trim($value))), $html_message)
