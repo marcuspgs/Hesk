@@ -366,7 +366,7 @@ function mail_send()
 			list($message, $html_message) = hesk_getEmailMessage('new_pm',$pm,1,0);
 
 			/* Send e-mail */
-			hesk_mail($pm_recipient['email'], $subject, $message, $html_message);
+			hesk_mail($pm_recipient['email'], [], $subject, $message, $html_message);
         }
 
 		unset($_SESSION['mail']);

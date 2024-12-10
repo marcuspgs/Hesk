@@ -25,7 +25,6 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 // Save the default language for the settings page before choosing user's preferred one
 $hesk_settings['language_default'] = $hesk_settings['language'];
 require(HESK_PATH . 'inc/common.inc.php');
-$hesk_settings['language'] = $hesk_settings['language_default'];
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/setup_functions.inc.php');
 hesk_load_database_functions();
@@ -172,6 +171,20 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                         </a>
                     </label>
                     <input type="text" class="form-control" name="s_noreply_name" maxlength="255" value="<?php echo $hesk_settings['noreply_name']; ?>">
+                </div>
+                <div class="form-group short">
+                    <label>
+                        <span><?php echo $hesklang['max_recipients']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>email.html#74','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </label>
+                    <input type="text" id="s_email_max_recipients" name="s_email_max_recipients" class="form-control" maxlength="5" value="<?php echo $hesk_settings['email_max_recipients']; ?>">
+                    <span><?php echo $hesklang['max_recipients2']; ?></span>
                 </div>
                 <div class="radio-group">
                     <h5>
@@ -419,7 +432,20 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     </div>
                                 </a>
                             </label>
-                            <input type="password" id="s5" name="s_smtp_password" class="form-control" maxlength="255" value="<?php echo $hesk_settings['smtp_password']; ?>" <?php echo $onload_status; ?> autocomplete="off">
+                            <div class="input-wrapper has-side-checkbox">
+                                <input type="password" id="s5" name="s_smtp_password" class="form-control" maxlength="255" value="<?php echo $hesk_settings['smtp_password']; ?>" <?php echo $onload_status; ?> autocomplete="off">
+                                <div class="checkbox-custom">
+                                    <input type="checkbox" id="s5_pass" onchange="hesk_toggleShowPassword('s5');">
+                                    <label for="s5_pass">
+                                        <svg class="icon icon-eye-open">
+                                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-open"></use>
+                                        </svg>
+                                        <svg class="icon icon-eye-close">
+                                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-close"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="smtp-auth-oauth" style="<?php echo $oauth_div; ?>">
@@ -557,6 +583,7 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                 <input type="hidden" name="tmp_imap_password" value="<?php echo $hesk_settings['imap_password']; ?>" />
                 <input type="hidden" name="tmp_imap_enc" value="<?php echo $hesk_settings['imap_enc']; ?>" />
                 <input type="hidden" name="tmp_imap_noval_cert" value="<?php echo $hesk_settings['imap_noval_cert']; ?>" />
+                <input type="hidden" name="tmp_imap_disable_GSSAPI" value="<?php echo $hesk_settings['imap_disable_GSSAPI']; ?>" />
                 <input type="hidden" name="tmp_imap_keep" value="<?php echo $hesk_settings['imap_keep']; ?>" />
                 <input type="hidden" name="tmp_imap_conn_type" value="<?php echo $hesk_settings['imap_conn_type']; ?>" />
                 <input type="hidden" name="tmp_imap_oauth_provider" value="<?php echo $hesk_settings['imap_oauth_provider']; ?>" />
@@ -676,6 +703,19 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     </a>
                                 </div>
                             </div>
+                            <div id="div_imap_disable_GSSAPI">
+                                <div class="checkbox-custom">
+                                    <input type="checkbox" id="i13" name="s_imap_disable_GSSAPI" value="1" <?php if ($hesk_settings['imap_disable_GSSAPI']) {echo 'checked';} ?>>
+                                    <label for="i13"><?php echo $hesklang['disable_GSSAPI']; ?></label>
+                                    <a onclick="hesk_window('<?php echo $help_folder; ?>email.html#73','400','500')">
+                                        <div class="tooltype right">
+                                            <svg class="icon icon-info">
+                                                <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="checkbox-group row">
@@ -776,7 +816,20 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     </div>
                                 </a>
                             </label>
-                            <input type="password" id="i6" name="s_imap_password" class="form-control" maxlength="255" value="<?php echo $hesk_settings['imap_password']; ?>" <?php echo $onload_status; ?> autocomplete="off">
+                            <div class="input-wrapper has-side-checkbox">
+                                <input type="password" id="i6" name="s_imap_password" class="form-control" maxlength="255" value="<?php echo $hesk_settings['imap_password']; ?>" <?php echo $onload_status; ?> autocomplete="off">
+                                <div class="checkbox-custom">
+                                    <input type="checkbox" id="i6_pass" onchange="hesk_toggleShowPassword('i6');">
+                                    <label for="i6_pass">
+                                        <svg class="icon icon-eye-open">
+                                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-open"></use>
+                                        </svg>
+                                        <svg class="icon icon-eye-close">
+                                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-close"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="imap-auth-oauth" style="<?php echo $oauth_div; ?>">
@@ -825,6 +878,7 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                             var s_imap_password  = document.getElementById('i6').value;
                             var s_imap_enc       = document.getElementById('i4').checked ? 'tls' : (document.getElementById('i9').checked ? 'ssl' : '');
                             var s_imap_noval_cert = document.getElementById('i10').checked ? '1' : '0';
+                            var s_imap_disable_GSSAPI = document.getElementById('i13').checked ? '1' : '0';
                             var s_imap_conn_type = document.getElementById('i12').checked ? 'oauth' : 'basic';
                             var s_imap_oauth_provider = s_imap_conn_type === 'oauth' ? document.getElementById('oauth-provider-select').value : 0;
 
@@ -835,6 +889,7 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                 "&s_imap_password="  + encodeURIComponent( s_imap_password ) +
                                 "&s_imap_enc="       + encodeURIComponent( s_imap_enc ) +
                                 "&s_imap_noval_cert=" + encodeURIComponent( s_imap_noval_cert ) +
+                                "&s_imap_disable_GSSAPI=" + encodeURIComponent( s_imap_disable_GSSAPI ) +
                                 "&s_imap_conn_type=" + encodeURIComponent(s_imap_conn_type) +
                                 "&s_imap_oauth_provider=" + encodeURIComponent(s_imap_oauth_provider);
 
@@ -1074,7 +1129,20 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     </div>
                                 </a>
                             </label>
-                            <input type="password" id="p6" name="s_pop3_password" class="form-control" maxlength="255" value="<?php echo $hesk_settings['pop3_password']; ?>" <?php echo $onload_status; ?> autocomplete="off">
+                            <div class="input-wrapper has-side-checkbox">
+                                <input type="password" id="p6" name="s_pop3_password" class="form-control" maxlength="255" value="<?php echo $hesk_settings['pop3_password']; ?>" <?php echo $onload_status; ?> autocomplete="off">
+                                <div class="checkbox-custom">
+                                    <input type="checkbox" id="p6_pass" onchange="hesk_toggleShowPassword('p6');">
+                                    <label for="p6_pass">
+                                        <svg class="icon icon-eye-open">
+                                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-open"></use>
+                                        </svg>
+                                        <svg class="icon icon-eye-close">
+                                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-close"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="pop3-auth-oauth" style="<?php echo $oauth_div; ?>">
@@ -1284,6 +1352,41 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                     <input type="text" name="s_loop_time" class="form-control" maxlength="5" value="<?php echo $hesk_settings['loop_time']; ?>">
                     <span><?php echo $hesklang['ss']; ?></span>
                 </div>
+                <div class="checkbox-group">
+                    <h5>
+                        <span><?php echo $hesklang['piping_notify_rejected_customers1']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>email.html#75','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </h5>
+                    <?php
+                    $rejection_cooldown_div = $hesk_settings['pipe_customer_rejection_notification'] ? 'block' : 'none';
+                    ?>
+                    <div class="checkbox-custom">
+                        <input onclick="hesk_toggleLayerDisplay('rejection_cooldown')" type="checkbox" id="s_pipe_customer_rejection_notification1" name="s_pipe_customer_rejection_notification" value="1" <?php if ($hesk_settings['pipe_customer_rejection_notification']) {echo 'checked';} ?>>
+                        <label for="s_pipe_customer_rejection_notification1"><?php echo $hesklang['piping_notify_rejected_customers2']; ?></label>
+                    </div>
+                </div>
+                <div id="rejection_cooldown" style="display:<?php echo $rejection_cooldown_div; ?>; margin-bottom: 20px">
+                    <div class="form-group short">
+                        <label>
+                            <span><?php echo $hesklang['piping_notify_rejected_customers3']; ?></span>
+                            <a onclick="hesk_window('<?php echo $help_folder; ?>email.html#76','400','500')">
+                                <div class="tooltype right">
+                                    <svg class="icon icon-info">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                    </svg>
+                                </div>
+                            </a>
+                        </label>
+                        <input type="text" name="s_pipe_customer_rejection_email_cooldown_hours" class="form-control" maxlength="3" value="<?php echo $hesk_settings['pipe_customer_rejection_email_cooldown_hours']; ?>">
+                        <span><?php echo $hesklang['hh']; ?></span>
+                    </div>
+                </div>
             </section>
             <section class="settings__form_block">
                 <h3><?php echo $hesklang['suge']; ?></h3>
@@ -1376,22 +1479,6 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
             </section>
             <section class="settings__form_block">
                 <h3><?php echo $hesklang['other']; ?></h3>
-                <div class="checkbox-group">
-                    <h5>
-                        <span><?php echo $hesklang['meml']; ?></span>
-                        <a onclick="hesk_window('<?php echo $help_folder; ?>email.html#57','400','500')">
-                            <div class="tooltype right">
-                                <svg class="icon icon-info">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                </svg>
-                            </div>
-                        </a>
-                    </h5>
-                    <div class="checkbox-custom">
-                        <input type="checkbox" id="s_multi_eml1" name="s_multi_eml" value="1" <?php if ($hesk_settings['multi_eml']) {echo 'checked';} ?>>
-                        <label for="s_multi_eml1"><?php echo $hesklang['meml2']; ?></label>
-                    </div>
-                </div>
                 <div class="checkbox-group">
                     <h5>
                         <span><?php echo $hesklang['sconfe']; ?></span>

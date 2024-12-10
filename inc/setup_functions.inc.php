@@ -17,6 +17,25 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+$hesk_settings['barcode_types'] = array(
+    'C128A'      => 'CODE 128 A',
+    'C128B'      => 'CODE 128 B',
+    'C128'       => 'CODE 128',
+    'C39E+'      => 'CODE 39 EXTENDED + CHECKSUM',
+    'C39E'       => 'CODE 39 EXTENDED',
+    'C39+'       => 'CODE 39 + CHECKSUM',
+    'C39'        => 'CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.',
+    'C93'        => 'CODE 93 - USS-93',
+    'DATAMATRIX' => 'DATAMATRIX (ISO/IEC 16022)',
+    'PDF417'     => 'PDF417 (ISO/IEC 15438:2006)',
+    'QRCODE'     => 'QR-CODE',
+);
+
+$hesk_settings['barcode_formats'] = array(
+    'svg' => 'SVG image',
+    'png' => 'PNG image',
+);
+
 /*** FUNCTIONS ***/
 
 
@@ -576,6 +595,7 @@ function hesk_testIMAP($check_old_settings=false)
 	$set['imap_enc']		= hesk_POST('s_imap_enc');
 	$set['imap_enc']        = ($set['imap_enc'] == 'ssl' || $set['imap_enc'] == 'tls') ? $set['imap_enc'] : '';
 	$set['imap_noval_cert'] = empty($_POST['s_imap_noval_cert']) ? 0 : 1;
+    $set['imap_disable_GSSAPI'] = empty($_POST['s_imap_disable_GSSAPI']) ? 0 : 1;
 	$set['imap_keep']		= empty($_POST['s_imap_keep']) ? 0 : 1;
 	$set['imap_user']		= hesk_input( hesk_POST('s_imap_user') );
 	$set['imap_password']	= hesk_input( hesk_POST('s_imap_password') );
@@ -596,6 +616,7 @@ function hesk_testIMAP($check_old_settings=false)
 		$set['tmp_imap_enc']		= hesk_POST('s_imap_enc');
 		$set['tmp_imap_enc']        = ($set['tmp_imap_enc'] == 'ssl' || $set['tmp_imap_enc'] == 'tls') ? $set['tmp_imap_enc'] : '';
         $set['tmp_imap_noval_cert'] = empty($_POST['tmp_imap_noval_cert']) ? 0 : 1;
+        $set['tmp_imap_disable_GSSAPI'] = empty($_POST['tmp_imap_disable_GSSAPI']) ? 0 : 1;
 		$set['tmp_imap_keep']		= empty($_POST['tmp_imap_keep']) ? 0 : 1;
 		$set['tmp_imap_user']		= hesk_input( hesk_POST('tmp_imap_user') );
 		$set['tmp_imap_password']	= hesk_input( hesk_POST('tmp_imap_password') );
@@ -614,6 +635,7 @@ function hesk_testIMAP($check_old_settings=false)
 			$set['tmp_imap_host_port'] == $set['imap_host_port'] &&
 			$set['tmp_imap_enc']       == $set['imap_enc']       &&
 			$set['tmp_imap_noval_cert'] == $set['imap_noval_cert'] &&
+            $set['tmp_imap_disable_GSSAPI'] == $set['imap_disable_GSSAPI'] &&
 			$set['tmp_imap_keep']      == $set['imap_keep']      &&
 			$set['tmp_imap_user']      == $set['imap_user']      &&
 			$set['tmp_imap_password']  == $set['imap_password']  &&
@@ -656,6 +678,7 @@ function hesk_testIMAP($check_old_settings=false)
 
     $imap->readOnly = false;
     $imap->ignoreCertificateErrors = $set['imap_noval_cert'];
+    $imap->disableGSSAPI = $set['imap_disable_GSSAPI'];
     $imap->connectTimeout = 15;
     $imap->responseTimeout = 15;
 

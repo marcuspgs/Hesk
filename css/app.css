@@ -707,15 +707,15 @@ a:hover {
     cursor: pointer;
     margin: 0 3px 3px 0;
     padding: 2px 6px;
-    background: #f2f2f2;
+    background: #f1f9ff;
     color: #303030;
-    border: 0 solid #d0d0d0
+    border: 0 solid #d0d0d0;
 }
 
 .selectize-control.multi .selectize-input>div.active {
-    background: #e8e8e8;
-    color: #303030;
-    border: 0 solid #cacaca
+    color: #fff;
+    background: #2c70a2;
+    border: solid 1px #2c70a2;
 }
 
 .selectize-control.multi .selectize-input.disabled>div, .selectize-control.multi .selectize-input.disabled>div.active {
@@ -792,6 +792,10 @@ a:hover {
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
     border-radius: 1px
+}
+.selectize-dropdown [data-selectable] .highlight.extra-space-infront::before {
+    /* handling situations where multi word searches would break a word and remove a space*/
+    content: ' ';
 }
 
 .selectize-dropdown .option, .selectize-dropdown .optgroup-header {
@@ -901,10 +905,10 @@ a:hover {
 
 .selectize-control.multi .selectize-input>div {
     margin: 0 6px 0 0;
-    padding: 0;
-    background: transparent;
+    padding: 5px;
+    background: #f1f9ff;
     color: #26282a;
-    border: none
+    border: solid 1px #2c70a2;
 }
 
 .selectize-control {
@@ -954,6 +958,7 @@ a:hover {
     height: 40px;
     padding: 0 32px 0 16px;
     color: #133e5e;
+    white-space: pre;
 }
 
 .selectize-control .selectize-dropdown .option.active {
@@ -972,7 +977,17 @@ a:hover {
 .selectize-control.isError .selectize-input {
     border: solid 1px #e64342 !important;
 }
-
+.selectize-control .add-entry-option {
+    opacity: 1;
+}
+.selectize-control .add-entry-option.with-results-above {
+    border-top: solid 1px #2c70a2;
+}
+.selectize-control .add-entry-option:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+    background-color: #2c70a2 !important;
+}
 .datepicker--cells {
     display: -ms-flexbox;
     display: flex;
@@ -2259,7 +2274,6 @@ button {
 
 .btn-full.inline-flex {
     display: inline-flex;
-    height: 48px
 }
 
 .btn-full:hover {
@@ -4017,6 +4031,24 @@ input::-ms-clear {
     font-weight: 700
 }
 
+.filters__listing .btn.is-bookmarks {
+    background-color: #f0fff4 !important;
+    border: 1px solid #247e53;
+    color: #133e5e;
+}
+
+.filters__listing .btn.is-bookmarks:hover {
+    background-color: #009b51 !important;
+    color: #fff
+}
+
+.is-bookmark {
+    fill: #247e53 !important;
+    transform: rotate(50deg);
+    margin-left: 3px;
+    margin-right: 6px;
+}
+
 .filters__listing .btn.is-due-soon {
     background-color: #ffc !important;
     border: 1px solid #926a0e;
@@ -4249,6 +4281,41 @@ input::-ms-clear {
     /* color: #2c70a2; */
 }
 
+.ticket__body_block .block--head .contact.grid {
+    display: grid;
+    row-gap: 10px;
+}
+
+.ticket__body_block .block--head .contact.grid .requester-header {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+}
+
+.ticket__body_block .block--head .contact.grid .requester-header span {
+    vertical-align: middle;
+}
+
+.ticket__body_block .block--head .contact.grid .requester {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.ticket__body_block .block--head .contact.grid .cc-header {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: right;
+}
+
+.ticket__body_block .block--head .contact.grid .cc-header span {
+    vertical-align: middle;
+}
+
+.ticket__body_block .block--head .contact.grid .cc {
+    grid-column: 2;
+    grid-row: 2;
+}
+
 .ticket__body_block .block--head .contact>span {
     color: #2c70a2;
 }
@@ -4266,7 +4333,18 @@ input::-ms-clear {
 .ticket__body_block .block--head .contact .dropdown {
     margin-left: 8px;
     cursor: pointer;
-    position: static
+    position: static;
+}
+
+.ticket__body_block .block--head .contact .dropdown.customer {
+    margin-left: 8px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 2px 4px 0 rgb(38 40 42 / 30%);
+}
+
+.ticket__body_block .block--head .contact .dropdown.customer label {
+    padding: 5px;
 }
 
 .ticket__body_block .block--head .contact .dropdown span {
@@ -4319,7 +4397,8 @@ input::-ms-clear {
 
 .ticket__body_block .block--head time {
     margin: 0 10px;
-    color: #2c70a2
+    color: #2c70a2;
+    align-self: start;
 }
 
 .ticket__body_block .block--head .more {
@@ -4544,6 +4623,22 @@ p.rate {
     letter-spacing: .1px;
     -ms-flex-align: baseline;
     align-items: baseline
+}
+
+.ticket__body_block .block--suggested span {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    -ms-flex-align: baseline;
+    align-items: baseline;
 }
 
 .ticket__body_block .block--suggested b {
@@ -5080,6 +5175,16 @@ p.rate {
     flex-shrink: 0;
 }
 
+.value svg.copy-me {
+    fill: #959eb0;
+}
+
+.value svg.copied {
+    fill: #002d73;
+    width: 0.8em;
+    height: 0.8em;
+}
+
 .ticket__params .params--block h4 {
     height: 48px;
     display: -ms-flexbox;
@@ -5130,6 +5235,14 @@ p.rate {
 
 .main__content.tickets .table th:nth-child(2), .main__content.tickets .table td:nth-child(2) {
     border: none
+}
+
+.main__content.tickets .table .customer-count {
+    background: #fff;
+    border: solid 1px #92a8b6;
+    margin-left: 5px;
+    padding: 3px;
+    white-space: nowrap;
 }
 
 .main__content.tickets.actions .tickets__mobile_head [data-action="ticket-mobile-actions"] {
@@ -6206,6 +6319,10 @@ p.rate {
     margin-bottom: 16px
 }
 
+.main__content.team .team__head.bulk-actions {
+    justify-content: flex-start;
+}
+
 .main__content.team .team__head h2 {
     font-family: "Lato", Arial, sans-serif;
     padding-left: 16px;
@@ -6219,6 +6336,77 @@ p.rate {
 
 .main__content.team .team__head .btn {
     min-width: 168px
+}
+
+.main__content.team .customers__search {
+    margin-bottom: 20px;
+}
+
+.main__content.team .customers__search .filters {
+    display: flex;
+    gap: 10px;
+}
+
+.main__content.team .customers__search .filters > div {
+    flex-grow: 1;
+}
+
+.main__content.team .customers__search h3 {
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.main__content.team .table-wrap.import .import-steps {
+    display: flex;
+    justify-content: center;
+}
+
+.main__content.team .table-wrap.import .step-1 .form-group.short {
+    display: inline-flex;
+}
+
+.main__content.team .table-wrap.import .step-1 .form-group.short label {
+    display: flex;
+    align-items: center;
+}
+
+.main__content.team .table-wrap.import .step-1 .form-group.short input.form-control {
+    width: 75px;
+    margin-left: 10px;
+}
+
+.main__content.team .table-wrap.import .step-3 .upload-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.main__content.team .table-wrap.import .step-3 .upload-stats .value {
+    font-size: 2rem;
+}
+
+.main__content.team .table-wrap.import .step-3 td[data-attr="status"].failed {
+    background-color: #FFC2C2;
+}
+
+.main__content.team .table-wrap.import .selectize-input,
+.main__content.team .table-wrap.import .selectize-dropdown {
+    flex-grow: 1;
+    width: 100% !important;
+}
+
+.main__content.team .table-wrap.import .action-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.main__content.team .table-wrap.import ul {
+    list-style: inherit;
+    margin-left: 20px;
+}
+
+.main__content.team .table-wrap.import i {
+    font-style: italic;
 }
 
 .main__content.team .new-team {
@@ -6235,11 +6423,6 @@ p.rate {
 .main__content.team .table-wrap {
     margin-right: 200px;
     margin-top: 0
-}
-
-.main__content.team .table-wrap tbody td:first-child {
-    padding-left: 24px;
-    padding-right: 16px
 }
 
 .main__content.team .table-wrap tbody td:last-child {
@@ -6397,6 +6580,11 @@ p.rate {
     min-width: 176px
 }
 
+.team-create.customer .right-bar__body [data-action="save"] {
+    display: flex;
+    min-width: 176px;
+}
+
 @media screen and (max-width: 899px) {
     .team-create .right-bar__body [data-action="save"] {
         width: 145px!important
@@ -6426,6 +6614,14 @@ p.rate {
 
 .team-create .right-bar__body[data-step="1"] h4 {
     margin-bottom: 24px
+}
+
+.team-create .right-bar__body[data-step="1"] .customer-password h4 {
+    margin-bottom: 0;
+}
+
+.team-create .right-bar__body[data-step="1"] .customer-password > div.optional {
+    margin-bottom: 24px;
 }
 
 .team-create .right-bar__body[data-step="1"] [data-action="back"] {
@@ -10126,6 +10322,22 @@ p.rate {
     background-color: rgb(0, 0, 0, 0.2);
 }
 
+.admin-nav-badge {
+    display: inline-block;
+    min-width: 16px;
+    height: 16px;
+    background-color: red;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: .1px;
+    text-align: center;
+    color: #fff;
+    border-radius: 50%;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 /*
 .submenu__listitem {
     border-bottom: 1px solid rgb(255, 255, 255, 0.2);
@@ -10481,7 +10693,8 @@ p.rate {
 }
 
 .header .profile__user .profile__menu .profile--view a {
-    margin: auto
+    margin: auto;
+    text-align: center;
 }
 
 .header .profile__user .profile__menu .profile--logout {
@@ -12105,6 +12318,17 @@ p.rate {
     width: 96px
 }
 
+.notification-flash .notification--title.error-title {
+    display: none;
+}
+.notification-flash.display-error .notification--title.error-title {
+    display: block;
+}
+.notification-flash.display-error .notification--title:not(.error-title),
+.notification-flash.display-error .notification--text {
+    display: none;
+}
+
 @media screen and (max-width: 899px) {
     .notification-flash {
         top: 0!important;
@@ -12914,6 +13138,12 @@ sub {
     width: 100% !important;
 }
 
+.delete-modal .radio-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .header .profile__user.active .user__ava {
     background-color: #fff;
     color: #2c70a2
@@ -13303,6 +13533,10 @@ sub {
     background-color: #DC2D89 !important
 }
 
+.pending-approval {
+    background-color: #ffffcc !important
+}
+
 /* region Attachments */
 .attachments {
     max-width: 560px;
@@ -13372,3 +13606,1091 @@ sub {
 .pb10 {
     padding-bottom: 10px;
 }
+
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.loading-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #156cc8;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.no-background-color {
+    background-color: #ffffff !important;
+}
+
+/* ---------------
+ * BEGIN HESK LAYOUT IMPROVEMENTS
+ * ---------------
+ *   These css changes below contains styles that override above csses, that improve certain layouts functionality.
+ *   It's kept distinctly separate from above css, for easier decoupling and seeing what was specifically overridden from the original.
+*/
+:root {
+    --transition-time-pri: 50ms; /* i.e. hover over icons, buttons ... */
+    --transition-time-sec: 150ms; /* secondary element within an element, i.e. icon anim delay within buttons */
+}
+/* START GENERAL SELECTORS / ELEMENTS */
+.main {
+    /* Required as parent has display: flex, and it can cause an issue if any of the children is wider than the remaining parent space,
+    it would cause .main to expand to fit for that. BUT adding a flexed item min-width: 0, overrides the unset value which causes above behaviour.
+    I.e. example of this issue was on Admin-> Tickets view, where with a ton of table columns on Desktop it would cause it to not respect viewport size. */
+    min-width: 0;
+}
+.btn {
+    cursor: pointer;
+    transition: all var(--transition-time-pri) ease;
+}
+.btn-border:hover {
+    transition: all var(--transition-time-pri) ease;
+    background: #2c70a2;
+    color: #ffffff;
+    fill: #ffffff;
+    border-color: #133e5e;
+}
+
+/* start speeding up all transitions */
+.icon {
+    transition: all var(--transition-time-sec) ease;
+}
+a {
+    transition: color var(--transition-time-pri) ease;
+}
+.selectize-input {
+    transition: all var(--transition-time-pri) ease
+}
+.selectize-control .selectize-input {
+    transition: all var(--transition-time-pri) ease
+}
+.selectize-control .selectize-input:after {
+    transition: all var(--transition-time-pri) ease
+}
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down {
+    transition: all var(--transition-time-pri) ease
+}
+.dropdown .dropdown-list>li svg, .dropdown-select .dropdown-list>li svg {
+    transition: all var(--transition-time-pri) ease
+}
+.form input.form-control, .form textarea.form-control {
+    transition: all var(--transition-time-pri) ease
+}
+.form select.form-control {
+    transition: all var(--transition-time-pri) ease;
+}
+.form__search .form__search_type .type--list li {
+    transition: all var(--transition-time-pri) ease;
+}
+.form__search .form__search_type .type--list li .icon {
+    transition: all var(--transition-time-pri) ease;
+}
+.checkbox-custom [type='checkbox']+label {
+    transition: all var(--transition-time-pri) ease;
+}
+.tickets__mobile_head .btn {
+    transition: all var(--transition-time-pri) ease;
+}
+.body a {
+    transition: all var(--transition-time-pri) ease;
+}
+/* end speeding up all transitions */
+
+hr.sub-navigation-border {
+    border: 0;
+    color: #9e9e9e;
+    background-color: #9e9e9e;
+    height: 1px;
+    width: 100%;
+    text-align: left;
+}
+.clear-on-mobile {
+    display: none;
+}
+.pagination__amount {
+    margin-top: 0;
+}
+.table-wrap {
+    margin-top: 5px;
+}
+.table-wrap.ignore-overflow {
+    overflow-x: auto;
+}
+.icon-person {
+    width: .86em;
+    height: 1em;
+    fill: #516b7d;
+    flex-shrink: 0;
+}
+label .icon-person,
+.label .icon-person {
+    /* various labels/dropdowns, that are suggesting a user */
+    margin-right: 4px;
+    margin-top: -1px;
+}
+/* START ADMIN "more complex" common elements */
+.form input.form-control,
+.form textarea.form-control {
+    vertical-align: middle;
+}
+/* style dropdown the same, exception for "right edge ones", like on ticket view */
+
+/* If calc & vw is supported, use these to prevent dropdown lists from going beyond screen size.*/
+.dropdown .dropdown-list, .dropdown-select .dropdown-list {
+    max-width: calc(100vw - 20px);
+    overflow-x: auto; /* we have to give it overflow auto, as there's an issue with wrapping text into several lines*/
+}
+.dropdown:not(.right),
+.dropdown-select:not(.right) {
+    vertical-align: middle;
+}
+.dropdown:not(.right):hover,
+.dropdown-select:not(.right):hover {
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+    color: #fff;
+    transition: all var(--transition-time-pri) ease;
+}
+.dropdown:not(.right):hover label,
+.dropdown:not(.right):hover .label,
+.dropdown-select:not(.right):hover label,
+.dropdown-select:not(.right):hover .label,
+.dropdown:not(.right):hover label span,
+.dropdown:not(.right):hover .label span,
+.dropdown-select:not(.right):hover label span,
+.dropdown-select:not(.right):hover .label span {
+    color: #fff !important;
+}
+/* only change color for 1-level down icons, not i.e. for within <li> elements*/
+.dropdown:not(.right):hover > * > .icon,
+.dropdown:not(.right):hover > * > .icon,
+.dropdown-select:not(.right):hover > * > .icon,
+.dropdown-select:not(.right):hover > * > .icon {
+    transition: all var(--transition-time-sec) ease;
+    color: #fff !important;
+    fill: #fff !important;
+}
+/* we're applying the dropdown style on labels, as the click events work on them, so this ensures they work over the whole area properly
+ Note 1: Generally we need only 2 selectors, BUT we have to account for an edge case with .priority fields (But JUST inside tables!), which shouldn't be treated as selects in tables,
+ but SHOULD be when in form-group (i.e. not on listing tickets, but yes when creating)
+ Note 2: We actually have to double those selectors AS WELL, as some HTML uses .label class, and some <label> elements
+ Note 3: as label in prev design had 5px padding, we have to give it 5 more side padding (i.e. 17px instead of 12px) to make it the same spacing
+*/
+.dropdown:not(.right):not(td .priority) .label,
+.dropdown-select:not(.right):not(td .priority) .label,
+.form-group .dropdown:not(.right) .label,
+.form-group .dropdown-select:not(.right) .label,
+.checkbox-custom .dropdown-select:not(.right) .label,
+.dropdown:not(.right):not(td .priority) label,
+.dropdown-select:not(.right):not(td .priority) label,
+.form-group .dropdown:not(.right) label,
+.form-group .dropdown-select:not(.right) label,
+.checkbox-custom .dropdown-select:not(.right) label {
+    display: inline-flex;
+    border-radius: 2px;
+    border: solid 1px #2c70a2;
+    box-shadow: none;
+    padding: 0 17px 0 17px !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    /* use dynamic combo of height + min-height + line-height to ensure that the selects can scale & fit any content inside them (i.e. multiple rows) */
+    height: max-content;
+    min-height: 40px;
+    line-height: 1.7;
+    -ms-flex-align: center;
+    align-items: center;
+    transition: all var(--transition-time-pri) ease;
+    vertical-align: middle;
+}
+
+.dropdown:not(.right):not(td .priority) .dropdown-list .label,
+.dropdown-select:not(.right):not(td .priority) .dropdown-list .label,
+.form-group .dropdown:not(.right) .dropdown-list .label,
+.form-group .dropdown-select:not(.right) .dropdown-list .label,
+.checkbox-custom .dropdown-select:not(.right) .dropdown-list .label,
+.dropdown:not(.right):not(td .priority) .dropdown-list label,
+.dropdown-select:not(.right):not(td .priority) .dropdown-list label,
+.form-group .dropdown:not(.right) .dropdown-list label,
+.form-group .dropdown-select:not(.right) .dropdown-list label,
+.checkbox-custom .dropdown-select:not(.right) .dropdown-list label {
+    min-width: calc(100% + 2px); /* make it at least wide as parent, + 2extra px for parent's border*/
+}
+
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down {
+    margin-left: 12px; /* account for a bit extra margin, as with label being flex, it now removes the whitespace*/
+}
+.selectize-control:not(.read-write) .selectize-input:hover,
+.selectize-control:not(.read-write) .selectize-input:focus-visible {
+    color: #ffffff;
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+}
+.selectize-control .selectize-input:hover::after,
+.selectize-control .selectize-input:focus-visible::after {
+    transition: all var(--transition-time-sec) ease;
+    color: #ffffff;
+    fill: #ffffff;
+    filter: brightness(0%) invert(100%); /* use filter, as it's using a greyish background image for chevron*/
+    opacity: 1 !important;
+}
+.selectize-control .selectize-input:hover ::placeholder,
+.selectize-control .selectize-input:focus-visible ::placeholder{
+    color: #ffffff;
+    opacity: 1;
+}
+.selectize-control.read-write .selectize-input:not(.focus):hover,
+.selectize-control.read-write .selectize-input:not(.focus).dropdown-active:hover {
+    /* have to have this one as extra to ensure it overwrites app.css */
+    color: #ffffff;
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+}
+
+.selectize-dropdown-content .no-results {
+    padding: 5px 10px;
+}
+.checkbox-custom [type="checkbox"] + label:hover::before {
+    background: #bdd3e3;
+}
+.radio-custom [type="radio"] + label:hover::before,
+.radio-custom [type="radio"] + label:hover::before {
+    background: #bdd3e3;
+}
+.dropdown-select .label {
+    margin-right: 0;
+}
+/* START admin header */
+.header .profile__user .profile__menu .profile--view {
+    padding: 10px 20px;
+}
+/* START MISC ADMIN PAGES NAVIGATION */
+
+/* TODO note -> why categories class for kb, as all seem to have specific ones? */
+/*
+Note added attempt at overriding all headers in the same way, with more specific selectors
+*/
+
+/*.main__content.categories .knowledgebase__head {*/
+.wrapper .main .main__content > section {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between
+}
+
+/*.main__content.categories .knowledgebase__head h2 {*/
+.wrapper .main .main__content > section > h2 {
+    font-family: "Lato", Arial, sans-serif;
+    margin-left: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22;
+    letter-spacing: .1px;
+
+    /*margin-bottom: 16px;*/
+}
+
+/* if table-wrap is the first next sibling, add some extra margin */
+.wrapper .main .main__content > section + .table-wrap {
+    margin-top: 16px;
+}
+
+.main__content.tools .table-wrapper table {
+    width: 100%;
+}
+
+
+/* START admin manage_knowledgebase */
+.main__content.knowledgebase form input {
+    vertical-align: middle;
+}
+.main__content.knowledgebase form .btn {
+    vertical-align: middle;
+}
+.main__content.knowledge .article__detalies .article__detalies_list li .name {
+    margin-right: 5px;
+}
+.article__detalies_list .dropdown-select.right .label {
+    /* unfortunately we have to specifically add this css to override some unique css selector edge case here */
+    display: inline-flex;
+    border-radius: 2px;
+    border: solid 1px #2c70a2;
+    box-shadow: none;
+    padding: 0 17px 0 17px !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    /* use dynamic combo of height + min-height + line-height to ensure that the selects can scale & fit any content inside them (i.e. multiple rows) */
+    height: max-content;
+    min-height: 40px;
+    line-height: 1.7;
+    -ms-flex-align: center;
+    align-items: center;
+    transition: all var(--transition-time-pri) ease;
+    vertical-align: middle;
+}
+.article__detalies_list .dropdown-select.right:hover {
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+    color: #fff;
+    transition: all var(--transition-time-pri) ease;
+}
+.article__detalies_list .dropdown-select.right:hover .label,
+.article__detalies_list .dropdown-select.right:hover .label span {
+    color: #fff !important;
+}
+/* START admin_main */
+.tickets__legend .bulk-actions .btn {
+    height: 40px !important;
+}
+.show_tickets  .search-option {
+    margin-bottom: 10px;
+}
+.show_tickets #divShow .search-option {
+    padding-top: 10px;
+    border-top: 1px solid #3333;
+}
+.show_tickets .search-name {
+    line-height: 1.85;
+    flex-shrink: 0; /* prevents status lines from shrinking, while others don't */
+}
+.show_tickets .search-options .row .checkbox-custom {
+    margin-top: 0;
+}
+.show_tickets .search-options .row:not(:first-child) {
+    /*margin-top: 10px;*/
+    margin-top: 3px;
+}
+.show_tickets .checkbox-custom:first-child,
+.show_tickets .radio-custom:first-child {
+    margin-top: 3px;
+}
+/* START admin_ticket */
+/* START Misc ticket layout corrections for the columns to expand more nicely and consume 100% of width properly in all cases */
+.main__content.ticket {
+    /* as it's children no longer have fixed widths, (for better responsive layout), we have to put it to this parent, so that the content doesn't get too wide */
+    /*max-width: 1200px; <- now unnecessary, as it's limited by a max width setting! */
+    margin: 0 auto; /* auto margin of auto, essentially aligns it centrally within its container, if the screen is wider */
+    /* NOTE: unfortunately marign 0 auto, causes the main contaienr to NOT extend to full available width, if ticket width is set to be auto/extend.
+    But without it, it's hard to detect when params column should wrap to new row and extend full width */
+
+    padding: 23px 16px 50px 16px; /* less right padding needed, compensated with gap of 16px to separate the two columns */
+    gap: 24px;
+    flex-wrap: wrap; /* wrap, to force the second column below, if there's no longer enough space for it */
+}
+.main__content.ticket .ticket__body {
+    width: auto;
+    flex: 50 1 0; /* just a massive flex-grow, to ensure that this column always takes the rest of available flex width,
+    as we want the 2nd column to be max 320px at all times, but still allow it to expand to full width if it gets forced into it's own row */
+    margin-right: 0; /* no longer needed, handled by parent's gap */
+}
+/* make ticket params a bit wider, to be able to fit more language texts inside*/
+.ticket__params {
+    width: 330px;
+}
+.main__content.ticket .ticket__params {
+    /* don't allow it to shrink below 320px, this will help force it to automatically go into a new row
+    flex-grow of 0 allows it to scale up to full width automatically if forced into a new row
+    */
+    flex: 1 0 330px;
+}
+/* END Misc ticket layout corrections */
+.ticket__body_block {
+    padding: 15px 30px 15px;
+}
+.ticket__body_block .block--head .contact.grid .cc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 0;
+}
+.ticket__body_block .block--head .contact.grid .requester-header {
+    min-width: max-content;
+}
+.ticket__body_block .block--head .contact.grid .cc-header {
+    min-width: max-content;
+}
+.main__content.ticket .ticket__body_block .block--submit {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px 20px;
+}
+.ticket__body_block .block--submit .btn {
+    margin-right: 0;
+}
+.main__content.ticket .ticket__body_block input[name="save_reply"] {
+    margin-right: auto;
+}
+#submit-as-div.dropdown-select {
+    border: none;
+    margin-left: 0;
+}
+#submit-as-div.dropdown-select .label {
+    padding: 0 !important;
+    border: 0;
+}
+#submit-as-div.dropdown-select:hover .label span {
+    transition: all var(--transition-time-pri) ease;
+    background: #2c70a2;
+    color: #ffffff;
+    fill: #ffffff;
+}
+.ticket__body_block .block--head .contact .dropdown.customer {
+    box-shadow: none;
+    border-radius: 3px; /* required due to hover background, as label has box shadow and is rounded a bit */
+}
+.ticket__body_block .block--head .contact .dropdown.customer .label,
+.ticket__body_block .block--head .contact .dropdown.customer label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    padding: 0 12px 0 12px !important; /* exception to make it narrower, as label no longer had 5px extra padding in original design */
+    /*border: solid 1px #2c70a2;*//* additional exception overwrite for a specific .priority field in admin_ticket */
+
+    /* attempt at a less cluttered design, which still indicates these are selectable/expandable, but not the focus of UI */
+    /* variant 1 - bottom border */
+    border: none;
+    /*border-bottom: 1px solid #2c70a2;*/
+
+    /* variant 2 - lighter text */
+    /*color: #959eb0;*/
+
+    /* variant 3 - slight inset shadow */
+    box-shadow: inset 2px 1px 2px #f3f4f4, inset -2px -1px 2px #f3f4f4;
+}
+.ticket__body_block .block--head .contact .dropdown.customer:hover .label,
+.ticket__body_block .block--head .contact .dropdown.customer:hover label {
+    box-shadow: inset 2px 1px 2px #205c88, inset -2px -1px 2px #205c88;
+}
+.main__content.ticket .ticket__params .dropdown-select {
+    border-radius: 3px; /* required due to hover background, as label has box shadow and is rounded a bit */
+}
+.main__content.ticket .ticket__params .dropdown-select .label,
+.main__content.ticket .ticket__params .dropdown-select label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    padding: 0 12px 0 12px !important; /* exception to make it narrower, as label no longer had 5px extra padding in original design */
+    /*border: solid 1px #2c70a2;*/ /* additional exception overwrite for a specific .priority field in admin_ticket */
+
+    /* attempt at a less cluttered design, which still indicates these are selectable/expandable, but not the focus of UI */
+    /* variant 1 - bottom border */
+    border: none;
+    /*border-bottom: 1px solid #2c70a2;*/
+
+    /* variant 2 - lighter text */
+    /*color: #959eb0;*/
+
+    /* variant 3 - slight inset shadow */
+    box-shadow: inset 2px 1px 2px #f3f4f4, inset -2px -1px 2px #f3f4f4;
+}
+.checkbox-custom .dropdown-select:not(.right) .label,
+.checkbox-custom .dropdown-select:not(.right) label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+}
+.main__content.ticket .ticket__params .dropdown-select:hover .label,
+.main__content.ticket .ticket__params .dropdown-select:hover label {
+    box-shadow: inset 2px 1px 2px #205c88, inset -2px -1px 2px #205c88;
+}
+.ticket__body_block .block--head .contact .dropdown .dropdown-list li:not(.noclose):hover a {
+    color: #fff;
+}
+.ticket__body_block .block--head .contact time {
+    margin-left: 2px;
+}
+.ticket__body_block .block--head .contact .requester time {
+    margin-left: 0;
+}
+.ticket__body_block .block--checkboxs {
+    gap: 10%;
+}
+.ticket__body_block .block--checkboxs .checkbox-custom {
+    /* align the checkboxes into 2 columns, and allow enough space for a bit bigger texts, but if too long, force it into next row */
+    flex-basis: 43%;
+    margin-right: 0;
+    min-width: 35ch;
+}
+.attachments {
+    margin-top: 15px;
+}
+.ticket__body_block .time-and-canned .block--timer {
+    padding: 10px;
+}
+.ticket__body_block .time-and-canned .canned-options {
+    margin-top: 0 !important; /* to override a weird responsive change -> should be at 1340, so it's same media query condition as the parent */
+}
+@media (max-width: 1340px) {
+    .ticket__body_block .time-and-canned .canned-options {
+        margin-top: 10px !important;
+    }
+}
+.ticket__body_block .time-and-canned .canned-options .options {
+    flex-wrap: wrap;
+}
+.ticket__body_block .time-and-canned .canned-options .options > div {
+    flex: 1 0 175px;
+    max-width: 100%;
+}
+.ticket__body_block .time-and-canned .canned-options .form-group {
+    width: 50%;
+    margin-bottom: 0;
+}
+.ticket__body_block .time-and-canned .canned-options .form-group label {
+    text-align: right;
+}
+.ticket__body_block .time-and-canned .canned-options .form-group .selectize-control {
+    justify-content: right;
+}
+.ticket__body_block .time-and-canned .canned-options .form-group .selectize-control .selectize-input{
+    width: 100% !important;
+}
+.custom-field-title {
+    line-height: 1.8;
+}
+/* START some attempts for new customer layout - WIP, not final, might require layout changes */
+#submit-ticket .form-group > label > a {
+    margin-left: 5px;
+}
+/* END some attempts for new customer layout - WIP, not final, might require layout changes */
+
+/* START Users/Customers */
+.delete-modal .radio-list .radio-custom {
+    margin-top: 15px;
+}
+/* END Users/Customers */
+
+/* START admin/reports */
+/*.reports .radio-list .radio-custom:not(:first-child) {*/
+.reports__range_form  .radio-list .radio-custom:not(:first-child) {
+    margin-top: 5px;
+}
+.pie-chart-holder {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+}
+.pie-chart-holder > div {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+    max-width: 100%;
+}
+.pie-chart-holder > div > div {
+    display: block !important;
+    flex-basis: 200px;
+    flex-grow: 1;
+}
+/* START Admin_settings_general */
+/* certain settings can be in an .input-wrapper for allowing specific layouts, i.e. like having an icon/text for show password on top of the input field.
+To not mess the other layout, we essentially have to give input-wrapper some of the same behaviour as input (by default and on responsive breakpoints)
+to ensure it displays exactly like the other.
+
+Similarly, we have to "undo" the behaviour for any input that is inside the input-wrapper - it's essentially just making it fit the width.
+*/
+.main__content.settings .settings__form .form-group .input-wrapper {
+    position: relative;
+    width: 320px;
+    margin-left: 24px;
+}
+.main__content.settings .settings__form .form-group  .input-wrapper input {
+    width: 100%;
+    margin-left: 0;
+    padding-right: 44px;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    bottom: 0;
+    margin: auto 0;
+    height: max-content;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom input {
+    opacity: 0;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom label {
+    width: max-content !important;
+    margin-bottom: 0 !important;
+    padding-left: 0 !important;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom label::before,
+.input-wrapper.has-side-checkbox .checkbox-custom label::after {
+    /* don't show regular checkbox here*/
+    display: none;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom .icon-eye-open,
+.input-wrapper.has-side-checkbox .checkbox-custom .icon-eye-close {
+    width: 24px;
+    height: 24px;
+    fill: #2c70a2;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom.checked .icon-eye-close {
+    display: none;
+}
+.input-wrapper.has-side-checkbox .checkbox-custom:not(.checked) .icon-eye-open {
+    display: none;
+}
+.main__content .btn--blue-border {
+    height: 40px;
+}
+.main__content.settings .settings__form .form-group.flex-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.main__content.settings .btn.btn--blue-border {
+    /* don't override these buttons to be lower in height on mobile, as it looks worse */
+    height: 40px !important;
+}
+/* START admin_settings_email */
+.main__content.settings .settings__form .settings__form_block {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3333;
+}
+.main__content.settings .settings__form .settings__form_submit {
+    margin-top: 0;
+}
+#smtp_settings .divider {
+    display: none; /* no longer necessary, due to now generic/default separators on each .settings__form_block */
+}
+/* START admin_settings_ticket_list */
+.main__content.settings .settings__form .checkbox-group.list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.main__content.settings .settings__form .checkbox-group.list .checkbox-custom {
+    flex-basis: 25ch; /* TODO potential issue if there are ticket list fields that are longer than this? */
+}
+.table.ticket-list .dropdown.priority {
+    pointer-events: none; /* remove unnecessary hover event */
+}
+/* START module escalate */
+.right-bar.module-escalate-create .step-bar {
+    width: auto !important;
+}
+/* END module escalate */
+
+/* START content tools */
+.main__content.tools .tools__between-head.wider {
+    max-width: 100%;
+}
+/* END content tools */
+
+/* START email_templates */
+.right-bar.tools-email-template-edit .template--tags .tag-list a {
+    transition: all var(--transition-time-pri) ease-in;
+}
+.right-bar.tools-email-template-edit .template--tags .tag-list a:hover {
+    transition: all var(--transition-time-pri) ease-in;
+    background: rgba(44, 112, 162, 1);
+    color: #ffffff;
+}
+.right-bar.tools-email-template-edit .param > span {
+    display: inline-flex;
+    align-items: center;
+}
+/* END email_templates */
+
+/* START MFA */
+.step-bar li:last-child {
+    width: max-content;
+}
+/* END MFA */
+
+/* START manage categories */
+.category-create .category-create__select .dropdown .label,
+.category-create .category-create__select .dropdown-select .label {
+    box-shadow: inset 2px 1px 2px #f3f4f4, inset -2px -1px 2px #f3f4f4;
+    min-height: 2em !important;
+    padding: 0 12px 0 12px !important;
+    border: none;
+}
+.category-create .category-create__select .dropdown:hover .label,
+.category-create .category-create__select .dropdown-select:hover .label {
+    box-shadow: inset 2px 1px 2px #205c88, inset -2px -1px 2px #205c88;
+}
+.category-create .category-create__select .dropdown-select {
+    border-radius: 3px;
+}
+/* END manage categories */
+
+/* START custom_fields */
+.form.right-bar.create-custom-field .form input.form-control {
+    height: 40px !important;
+}
+/* END custom_fields */
+
+/* START manage_users */
+.team-create .right-bar__body .defaults-section .check-plus-input .form-group .form-control {
+    height: 40px;
+}
+/* END manage_users */
+
+/* START profile */
+.right-bar.profile-edit .step-item .check-plus-input .form-group .form-control {
+    height: 40px !important;
+}
+.right-bar.profile-edit .step-item.step-3 .defaults-section .check-plus-input {
+    flex-wrap: wrap;
+    gap: 5px 0;
+}
+.right-bar.profile-edit .step-item.step-3 .defaults-section .check-plus-input .checkbox-custom {
+    flex-basis: 100%; /* force other inputs into new row */
+}
+.right-bar.profile-edit .step-item.step-3 .defaults-section .form-group:not(:last-child) {
+    width: 43px !important;
+    margin-left: 23px;
+}
+.right-bar.profile-edit .step-item.step-3 .defaults-section .check-plus-input .form-group:last-child {
+    width: max-content;
+}
+/* END profile */
+
+/* ---------------
+ * END HESK LAYOUT IMPROVEMENTS
+ * ---------------
+*/
+
+/* ---------------
+ * BEGIN RESPONSIVE LAYOUT IMPROVEMENTS
+ * ---------------
+ *   These css changes below contains additional responsive improvements that override the above original CSS.
+ *   It's kept distinctly separate from above css, for easier decoupling and seeing what was specifically overridden from the original.
+*/
+
+@media screen and (max-width: 1230px) {
+    /* admin_setting_general */
+
+    .main__content.settings .settings__form .form-group .input-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+    .main__content.settings .settings__form .form-group  .input-wrapper input {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    /* admin_settings_help_desk - note, some of these settings overlap with other setting pages, like misc, etc. */
+    .main__content.settings .settings__form .form-group.flex-row {
+        display: flex;
+    }
+    .main__content.settings .settings__form .form-group.flex-row label {
+        flex: 9999 0 100%; /* massive flex-grow, so it takes all the rest of the space*/
+        justify-content: flex-start;
+    }
+    .main__content.settings.admin_settings_help_desk .settings__form .form-group.flex-row .dropdown-select {
+    }
+    .main__content.settings.admin_settings_help_desk .settings__form .form-group.flex-row input {
+        flex: 1;
+        max-width: 100% !important;
+    }
+    .main__content.settings .settings__form .form-group.flex-row input,
+    .main__content.settings .settings__form .form-group.flex-row .dropdown-select label {
+        flex: 1;
+    }
+    .main__content.settings .settings__form .form-group.flex-row input {
+        flex: 0 1 auto;
+        max-width: max-content !important;
+    }
+    /* admin_settings_misc */
+    .main__content.settings .settings__form .form-group.flex-row .selectize-control {
+        flex: 1;
+    }
+    /* admin settings hesk desk */
+    .main__content.settings .settings__form .form-group > span {
+        margin-left: 0;
+    }
+    .main__content.settings .settings__form .checkbox-group .checkbox-list .form-group textarea {
+        box-sizing: border-box;
+        width: calc(100% - 25px);
+    }
+}
+@media screen and (max-width: 1100px) {
+    .main__content.ticket .block--submit .submit-us .dropdown-list {
+        /* prevent overflow of select dropdowns on mid-screen size*/
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+        transform: none;
+    }
+}
+@media screen and (max-width: 899px) {
+    .main__content { /* TODO note -> was there less left padding here deliabrately -> i.e. right padding needs more for i.e. a scrollbar?*/
+        padding: 16px 16px 0 16px !important;
+    }
+    .main__content.knowledgebase form .btn {
+        height: 27px !important;
+    }
+    .main__content.ticket {
+        gap: 0; /* no further gap required, handled by bottom-margin already */
+    }
+    .main__content.ticket .ticket__body {
+        max-width: 100% !important;
+    }
+    .main__content.ticket .ticket__params {
+        max-width: 100% !important;
+    }
+    .main__content.ticket .block--submit .btn {
+        margin: 0;
+        margin-right: 16px;
+    }
+    .main__content.ticket .ticket__body .ticket__body_block:not(:first-child) .block--head {
+        /* got to re-overwrite this for replies on admin, as otherwise they unnecessarily force layout to move to next row */
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .main__content.ticket .ticket__body .ticket__body_block:not(:first-child) .block--head .more {
+        margin-left: auto;
+    }
+    .main__content.ticket .ticket__body .ticket__body_block:not(:first-child) .block--head time {
+        margin-bottom: 0;
+    }
+
+    .main__content.ticket .ticket__body_block .block--submit {
+        gap: 10px 0px;
+    }
+    .main__content.ticket .block--submit .submit-us {
+        margin: 0;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .main__content.notice-flash {
+        padding: 0 !important;
+    }
+
+    .table-wrap {
+        padding: 5px;
+    }
+    .table tbody td,
+    .table thead th {
+        padding: 7px 5px;
+    }
+    .table tbody td.table__first_th ,
+    .table thead th.table__first_th {
+        padding: 7px 5px 7px 10px;
+    }
+    .main__content.team .table-wrap tbody td:first-child {
+        padding: 7px 5px 7px 10px;
+    }
+    .right-bar .step-bar {
+        max-width: 100vw !important;
+    }
+
+    /* module_escalate new rule */
+    .right-bar.module-escalate-create .step-item .check-plus-input .checkbox-custom {
+        margin-bottom: 5px !important;
+    }
+    .right-bar.module-escalate-create .step-item .check-plus-input .form-group {
+        margin-left: 0 !important;
+    }
+
+    /* table tickets page */
+    .ticket__body_block {
+        padding: 10px;
+    }
+
+    /* admin_ticket */
+    .more .dropdown-list {
+        right: 20px !important;
+        left: auto !important;
+    }
+
+    /* have to reset this again, as it was overriden by < 1100px query above*/
+    .main__content.ticket .block--submit .submit-us .dropdown-list {
+        top: calc(100% + 8px);
+
+        right: 0;
+        -ms-transform: none;
+        transform: none;
+        left: auto;
+    }
+    .btn--blue-border, .btn-full { /* don't make them lower, as it looks better if they remain high*/
+        height: 40px !important;
+    }
+
+    /* MFA */
+    .main__content.profile .mfa-steps .step-bar {
+        width: 100%;
+    }
+
+    /* custom fields page*/
+    .main__content.tools .table-wrapper.custom-field .buttons p {
+        width: max-content;
+        gap: 10px;
+    }
+    .main__content.tools .table-wrapper.custom-field .buttons p a {
+        width: 28px;
+        height: 28px;
+    }
+
+    /* manage kb */
+    .main__content.knowledge.category .category__list .category__list_table table td.actions .actions--buttons {
+        margin-right: 0;
+    }
+    .main__content.knowledge.category .category__list .category__list_table table td.actions a {
+        width: 28px;
+        height: 28px;
+    }
+
+    .main__content.knowledge .article__detalies_list .dropdown.right .dropdown-list,
+    .main__content.knowledge .article__detalies_list .dropdown-select.right .dropdown-list {
+        /* If calc & vw supported, this will effectively position the dropdown items to the left of the screen
+        A simple left: 0, in this case wouldn't work, as the dropdown has a label on the left of it.
+        */
+        right: auto;
+        left: calc(-50vw + 50%);
+        max-width: calc(100vw - 30px);
+    }
+
+    /* START manage_users */
+    .team-create .right-bar__body .defaults-section .check-plus-input .form-group:not(:first-child) {
+        margin-left: 20px;
+    }
+
+    /* START custom_fields */
+    .right-bar.create-custom-field .item--section .radio-custom {
+        flex-wrap: wrap;
+        gap: 5px 0;
+    }
+
+    /*  START profile */
+    .right-bar.profile-edit .step-item.step-3 .defaults-section .form-group:last-child {
+        width: 40px !important;
+        margin-left: 20px;
+    }
+
+    /* START settings */
+    .settings__form_block .dropdown.center .dropdown-list,
+    .settings__form_block .dropdown-select.center .dropdown-list {
+        right: auto;
+        left: 0;
+        max-width: calc(100vw - 20px);
+        transform: none;
+    }
+    .main__content.settings .settings__form .checkbox-group.row {
+        gap: 0 10px;
+    }
+    .main__content.settings .settings__form .checkbox-group h5 {
+        flex-shrink: 1;
+    }
+    .main__content.settings .settings__form .checkbox-group .switch-checkbox {
+        margin-top: 7px;
+    }
+    .main__content.settings .settings__form .checkbox-group.row label {
+        margin-left: 15px !important;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .show_tickets .search-name {
+        width: 150px;
+    }
+    .wrapper .main .main__content > section > h2 {
+        margin-left: 0;
+        padding-left: 0;
+        min-width: 40%;
+    }
+    .main__content.profile .mfa__head {
+        margin-right: auto;
+    }
+
+    .main__content.ticket .block--submit .submit-us .dropdown-list {
+        right: auto;
+        left: 0;
+        max-width: calc(100vw - 30px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .btn-full {
+        min-width: max-content;
+    }
+    .show_tickets .checkbox-group .row .checkbox-custom {
+        min-width: auto;
+        width: 100%;
+    }
+    .clear-on-mobile {
+        display: block;
+    }
+    .main__content { /* TODO note -> was there less left padding here deliabrately -> i.e. right padding needs more for i.e. a scrollbar?*/
+        /*padding: 5px 5px 0 5px;*/
+        padding: 16px 5px 0 5px !important;
+    }
+    .inline-bottom {
+        display: inline-block; /* undo the overwrite, seems unnecessary */
+    }
+
+    .show_tickets .search-name {
+        width: 120px;
+        max-width: 30%;
+    }
+    .main__content.team .team__head .buttons {
+        margin-left: 20px;
+        text-align: right;
+    }
+    .main__content.team .team__head .buttons .btn {
+        /*width: 100%;*/
+        max-width: 100%;
+    }
+    .main__content.team .team__head .buttons .btn:not(:first-child) {
+        margin-top: 5px;
+    }
+
+    /* admin_settings_general */
+    .main__content.settings .settings__form .form-group.flex-row {
+        display: block;
+    }
+    .main__content.settings .settings__form .form-group.flex-row > label {
+        display: block;
+    }
+    .main__content.settings .settings__form .form-group.flex-row .dropdown-select {
+        margin-left: 0;
+    }
+
+    /* admin_Settings_misc inputs & label better layout */
+    .main__content.settings .settings__form .form-group.flex-row input {
+        flex: 0 1 auto;
+        max-width: 100% !important;
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    .ticket__body_block .time-and-canned .canned-options .form-group {
+        margin-top: 10px;
+    }
+}
+
+/* ---------------
+ * END RESPONSIVE LAYOUT IMPROVEMENTS
+ * ---------------
+*/

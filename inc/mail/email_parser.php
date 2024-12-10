@@ -171,7 +171,7 @@ function process_attachments($attachments)
 		}
         elseif ($type == 'message')
         {
-            $orig_name = ($key + 1) . ".msg";
+            $orig_name = ($key + 1) . ".eml";
         }
 
 		if ( ! strlen($orig_name))
@@ -382,6 +382,11 @@ function process_results($result,$tempdir)
 
     // Do we have a priority tag?
     $r["X-Priority"] = isset($result["X-Priority"]) ? strtolower($result["X-Priority"]) : "low";
+
+    // Message ID and related tags
+    $r["Message-ID"] = isset($result["Message-ID"]) ? $result["Message-ID"] : "";
+    $r["In-Reply-To"] = isset($result["In-Reply-To"]) ? $result["In-Reply-To"] : "";
+    $r["References"] = isset($result["References"]) ? $result["References"] : "";
 
 	return $r;
 }

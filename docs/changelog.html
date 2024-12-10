@@ -15,7 +15,7 @@
 <tr>
 <td width="50%" style="text-align:left;vertical-align:top">
  <ul class="nobullets">
- <li>Version: 3.4.5 from 9th March 2024</li>
+ <li>Version: 3.5.1 from 15th November 2024</li>
  <li>Developed by: Klemen Stirn, Mike Koch</li>
  <li><a href="https://www.hesk.com">Help Desk Software HESK</a></li>
  <li><a href="https://www.phpjunkyard.com">Free PHP Scripts</a></li>
@@ -33,6 +33,45 @@
 </table>
 
 <h2>HESK 3 CHANGELOG</h2>
+
+<p><b>Changes in 3.5.1</b> - 15th November 2024<br />
+- fix: cannot delete customers from the database when customer accounts are disabled<br />
+- fix: link to the wrong download_attachment.php file in customer emails<br />
+- fix: "Submit as" button not working with Ticket Formatting set to Rich Text</p>
+
+<p><b>Changes in 3.5.0</b> - 4th November 2024<br />
+- Hesk now supports customer accounts; they can be disabled, optional or required<br />
+- service messages can now be displayed on multiple customer-side pages<br />
+- a barcode (C128, C39, QR code ...) can be added when printing tickets<br />
+- when submitting a ticket or a reply, Hesk can now show a &quot;Submitting, please wait&quot; message<br />
+- display an error on the OAuth Providers page if cURL is not available<br />
+- copy/generate a public link to a ticket from the admin panel<br />
+- rich text editors now have anchor plugin enabled<br />
+- number of available custom fields doubled to 100<br />
+- staff can now bookmark tickets; you only see your own bookmarks<br />
+- staff can send a ticket email reminder to the assigned staff member<br />
+- added a &quot;Download all&quot; link to ticket attachments<br />
+- added IMAP option to disable GSSAPI authenticator (Kerberos error work-around)<br />
+- added a limit to the number of email recipients in a single email<br />
+- added closed at and ticket URL to ticket exports<br />
+- added option to include ticket history log in ticket exports<br />
+- added an easy way to load an extra custom Javascript file to Hesk admin<br />
+- when saving a KB article, show the article again rather than the category article list<br />
+- if a KB category has no articles, Hesk will search for articles to preview in sub-categories<br />
+- changed default unknown email extension from *.msg to *.eml to avoid issues with Outlook's MSG format<br />
+- add do_not_suggest=1 to disable suggesting KB articles when passing parameters to the submit a ticket form<br/>
+- the &quot;Require email to view a ticket&quot; setting will now consider tickets with no emails<br />
+- fix: do not log the staff IP address as the client IP address when submitting a ticket from the admin panel<br />
+- fix: incorrect &quot;last updated&quot; timestamp shown in emails when customers reply to a ticket<br />
+- fix: third-party modified staff signature not updated until new login<br />
+- fix: auto-assign not working if turned off from category but selected by staff<br />
+- fix: OAuth providers can send an error along with status<br />
+- fix: settings help files do not link to the correct language if a non-default is selected<br />
+- fix: SQL error with too long default URL user variable</p>
+
+<p><b>Changes in 3.4.6</b> - 11th August 2024<br />
+- security: fixed a reflected XSS, reported by TETS (<a href="https://theeminence.org/">www</a>)<br />
+- fix: invalid value in tickets sub-pages links</p>
 
 <p><b>Changes in 3.4.5</b> - 9th March 2024<br />
 - fix: required custom field errors from category-specific fields when editing a ticket<br />

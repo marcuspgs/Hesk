@@ -138,6 +138,7 @@ if ($hesk_settings['imap_conn_type'] === 'basic') {
 
 $imap->readOnly = $hesk_settings['TEST-MODE'];
 $imap->ignoreCertificateErrors = $hesk_settings['imap_noval_cert'];
+$imap->disableGSSAPI = $hesk_settings['imap_disable_GSSAPI'];
 $imap->connectTimeout = 15;
 $imap->responseTimeout = 15;
 

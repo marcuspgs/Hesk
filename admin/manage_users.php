@@ -39,41 +39,43 @@ if ($can_man_users) {
 
 /* Possible user features */
 $hesk_settings['features'] = array(
-'can_view_tickets',		/* User can read tickets */
-'can_reply_tickets',	/* User can reply to tickets */
-'can_del_tickets',		/* User can delete tickets */
-'can_edit_tickets',		/* User can edit tickets */
-'can_merge_tickets',	/* User can merge tickets */
-'can_resolve',			/* User can resolve tickets */
-'can_submit_any_cat',	/* User can submit a ticket to any category/department */
-'can_del_notes',		/* User can delete ticket notes posted by other staff members */
-'can_change_cat',		/* User can move ticket to any category/department */
-'can_change_own_cat',	/* User can move ticket to a category/department he/she has access to */
+'can_view_tickets',     /* User can read tickets */
+'can_reply_tickets',    /* User can reply to tickets */
+'can_del_tickets',      /* User can delete tickets */
+'can_edit_tickets',     /* User can edit tickets */
+'can_merge_tickets',    /* User can merge tickets */
+'can_resolve',          /* User can resolve tickets */
+'can_submit_any_cat',   /* User can submit a ticket to any category/department */
+'can_del_notes',        /* User can delete ticket notes posted by other staff members */
+'can_change_cat',       /* User can move ticket to any category/department */
+'can_change_own_cat',   /* User can move ticket to a category/department he/she has access to */
 'can_due_date',         /* User can set and modify due date */
-'can_man_kb',			/* User can manage knowledgebase articles and categories */
-'can_man_users',		/* User can create and edit staff accounts */
-'can_view_users',		/* User can view staff accounts, but not create or edit them */
-'can_man_cat',			/* User can manage categories/departments */
-'can_man_canned',		/* User can manage canned responses */
-'can_man_ticket_tpl',	/* User can manage ticket templates */
-'can_man_settings',		/* User can manage help desk settings */
-'can_add_archive',		/* User can mark tickets as "Tagged" */
-'can_assign_self',		/* User can assign tickets to himself/herself */
-'can_assign_others',	/* User can assign tickets to other staff members */
-'can_view_unassigned',	/* User can view unassigned tickets */
-'can_view_ass_others',	/* User can view tickets that are assigned to other staff */
+'can_man_kb',           /* User can manage knowledgebase articles and categories */
+'can_man_users',        /* User can create and edit staff accounts */
+'can_view_users',       /* User can view staff accounts, but not create or edit them */
+'can_man_cat',          /* User can manage categories/departments */
+'can_man_canned',       /* User can manage canned responses */
+'can_man_ticket_tpl',   /* User can manage ticket templates */
+'can_man_settings',     /* User can manage help desk settings */
+'can_add_archive',      /* User can mark tickets as "Tagged" */
+'can_assign_self',      /* User can assign tickets to himself/herself */
+'can_assign_others',    /* User can assign tickets to other staff members */
+'can_view_unassigned',  /* User can view unassigned tickets */
+'can_view_ass_others',  /* User can view tickets that are assigned to other staff */
 'can_view_ass_by',      /* User can view tickets he/she assigned to others */
-'can_run_reports',		/* User can run reports and see statistics (only allowed categories and self) */
+'can_run_reports',      /* User can run reports and see statistics (only allowed categories and self) */
 'can_run_reports_full', /* User can run reports and see statistics (unrestricted) */
-'can_export',			/* User can export own tickets to Excel */
-'can_view_online',		/* User can view what staff members are currently online */
-'can_ban_emails',		/* User can ban email addresses */
-'can_unban_emails',		/* User can delete email address bans. Also enables "can_ban_emails" */
-'can_ban_ips',			/* User can ban IP addresses */
-'can_unban_ips',		/* User can delete IP bans. Also enables "can_ban_ips" */
-'can_privacy',  		/* User can use privacy tools (Anonymize tickets) */
-'can_service_msg',		/* User can manage service messages shown in customer interface */
-'can_email_tpl',		/* User can manage email templates */
+'can_export',           /* User can export own tickets to Excel */
+'can_view_online',      /* User can view what staff members are currently online */
+'can_ban_emails',       /* User can ban email addresses */
+'can_unban_emails',     /* User can delete email address bans. Also enables "can_ban_emails" */
+'can_ban_ips',          /* User can ban IP addresses */
+'can_unban_ips',        /* User can delete IP bans. Also enables "can_ban_ips" */
+'can_privacy',          /* User can use privacy tools (Anonymize tickets) */
+'can_service_msg',      /* User can manage service messages shown in customer interface */
+'can_email_tpl',        /* User can manage email templates */
+'can_man_customers',    /* User can create and edit customer accounts */
+'can_view_customers',   /* User can view customer accounts, but not create or edit them */
 );
 
 /* Set default values */
@@ -182,14 +184,15 @@ else
 {
 
 /* If one came from the Edit page make sure we reset user values */
-
 if (isset($_SESSION['save_userdata']))
 {
 	$_SESSION['userdata'] = $default_userdata;
+    $_SESSION['use_sort_vars'] = true;
     unset($_SESSION['save_userdata']);
 }
 if (isset($_SESSION['edit_userdata']))
 {
+    $_SESSION['use_sort_vars'] = true;
 	$_SESSION['userdata'] = $default_userdata;
     unset($_SESSION['edit_userdata']);
 }
@@ -199,9 +202,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
-?>
 
-<?php
 /* This will handle error, success and notice messages */
 if (!hesk_SESSION(array('userdata', 'errors'))) {
     hesk_handle_messages();
@@ -256,6 +257,19 @@ if (hesk_dbNumRows($res) > 0)
     //hesk_show_notice($hesklang['uue'] . '<br><br>' . implode('<br>', array_keys($emails)));
     hesk_show_notice($hesklang['uue']);
 }
+
+    if (!isset($_SESSION['use_sort_vars']) && isset($_SESSION['sort_vars'])) {
+        unset($_SESSION['sort_vars']);
+    }
+    $saved_search = hesk_SESSION_array('sort_vars');
+    $sort_column = isset($saved_search['sort_column']) ? $saved_search['sort_column'] : hesk_REQUEST('sort_column');
+    $sort_direction = isset($saved_search['sort_direction']) ? $saved_search['sort_direction'] : hesk_REQUEST('sort_direction');
+
+    // Now set the variables in the session for later
+    $_SESSION['sort_vars'] = [
+        'sort_column' => $sort_column,
+        'sort_direction' => $sort_direction
+    ];
 ?>
 <div class="main__content team">
     <section class="team__head">
@@ -281,8 +295,22 @@ if (hesk_dbNumRows($res) > 0)
             <table id="default-table" class="table sindu-table">
                 <thead>
                 <tr>
-                    <th><?php echo $hesklang['name']; ?></th>
-                    <th><?php echo $hesklang['email']; ?></th>
+                    <th class="sindu-handle <?php echo $sort_column === 'name' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <a href="<?php echo build_sort_url($sort_column, 'name', $sort_direction); ?>">
+                            <div class="sort">
+                                <span><?php echo $hesklang['name']; ?></span>
+                                <i class="handle"></i>
+                            </div>
+                        </a>
+                    </th>
+                    <th class="sindu-handle <?php echo $sort_column === 'email' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <a href="<?php echo build_sort_url($sort_column, 'email', $sort_direction); ?>">
+                            <div class="sort">
+                                <span><?php echo $hesklang['email']; ?></span>
+                                <i class="handle"></i>
+                            </div>
+                        </a>
+                    </th>
                     <th><?php echo $hesklang['username']; ?></th>
                     <th><?php echo $hesklang['role']; ?></th>
                     <?php
@@ -326,7 +354,13 @@ if (hesk_dbNumRows($res) > 0)
                         $tickets_per_user[$row['owner']]['closed'] += $row['cnt'];
                     }
                 }
-                $res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `name` ASC');
+
+                $query_sort_column = 'name';
+                if ($sort_column !== null && in_array($sort_column, ['name', 'email'])) {
+                    $query_sort_column = $sort_column;
+                }
+                $query_sort_direction = $sort_direction === 'ASC' ? 'ASC' : 'DESC';
+                $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `{$query_sort_column}` {$query_sort_direction}");
 
                 $cannot_manage = array();
 
@@ -407,7 +441,7 @@ if (hesk_dbNumRows($res) > 0)
                                 </div>';
                         }
 
-                        $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                             $modal_body,
                             'manage_users.php?a=remove&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0));
                         $remove_code = '
@@ -489,7 +523,7 @@ EOC;
                     $mfa_enrollment = intval($myuser['mfa_enrollment']);
                     $mfa_status = $hesklang['mfa_method_none'];
                     $mfa_reset = '';
-                    $modal_id = hesk_generate_delete_modal($hesklang['mfa_reset_to_default'],
+                    $modal_id = hesk_generate_old_delete_modal($hesklang['mfa_reset_to_default'],
                         $hesklang['mfa_reset_confirm'],
                         'manage_users.php?a=resetmfa&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0),
                         $hesklang['mfa_reset_yes']);
@@ -570,6 +604,7 @@ EOC;
 </div>
 <?php
 endif;
+unset($_SESSION['use_sort_vars']);
 
 require_once(HESK_PATH . 'inc/footer.inc.php');
 exit();
@@ -901,7 +936,8 @@ function update_user()
 	`notify_reply_my`='".($myuser['notify_reply_my'])."' ,
 	`notify_assigned`='".($myuser['notify_assigned'])."' ,
 	`notify_pm`='".($myuser['notify_pm'])."',
-	`notify_note`='".($myuser['notify_note'])."'
+	`notify_note`='".($myuser['notify_note'])."',
+    `notify_customer_approval`='".($myuser['notify_customer_approval'])."'
     WHERE `id`='".intval($myuser['id'])."'");
 
     unset($_SESSION['save_userdata']);
@@ -1084,6 +1120,7 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
     $myuser['notify_assigned']			    = empty($_POST['notify_assigned']) ? 0 : 1;
     $myuser['notify_note']				    = empty($_POST['notify_note']) ? 0 : 1;
     $myuser['notify_pm']				    = empty($_POST['notify_pm']) ? 0 : 1;
+    $myuser['notify_customer_approval']     = empty($_POST['notify_customer_approval']) ? 0 : 1;
 
     /* Save entered info in session so we don't lose it in case of errors */
 	$_SESSION['userdata'] = $myuser;
@@ -1166,7 +1203,10 @@ function remove()
 
     // Clear users' authentication and MFA tokens
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` WHERE `user_id` = {$myuser}");
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$myuser}");
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$myuser} AND `user_type` = 'STAFF'");
+
+    // Clear users' bookmarks
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."bookmarks` WHERE `user_id` = {$myuser}");
 
 	// Refresh autoassign configs to ensure their ID is gone
     hesk_updateAutoassignConfigs();
@@ -1239,5 +1279,12 @@ function reset_mfa() {
     delete_mfa_codes($myuser);
 
     hesk_process_messages($hesklang['mfa_reset'], './manage_users.php', 'SUCCESS');
+}
+
+function build_sort_url($current_sort_field, $sort_field, $current_sort_direction) {
+    $target_sort_direction = $current_sort_direction === 'ASC' && $sort_field === $current_sort_field ? 'DESC' : 'ASC';
+    $encoded_field = urlencode($sort_field);
+
+    return "manage_users.php?sort_column={$encoded_field}&sort_direction={$target_sort_direction}";
 }
 ?>

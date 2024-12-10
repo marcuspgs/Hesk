@@ -197,6 +197,28 @@ function hesk_setcookie($name, $value, $expire=0, $path="")
 } // END hesk_setcookie()
 
 
+function hesk_get_service_messages($page=null, $strict_page_check=false)
+{
+    global $hesk_settings, $hesklang, $hesk_db_link;
+
+    if (empty($page)) {
+        $page = 'home';
+    }
+
+    $res = hesk_dbQuery('SELECT `title`, `message`, `style` FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."service_messages`
+        WHERE `type`='0'
+        AND ".($strict_page_check ? "`location` LIKE '%".hesk_dbEscape($page)."%'" : "(" . ($page == 'home' ? '`location` IS NULL OR ' : '')."`location`='ALL' OR `location` LIKE '%".hesk_dbEscape($page)."%')")."
+        AND (`language` IS NULL OR `language` LIKE '".hesk_dbEscape($hesk_settings['language'])."')
+        ORDER BY `order` ASC"
+    );
+    $service_messages = array();
+    while ($sm=hesk_dbFetchAssoc($res)) {
+        $service_messages[] = $sm;
+    }
+    return $service_messages;
+} // END hesk_get_service_messages()
+
+
 function hesk_service_message($sm)
 {
 	switch ($sm['style'])
@@ -360,6 +382,18 @@ function hesk_GET($in, $default = '')
 } // END hesk_GET()
 
 
+function hesk_restricted_GET($in, $allowed_values, $default = '')
+{
+    if (!isset($_GET[$in]) || is_array($_GET[$in])) {
+        return $default;
+    }
+
+    $value = $_GET[$in];
+    return in_array($value, $allowed_values) ? $value : $default;
+
+} // END hesk_restricted_GET()
+
+
 function hesk_POST($in, $default = '')
 {
 	return isset($_POST[$in]) && ! is_array($_POST[$in]) ? $_POST[$in] : $default;
@@ -446,7 +480,7 @@ function hesk_slashJS($in)
 } // END hesk_slashJS()
 
 
-function hesk_verifyEmailMatch($trackingID, $my_email = 0, $ticket_email = 0, $error = 1)
+function hesk_verifyEmailMatch($trackingID, $my_email = 0, $ticket_emails = [], $error = 1)
 {
 	global $hesk_settings, $hesklang, $hesk_db_link;
 
@@ -462,6 +496,22 @@ function hesk_verifyEmailMatch($trackingID, $my_email = 0, $ticket_email = 0, $e
 	/* Limit brute force attempts */
 	hesk_limitBfAttempts();
 
+    // handle edge case: email is required to view tickets, but is not required to submit a ticket
+    // if the ticket was submitted without an email, match an empty mail
+    // if the ticket was submitted with an email, it must match
+    if ($hesk_settings['require_email'] == 0) {
+        if (in_array('', $ticket_emails)) {
+            $hesk_settings['e_param'] = '';
+            $hesk_settings['e_query'] = '';
+            $hesk_settings['e_email'] = '';
+            return true;
+        } elseif (empty($my_email)) {
+            return 'EMAIL_REQUIRED';
+        } else {
+            $hesk_settings['tmp_skip_redirect'] = true;
+        }
+    }
+
 	/* Get email address */
 	if ($my_email)
 	{
@@ -474,43 +524,44 @@ function hesk_verifyEmailMatch($trackingID, $my_email = 0, $ticket_email = 0, $e
 		$my_email = hesk_getCustomerEmail();
 	}
 
-	/* Get email from ticket */
-	if ( ! $ticket_email)
+	/* Get emails from ticket */
+	if (empty($ticket_emails))
 	{
-		$res = hesk_dbQuery("SELECT `email` FROM `".$hesk_settings['db_pfix']."tickets` WHERE `trackid`='".hesk_dbEscape($trackingID)."' LIMIT 1");
-		if (hesk_dbNumRows($res) == 1)
-		{
-			$ticket_email = hesk_dbResult($res);
-		}
-        else
+		$res = hesk_dbQuery("SELECT `customers`.`email` AS `email`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` `tickets`
+            INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` `ticket_customer`
+                ON `tickets`.`id` = `ticket_customer`.`ticket_id`
+            INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` `customers`
+                ON `ticket_customer`.`customer_id` = `customers`.`id` 
+            WHERE `trackid`='".hesk_dbEscape($trackingID)."'");
+        while ($row = hesk_dbFetchAssoc($res)) {
+            $ticket_emails[] = $row['email'];
+        }
+
+        if (empty($ticket_emails))
         {
 			hesk_process_messages($hesklang['ticket_not_found'],'ticket.php');
         }
 	}
 
-	/* Validate email */
-	if ($hesk_settings['multi_eml'])
-	{
-		$valid_emails = explode(',', strtolower($ticket_email) );
-		if ( in_array(strtolower($my_email), $valid_emails) )
-		{
-			/* Match, clean brute force attempts and return true */
-			hesk_cleanBfAttempts();
-			return true;
-		}
-	}
-	elseif ( strtolower($ticket_email) == strtolower($my_email) )
-	{
-		/* Match, clean brute force attempts and return true */
-		hesk_cleanBfAttempts();
-		return true;
-	}
+    /* Validate email */
+    foreach ($ticket_emails as $email) {
+        if (strtolower($my_email) === strtolower($email)) {
+            /* Match, clean brute force attempts and return true */
+            hesk_cleanBfAttempts();
+            return true;
+        }
+    }
+
 
 	/* Email doesn't match, clean cookies and error out */
     if ($error)
     {
 	    hesk_setcookie('hesk_myemail', '');
-	    hesk_process_messages($hesklang['enmdb'],'ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999));
+        if ( ! empty($hesk_settings['tmp_skip_redirect'])) {
+            return 'EMAIL_FALSE';
+        }
+        hesk_process_messages($hesklang['enmdb'],'ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999));
     }
     else
     {
@@ -974,7 +1025,7 @@ function hesk_forceLogout($error_message = '', $redirect = 'index.php', $do_die 
 
     // Clear users' authentication and MFA tokens
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` WHERE `user_id` = {$id}");
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$id}");
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$id} AND `user_type` = 'STAFF'");
 
     // Stop the session and clear cookies
     hesk_session_stop();
@@ -994,6 +1045,33 @@ function hesk_forceLogout($error_message = '', $redirect = 'index.php', $do_die 
 } // END hesk_forceLogout()
 
 
+function hesk_forceLogoutCustomer($error_message = '', $redirect = 'index.php', $do_die = true, $message_type = 'ERROR')
+{
+    global $hesk_settings, $hesklang;
+
+    if (($id = hesk_SESSION(array('customer', 'id'), false)) === false) {
+        return true;
+    }
+
+    // Clear users' MFA tokens
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$id} AND `user_type` = 'CUSTOMER'");
+
+    // Stop the session and clear cookies
+    hesk_session_stop();
+
+    // Send the user to the login page?
+    if ($redirect !== false) {
+        hesk_session_start('CUSTOMER');
+        hesk_process_messages($error_message, $redirect, $message_type);
+    }
+
+    if ($do_die) {
+        exit();
+    }
+
+} // END hesk_forceLogoutCustomer()
+
+
 function hesk_limitInternalBfAttempts()
 {
     return hesk_limitBfAttempts(false);
@@ -1007,7 +1085,11 @@ function hesk_limitBfAttempts($die_with_error = true)
 	// Check if this IP is banned permanently
 	if ( hesk_isBannedIP(hesk_getClientIP()) )
 	{
-        hesk_forceLogout($hesklang['baned_ip']);
+        if (isset($_SESSION['customer'])) {
+            hesk_forceLogoutCustomer($hesklang['baned_ip']);
+        } else {
+            hesk_forceLogout($hesklang['baned_ip']);
+        }
     	hesk_error($hesklang['baned_ip'], 0);
 	}
 
@@ -1045,15 +1127,23 @@ function hesk_limitBfAttempts($die_with_error = true)
             if ( ! $die_with_error)
             {
                 hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."logins` WHERE `ip`='".hesk_dbEscape($ip)."'");
-                hesk_forceLogout($hesklang['bf_int']);
+                if (isset($_SESSION['customer'])) {
+                    hesk_forceLogoutCustomer($hesklang['baned_ip']);
+                } else {
+                    hesk_forceLogout($hesklang['baned_ip']);
+                }
             }
 
             $error = sprintf($hesklang['yhbb'], $hesk_settings['attempt_banmin']);
 
-            // If this is a logged-in staff, log out
-            hesk_forceLogout($error);
+            // If this is a logged-in user, log out
+            if (isset($_SESSION['customer'])) {
+                hesk_forceLogoutCustomer($hesklang['baned_ip']);
+            } else {
+                hesk_forceLogout($hesklang['baned_ip']);
+            }
 
-            // Not a logged-in staff, throw an error
+            // Not a logged-in user, throw an error
             unset($_SESSION);
         	hesk_error($error, 0);
 
@@ -1157,10 +1247,34 @@ function hesk_getReplierName($ticket)
     }
 
     // Last reply by customer
-    return $ticket['name'];
+    if ($ticket['replies'] > 0) {
+        // Get latest customer reply
+        $replier_rs = hesk_dbQuery("SELECT `customer`.`name` AS `name`
+                FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `reply`
+                LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customer`
+                    ON `reply`.`customer_id` = `customer`.`id`
+                WHERE `replyto` = ".intval($ticket['id'])."
+                    AND `staffid` = 0
+                ORDER BY `reply`.`id` DESC
+                LIMIT 1");
 
+        if ($row = hesk_dbFetchAssoc($replier_rs)) {
+            return $row['name'] !== null ? $row['name'] : $hesklang['anon_name'];
+        }
+    }
+
+    // No replies, grab the requester from the main ticket
+    $requester_name_rs = hesk_dbQuery("SELECT `customer`.`name`
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
+        LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customer`
+            ON `ticket_to_customer`.`customer_id` = `customer`.`id`
+        WHERE `ticket_to_customer`.`ticket_id` = ".intval($ticket['id'])."
+            AND `customer_type` = 'REQUESTER'");
+
+    if ($row = hesk_dbFetchAssoc($requester_name_rs)) {
+        return $row['name'] !== null ? $row['name'] : $hesklang['anon_name'];
+    }
 } // END hesk_getReplierName()
-
 
 function hesk_getOwnerName($id)
 {
@@ -2358,43 +2472,16 @@ function hesk_validateEmail($address,$error,$required=1)
 {
 	global $hesklang, $hesk_settings;
 
-	/* Allow multiple emails to be used? */
-	if ($hesk_settings['multi_eml'])
-	{
-		/* Make sure the format is correct */
-		$address = preg_replace('/\s/','',$address);
-		$address = str_replace(';',',',$address);
+    /* Make sure people don't try to enter multiple addresses */
+    $address = str_replace(strstr($address,','),'',$address);
+    $address = str_replace(strstr($address,';'),'',$address);
+    $address = trim($address);
 
-		/* Check if addresses are valid */
-		$all = array_unique(explode(',',$address));
-		foreach ($all as $k => $v)
-		{
-			if ( ! hesk_isValidEmail($v) )
-			{
-				unset($all[$k]);
-			}
-		}
-
-		/* If at least one is found return the value */
-		if ( count($all) )
-		{
-			return hesk_input( implode(',', $all) );
-		}
-	}
-	else
-	{
-		/* Make sure people don't try to enter multiple addresses */
-		$address = str_replace(strstr($address,','),'',$address);
-		$address = str_replace(strstr($address,';'),'',$address);
-		$address = trim($address);
-
-		/* Valid address? */
-		if ( hesk_isValidEmail($address) )
-		{
-			return hesk_input($address);
-		}
-	}
-
+    /* Valid address? */
+    if ( hesk_isValidEmail($address) )
+    {
+        return hesk_input($address);
+    }
 
 	if ($required)
 	{
@@ -2406,6 +2493,26 @@ function hesk_validateEmail($address,$error,$required=1)
 	}
 
 } // END hesk_validateEmail()
+
+function hesk_validateFollowers($followers) {
+    /* Make sure the format is correct */
+    $followers = preg_replace('/\s/','',$followers);
+    $followers = str_replace(';',',',$followers);
+
+    /* Check if addresses are valid */
+    $all = explode(',',$followers);
+    $all = array_map('strtolower', $all);
+    $all = array_unique($all);
+    foreach ($all as $k => $v)
+    {
+        if ( ! hesk_isValidEmail($v) )
+        {
+            unset($all[$k]);
+        }
+    }
+
+    return $all;
+}
 
 
 function hesk_isValidEmail($email)
@@ -2487,11 +2594,12 @@ function hesk_session_regenerate_id()
 } // END hesk_session_regenerate_id()
 
 
-function hesk_session_start()
+function hesk_session_start($user_type = 'STAFF')
 {
     global $hesk_settings;
 
-    session_name('HESK' . sha1(dirname(__FILE__) . '$r^k*Zkq|w1(G@!-D?3%') );
+    $prefix = $user_type === 'STAFF' ? 'HESK' : 'HESKC';
+    session_name($prefix . sha1(dirname(__FILE__) . '$r^k*Zkq|w1(G@!-D?3%') );
 
     // PHP < 7.3 doesn't support the SameSite attribute, let's use a trick
     if (PHP_VERSION_ID < 70300)
@@ -2636,7 +2744,7 @@ function hesk_check_maintenance($dodie = true)
 	$hesk_installed = $hesk_settings['maintenance_mode'] == 0 &&
                       $hesk_settings['question_ans'] == 'PB6YM' &&
                       $hesk_settings['site_title'] == 'Website' &&
-                      $hesk_settings['site_url'] == 'http://www.example.com' &&
+                      $hesk_settings['site_url'] == 'https://www.example.com' &&
                       $hesk_settings['webmaster_mail'] == 'support@example.com' &&
                       $hesk_settings['noreply_mail'] == 'support@example.com' &&
                       $hesk_settings['noreply_name'] == 'Help Desk' &&
@@ -2646,7 +2754,7 @@ function hesk_check_maintenance($dodie = true)
                       $hesk_settings['db_pass'] == 'test' &&
                       $hesk_settings['db_pfix'] == 'hesk_' &&
                       $hesk_settings['hesk_title'] == 'Help Desk' &&
-                      $hesk_settings['hesk_url'] == 'http://www.example.com/helpdesk';
+                      $hesk_settings['hesk_url'] == 'https://www.example.com/helpdesk';
 
     // Just exist if TEMPLATE_PATH is not defined
     if ( ! defined('TEMPLATE_PATH')) {
@@ -2800,13 +2908,7 @@ function hesk_full_name_to_first_name($full_name)
 
 } // END hesk_full_name_to_first_name()
 
-function hesk_generate_delete_modal($title, $body, $confirm_link, $delete_text = '') {
-    global $hesklang, $hesk_settings;
-
-    if ($delete_text == '') {
-        $delete_text = $hesklang['delete'];
-    }
-
+function hesk_generate_random_id() {
     /* Ticket ID can be of these chars */
     $useChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
 
@@ -2828,6 +2930,18 @@ function hesk_generate_delete_modal($title, $body, $confirm_link, $delete_text =
     $random_id .= $useChars[mt_rand(0, 62)];
     $random_id .= $useChars[mt_rand(0, 62)];
     $random_id .= $useChars[mt_rand(0, 62)];
+
+    return $random_id;
+}
+
+function hesk_generate_old_delete_modal($title, $body, $confirm_link, $delete_text = '') {
+    global $hesklang, $hesk_settings;
+
+    if ($delete_text == '') {
+        $delete_text = $hesklang['delete'];
+    }
+
+    $random_id = hesk_generate_random_id();
     ?>
     <div class="modal delete-modal" data-modal-id="<?php echo $random_id; ?>">
         <div class="modal__body" style="white-space: normal; <?php if ($hesk_settings['limit_width']) echo 'max-width:'.$hesk_settings['limit_width'].'px'; ?>">
@@ -2838,7 +2952,7 @@ function hesk_generate_delete_modal($title, $body, $confirm_link, $delete_text =
             </i>
             <h3><?php echo $title; ?></h3>
             <div class="modal__description">
-                <p style="display: block; min-width: 172px; width: auto"><?php echo $body; ?></p>
+                <?php echo $body; ?>
             </div>
             <div class="modal__buttons">
                 <button class="btn btn-border" ripple="ripple" data-action="cancel"><?php echo $hesklang['cancel']; ?></button>
@@ -2849,8 +2963,53 @@ function hesk_generate_delete_modal($title, $body, $confirm_link, $delete_text =
     <?php
 
     return $random_id;
-} // end hesk_generate_delete_modal()
+} // end hesk_generate_old_delete_modal()
 
+function hesk_generate_delete_modal($modal_config) {
+    global $hesklang, $hesk_settings;
+
+    $defaults = [
+        'title' => 'MISSING TITLE',
+        'body' => 'MISSING BODY',
+        'confirm_action' => 'MISSING CONFIRM ACTION',
+        'use_form' => false,
+        'delete_text' => $hesklang['delete']
+    ];
+    $options = array_merge($defaults, $modal_config);
+    $random_id = hesk_generate_random_id();
+    ?>
+    <div class="modal delete-modal" data-modal-id="<?php echo $random_id; ?>">
+        <div class="modal__body" style="white-space: normal; <?php if ($hesk_settings['limit_width']) echo 'max-width:'.$hesk_settings['limit_width'].'px'; ?>">
+            <i class="modal__close" data-action="cancel">
+                <svg class="icon icon-close">
+                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                </svg>
+            </i>
+            <h3><?php echo $options['title']; ?></h3>
+            <?php if ($options['use_form']): ?>
+            <form action="<?php echo $options['confirm_action']; ?>" method="<?php echo $options['form_method']; ?>">
+                <?php endif; ?>
+                <div class="modal__description">
+                    <p style="display: block; min-width: 172px; width: auto"><?php echo $options['body']; ?></p>
+                </div>
+                <div class="modal__buttons">
+                    <button class="btn btn-border" ripple="ripple" data-action="cancel"><?php echo $hesklang['cancel']; ?></button>
+                    <?php if ($options['use_form']): ?>
+                    <button type="submit" class="btn btn-full text-white" ripple="ripple" style="width: 152px; height: 40px;">
+                        <?php echo $options['delete_text']; ?>
+                    </button>
+                    <?php else: ?>
+                    <a data-confirm-button href="<?php echo $options['confirm_action']; ?>" class="btn btn-full text-white" ripple="ripple" style="width: 152px; height: 40px;"><?php echo $options['delete_text']; ?></a>
+                    <?php endif; ?>
+                </div>
+                <?php if ($options['use_form']): ?>
+            </form>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php
+    return $random_id;
+}
 
 function hesk_authorizeNonCLI()
 {
@@ -2939,3 +3098,400 @@ function hesk_iso8859_1_to_utf8($s)
     return substr($s, 0, $j);
 }
 
+function hesk_password_hash($password)
+{
+    if ( ! function_exists('password_hash')) {
+        global $hesklang;
+        die($hesklang['old_php_version']);
+    }
+
+    return password_hash($password, PASSWORD_DEFAULT);
+} // END hesk_password_hash()
+
+
+function hesk_password_verify($password, $hash)
+{
+    if ( ! function_exists('password_verify')) {
+        global $hesklang;
+        die($hesklang['old_php_version']);
+    }
+
+    return password_verify($password, $hash);
+} // END hesk_password_verify()
+
+
+function hesk_password_needs_rehash($hash)
+{
+    return password_needs_rehash($hash, PASSWORD_DEFAULT);
+} // END hesk_password_needs_rehash()
+
+function hesk_activeSessionCreateTag($username, $password_hash)
+{
+    $salt = uniqid(mt_rand(), true);
+    return $salt . '|' . sha1($salt . hesk_mb_strtolower($username) . $password_hash);
+} // END hesk_activeSessionCreateTag()
+
+function hesk_verifyGoto($login_type = 'STAFF')
+{
+    // Default redirect URL
+    $url_default = $login_type === 'STAFF' ? 'admin_main.php' : 'index.php';
+
+    // If no "goto" parameter is set, redirect to the default page
+    if ( ! hesk_isREQUEST('goto') )
+    {
+        return $url_default;
+    }
+
+    // Get the "goto" parameter
+    $url = hesk_REQUEST('goto');
+
+    // Fix encoded "&"
+    $url = str_replace('&amp;', '&', $url);
+
+    // Parse the URL for verification
+    $url_parts = parse_url($url);
+
+    // The "path" part is required
+    if ( ! isset($url_parts['path']) )
+    {
+        return $url_default;
+    }
+
+    // Extract the file name from path
+    $url = basename($url_parts['path']);
+
+    // Allowed files for redirect
+    $OK_urls = [
+        'index.php' => '',
+        'my_tickets.php' => '',
+        'manage_mfa.php' => '',
+        'knowledgebase.php' => ''
+    ];
+
+    if ($login_type === 'STAFF') {
+        $OK_urls = array(
+            'admin_main.php' => '',
+            'admin_settings_email.php' => '',
+            'admin_settings_general.php' => '',
+            'admin_settings_help_desk.php' => '',
+            'admin_settings_knowledgebase.php' => '',
+            'admin_settings_misc.php' => '',
+            'admin_settings_save.php' => 'admin_settings_general.php',
+            'admin_settings_ticket_list.php' => '',
+            'admin_ticket.php' => '',
+            'archive.php' => '',
+            'assign_owner.php' => '',
+            'banned_emails.php' => '',
+            'banned_ips.php' => '',
+            'change_status.php' => '',
+            'custom_fields.php' => '',
+            'custom_statuses.php' => '',
+            'edit_post.php' => '',
+            'email_templates.php' => '',
+            'export.php' => '',
+            'find_tickets.php' => '',
+            'generate_spam_question.php' => '',
+            'knowledgebase_private.php' => '',
+            'lock.php' => '',
+            'mail.php' => '',
+            'mail.php?a=read&id=1' => '',
+            'manage_canned.php' => '',
+            'manage_categories.php' => '',
+            'manage_knowledgebase.php' => '',
+            'manage_ticket_templates.php' => '',
+            'manage_users.php' => '',
+            'manage_customers.php' => '',
+            'module_statistics.php' => '',
+            'module_escalate.php' => '',
+            'module_satisfaction.php' => '',
+            'module_satisfaction_optout.php' => '',
+            'new_ticket.php' => '',
+            'oauth_providers.php' => '',
+            'profile.php' => '',
+            'reports.php' => '',
+            'service_messages.php' => '',
+            'show_tickets.php' => '',
+        );
+    }
+
+    // URL must match one of the allowed ones
+    if ( ! isset($OK_urls[$url]) )
+    {
+        return $url_default;
+    }
+
+    // Modify redirect?
+    if ( strlen($OK_urls[$url]) )
+    {
+        $url = $OK_urls[$url];
+    }
+
+    // All OK, return the URL with query if set
+    return isset($url_parts['query']) ? $url.'?'.$url_parts['query'] : $url;
+
+} // END hesk_verifyGoto()
+
+function hesk_activeSessionValidate($username, $password_hash, $tag)
+{
+    // Salt and hash need to be separated by a |
+    if ( ! strpos($tag, '|') )
+    {
+        return false;
+    }
+
+    // Get two parts of the tag
+    list($salt, $hash) = explode('|', $tag, 2);
+
+    // Make sure the hash matches existing username and password
+    if ($hash == sha1($salt . hesk_mb_strtolower($username) . $password_hash) )
+    {
+        return true;
+    }
+
+    return false;
+} // END hesk_activeSessionValidate()
+
+function hesk_time_since($original)
+{
+    global $hesk_settings, $hesklang, $mysql_time;
+
+    /* array of time period chunks */
+    $chunks = array(
+        array(60 * 60 * 24 * 365 , $hesklang['abbr']['year']),
+        array(60 * 60 * 24 * 30 , $hesklang['abbr']['month']),
+        array(60 * 60 * 24 * 7, $hesklang['abbr']['week']),
+        array(60 * 60 * 24 , $hesklang['abbr']['day']),
+        array(60 * 60 , $hesklang['abbr']['hour']),
+        array(60 , $hesklang['abbr']['minute']),
+        array(1 , $hesklang['abbr']['second']),
+    );
+
+    /* Invalid time */
+    if ($mysql_time < $original)
+    {
+        // DEBUG return "T: $mysql_time (".date('Y-m-d H:i:s',$mysql_time).")<br>O: $original (".date('Y-m-d H:i:s',$original).")";
+        return "0".$hesklang['abbr']['second'];
+    }
+
+    $since = $mysql_time - $original;
+
+    // $j saves performing the count function each time around the loop
+    for ($i = 0, $j = count($chunks); $i < $j; $i++) {
+
+        $seconds = $chunks[$i][0];
+        $name = $chunks[$i][1];
+
+        // finding the biggest chunk (if the chunk fits, break)
+        if (($count = floor($since / $seconds)) != 0) {
+            // DEBUG print "<!-- It's $name -->\n";
+            break;
+        }
+    }
+
+    $print = "$count{$name}";
+
+    if ($i + 1 < $j) {
+        // now getting the second item
+        $seconds2 = $chunks[$i + 1][0];
+        $name2 = $chunks[$i + 1][1];
+
+        // add second item if it's greater than 0
+        if (($count2 = floor(($since - ($seconds * $count)) / $seconds2)) != 0) {
+            $print .= "$count2{$name2}";
+        }
+    }
+    return $print;
+} // END hesk_time_since()
+
+
+function hesk_time_lastchange($original)
+{
+    global $hesk_settings, $hesklang;
+
+    // Save time format setting so we can restore it later
+    $copy = $hesk_settings['format_timestamp'];
+
+    // We need this time format for this function
+    $hesk_settings['format_timestamp'] = 'Y-m-d H:i:s';
+
+    // Get HESK time-adjusted start of today if not already
+    if ( ! defined('HESK_TIME_TODAY') )
+    {
+        // Adjust for HESK time and define constants for alter use
+        define('HESK_TIME_TODAY',		date('Y-m-d 00:00:00', hesk_date(NULL, false, false, false) ) );
+        define('HESK_TIME_YESTERDAY',	date('Y-m-d 00:00:00', strtotime(HESK_TIME_TODAY)-86400) ) ;
+    }
+
+    // Adjust HESK time difference and get day name
+    $ticket_time = hesk_date($original, true);
+
+    if ($ticket_time >= HESK_TIME_TODAY)
+    {
+        // For today show HH:MM
+        $day = substr($ticket_time, 11, 5);
+    }
+    elseif ($ticket_time >= HESK_TIME_YESTERDAY)
+    {
+        // For yesterday show word "Yesterday"
+        $day = $hesklang['r2'];
+    }
+    else
+    {
+        // For other days show DD MMM YY
+        list($y, $m, $d) = explode('-', substr($ticket_time, 0, 10) );
+        $day = '<span style="white-space: nowrap;">' . $d . ' ' . $hesklang['ms'.$m] . ' ' . substr($y, 2) . '</span>';
+    }
+
+    // Restore original time format setting
+    $hesk_settings['format_timestamp'] = $copy;
+
+    // Return value to display
+    return $day;
+
+} // END hesk_time_lastchange()
+
+// Checks the user if they're elevated and not expired. If not, redirect to the elevator
+function hesk_check_user_elevation($post_elevation_redirect, $customer_side = false) {
+
+    if ($customer_side && (!isset($_SESSION['customer']['elevated']) || $_SESSION['customer']['elevated'] < new DateTime())) {
+        $_SESSION['customer']['elevated'] = null;
+        $_SESSION['customer']['elevator_target'] = $post_elevation_redirect;
+        header('Location: elevator.php');
+        exit();
+    } elseif (!$customer_side && (!hesk_SESSION('elevated') || hesk_SESSION('elevated') < new DateTime())) {
+        $_SESSION['elevated'] = null;
+        $_SESSION['elevator_target'] = $post_elevation_redirect;
+        header('Location: elevator.php');
+        exit();
+    }
+
+    return true;
+}
+
+function hesk_get_primary_customer_for_ticket($ticket_id, $fail_on_missing_customer = true) {
+    global $hesk_settings, $hesklang;
+
+    $customer_res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+	WHERE `id` = (
+		SELECT `customer_id`
+		FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer`
+		WHERE `ticket_id` = ".intval($ticket_id)."
+		    AND `customer_type` = 'REQUESTER'
+	)");
+    if (hesk_dbNumRows($customer_res) !== 1) {
+        if ($fail_on_missing_customer) {
+            hesk_error($hesklang['customer_not_found']);
+        } else {
+            return null;
+        }
+    }
+    return hesk_dbFetchAssoc($customer_res);
+}
+
+function hesk_output_customer_name_and_email($customer, $html_encoded_brackets = true) {
+    global $hesklang;
+
+    if ($customer === null || empty($customer)) {
+        return $hesklang['anon_name'];
+    }
+
+    $name = $customer['name'];
+    $email = $customer['email'];
+    if ($name ===  null || $name === '') {
+        return $email;
+    }
+    if ($email === null || $email === '') {
+        return $name;
+    }
+
+    // TODO I really don't like having HTML-encoded stuff in here :/
+    $less_than = $html_encoded_brackets ? '&lt;' : '<';
+    $greater_than = $html_encoded_brackets ? '&gt;' : '>';
+
+    return "{$name} {$less_than}{$email}{$greater_than}";
+}
+
+function hesk_output_pager($total_count, $total_pages, $current_page, $query_url, $query_param_name = 'page-number') {
+    global $hesklang;
+
+    $prev_page = ($current_page - 1 <= 0) ? 0 : $current_page - 1;
+    $next_page = ($current_page + 1 > $total_pages) ? 0 : $current_page + 1;
+    $query_param = $query_url === '' ? '?' : '&';
+
+    if ($total_pages <= 1) {
+        return;
+    }
+
+    /* List pages */
+    echo '<div class="pagination-wrap"><div class="pagination">';
+    if ($total_pages >= 7) {
+        if ($current_page > 2) {
+            echo '
+                        <a href="'.$query_url.$query_param.$query_param_name.'=1" class="btn pagination__nav-btn">
+                            <svg class="icon icon-chevron-left" style="margin-right:-6px">
+                              <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-chevron-left"></use>
+                            </svg>
+                            <svg class="icon icon-chevron-left">
+                              <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-chevron-left"></use>
+                            </svg>
+                            '.$hesklang['pager_first'].'
+                        </a>';
+        }
+
+        if ($prev_page) {
+            echo '
+                        <a href="'.$query_url.$query_param.$query_param_name.'='.$prev_page.'" class="btn pagination__nav-btn">
+                            <svg class="icon icon-chevron-left">
+                              <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-chevron-left"></use>
+                            </svg>
+                            '.$hesklang['pager_previous'].'
+                        </a>';
+        }
+    }
+
+    echo '<ul class="pagination__list">';
+    for ($i=1; $i<=$total_pages; $i++) {
+        if ($i <= ($current_page+5) && $i >= ($current_page-5)) {
+            if ($i == $current_page) {
+                echo '
+                            <li class="pagination__item is-current">
+                              <a href="javascript:" class="pagination__link">'.$i.'</a>
+                            </li>';
+            } else {
+                echo '
+                            <li class="pagination__item ">
+                              <a href="'.$query_url.$query_param.$query_param_name.'='.$i.'" class="pagination__link">'.$i.'</a>
+                            </li>';
+            }
+        }
+    }
+    echo '</ul>';
+
+    if ($total_pages >= 7) {
+        if ($next_page) {
+            echo '
+                        <a href="'.$query_url.$query_param.$query_param_name.'='.$next_page.'" class="btn pagination__nav-btn">
+                            '.$hesklang['pager_next'].'
+                            <svg class="icon icon-chevron-right">
+                              <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-chevron-right"></use>
+                            </svg>
+                        </a>';
+        }
+
+        if ($current_page < ($total_pages - 1)) {
+            echo '
+                        <a href="'.$query_url.$query_param.$query_param_name.'='.$total_pages.'" class="btn pagination__nav-btn">
+                            '.$hesklang['pager_last'].'
+                            <svg class="icon icon-chevron-right">
+                              <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-chevron-right"></use>
+                            </svg>
+                            <svg class="icon icon-chevron-right" style="margin-left:-6px">
+                              <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-chevron-right"></use>
+                            </svg>
+                        </a>';
+        }
+    }
+    echo '</div>';
+    echo '<p class="pagination__amount">'.sprintf($hesklang['customers_on_pages'], $total_count, $total_pages).'</p>';
+    echo '</div>';
+}

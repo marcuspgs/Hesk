@@ -1,5 +1,9 @@
 <?php
 global $hesk_settings, $hesklang;
+/**
+ * @var bool $customerLoggedIn - `true` if a customer is logged in, `false` otherwise
+ * @var array $customerUserContext - User info for a customer if logged in.  `null` if a customer is not logged in.
+ */
 
 // This guard is used to ensure that users can't hit this outside of actual HESK code
 if (!defined('IN_SCRIPT')) {
@@ -7,6 +11,7 @@ if (!defined('IN_SCRIPT')) {
 }
 
 require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
+require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +48,7 @@ require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
+                    <?php renderLoginNavbarElements($customerUserContext); ?>
                     <?php if ($hesk_settings['can_sel_lang']): ?>
                         <div class="header__lang">
                             <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
@@ -87,6 +93,7 @@ require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
                     hesk3_show_messages($messages);
                     ?>
                 </div>
+                <?php hesk3_show_messages($serviceMessages); ?>
                 <h2 class="select__title"><?php echo $hesklang['select_category_text']; ?></h2>
                 <?php
                 // Show dropdown or list, depending on number of categories
@@ -157,7 +164,7 @@ END LICENSE CODE
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/jquery-3.5.1.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js"></script>
+<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script>
     $(document).ready(function() {
         $('#select_category').selectize();

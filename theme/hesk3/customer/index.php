@@ -7,22 +7,19 @@ if (!defined('IN_SCRIPT')) {
 }
 
 /**
- * @var array $top_articles
- * @var array $latest_articles
- * @var array $service_messages
+ * @var array $topArticles - Collection of top knowledgebase articles
+ * @var array $latestArticles - Collection of newest/latest knowledgebase articles
+ * @var array $serviceMessages - Collection of service messages to be displayed
+ * @var array $messages - Collection of feedback messages to be displayed (such as "You have been logged out")
+ * @var bool $accountRequired - `true` if an account is required to use the helpdesk, `false` otherwise
+ * @var bool $customerLoggedIn - `true` if a customer is logged in, `false` otherwise
+ * @var array $customerUserContext - User info for a customer if logged in.  `null` if a customer is not logged in.
  */
-
-$service_message_type_to_class = array(
-    '0' => 'none',
-    '1' => 'success',
-    '2' => '', // Info has no CSS class
-    '3' => 'warning',
-    '4' => 'danger'
-);
 
 require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
 require_once(TEMPLATE_PATH . 'customer/util/kb-search.php');
 require_once(TEMPLATE_PATH . 'customer/util/rating.php');
+require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,6 +59,7 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
+                    <?php renderLoginNavbarElements($customerUserContext); ?>
                     <?php if ($hesk_settings['can_sel_lang']): ?>
                         <div class="header__lang">
                             <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
@@ -95,11 +93,14 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
         </div>
         <div class="main__content">
             <div class="contr">
+                <div style="margin-bottom: 20px;">
+                    <?php hesk3_show_messages($messages); ?>
+                </div>
                 <div class="help-search">
                     <h2 class="search__title"><?php echo $hesklang['how_can_we_help']; ?></h2>
                     <?php displayKbSearch(); ?>
                 </div>
-                <?php hesk3_show_messages($service_messages); ?>
+                <?php hesk3_show_messages($serviceMessages); ?>
                 <div class="nav">
                     <a href="index.php?a=add" class="navlink">
                         <div class="icon-in-circle">
@@ -112,6 +113,19 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                             <div class="navlink__descr"><?php echo $hesklang['open_ticket']; ?></div>
                         </div>
                     </a>
+                    <?php if ($accountRequired || $customerLoggedIn): ?>
+                    <a href="my_tickets.php" class="navlink">
+                        <div class="icon-in-circle">
+                            <svg class="icon icon-document">
+                                <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-document"></use>
+                            </svg>
+                        </div>
+                        <div>
+                            <h5 class="navlink__title"><?php echo $hesklang['customer_my_tickets_heading']; ?></h5>
+                            <div class="navlink__descr"><?php echo $hesklang['customer_my_tickets_description']; ?></div>
+                        </div>
+                    </a>
+                    <?php else: ?>
                     <a href="ticket.php" class="navlink">
                         <div class="icon-in-circle">
                             <svg class="icon icon-document">
@@ -123,6 +137,7 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                             <div class="navlink__descr"><?php echo $hesklang['vet']; ?></div>
                         </div>
                     </a>
+                    <?php endif; ?>
                 </div>
                 <?php if ($hesk_settings['kb_enable']): ?>
                 <article class="article">
@@ -139,14 +154,14 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                     <div class="tabbed__head">
                         <ul class="tabbed__head_tabs">
                             <?php
-                            if (count($top_articles) > 0):
+                            if (count($topArticles) > 0):
                             ?>
                             <li class="current" data-link="tab1">
                                 <span><?php echo $hesklang['popart']; ?></span>
                             </li>
                             <?php
                             endif;
-                            if (count($latest_articles) > 0):
+                            if (count($latestArticles) > 0):
                             ?>
                             <li data-link="tab2">
                                 <span><?php echo $hesklang['latart']; ?></span>
@@ -155,9 +170,9 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                         </ul>
                     </div>
                     <div class="tabbed__tabs">
-                        <?php if (count($top_articles) > 0): ?>
+                        <?php if (count($topArticles) > 0): ?>
                         <div class="tabbed__tabs_tab is-visible" data-tab="tab1">
-                            <?php foreach ($top_articles as $article): ?>
+                            <?php foreach ($topArticles as $article): ?>
                             <a href="knowledgebase.php?article=<?php echo $article['id']; ?>" class="preview">
                                 <div class="icon-in-circle">
                                     <svg class="icon icon-knowledge">
@@ -199,10 +214,10 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                         </div>
                         <?php
                         endif;
-                        if (count($latest_articles) > 0):
+                        if (count($latestArticles) > 0):
                         ?>
-                        <div class="tabbed__tabs_tab <?php echo count($top_articles) === 0 ? 'is-visible' : ''; ?>" data-tab="tab2">
-                            <?php foreach ($latest_articles as $article): ?>
+                        <div class="tabbed__tabs_tab <?php echo count($topArticles) === 0 ? 'is-visible' : ''; ?>" data-tab="tab2">
+                            <?php foreach ($latestArticles as $article): ?>
                                 <a href="knowledgebase.php?article=<?php echo $article['id']; ?>" class="preview">
                                     <div class="icon-in-circle">
                                         <svg class="icon icon-knowledge">
@@ -250,7 +265,7 @@ require_once(TEMPLATE_PATH . 'customer/util/rating.php');
                 </article>
                 <?php
                 endif;
-                if ($hesk_settings['alink']):
+                if (!$customerLoggedIn && $hesk_settings['alink']):
                 ?>
                 <div class="article__footer">
                     <a href="<?php echo $hesk_settings['admin_dir']; ?>/" class="link"><?php echo $hesklang['ap']; ?></a>
@@ -286,7 +301,7 @@ END LICENSE CODE
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <?php outputSearchJavascript(); ?>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js"></script>
+<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 </body>
 

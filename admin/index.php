@@ -121,6 +121,7 @@ function do_login()
 				if ( isset($_SESSION['checksum']) && $sc->checkCode($mysecnum, $_SESSION['checksum']) )
 				{
 					$_SESSION['img_a_verified'] = true;
+                    unset($_SESSION['checksum']);
 				}
 				else
 				{
@@ -305,7 +306,7 @@ function process_successful_login($user_row) {
 	{
         $selector = base64_encode(random_bytes(9));
         $authenticator = random_bytes(33);
-        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` (`selector`,`token`,`user_id`,`expires`) VALUES ('".hesk_dbEscape($selector)."','".hesk_dbEscape(hash('sha256', $authenticator))."','".intval($_SESSION['id'])."', NOW() + INTERVAL 1 YEAR)");
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` (`selector`,`token`,`user_id`,`user_type`,`expires`) VALUES ('".hesk_dbEscape($selector)."','".hesk_dbEscape(hash('sha256', $authenticator))."','".intval($_SESSION['id'])."','STAFF', NOW() + INTERVAL 1 YEAR)");
         hesk_setcookie('hesk_username', '');
         hesk_setcookie('hesk_remember', $selector.':'.base64_encode($authenticator), strtotime('+1 year'));
 	}
@@ -342,10 +343,25 @@ function process_successful_login($user_row) {
                     require(HESK_PATH . 'inc/email_functions.inc.php');
                 }
 
+                if ( ! function_exists('hesk_get_customers_for_ticket') )
+                {
+                    require(HESK_PATH . 'inc/customer_accounts.inc.php');
+                }
+
                 while ($ticket = hesk_dbFetchAssoc($result))
                 {
                     $ticket['dt'] = hesk_date($ticket['dt'], true);
                     $ticket['lastchange'] = hesk_date($ticket['lastchange'], true);
+                    $ticket['due_date'] = hesk_format_due_date($ticket['due_date']);
+
+                    $customers = hesk_get_customers_for_ticket($ticket['id']);
+                    $customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
+                    $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
+
+                    $ticket['email'] = implode(';', $customer_emails);
+                    $ticket['name'] = implode(';', $customer_names);
+                    $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+
                     $ticket = hesk_ticketToPlain($ticket, 1, 0);
                     hesk_notifyCustomer('ticket_closed');
                 }
@@ -519,8 +535,8 @@ function print_login()
                                 {
                                     $cls = in_array('mysecnum',$_SESSION['a_iserror']) ? ' class="form-control isError" ' : ' class="form-control" ';
 
-                                    echo '<div class="form-group"><label>'.$hesklang['sec_enter'].'</label><img src="'.HESK_PATH.'print_sec_img.php?'.rand(10000,99999).'" width="150" height="40" alt="'.$hesklang['sec_img'].'" title="'.$hesklang['sec_img'].'" border="1" name="secimg" style="vertical-align:middle" /> '.
-                                        '<a style="vertical-align: middle; display: inline" class="btn btn-refresh" href="javascript:" onclick="document.form1.secimg.src=\''.HESK_PATH.'print_sec_img.php?\'+ ( Math.floor((90000)*Math.random()) + 10000);">
+                                    echo '<div class="form-group"><label>'.$hesklang['sec_enter'].'</label><img src="print_sec_img.php?'.rand(10000,99999).'" width="150" height="40" alt="'.$hesklang['sec_img'].'" title="'.$hesklang['sec_img'].'" border="1" name="secimg" style="vertical-align:middle" /> '.
+                                        '<a style="vertical-align: middle; display: inline" class="btn btn-refresh" href="javascript:" onclick="document.form1.secimg.src=\'print_sec_img.php?\'+ ( Math.floor((90000)*Math.random()) + 10000);">
                                             <svg class="icon icon-refresh">
                                                 <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-refresh"></use>
                                             </svg>
@@ -821,7 +837,9 @@ function logout() {
 
     // Clear users' authentication tokens
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` WHERE `user_id` = ".intval($_SESSION['id']));
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = ".intval($_SESSION['id']));
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` 
+        WHERE `user_id` = ".intval($_SESSION['id'])."
+        AND `user_type` = 'STAFF'");
 
     /* Destroy session and cookies */
 	hesk_session_stop();

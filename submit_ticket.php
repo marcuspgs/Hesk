@@ -18,6 +18,7 @@ define('HESK_PATH','./');
 require(HESK_PATH . 'hesk_settings.inc.php');
 define('TEMPLATE_PATH', HESK_PATH . "theme/{$hesk_settings['site_theme']}/");
 require(HESK_PATH . 'inc/common.inc.php');
+require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 // Are we in maintenance mode?
 hesk_check_maintenance();
@@ -56,7 +57,7 @@ if ( preg_match("/\n|\r|\t|%0A|%0D|%08|%09/", hesk_POST('name') . hesk_POST('sub
     exit();
 }
 
-hesk_session_start();
+hesk_session_start('CUSTOMER');
 
 // A security check - not needed here, but uncomment if you require it
 # hesk_token_check();
@@ -69,6 +70,9 @@ if (isset($_SESSION['already_submitted']))
 
 // Connect to database
 hesk_dbConnect();
+
+// Do we require logged-in customers to view the help desk?
+$customer = hesk_isCustomerLoggedIn($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required']);
 
 $hesk_error_buffer = array();
 
@@ -133,6 +137,7 @@ if ($hesk_settings['secimg_use'] && ! isset($_SESSION['img_verified']))
 			if ( isset($_SESSION['checksum']) && $sc->checkCode($mysecnum, $_SESSION['checksum']) )
 			{
 				$_SESSION['img_verified']=true;
+                unset($_SESSION['checksum']);
 			}
 			else
 			{
@@ -142,70 +147,97 @@ if ($hesk_settings['secimg_use'] && ! isset($_SESSION['img_verified']))
 	}
 }
 
-$tmpvar['name']	 = hesk_input( hesk_POST('name') ) or $hesk_error_buffer['name']=$hesklang['enter_your_name'];
-
-$email_available = true;
-
-if ($hesk_settings['require_email'])
-{
-    $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer['email']=$hesklang['enter_valid_email'];
+if (! isset($customer)) {
+    $customer = hesk_isCustomerLoggedIn(false);
 }
-else
-{
-    $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0);
+$email_available = true;
+if ($customer) {
+    $tmpvar['name'] = hesk_addslashes($customer['name']);
+    $tmpvar['email'] = hesk_addslashes($customer['email']);
+    $tmpvar['customer_id'] = intval($customer['id']);
+} else {
+    $tmpvar['name']	 = hesk_input( hesk_POST('name') ) or $hesk_error_buffer['name']=$hesklang['enter_your_name'];
 
-    // Not required, but must be valid if it is entered
-    if ($tmpvar['email'] == '')
+    if ($hesk_settings['require_email'])
     {
-        $email_available = false;
+        $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer['email']=$hesklang['enter_valid_email'];
+    }
+    else
+    {
+        $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0);
 
-        if (strlen(hesk_POST('email')))
+        // Not required, but must be valid if it is entered
+        if ($tmpvar['email'] == '')
         {
-            $hesk_error_buffer['email'] = $hesklang['not_valid_email'];
-        }
+            $email_available = false;
 
-        // No need to confirm the email
-        $hesk_settings['confirm_email'] = 0;
-        $_POST['email2'] = '';
-        $_SESSION['c_email'] = '';
-        $_SESSION['c_email2'] = '';
+            if (strlen(hesk_POST('email')))
+            {
+                $hesk_error_buffer['email'] = $hesklang['not_valid_email'];
+            }
+
+            // No need to confirm the email
+            $hesk_settings['confirm_email'] = 0;
+            $_POST['email2'] = '';
+            $_SESSION['c_email'] = '';
+            $_SESSION['c_email2'] = '';
+        }
+    }
+
+    if ($tmpvar['email'] !== '' && $hesk_settings['customer_accounts'] > 0) {
+        // Ensure that no one is registered under this email
+        $customer_exists = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+            WHERE `email` = '".hesk_dbEscape($tmpvar['email'])."' AND `verified` > 0");
+        if (hesk_dbNumRows($customer_exists) > 0) {
+            $hesk_error_buffer['email'] = sprintf($hesklang['submit_ticket_customer_email_exists'], urlencode($tmpvar['email']));
+        }
+    }
+
+    if ($hesk_settings['confirm_email'])
+    {
+        $tmpvar['email2'] = hesk_validateEmail( hesk_POST('email2'), 'ERR', 0) or $hesk_error_buffer['email2']=$hesklang['confemail2'];
+
+        // Anything entered as email confirmation?
+        if ($tmpvar['email2'] != '')
+        {
+            // Do we have multiple emails?
+            if ($hesk_settings['multi_eml'] && count( array_diff( explode(',', strtolower($tmpvar['email']) ), explode(',', strtolower($tmpvar['email2']) ) ) ) == 0)
+            {
+                $_SESSION['c_email2'] =  hesk_POST('email2');
+            }
+            // Single email address match
+            elseif ( ! $hesk_settings['multi_eml'] && strtolower($tmpvar['email']) == strtolower($tmpvar['email2']) )
+            {
+                $_SESSION['c_email2'] =  hesk_POST('email2');
+            }
+            else
+            {
+                // Invalid match
+                $tmpvar['email2'] = '';
+                $_POST['email2'] = '';
+                $_SESSION['c_email2'] = '';
+                $_SESSION['isnotice'][] = 'email';
+                $hesk_error_buffer['email2']=$hesklang['confemaile'];
+            }
+        }
+        else
+        {
+            $_SESSION['c_email2'] =  hesk_POST('email2');
+        }
     }
 }
 
-if ($hesk_settings['confirm_email'])
-{
-	$tmpvar['email2'] = hesk_validateEmail( hesk_POST('email2'), 'ERR', 0) or $hesk_error_buffer['email2']=$hesklang['confemail2'];
-
-	// Anything entered as email confirmation?
-	if ($tmpvar['email2'] != '')
-	{
-		// Do we have multiple emails?
-		if ($hesk_settings['multi_eml'] && count( array_diff( explode(',', strtolower($tmpvar['email']) ), explode(',', strtolower($tmpvar['email2']) ) ) ) == 0)
-		{
-			$_SESSION['c_email2'] =  hesk_POST('email2');
-		}
-		// Single email address match
-		elseif ( ! $hesk_settings['multi_eml'] && strtolower($tmpvar['email']) == strtolower($tmpvar['email2']) )
-		{
-			$_SESSION['c_email2'] =  hesk_POST('email2');
-		}
-		else
-		{
-			// Invalid match
-			$tmpvar['email2'] = '';
-			$_POST['email2'] = '';
-			$_SESSION['c_email2'] = '';
-			$_SESSION['isnotice'][] = 'email';
-			$hesk_error_buffer['email2']=$hesklang['confemaile'];
-		}
-	}
-	else
-	{
-		$_SESSION['c_email2'] =  hesk_POST('email2');
-	}
-}
-
+$tmpvar['followers'] = $hesk_settings['multi_eml'] ? hesk_validateFollowers(hesk_POST('follower_email')) : [];
 $tmpvar['category'] = intval( hesk_POST('category') ) or $hesk_error_buffer['category']=$hesklang['sel_app_cat'];
+
+// Verify followers, remove duplicates
+if ($hesk_settings['multi_eml']) {
+    // Make sure Requester is not also among Followers
+    foreach (array_keys($tmpvar['followers'], strtolower($tmpvar['email']), true) as $key) {
+        unset($tmpvar['followers'][$key]);
+    }
+    $tmpvar['followers'] = array_values($tmpvar['followers']);
+}
 
 // Do we have a default due date?
 $default_due_date_info = hesk_getCategoryDueDateInfo($tmpvar['category']);
@@ -406,6 +438,14 @@ foreach ($hesk_settings['custom_fields'] as $k=>$v)
 }
 
 // Check bans
+$clean_followers = [];
+foreach ($tmpvar['followers'] as $follower) {
+    if (!hesk_isBannedEmail($follower)) {
+        $clean_followers[] = $follower;
+    }
+}
+$tmpvar['followers'] = $clean_followers;
+
 if ($email_available && ! isset($hesk_error_buffer['email']) && hesk_isBannedEmail($tmpvar['email']) || hesk_isBannedIP(hesk_getClientIP()) )
 {
 	hesk_error($hesklang['baned_e']);
@@ -415,7 +455,14 @@ if ($email_available && ! isset($hesk_error_buffer['email']) && hesk_isBannedEma
 $below_limit = true;
 if ($email_available && $hesk_settings['max_open'] && ! isset($hesk_error_buffer['email']) )
 {
-	$res = hesk_dbQuery("SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `status` IN ('0', '1', '2', '4', '5') AND " . hesk_dbFormatEmail($tmpvar['email']));
+	$res = hesk_dbQuery("SELECT COUNT(*) 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
+            ON `tickets`.`id` = `ticket_to_customer`.`ticket_id`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customers`
+            ON `ticket_to_customer`.`customer_id` = `customers`.`id` 
+        WHERE `status` IN ('0', '1', '2', '4', '5') 
+        AND " . hesk_dbFormatEmail($tmpvar['email']));
 	$num = hesk_dbResult($res);
 
 	if ($num >= $hesk_settings['max_open'])
@@ -474,6 +521,7 @@ if (count($hesk_error_buffer))
     $_SESSION['c_priority'] = hesk_POST('priority');
     $_SESSION['c_subject']  = hesk_POST('subject');
     $_SESSION['c_message']  = hesk_POST('message');
+    $_SESSION['c_followers'] = hesk_POST('follower_email');
 
     $tmp = '';
     foreach ($hesk_error_buffer as $error)
@@ -536,11 +584,40 @@ if ($hesk_settings['attachments']['use'] && ! empty($attachments) )
     }
 }
 
+// Get or create a customer for the name/email combo
+if (!isset($tmpvar['customer_id'])) {
+    $tmpvar['customer_id'] = hesk_get_or_create_customer($tmpvar['name'], $tmpvar['email']);
+}
+$tmpvar['follower_ids'] = [];
+$removed_followers = [];
+
+// If customer accounts are required, you can only add registered users
+if ($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required']) {
+    foreach ($tmpvar['followers'] as $key => $follower) {
+        if (($valid_follower = hesk_get_customer_id_by_email($follower, true)) !== null) {
+            $tmpvar['follower_ids'][] = $valid_follower;
+        } else {
+            unset($tmpvar['followers'][$key]);
+            $removed_followers[] = $follower;
+        }
+    }
+} else {
+    foreach ($tmpvar['followers'] as $follower) {
+        $tmpvar['follower_ids'][] = hesk_get_or_create_follower($follower);
+    }
+}
+
+$tmpvar['followers'] = array_values($tmpvar['followers']);
+
+if (count($removed_followers)) {
+    hesk_process_messages($hesklang['followers_removed'] . '<ul><li>' . implode('</li><li>', $removed_followers) . '</li></ul>', 'NOREDIRECT', 'NOTICE');
+}
+
 // Insert ticket to database
 $ticket = hesk_newTicket($tmpvar);
 
 // Notify the customer
-if ($hesk_settings['notify_new'] && $email_available)
+if ($hesk_settings['notify_new'] && ($email_available || count($tmpvar['followers']) > 0))
 {
 	hesk_notifyCustomer();
 }
@@ -576,14 +653,18 @@ hesk_cleanSessionVars('c_subject');
 hesk_cleanSessionVars('c_message');
 hesk_cleanSessionVars('c_question');
 hesk_cleanSessionVars('c_attachments');
+hesk_cleanSessionVars('c_followers');
 hesk_cleanSessionVars('img_verified');
 
 $messages = hesk_get_messages();
-
+$user_context = hesk_isCustomerLoggedIn(false);
 $hesk_settings['render_template'](TEMPLATE_PATH . 'customer/create-ticket/create-ticket-confirmation.php', array(
     'trackingId' => $ticket['trackid'],
     'emailProvided' => $email_available,
-    'messages' => $messages
+    'messages' => $messages,
+    'serviceMessages' => hesk_get_service_messages('t-ok'),
+	'customerLoggedIn' => $user_context !== null,
+	'customerUserContext' => $user_context
 ));
 
 exit();

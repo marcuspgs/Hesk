@@ -91,7 +91,7 @@ https://www.hesk.com/buy.php
 END LICENSE CODE
 *******************************************************************************/
 
-echo '</div>';
+echo '</div><p>&nbsp;</p>';
 
 /* Clean unneeded session variables */
 hesk_cleanSessionVars('hide');

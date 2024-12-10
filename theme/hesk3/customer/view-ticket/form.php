@@ -1,6 +1,7 @@
 <?php
 global $hesk_settings, $hesklang;
 /**
+ * @var array $customerUserContext - User info for the customer.
  * @var string $trackingId
  * @var string $email
  * @var boolean $rememberEmail
@@ -14,6 +15,7 @@ if (!defined('IN_SCRIPT')) {
 }
 
 require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
+require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +58,7 @@ require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
+                    <?php renderLoginNavbarElements($customerUserContext); ?>
                     <?php if ($hesk_settings['can_sel_lang']): ?>
                         <div class="header__lang">
                             <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
@@ -96,6 +99,7 @@ require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
         <div class="main__content">
             <div class="contr">
                 <div style="margin-bottom: 20px;">
+                    <?php hesk3_show_messages($serviceMessages); ?>
                     <?php
                     if (!$submittedForgotTrackingIdForm) {
                         hesk3_show_messages($messages);
@@ -122,12 +126,20 @@ require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
                         if ($hesk_settings['email_view_ticket'])
                         {
                             $tmp = 'document.form1.email.value=document.form2.e.value;';
+
+                            if ($hesk_settings['require_email']):
                             ?>
                             <div class="form-group required">
                                 <label class="label"><?php echo $hesklang['email']; ?></label>
                                 <input type="email" class="form-control" name="e" size="35" value="<?php echo $email; ?>" required>
                                 <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
                             </div>
+                            <?php else: ?>
+                            <div class="form-group">
+                                <label class="label"><?php echo $hesklang['email']; ?></label>
+                                <input type="email" class="form-control" name="e" size="35" value="<?php echo $email; ?>">
+                            </div>
+                            <?php endif; ?>
                             <div class="form-group">
                                 <div class="checkbox-custom">
                                     <input type="hidden" name="f" value="1">
@@ -246,7 +258,7 @@ END LICENSE CODE
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/jquery-3.5.1.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js"></script>
+<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/jquery.modal.min.js"></script>
 <script>
     $(document).ready(function() {

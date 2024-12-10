@@ -171,7 +171,7 @@ hesk_handle_messages();
                     <td><?php echo hesk_date($ban['dt']); ?></td>
                     <?php if ($can_unban): ?>
                         <td class="unban">
-                            <?php $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                            <?php $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                 $hesklang['delban_confirm'],
                                 'banned_ips.php?a=unban&amp;id='. $ban['id'] .'&amp;token='. hesk_token_echo(0)); ?>
                             <a href="javascript:" data-modal="[data-modal-id='<?php echo $modal_id; ?>']">

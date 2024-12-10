@@ -27,6 +27,15 @@ $query = hesk_REQUEST('q') or die('');
 
 hesk_dbConnect();
 
+// Do we require logged-in customers to view the help desk?
+if ($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required'] == 2) {
+    require(HESK_PATH . 'inc/customer_accounts.inc.php');
+    hesk_session_start('CUSTOMER');
+    if (! hesk_isCustomerLoggedIn(false)) {
+        die('');
+    }
+}
+
 /* Get relevant articles from the database */
 $res = hesk_dbQuery("SELECT t1.`id`, t1.`subject`, LEFT(t1.`content`, ".max(200, $hesk_settings['kb_substrart'] * 2).") AS `content`, MATCH(`subject`,`content`,`keywords`) AGAINST ('".hesk_dbEscape($query)."') AS `score`
 					FROM `".hesk_dbEscape($hesk_settings['db_pfix']).'kb_articles` AS t1

@@ -97,8 +97,14 @@ $(document).ready(function() {
         value = $(el).text();
       }
     });
-    var template =
-      '<div class="label"><span>' +
+      let prependIconToSelect = '';
+      let appendIconClass = select.attr('data-append-icon-class');
+      if (appendIconClass) {
+          prependIconToSelect = '<svg class="icon ' + appendIconClass + '"><use xlink:href="./img/sprite.svg#' + appendIconClass + '"></use></svg>';
+      }
+
+      var template =
+      '<div class="label">' + prependIconToSelect + '<span>' +
       escapeHtml(value) +
       '</span><svg class="icon icon-chevron-down"><use xlink:href="./img/sprite.svg#icon-chevron-down"></use></svg></div><ul class="dropdown-list">';
     for (var i in options) {
@@ -539,7 +545,17 @@ $(document).ready(function() {
   });
 
   // Never allow typing in dropdowns
-  $('.selectize-input input').prop('readonly', 'true');
+    $('.selectize-control:not(.read-write) .selectize-input input').prop('readonly', 'true');
+
+  // Profile dropdown
+  $('[data-action="show-profile"]').click(function (e) {
+    if ($('.profile__user').hasClass('active')) {
+      $('.profile__user').removeClass('active').find('.profile__menu').slideUp(150);
+    } else {
+      outClose();
+      $('.profile__user').addClass('active').find('.profile__menu').slideDown(150);
+    }
+  });
 });
 
 window.onload = function() {

@@ -293,10 +293,9 @@ if (!isset($_SESSION['hide']))
 if (!isset($_SESSION['hide']['treemenu']))
 {
 	?>
-    <div class="main__content categories">
-        <div class="table-wrap">
-
-            <h3 style="font-size: 1.3rem">
+    <div class="main__content knowledgebase">
+        <section class="knowledgebase__head">
+            <h2>
                 <?php echo $hesklang['kb']; ?>
                 <div class="tooltype right out-close">
                     <svg class="icon icon-info">
@@ -308,7 +307,9 @@ if (!isset($_SESSION['hide']['treemenu']))
                         </div>
                     </div>
                 </div>
-            </h3>
+            </h2>
+        </section>
+        <div class="table-wrap">
             <?php
             // Show a notice if total public articles is less than 5
             if ($total_articles < 5)
@@ -320,6 +321,7 @@ if (!isset($_SESSION['hide']['treemenu']))
             ?>
             <!-- SUB NAVIGATION -->
             <?php show_subnav(); ?>
+            <hr class="sub-navigation-border">
             <!-- SUB NAVIGATION -->
             <!-- SHOW THE CATEGORY TREE -->
             <?php show_treeMenu(); ?>
@@ -422,7 +424,7 @@ if (!isset($_SESSION['hide']['new_article']))
                             <label for="add_catid"><?php echo $hesklang['kb_cat']; ?></label>
                         </div>
                         <div class="descr">
-                            <div class="dropdown-select center out-close">
+                            <div class="dropdown-select right out-close">
                                 <select id="add_catid" name="catid"><?php $listBox->printMenu(); ?></select>
                             </div>
                         </div>
@@ -519,7 +521,7 @@ if (!isset($_SESSION['hide']['new_category']))
                 </div>
                 <div class="form-group">
                     <label for="add_cat_parent"><?php echo $hesklang['kb_cat_parent']; ?></label>
-                    <div class="dropdown-select center out-close">
+                    <div class="dropdown-select out-close">
                         <select id="add_cat_parent" name="parent"><?php $listBox->printMenu()?></select>
                     </div>
                 </div>
@@ -663,7 +665,7 @@ function list_draft() {
                                             </svg>
                                         </a>
                                         <?php
-                                        $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                             $hesklang['del_art'],
                                             'manage_knowledgebase.php?a=remove_article&amp;id='. $article['id'] .'&amp;token='. hesk_token_echo(0));
                                         ?>
@@ -801,7 +803,7 @@ function list_private() {
                                             </svg>
                                         </a>
                                         <?php
-                                        $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                             $hesklang['del_art'],
                                             'manage_knowledgebase.php?a=remove_article&amp;id='. $article['id'] .'&amp;token='. hesk_token_echo(0));
                                         ?>
@@ -1262,7 +1264,7 @@ function save_article()
             $redirect_action = 'a=list_private';
             break;
         default:
-            $redirect_action = 'a=manage_cat&catid='.$catid;
+            $redirect_action = 'a=edit_article&id='.$id.'&from='.$from;
             break;
     }
 
@@ -1460,7 +1462,7 @@ function edit_article()
                             <label for="edit_catid"><?php echo $hesklang['kb_cat']; ?></label>
                         </div>
                         <div class="descr">
-                            <div class="dropdown-select center out-close">
+                            <div class="dropdown-select right out-close">
                                 <select id="edit_catid" name="catid"><?php $listBox->printMenu()?></select>
                             </div>
                         </div>
@@ -1469,7 +1471,7 @@ function edit_article()
                 <div class="article__detalies_action">
                     <button type="submit" class="btn btn-full" ripple="ripple"><?php echo $hesklang['kb_save']; ?></button>
                     <?php
-                    $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                    $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                         $hesklang['del_art'],
                         'manage_knowledgebase.php?a=remove_article&amp;id='. $article['id'] .'&amp;token='. hesk_token_echo(0));
                     ?>
@@ -1551,7 +1553,7 @@ function edit_article()
                                             <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-delete"></use>
                                         </svg>
                                     </a>&raquo; ';
-                                echo '<a href="../download_attachment.php?kb_att='.$att_id.'" title="'.$hesklang['dnl'].' '.$att_name.'">'.$att_name.'</a><br />';
+                                echo '<a href="download_attachment.php?kb_att='.$att_id.'" title="'.$hesklang['dnl'].' '.$att_name.'">'.$att_name.'</a><br />';
                             }
                             echo '<br>';
                         }
@@ -1581,7 +1583,7 @@ function edit_article()
             </div>
             <div class="d-flex-center sm-hidden mt2">
                 <?php
-                $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                     $hesklang['del_art'],
                     'manage_knowledgebase.php?a=remove_article&amp;id='. $article['id'] .'&amp;token='. hesk_token_echo(0));
                 ?>
@@ -1888,7 +1890,7 @@ function manage_category() {
                                         ?>
                                         <a class="tooltip" href="manage_knowledgebase.php?a=sticky&amp;s=<?php echo $article['sticky'] ? 0 : 1 ?>&amp;id=<?php echo $article['id']; ?>&amp;catid=<?php echo $catid; ?>&amp;token=<?php hesk_token_echo(); ?>"
                                            title="<?php echo $article['sticky'] ? $hesklang['stickyoff'] : $hesklang['stickyon']; ?>">
-                                            <svg class="icon icon-pin" <?php echo $article['sticky'] ? ' style="fill: #38bc7d; transform: rotate(50deg);"' : ''; ?>>
+                                            <svg class="icon icon-pin <?php echo $article['sticky'] ? 'is-bookmark' : ''; ?>">
                                                 <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-pin"></use>
                                             </svg>
                                         </a>
@@ -1899,7 +1901,7 @@ function manage_category() {
                                             </svg>
                                         </a>
                                         <?php
-                                        $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                             $hesklang['del_art'],
                                             'manage_knowledgebase.php?a=remove_article&amp;id='. $article['id'] .'&amp;token='. hesk_token_echo(0));
                                         ?>
@@ -1943,7 +1945,7 @@ function manage_category() {
                     </div>
                     <div class="form-group">
                         <label for="edit_cat_parent"><?php echo $hesklang['kb_cat_parent']; ?></label>
-                        <div class="dropdown-select center out-close">
+                        <div class="dropdown-select out-close">
                             <select id="edit_cat_parent" name="parent"><?php $listBox->printMenu();  ?></select>
                         </div>
                     </div>
@@ -2426,7 +2428,7 @@ function show_subnav($hide='',$catid=1)
         </svg>
         <form style="display: inline" class="form" method="get" action="manage_knowledgebase.php">
         <input type="hidden" name="a" value="edit_article">
-        '. $hesklang['aid'] .': <input type="text" name="id" class="form-control" style="width: 75px; height: inherit"> <button type="submit" class="btn btn--blue-border" style="height: 26px;">'. $hesklang['edit'] .'</button>
+        '. $hesklang['aid'] .': <input type="text" name="id" class="form-control" style="width: 75px; height: inherit"> <button type="submit" class="btn btn--blue-border" style="height: 27px;">'. $hesklang['edit'] .'</button>
         </form>
     ';
 

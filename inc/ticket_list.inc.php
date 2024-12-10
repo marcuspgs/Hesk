@@ -98,6 +98,12 @@ while ($row = hesk_dbFetchAssoc($result))
                 break;
         }
     }
+
+    // Total bookmarks
+    if ( ! empty($row['is_bookmark']))
+    {
+        $totals['filtered']['bookmarks'] += $row['cnt'];
+    }
 }
 
 // Quick link: assigned to me
@@ -114,6 +120,11 @@ elseif ($is_quick_link == 'ot')
 elseif ($is_quick_link == 'un')
 {
     $total = $totals['filtered']['unassigned'];
+}
+// Quick link: bookmarks
+elseif ($is_quick_link == 'bm')
+{
+    $total = $totals['filtered']['bookmarks'];
 }
 // Quick link: due soon
 elseif ($is_quick_link == 'due')
@@ -138,6 +149,7 @@ elseif ($is_quick_link == 'all')
 // No quick link
 else
 {
+    $is_quick_link = false;
     $total = $totals['filtered']['all'];
 }
 
@@ -163,9 +175,9 @@ if (true)
 		$query .= '&amp;s_un='.$s_un[1];
 
         $query .= '&amp;duedate_option='.$duedate_search_type;
-        $query .= '&amp;duedate_specific_date='.$duedate_input;
+        $query .= '&amp;duedate_specific_date='.urlencode($duedate_input);
         $query .= '&amp;duedate_amount_value='.$duedate_amount_value;
-        $query .= '&amp;duedate_amount_unit'.$duedate_amount_unit;
+        $query .= '&amp;duedate_amount_unit='.$duedate_amount_unit;
 
 		$query .= '&amp;cot='.$cot;
 		$query .= '&amp;g='.$group;
@@ -232,9 +244,9 @@ if (true)
 		#$query .= '&amp;sort=';
 
         $query .= '&amp;duedate_option='.$duedate_search_type;
-        $query .= '&amp;duedate_specific_date='.$duedate_input;
+        $query .= '&amp;duedate_specific_date='.urlencode($duedate_input);
         $query .= '&amp;duedate_amount_value='.$duedate_amount_value;
-        $query .= '&amp;duedate_amount_unit'.$duedate_amount_unit;
+        $query .= '&amp;duedate_amount_unit='.$duedate_amount_unit;
 
 		$query .= '&amp;cot='.$cot;
 		$query .= '&amp;g='.$group;
@@ -267,7 +279,7 @@ if (true)
 	/* Print the table with tickets */
 	$random=rand(10000,99999);
 
-	$modal_id = hesk_generate_delete_modal($hesklang['confirm'],
+	$modal_id = hesk_generate_old_delete_modal($hesklang['confirm'],
         $hesklang['confirm_execute'],
     "javascript:document.getElementById('delete-tickets-form').submit()",
         $hesklang['confirm']);
@@ -302,6 +314,7 @@ if (true)
             <?php if ($can_view_unassigned): ?>
             <a href="<?php echo $href . '?' . $query_for_quick_links . '&amp;ql=un'; ?>" class="btn btn-transparent <?php if ($is_quick_link == 'un') echo 'is-bold is-selected'; ?>"><span><?php echo $hesklang['ql_una']; ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['unassigned']; ?></span></a>
             <?php endif; ?>
+            <a href="<?php echo $href . '?' . $query_for_quick_links . '&amp;ql=bm&amp;s_my=1&amp;s_ot=1&amp;s_un=1'; ?>" class="btn btn-transparent is-bookmarks <?php if ($is_quick_link == 'bm') echo 'is-bold is-selected'; ?>"><span><?php echo $hesklang['ql_bookmarks']; ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['bookmarks']; ?></span></a>
             <a href="<?php echo $href . '?' . $query_for_quick_links . '&amp;ql=due&amp;s_my=1&amp;s_ot=1&amp;s_un=1'; ?>" class="btn btn-transparent is-due-soon <?php if ($is_quick_link == 'due') echo 'is-bold is-selected'; ?>"><span><?php echo $hesklang['ql_due']; ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['due_soon']; ?></span></a>
             <a href="<?php echo $href . '?' . $query_for_quick_links . '&amp;ql=ovr&amp;s_my=1&amp;s_ot=1&amp;s_un=1'; ?>" class="btn btn-transparent is-overdue <?php if ($is_quick_link == 'ovr') echo 'is-bold is-selected'; ?>"><span><?php echo $hesklang['ql_ovr']; ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['overdue']; ?></span></a>
         </div>
@@ -440,6 +453,7 @@ if (true)
 		// Print last modified
 		if ( hesk_show_column('lastchange') )
 		{
+            // Another usage over in my_tickets.php
 			switch ($hesk_settings['updatedformat'])
 			{
 	        	case 1:
@@ -470,13 +484,26 @@ if (true)
 		// Print customer name
 		if ( hesk_show_column('name') )
 		{
-			echo '<td>'.$ticket['name'].'</td>';
+            echo '<td>'.$ticket['name'];
+
+            if (intval($ticket['customer_count']) > 1) {
+                echo '<span class="customer-count">'.sprintf($hesklang['customer_count_x_more'], intval($ticket['customer_count']) - 1).'</span>';
+            }
+
+			echo '</td>';
 		}
 
 		// Print customer email
 		if ( hesk_show_column('email') )
 		{
-			echo '<td>' . (strlen($ticket['email']) ? '<a href="mailto:'.$ticket['email'].'">'.$hesklang['clickemail'].'</a>' : '') . '</td>';
+			echo '<td>' . (strlen($ticket['email']) ? '<a href="mailto:'.$ticket['email'].'">'.$hesklang['clickemail'].'</a>' : '');
+
+            if (intval($ticket['email_count']) > 1) {
+                $subtraction_amount = strlen($ticket['email']) ? 1 : 0;
+                echo '<span class="customer-count">'.sprintf($hesklang['customer_count_x_more'], intval($ticket['email_count']) - $subtraction_amount).'</span>';
+            }
+
+            echo '</td>';
 		}
 
 		// Print subject and link to the ticket page
@@ -484,6 +511,8 @@ if (true)
 		{
 			echo '<td class="subject">'.($ticket['archive'] ? '<svg class="icon icon-tag '.($ticket['owner'] != $_SESSION['id'] ? 'fill-gray' : '').'" style="margin-right: 3px">
                         <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-tag"></use>
+                    </svg>' : '').($ticket['is_bookmark'] ? '<svg class="icon icon-pin is-bookmark" style="margin-right: 6px">
+                        <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-pin"></use>
                     </svg>' : '').$owner.'<a class="link" href="admin_ticket.php?track='.$ticket['trackid'].'&amp;Refresh='.$random.'">'.$ticket['subject'].'</a></td>';
 		}
 
@@ -528,7 +557,8 @@ if (true)
 			}
 			else
             {
-				$ticket['repliername'] = $ticket['name'];
+                $customer_name = $ticket['lastreplier_customername'] === null ? $ticket['name'] : $ticket['lastreplier_customername'];
+				$ticket['repliername'] = $customer_name;
 			}
 			echo '<td>'.$ticket['repliername'].'</td>';
 		}
@@ -702,6 +732,7 @@ if (true)
         </div>
         <div class="bulk-actions">
             <?php echo $hesklang['with_selected']; ?>
+            <div class="clear-on-mobile"></div>
             <div class="inline-bottom">
                 <select name="a">
                     <option value="low" selected="selected"><?php echo $hesklang['set_pri_to'].' '.$hesklang['low']; ?></option>
@@ -772,6 +803,7 @@ if (true)
                 <div style="height:6px"></div>
 
                 <?php echo $hesklang['assign_selected']; ?>
+                <div class="clear-on-mobile"></div>
                 <div class="inline-bottom">
                     <select name="owner">
                         <option value="" selected="selected"><?php echo $hesklang['select']; ?></option>
@@ -834,7 +866,7 @@ function hesk_print_list_head()
         $hesk_settings['hesk-group-count'] = 1;
     }
 	?>
-    <div class="table-wrap">
+    <div class="table-wrap ignore-overflow">
 	<table class="table sindu-table ticket-list sindu_origin_table" id="default-table">
     <thead>
     <tr>
@@ -882,103 +914,3 @@ function hesk_print_list_head()
     <tbody>
 	<?php
 } // END hesk_print_list_head()
-
-
-function hesk_time_since($original)
-{
-	global $hesk_settings, $hesklang, $mysql_time;
-
-    /* array of time period chunks */
-    $chunks = array(
-        array(60 * 60 * 24 * 365 , $hesklang['abbr']['year']),
-        array(60 * 60 * 24 * 30 , $hesklang['abbr']['month']),
-        array(60 * 60 * 24 * 7, $hesklang['abbr']['week']),
-        array(60 * 60 * 24 , $hesklang['abbr']['day']),
-        array(60 * 60 , $hesklang['abbr']['hour']),
-        array(60 , $hesklang['abbr']['minute']),
-        array(1 , $hesklang['abbr']['second']),
-    );
-
-	/* Invalid time */
-    if ($mysql_time < $original)
-    {
-    	// DEBUG return "T: $mysql_time (".date('Y-m-d H:i:s',$mysql_time).")<br>O: $original (".date('Y-m-d H:i:s',$original).")";
-        return "0".$hesklang['abbr']['second'];
-    }
-
-    $since = $mysql_time - $original;
-
-    // $j saves performing the count function each time around the loop
-    for ($i = 0, $j = count($chunks); $i < $j; $i++) {
-
-        $seconds = $chunks[$i][0];
-        $name = $chunks[$i][1];
-
-        // finding the biggest chunk (if the chunk fits, break)
-        if (($count = floor($since / $seconds)) != 0) {
-            // DEBUG print "<!-- It's $name -->\n";
-            break;
-        }
-    }
-
-    $print = "$count{$name}";
-
-    if ($i + 1 < $j) {
-        // now getting the second item
-        $seconds2 = $chunks[$i + 1][0];
-        $name2 = $chunks[$i + 1][1];
-
-        // add second item if it's greater than 0
-        if (($count2 = floor(($since - ($seconds * $count)) / $seconds2)) != 0) {
-            $print .= "$count2{$name2}";
-        }
-    }
-    return $print;
-} // END hesk_time_since()
-
-
-function hesk_time_lastchange($original)
-{
-	global $hesk_settings, $hesklang;
-
-	// Save time format setting so we can restore it later
-	$copy = $hesk_settings['format_timestamp'];
-
-	// We need this time format for this function
-	$hesk_settings['format_timestamp'] = 'Y-m-d H:i:s';
-
-	// Get HESK time-adjusted start of today if not already
-	if ( ! defined('HESK_TIME_TODAY') )
-	{
-		// Adjust for HESK time and define constants for alter use
-		define('HESK_TIME_TODAY',		date('Y-m-d 00:00:00', hesk_date(NULL, false, false, false) ) );
-		define('HESK_TIME_YESTERDAY',	date('Y-m-d 00:00:00', strtotime(HESK_TIME_TODAY)-86400) ) ;
-	}
-
-	// Adjust HESK time difference and get day name
-	$ticket_time = hesk_date($original, true);
-
-	if ($ticket_time >= HESK_TIME_TODAY)
-	{
-		// For today show HH:MM
-		$day = substr($ticket_time, 11, 5);
-	}
-	elseif ($ticket_time >= HESK_TIME_YESTERDAY)
-	{
-		// For yesterday show word "Yesterday"
-		$day = $hesklang['r2'];
-	}
-	else
-	{
-		// For other days show DD MMM YY
-		list($y, $m, $d) = explode('-', substr($ticket_time, 0, 10) );
-		$day = '<span style="white-space: nowrap;">' . $d . ' ' . $hesklang['ms'.$m] . ' ' . substr($y, 2) . '</span>';
-	}
-
-	// Restore original time format setting
-	$hesk_settings['format_timestamp'] = $copy;
-
-	// Return value to display
-	return $day;
-
-} // END hesk_time_lastchange()

@@ -7,12 +7,12 @@ a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, bo
     vertical-align: baseline
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-    display: block
-}
-
 body, html {
     height: 100%
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block
 }
 
 body {
@@ -770,7 +770,10 @@ a:hover {
     background: rgba(125, 168, 208, .2);
     border-radius: 1px
 }
-
+.selectize-dropdown [data-selectable] .highlight.extra-space-infront::before {
+    /* handling situations where multi word searches would break a word and remove a space*/
+    content: ' ';
+}
 .selectize-dropdown .optgroup-header, .selectize-dropdown .option {
     padding: 5px 8px
 }
@@ -867,12 +870,16 @@ a:hover {
     border: solid 1px #2c70a2!important
 }
 
-.selectize-input:hover, .selectize-input.dropdown-active:hover {
+.selectize-input:not(.read-write):hover, .selectize-input:not(.read-write).dropdown-active:hover {
     border: solid 1px #133e5e!important;
     background-color: #2c70a2!important;
     color: #fff;
 }
 
+.selectize-control.read-write .selectize-input:hover, .selectize-control.read-write .selectize-input.dropdown-active:hover {
+    background: #ffffff !important;
+    color: #133e5e;
+}
 .selectize-control.input-tags {
     line-height: 1;
     margin-left: 24px
@@ -932,7 +939,8 @@ a:hover {
     align-items: center;
     height: 40px;
     padding: 0 32px 0 16px;
-    color: #133e5e
+    color: #133e5e;
+    white-space: pre;
 }
 
 .selectize-control .selectize-dropdown .option.active {
@@ -1771,6 +1779,14 @@ img:not([src]):not([srcset]) {
 .link:hover {
     text-decoration: none !important;
     color: #2c70a2;
+}
+
+.underline {
+    text-decoration: underline !important;
+}
+
+.underline:hover {
+    text-decoration: none !important;
 }
 
 .d-flex {
@@ -3347,6 +3363,41 @@ input::-ms-clear {
     /* color: #2c70a2; */
 }
 
+.ticket__body_block .block--head .contact.grid {
+    display: grid;
+    row-gap: 10px;
+}
+
+.ticket__body_block .block--head .contact.grid .requester-header {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+}
+
+.ticket__body_block .block--head .contact.grid .requester-header span {
+    vertical-align: middle;
+}
+
+.ticket__body_block .block--head .contact.grid .requester {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.ticket__body_block .block--head .contact.grid .cc-header {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: right;
+}
+
+.ticket__body_block .block--head .contact.grid .cc-header span {
+    vertical-align: middle;
+}
+
+.ticket__body_block .block--head .contact.grid .cc {
+    grid-column: 2;
+    grid-row: 2;
+}
+
 .ticket__body_block .block--head .contact>span {
     color: #2c70a2;
 }
@@ -3365,6 +3416,17 @@ input::-ms-clear {
     margin-left: 8px;
     cursor: pointer;
     position: static
+}
+
+.ticket__body_block .block--head .contact .dropdown.customer {
+    margin-left: 8px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 2px 4px 0 rgb(38 40 42 / 30%);
+}
+
+.ticket__body_block .block--head .contact .dropdown.customer label {
+    padding: 5px;
 }
 
 .ticket__body_block .block--head .contact .dropdown span {
@@ -4461,7 +4523,7 @@ input::-ms-clear {
 
 .cust-help .header {
     border-bottom: 1px solid #92a8b6;
-    background-color: #133e5e
+    background-color: #133e5e;
 }
 
 .cust-help .header .dropdown-select .label {
@@ -4487,7 +4549,31 @@ input::-ms-clear {
     justify-content: space-between;
     -ms-flex-align: center;
     align-items: center;
-    padding: 13px 0
+    padding: 13px 0;
+}
+
+.cust-help .header__inner .header__nav {
+    display: -ms-flexbox;
+    display: flex;
+    flex-grow: 1;
+    margin: 0 20px;
+    justify-content: flex-end;
+}
+
+.cust-help .header__inner .header__nav .nav-item {
+
+}
+
+.cust-help .header__inner .header__nav .nav-item.text-only {
+    color: #fff;
+}
+
+.cust-help .header__inner .header__nav .nav-item:not(:first-child) {
+    margin-left: 20px;
+}
+
+.cust-help .header__inner .header__nav .nav-item a {
+    color: #fff;
 }
 
 .cust-help .contr {
@@ -5638,6 +5724,18 @@ a.suggest-preview:hover .suggest-preview__title { font-weight: bold;}
     width: 96px
 }
 
+.notification-flash .notification--title.error-title {
+    display: none;
+}
+.notification-flash.display-error .notification--title.error-title {
+    display: block;
+}
+.notification-flash.display-error .notification--title:not(.error-title),
+.notification-flash.display-error .notification--text {
+    display: none;
+}
+
+
 @media screen and (max-width:900px) {
     .notification-flash {
         top: 0!important;
@@ -6359,3 +6457,1327 @@ sub {
     background: #f9fafd;
 }
 /* endregion */
+/* region My Tickets */
+.table-wrap {
+    margin-top: 24px;
+    padding: 12px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px 0 rgb(38 40 42 / 10%);
+    background-color: #fff;
+}
+
+.table-wrap .pager {
+    text-align: center;
+}
+
+.table-wrap .pager .pagination__list {
+    justify-content: center;
+}
+
+.table-wrap .table {
+    width: 100%;
+}
+
+.table-wrap .table thead {
+    height: 48px;
+    background-color: #2c70a2;
+    color: #fff;
+}
+
+.table-wrap .table thead a {
+    color: #fff;
+}
+
+.table-wrap .table thead a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.table-wrap .table thead th:not(:first-child) {
+    border-left: 1px solid #dfe4ec;
+}
+
+.table thead th.desc .handle {
+    height: 4px
+}
+
+.table thead th.desc .handle::before {
+    display: none
+}
+
+.table thead th.asc .handle {
+    height: 4px
+}
+
+.table thead th.asc .handle::after {
+    display: none
+}
+
+.table thead th .handle {
+    margin-left: 8px;
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 12px;
+    vertical-align: middle;
+}
+
+.table thead th .handle::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 4px solid #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.table thead th .handle::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    width: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 4px solid #ffffff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.table-wrap .table thead th {
+    padding: 18px 16px;
+    text-align: left;
+}
+
+.table thead th.table__first_th {
+    padding: 21px 0 21px 16px;
+    width: 40px;
+    border-right: none;
+    vertical-align: middle
+}
+
+.table-wrap .table tbody tr {
+    transition: all 100ms ease;
+    background-color: #edf6fb;
+    border-bottom: 1px solid #bdd4e2;
+}
+
+.table-wrap .table tbody tr:hover {
+    background-color: rgb(251 253 255) !important;
+}
+
+.table-wrap .table tbody tr:nth-child(even) {
+    background-color: #d5ebf7;
+}
+
+.table-wrap .table tbody tr.new {
+    font-weight: bolder;
+}
+
+.table-wrap .table tbody tr.new td:first-child {
+    position: relative
+}
+
+.table-wrap .table tbody tr.new td:first-child::before {
+    content: "";
+    width: 3px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #2c70a2;
+    border-top: 1px solid #bdd4e2;
+}
+
+.table-wrap .table tbody td:not(:first-child) {
+    border-left: 1px solid #92a8b6;
+}
+
+.table-wrap .table tbody td {
+    padding: 21px 16px;
+}
+/* endregion */
+
+input.form-control.as-text {
+    border: none;
+    background: transparent;
+}
+
+/* region Step Bar */
+.step-bar {
+    margin: 37px 0 0;
+    padding: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    border-top: 2px solid #dfe4ec;
+}
+
+.step-bar li {
+    width: 20%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-align: center;
+    align-items: center;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: .1px;
+    text-align: center;
+    color: #2c70a2;
+    position: relative;
+    cursor: pointer;
+}
+
+.step-bar.no-click li {
+    cursor: inherit;
+}
+
+.step-bar li::before {
+    content: "1";
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background-color: #959eb0;
+    border: 4px solid #dfe4ec;
+    border-radius: 50%;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: .1px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 8px;
+    margin-top: -13px;
+}
+
+.step-bar li:first-child {
+    -ms-flex-align: start;
+    align-items: flex-start;
+    width: 13%;
+    text-align: left;
+}
+
+.step-bar li:last-child {
+    -ms-flex-align: end;
+    align-items: flex-end;
+    width: 13%;
+    text-align: right;
+}
+
+.step-bar li:nth-child(1)::before {
+    content: "1"
+}
+
+.step-bar li:nth-child(2)::before {
+    content: "2"
+}
+
+.step-bar li:nth-child(3)::before {
+    content: "3"
+}
+
+.step-bar li:nth-child(4)::before {
+    content: "4"
+}
+
+.step-bar li:nth-child(5)::before {
+    content: "5"
+}
+
+@media screen and (max-width: 899px) {
+    .step-bar {
+        margin: 0 -12px;
+        padding: 0 12px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -ms-flex-align: center;
+        align-items: center;
+        background-color: #f6f7f9;
+        height: 56px;
+        width: auto;
+        -ms-flex-negative: 0;
+        flex-shrink: 0
+    }
+    .step-bar li {
+        display: none;
+        width: auto;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center!important;
+        align-items: center!important;
+        font-size: 14px;
+        font-weight: 400;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.57;
+        letter-spacing: .1px;
+        text-align: right;
+        color: #26282a
+    }
+    .step-bar li::before {
+        font-size: 12px;
+        margin: 0 8px 0 0
+    }
+}
+
+.step-slider {
+    margin-top: 24px
+}
+
+.step-slider .step-item {
+    display: none
+}
+
+.step-slider .step-item h4 {
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.38;
+    letter-spacing: .1px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.step-slider .step-item h4 span {
+    font-size: 14px;
+    font-weight: 400;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: #959eb0;
+    margin-left: 8px
+}
+
+.step-footer {
+    display: -ms-flexbox;
+    display: flex;
+    padding: 16px 32px;
+    box-shadow: 0 2px 8px 0 rgba(38, 40, 42, 0.1);
+    margin: auto -32px 0
+}
+
+.step-footer .btn-border {
+    margin-right: auto
+}
+
+.step-footer .btn-full {
+    margin-left: auto
+}
+
+.step-footer .btn-full.save {
+    display: none;
+    min-width: 176px
+}
+
+[data-step="1"] .step-bar li:nth-child(1)::before {
+    border-color: #00a6ec;
+    background-color: #00a6ec;
+}
+
+[data-step="1"] .step-item.step-1 {
+    display: block
+}
+
+@media screen and (max-width: 899px) {
+    [data-step="1"] .step-bar li:nth-child(1) {
+        display: -ms-flexbox;
+        display: flex;
+        width: auto;
+        font-weight: 700
+    }
+    [data-step="1"] .step-bar li:nth-child(1)::before {
+        content: attr(data-link) "/" attr(data-all);
+        width: 32px;
+        height: 32px
+    }
+    [data-step="1"] .step-bar li:nth-child(2) {
+        display: -ms-flexbox;
+        display: flex
+    }
+    [data-step="1"] .step-bar li:nth-child(2)::before {
+        content: "Next:";
+        width: auto;
+        height: auto;
+        background: none;
+        border: none;
+        color: #26282a;
+        font-size: 14px;
+        font-weight: 400
+    }
+}
+
+[data-step="2"] .step-bar li:nth-child(2)::before {
+    border-color: #00a6ec;
+    background-color: #00a6ec;
+}
+
+[data-step="2"] .step-item.step-2 {
+    display: block
+}
+
+@media screen and (max-width: 899px) {
+    [data-step="2"] .step-bar li:nth-child(2) {
+        display: -ms-flexbox;
+        display: flex;
+        width: auto;
+        font-weight: 700
+    }
+    [data-step="2"] .step-bar li:nth-child(2)::before {
+        content: attr(data-link) "/" attr(data-all);
+        width: 32px;
+        height: 32px
+    }
+    [data-step="2"] .step-bar li:nth-child(3) {
+        display: -ms-flexbox;
+        display: flex
+    }
+    [data-step="2"] .step-bar li:nth-child(3)::before {
+        content: "Next:";
+        width: auto;
+        height: auto;
+        background: none;
+        border: none;
+        color: #26282a;
+        font-size: 14px;
+        font-weight: 400
+    }
+}
+
+[data-step="3"] .step-bar li:nth-child(3)::before {
+    border-color: #00a6ec;
+    background-color: #00a6ec;
+}
+
+[data-step="3"] .step-item.step-3 {
+    display: block
+}
+
+@media screen and (max-width: 899px) {
+    [data-step="3"] .step-bar li:nth-child(3) {
+        display: -ms-flexbox;
+        display: flex;
+        width: auto;
+        font-weight: 700
+    }
+    [data-step="3"] .step-bar li:nth-child(3)::before {
+        content: attr(data-link) "/" attr(data-all);
+        width: 32px;
+        height: 32px
+    }
+    [data-step="3"] .step-bar li:nth-child(4) {
+        display: -ms-flexbox;
+        display: flex
+    }
+    [data-step="3"] .step-bar li:nth-child(4)::before {
+        content: "Next:";
+        width: auto;
+        height: auto;
+        background: none;
+        border: none;
+        color: #26282a;
+        font-size: 14px;
+        font-weight: 400
+    }
+}
+
+[data-step="4"] .step-bar li:nth-child(4)::before {
+    border-color: #00a6ec;
+    background-color: #00a6ec;
+}
+
+[data-step="4"] .step-item.step-4 {
+    display: block
+}
+
+@media screen and (max-width: 899px) {
+    [data-step="4"] .step-bar li:nth-child(4) {
+        display: -ms-flexbox;
+        display: flex;
+        width: auto;
+        font-weight: 700
+    }
+    [data-step="4"] .step-bar li:nth-child(4)::before {
+        content: attr(data-link) "/" attr(data-all);
+        width: 32px;
+        height: 32px
+    }
+    [data-step="4"] .step-bar li:nth-child(5) {
+        display: -ms-flexbox;
+        display: flex;
+        width: auto
+    }
+    [data-step="4"] .step-bar li:nth-child(5)::before {
+        content: "Next:";
+        width: auto;
+        height: auto;
+        background: none;
+        border: none;
+        color: #26282a;
+        font-size: 14px;
+        font-weight: 400
+    }
+}
+
+[data-step="5"] .step-bar li:nth-child(5)::before {
+    border-color: #38bc7d;
+    background-color: #38bc7d
+}
+
+[data-step="5"] .step-item.step-5 {
+    display: block
+}
+
+[data-step="5"] .btn-full.next {
+    display: none
+}
+
+[data-step="5"] .btn-full.save {
+    display: -ms-flexbox;
+    display: flex
+}
+
+@media screen and (max-width: 899px) {
+    [data-step="5"] .step-bar li:nth-child(5) {
+        display: -ms-flexbox;
+        display: flex;
+        width: auto;
+        font-weight: 700
+    }
+    [data-step="5"] .step-bar li:nth-child(5)::before {
+        content: attr(data-link) "/" attr(data-all);
+        width: 32px;
+        height: 32px
+    }
+}
+
+#verify-input {
+    max-width: 120px;
+    margin-right: 8px;
+}
+
+#verify-form .form-group {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+#verify-form .form-group label {
+    font-size: 20px;
+    color: #6b7480;
+    margin-right: 6px;
+}
+
+#verify-form .form-group .btn.btn--blue-border {
+    height: 40px;
+}
+
+#verify-another-way {
+    margin-top: 10px;
+}
+
+#verify-another-way li {
+    border-top: solid 1px #d4d6e3;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#verify-another-way li:last-child {
+    border-bottom: solid 1px #d4d6e3;
+}
+
+#verify-another-way .mfa-alt-text .btn-link,
+#mfa-verify #send-another-email-form .btn-link {
+    padding: 0;
+    color: #2c70a2;
+    transition: color 250ms ease;
+    height: inherit;
+    font-size: 14px;
+}
+
+#verify-another-way .mfa-alt-text .btn-link:hover,
+#mfa-verify #send-another-email-form .btn-link:hover {
+    color: #133e5e;
+}
+
+#mfa-verify > p {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.mfa-alt-icon {
+    height: 24px;
+    width: 24px;
+    margin: 0;
+    overflow: hidden;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.mfa-alt-icon > svg {
+    fill: black;
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.mfa-alt-text {
+    margin: 0 0 0 8px;
+    flex-grow: 1;
+}
+
+.verify-back {
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.verify-back a:hover {
+    color: #fff;
+}
+
+#complete-form {
+    text-align: center;
+}
+
+#complete-form .shield-icon {
+    font-size: 3rem;
+}
+
+#complete-form p {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+/* endregion */
+
+/* region Profile Dropdown */
+.header .profile__user {
+    line-height: 1.29;
+    letter-spacing: .1px;
+    color: #fff;
+    padding-left: 16px;
+    transition: all 100ms ease;
+    display: flex;
+    align-items: center;
+    margin-top: -13px;
+    margin-bottom: -13px;
+    position: relative;
+    height: 49px;
+}
+
+.header .profile__user.active .icon-chevron-down {
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+.header .profile__user .profile__menu {
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px 0 rgba(38, 40, 42, 0.1);
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 30;
+    display: none
+}
+
+.header .profile__user .profile__menu .profile--view {
+    padding: 16px 34px;
+}
+
+.header .profile__user .profile__menu .profile--view a {
+    margin: auto;
+    text-align: center;
+}
+
+.header .profile__user .profile__menu .profile--view a:hover {
+    color: currentColor;
+}
+
+.header .profile__user .profile__menu .profile--logout {
+    border-top: 1px solid #dfe4ec;
+    background-color: #526675;
+}
+
+.header .profile__user .profile__menu .profile--logout a {
+    display: -ms-flexbox;
+    display: flex;
+    height: 48px;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: #ffffff;
+    transition: all 100ms ease;
+}
+
+.header .profile__user .profile__menu .profile--logout a:hover {
+    background-color: #133e5e
+}
+
+.header .profile__user .profile__menu .profile--logout a .icon-log-out {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    fill: #fff;
+}
+
+.header .user__ava {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2c70a2;
+    color: #fff;
+}
+
+.listitem__icon a.mobile_ava {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #133e5e;
+    background-color: #9eb1be;
+    font-weight: 700;
+}
+
+.header .user__name {
+    cursor: pointer
+}
+
+.header .user__name p {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    white-space: nowrap;
+    max-width: 150px;
+    min-width: 120px
+}
+
+.header .user__name p span {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+.header .user__name p .icon-chevron-down {
+    width: 8px;
+    height: 8px;
+    margin-left: 4px;
+    fill: currentColor;
+}
+
+.ticket--profile {
+    gap: 0 20px;
+}
+
+.ticket--profile .ticket__body_block {
+    flex-grow: 1;
+    width: 50%;
+}
+
+.ticket--profile .profile__control {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.ticket--profile .profile__info .subtext {
+    margin-top: 8px;
+}
+
+.ticket--profile .profile__control .profile__edit:not(:first-child) {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.text-danger {
+    color: red;
+}
+
+.text-success {
+    color: green;
+}
+/* endregion */
+
+.flex {
+    display: flex;
+}
+
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.loading-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #156cc8;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* ---------------
+ * BEGIN HESK LAYOUT IMPROVEMENTS
+ * ---------------
+ *   These css changes below contains styles that override above csses, that improve certain layouts functionality.
+ *   It's kept distinctly separate from above css, for easier decoupling and seeing what was specifically overridden from the original.
+*/
+
+:root {
+    --transition-time-pri: 50ms; /* i.e. hover over icons, buttons ... */
+    --transition-time-sec: 150ms; /* secondary element within an element, i.e. icon anim delay within buttons */
+}
+/* START GENERAL SELECTORS / ELEMENTS */
+.main {
+    /* Required as parent has display: flex, and it can cause an issue if any of the children is wider than the remaining parent space,
+    it would cause .main to expand to fit for that. BUT adding a flexed item min-width: 0, overrides the unset value which causes above behaviour. */
+    min-width: 0;
+}
+.btn {
+    cursor: pointer;
+    transition: all var(--transition-time-pri) ease;
+}
+.btn-border:hover {
+    transition: all var(--transition-time-pri) ease;
+    background: #2c70a2;
+    color: #ffffff;
+    fill: #ffffff;
+    border-color: #133e5e;
+}
+
+/* start speeding up all transitions */
+.icon {
+    transition: all var(--transition-time-sec) ease;
+}
+a {
+    transition: color var(--transition-time-pri) ease;
+}
+.selectize-input {
+    transition: all var(--transition-time-pri) ease
+}
+.selectize-control .selectize-input {
+    transition: all var(--transition-time-pri) ease
+}
+.selectize-control .selectize-input:after {
+    transition: all var(--transition-time-pri) ease
+}
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down {
+    transition: all var(--transition-time-pri) ease
+}
+.dropdown .dropdown-list>li svg, .dropdown-select .dropdown-list>li svg {
+    transition: all var(--transition-time-pri) ease
+}
+.form input.form-control, .form textarea.form-control {
+    transition: all var(--transition-time-pri) ease
+}
+.form select.form-control {
+    transition: all var(--transition-time-pri) ease;
+}
+.form__search .form__search_type .type--list li {
+    transition: all var(--transition-time-pri) ease;
+}
+.form__search .form__search_type .type--list li .icon {
+    transition: all var(--transition-time-pri) ease;
+}
+.checkbox-custom [type='checkbox']+label {
+    transition: all var(--transition-time-pri) ease;
+}
+.tickets__mobile_head .btn {
+    transition: all var(--transition-time-pri) ease;
+}
+.body a {
+    transition: all var(--transition-time-pri) ease;
+}
+/* end speeding up all transitions */
+
+.table-wrap {
+}
+.table-wrap.ignore-overflow {
+    overflow-x: auto;
+}
+.table-wrap td a {
+    text-decoration: underline;
+}
+.table-wrap td a:hover {
+    text-decoration: none;
+}
+
+.icon-person {
+    width: .86em;
+    height: 1em;
+    fill: #516b7d;
+    flex-shrink: 0;
+}
+label .icon-person,
+.label .icon-person {
+    /* various labels/dropdowns, that are suggesting a user */
+    margin-right: 4px;
+    margin-top: -1px;
+}
+/* START TICKETS "more complex" common elements */
+.form input.form-control,
+.form textarea.form-control {
+    vertical-align: middle;
+}
+/* style dropdown the same, exception for "right edge ones", like on ticket view */
+.dropdown:not(.right),
+.dropdown-select:not(.right) {
+    vertical-align: middle;
+}
+.dropdown:not(.right):hover,
+.dropdown-select:not(.right):hover {
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+    color: #fff;
+    transition: all var(--transition-time-pri) ease;
+}
+.dropdown:not(.right):hover label,
+.dropdown:not(.right):hover .label,
+.dropdown-select:not(.right):hover label,
+.dropdown-select:not(.right):hover .label,
+.dropdown:not(.right):hover label span,
+.dropdown:not(.right):hover .label span,
+.dropdown-select:not(.right):hover label span,
+.dropdown-select:not(.right):hover .label span {
+    color: #fff !important;
+}
+/* only change color for 1-level down icons, not i.e. for within <li> elements*/
+.dropdown:not(.right):hover > * > .icon,
+.dropdown:not(.right):hover > * > .icon,
+.dropdown-select:not(.right):hover > * > .icon,
+.dropdown-select:not(.right):hover > * > .icon {
+    transition: all var(--transition-time-sec) ease;
+    color: #fff !important;
+    fill: #fff !important;
+}
+/* we're applying the dropdown style on labels, as the click events work on them, so this ensures they work over the whole area properly
+ Note 1: Generally we need only 2 selectors, BUT we have to account for an edge case with .priority fields, which shouldn't be treated as selectso in tables,
+ but SHOULD be when in form-group (i.e. not on listing tickets, but yes when creating)
+ Note 2: We actually have to double those selectors AS WELL, as some HTML uses .label class, and some <label> elements
+ Note 3: as label in prev design had 5px padding, we have to give it 5 more side padding (i.e. 17px instead of 12px) to make it the same spacing
+*/
+.dropdown:not(.right) .label,
+.dropdown-select:not(.right) .label,
+.form-group .dropdown:not(.right) .label,
+.form-group .dropdown-select:not(.right) .label,
+.dropdown:not(.right) label,
+.dropdown-select:not(.right) label,
+.form-group .dropdown:not(.right) label,
+.form-group .dropdown-select:not(.right) label {
+    display: inline-flex;
+    border-radius: 2px;
+    border: solid 1px #2c70a2;
+    box-shadow: none;
+    padding: 0 11px 0 17px !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+
+    /* use dynamic combo of height + min-height + line-height to ensure that the selects can scale & fit any content inside them (i.e. multiple rows) */
+    height: max-content;
+    min-height: 40px;
+    line-height: 1.7;
+    -ms-flex-align: center;
+    align-items: center;
+    transition: all var(--transition-time-pri) ease;
+    vertical-align: middle;
+}
+
+.dropdown:not(.right) .dropdown-list .label,
+.dropdown-select:not(.right) .dropdown-list .label,
+.form-group .dropdown:not(.right) .dropdown-list .label,
+.form-group .dropdown-select:not(.right) .dropdown-list .label,
+.dropdown:not(.right) .dropdown-list label,
+.dropdown-select:not(.right) .dropdown-list label,
+.form-group .dropdown:not(.right) .dropdown-list label,
+.form-group .dropdown-select:not(.right) .dropdown-list label {
+    min-width: calc(100% + 2px); /* make it at least wide as parent, + 2extra px for parent's border*/
+}
+
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down {
+    margin-left: 12px; /* account for a bit extra margin, as with label being flex, it now removes the whitespace*/
+}
+.selectize-control:not(.read-write) .selectize-input:hover,
+.selectize-control:not(.read-write) .selectize-input:focus-visible {
+    color: #ffffff;
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+}
+.selectize-control .selectize-input:hover::after,
+.selectize-control .selectize-input:focus-visible::after {
+    transition: all var(--transition-time-sec) ease;
+    color: #ffffff;
+    fill: #ffffff;
+    filter: brightness(0%) invert(100%); /* use filter, as it's using a greyish background image for chevron*/
+    opacity: 1 !important;
+}
+.selectize-control .selectize-input:hover ::placeholder,
+.selectize-control .selectize-input:focus-visible ::placeholder{
+    color: #ffffff;
+    opacity: 1;
+}
+.selectize-control.read-write .selectize-input:not(.focus):hover,
+.selectize-control.read-write .selectize-input:not(.focus).dropdown-active:hover {
+    /* have to have this one as extra to ensure it overwrites app.css */
+    color: #ffffff;
+    border-color: #133e5e;
+    background-color: #2c70a2 !important;
+}
+.selectize-dropdown-content .no-results {
+    padding: 5px 10px;
+}
+.checkbox-custom [type="checkbox"] + label:hover::before {
+    background: #bdd3e3;
+}
+.radio-custom [type="radio"] + label:hover::before,
+.radio-custom [type="radio"] + label:hover::before {
+    background: #bdd3e3;
+}
+.dropdown-select .label {
+    margin-right: 0;
+}
+/* START - header/profile menu */
+.header .user__name p {
+    min-width: unset;
+}
+.header .profile__user .profile__menu {
+    padding: 10px 20px;
+}
+.header .profile__user .profile__menu .profile--view {
+    padding: 0;
+}
+.header .profile__user .profile__menu .profile--view {
+    margin-bottom: 5px;
+}
+.header .dropdown:not(.right):hover,
+.header .dropdown-select:not(.right):hover {
+    border: none;
+    background-color: unset !important;
+}
+.header__lang .dropdown:not(.right) .label,
+.header__lang .dropdown-select:not(.right) .label {
+    border: none;
+}
+
+/* START submit support request */
+#cc-link {
+    min-width: 152px;
+    height: 40px;
+    background-color: #2c70a2;
+    color: #fff;
+    font-weight: 600;
+    transition: all var(--transition-time-pri) ease;
+    text-decoration: none;
+    border: 1px solid #133e5e;
+    width: max-content;
+
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+}
+#cc-link:hover {
+    background-color: #133e5e;
+}
+#cc-link a {
+    color: white;
+    /* Fix for full-button click taking effect */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-submit-ticket .form-group,
+.form-submit-ticket .param {
+    margin-bottom: 20px;
+}
+.dropzone {
+    padding: 0 20px; /* side padding looks better*/
+}
+
+/* START my_tickets */
+.table-wrap .pager {
+    margin-top: 10px;
+}
+
+/* START ticket */
+.ticket__body,
+.ticket__params {
+    min-width: 0; /* this helps prevents default flex behaviour where flex items will automatically fit their minimal content, possibly overflowing their parent */
+}
+.ticket__body_block {
+    padding: 15px 24px 15px;
+}
+.ticket__body_block .block--head .contact.grid .cc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 0;
+}
+.ticket__body_block .block--head .contact.grid .requester-header {
+    min-width: max-content;
+}
+.ticket__body_block .block--head .contact.grid .cc-header {
+    min-width: max-content;
+}
+.ticket__body_block h3 {
+    margin-bottom: 1em;
+}
+.ticket__body_block .block--head .contact .dropdown.customer {
+    box-shadow: none;
+    border-radius: 3px; /* required due to hover background, as label has box shadow and is rounded a bit */
+}
+.ticket__body_block .block--head .contact .dropdown.customer .label,
+.ticket__body_block .block--head .contact .dropdown.customer label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    padding: 0 12px 0 12px !important; /* exception to make it narrower, as label no longer had 5px extra padding in original design */
+
+    border: none;
+    box-shadow: inset 2px 1px 2px #f3f4f4, inset -2px -1px 2px #f3f4f4;
+}
+.ticket__body_block .block--head .contact .dropdown.customer:hover .label,
+.ticket__body_block .block--head .contact .dropdown.customer:hover label {
+    box-shadow: inset 2px 1px 2px #205c88, inset -2px -1px 2px #205c88;
+}
+.ticket .ticket__params .dropdown-select {
+    border-radius: 3px; /* required due to hover background, as label has box shadow and is rounded a bit */
+}
+.ticket .ticket__params .dropdown-select .label,
+.ticket .ticket__params .dropdown-select label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    padding: 0 12px 0 12px !important; /* exception to make it narrower, as label no longer had 5px extra padding in original design */
+
+    border: none;
+    box-shadow: inset 2px 1px 2px #f3f4f4, inset -2px -1px 2px #f3f4f4;
+}
+.checkbox-custom .dropdown-select:not(.right) .label,
+.checkbox-custom .dropdown-select:not(.right) label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+}
+.ticket .ticket__params .dropdown-select:hover .label,
+.ticket .ticket__params .dropdown-select:hover label {
+    box-shadow: inset 2px 1px 2px #205c88, inset -2px -1px 2px #205c88;
+}
+.ticket__body_block:not(:first-child) .block--head .contact {
+    display: flex; /* first-child is full ticket info, so it's a simple way to differentiate without DOM changes */
+}
+.ticket__body_block .block--head .contact .requester time {
+    margin-left: 0;
+}
+.ticket__body_block .block--head .contact time {
+    margin-left: 2px;
+}
+.ticket__params .params--block h4 {
+    padding: 8px 16px 8px 16px;
+}
+.ticket__body_block .block--description:last-child {
+    margin-bottom: 0;
+}
+.ticket__body_block .block--head .btn.btn-action {
+    align-self: flex-start;
+}
+.custom-field-title {
+    line-height: 1.8;
+}
+/* START knowledge base */
+.topics__list a {
+    margin: 5px 0;
+}
+
+/* START MFA */
+.step-bar li:last-child {
+    width: max-content;
+}
+.step-item h3 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+/* END MFA */
+
+/* ---------------
+ * END HESK LAYOUT IMPROVEMENTS
+ * ---------------
+*/
+
+
+/* ---------------
+ * BEGIN RESPONSIVE LAYOUT IMPROVEMENTS
+ * ---------------
+ *   These css changes below contains additional responsive improvements that override the above original CSS.
+ *   It's kept distinctly separate from above css, for easier decoupling and seeing what was specifically overridden from the original.
+*/
+
+@media screen and (max-width: 900px) {
+    .btn--blue-border, .btn-full { /* don't make them lower, as it looks better if they remain high*/
+        height: 40px !important;
+    }
+    .table-wrap {
+        padding: 5px;
+    }
+    .table-wrap .table {
+        font-size: 12px;
+    }
+    .table-wrap .table tbody td,
+    .table-wrap .table thead th {
+        padding: 7px 5px;
+    }
+    .table-wrap .table tbody td.table__first_th,
+    .table-wrap .table thead th.table__first_th {
+        padding: 7px 5px 7px 10px;
+    }
+
+    .cust-help .contr {
+        padding: 0 10px;
+    }
+
+    .search__form .form-group {
+        flex-wrap: wrap;
+    }
+    .search__form .search__submit {
+        bottom: auto;
+        margin: 0;
+        top: 11px;
+    }
+    #kb_search {
+        flex: 1;
+        width: auto;
+    }
+    #search-button {
+        height: inherit !important;
+        flex: 1;
+    }
+
+    /* MFA */
+    #formNeedValidation div[data-step] {
+        margin: 10px 0;
+    }
+    .step-bar {
+        margin: 0 -10px;
+        padding: 0 10px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .cust-help .contr {
+        padding: 0 5px;
+    }
+
+    #search-button {
+        height: 40px !important;
+        margin-left: 0;
+        margin-top: 10px;
+        flex-basis: 100%;
+    }
+    /* START knoweledgebase */
+    .preview {
+        padding: 20px 10px 10px 10px;
+    }
+    .topics {
+        padding: 15px 10px 0 10px; /* 0 bottom padding is compensated by bottom margin of categories */
+    }
+    .topics__list a {
+        margin: 10px 0; /* extra touch space */
+    }
+
+    /* table tickets page */
+    .ticket__body_block {
+        padding: 10px;
+    }
+    .form-submit-ticket {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #kb_search {
+        flex-basis: 100%;
+    }
+    form[action="my_tickets.php"] #kb_search {
+        /* we only want bottom margin on my_tickets search, not on others */
+        margin-bottom: 10px;
+    }
+    .search__form .form-group .selectize-control .selectize-input {
+        height: 40px !important;
+    }
+    #search-button {
+        margin-left: 10px;
+        margin-top: 0;
+        height: 40px !important;
+        flex-basis: auto;
+    }
+}
+
+/* ---------------
+ * END RESPONSIVE LAYOUT IMPROVEMENTS
+ * ---------------
+*/

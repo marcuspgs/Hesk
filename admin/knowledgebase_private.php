@@ -299,7 +299,7 @@ function hesk_show_kb_article($artid)
                         <svg class="icon icon-attach" style="fill: #9c9c9c">
                             <use xlink:href="'. HESK_PATH .'img/sprite.svg#icon-attach"></use>
                         </svg>
-                        <a class="link" href="../download_attachment.php?kb_att='.$att_id.'" rel="nofollow">
+                        <a class="link" href="download_attachment.php?kb_att='.$att_id.'" rel="nofollow">
                             '.$att_name.'
                         </a><br>';
                     }

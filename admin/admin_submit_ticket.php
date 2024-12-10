@@ -42,8 +42,8 @@ if ( empty($_POST) && ! empty($_SERVER['CONTENT_LENGTH']) )
 // Changing category? Remember data and redirect to category select page
 if (hesk_POST('change_category') == 1)
 {
-    $_SESSION['as_name']     = hesk_POST('name');
-    $_SESSION['as_email']    = hesk_POST('email');
+    $_SESSION['as_customer_id'] = hesk_POST('customer_id');
+    $_SESSION['as_follower_ids'] = hesk_POST_array('follower_id');
     $_SESSION['as_priority'] = hesk_POST('priority');
     $_SESSION['as_status']   = hesk_POST('status');
     $_SESSION['as_subject']  = hesk_POST('subject');
@@ -68,29 +68,33 @@ if (hesk_POST('change_category') == 1)
 
 $hesk_error_buffer = array();
 
-$tmpvar['name']	    = hesk_input( hesk_POST('name') ) or $hesk_error_buffer['name']=$hesklang['enter_your_name'];
 
-$email_available = true;
+$tmpvar['customer_id'] = hesk_POST('customer_id') or $hesk_error_buffer['customer-id']=$hesklang['customer_required'];
 
-if ($hesk_settings['require_email'])
-{
-    $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer['email']=$hesklang['enter_valid_email'];
+// Ensure that the customer (1) exists and (2) isn't pending approval
+$customer_verification_rs = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
+    WHERE `id` = ".intval($tmpvar['customer_id'])."
+        AND `verified` <> 2");
+if (hesk_dbNumRows($customer_verification_rs) < 1) {
+    $hesk_error_buffer['customer-id'] = $hesklang['customer_required'];
 }
-else
-{
-    $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0);
 
-    // Not required, but must be valid if it is entered
-    if ($tmpvar['email'] == '')
-    {
-        $email_available = false;
+$tmpvar['follower_ids'] = hesk_POST_array('follower_id');
 
-        if (strlen(hesk_POST('email')))
-        {
-            $hesk_error_buffer['email'] = $hesklang['not_valid_email'];
-        }
+// Remove followers that are also the requester, and remove duplicate followers
+$actual_followers = [];
+foreach ($tmpvar['follower_ids'] as $follower_id) {
+    $follower_id_int = intval($follower_id);
+    if ($follower_id_int === intval($tmpvar['customer_id']) || in_array($follower_id_int, $actual_followers)) {
+        continue;
+    }
+
+    $follower_record = hesk_get_customer_account_by_id($follower_id_int);
+    if ($follower_record['email'] && !hesk_isBannedEmail($follower_record['email'])) {
+        $actual_followers[] = $follower_id_int;
     }
 }
+$tmpvar['follower_ids'] = $actual_followers;
 
 $tmpvar['category'] = intval( hesk_POST('category') ) or $hesk_error_buffer['category']=$hesklang['sel_app_cat'];
 $tmpvar['priority'] = hesk_POST('priority');
@@ -136,12 +140,6 @@ if ($tmpvar['category'])
     }
 
 	hesk_verifyCategory(1);
-
-	// Is auto-assign of tickets disabled in this category?
-	if ( empty($hesk_settings['category_data'][$tmpvar['category']]['autoassign']) )
-	{
-		$hesk_settings['autoassign'] = false;
-	}
 }
 
 // Custom fields
@@ -410,8 +408,8 @@ if (count($hesk_error_buffer)!=0)
 {
 	$_SESSION['iserror'] = array_keys($hesk_error_buffer);
 
-    $_SESSION['as_name']     = hesk_POST('name');
-    $_SESSION['as_email']    = hesk_POST('email');
+    $_SESSION['as_customer_id'] = $tmpvar['customer_id'];
+    $_SESSION['as_follower_ids'] = $tmpvar['follower_ids'];
     $_SESSION['as_priority'] = $tmpvar['priority'];
     $_SESSION['as_status']   = $tmpvar['status'];
     $_SESSION['as_subject']  = hesk_POST('subject');
@@ -501,8 +499,13 @@ if ( defined('HESK_DEMO') ) {
     hesk_process_messages(sprintf($hesklang['antdemo'], 'https://www.hesk.com/demo/index.php?a=add'), 'new_ticket.php?category='.$tmpvar['category']);
 }
 
+// Let's not add staff IP address as the ticket IP address
+$hesk_settings['client_IP'] = '';
+
 // Insert ticket to database
 $ticket = hesk_newTicket($tmpvar);
+$customers = hesk_get_customers_for_ticket($ticket['id']);
+$email_available = count(array_filter($customers, function($customer) { return $customer['email'] !== ''; })) > 0;
 
 // Notify the customer about the ticket?
 if ($notify && $email_available)
@@ -537,6 +540,8 @@ elseif ( ! $ticket['owner'])
 // Unset temporary variables
 unset($tmpvar);
 hesk_cleanSessionVars('tmpvar');
+hesk_cleanSessionVars('as_customer_id');
+hesk_cleanSessionVars('as_follower_ids');
 hesk_cleanSessionVars('as_name');
 hesk_cleanSessionVars('as_email');
 hesk_cleanSessionVars('as_category');

@@ -63,8 +63,8 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
                 }
               });
             },
-            toolbar: 'undo redo | styleselect fontselect fontsizeselect | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | bullist numlist outdent indent | link unlink image codesample code',
-            plugins: 'charmap code codesample image link lists table autolink',
+            toolbar: 'undo redo | styleselect fontselect fontsizeselect | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | bullist numlist outdent indent | link unlink anchor image codesample code',
+            plugins: 'charmap code codesample image link lists table autolink anchor',
             height: 350,
             toolbar_mode: 'sliding',
             mobile: {

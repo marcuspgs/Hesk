@@ -2604,7 +2604,18 @@ class mime_parser_class
         {
             $results['X-Priority'] = "high";
         }
-
+        if(IsSet($message['Headers']['message-id:']))
+        {
+            $results['Message-ID'] = $message['Headers']['message-id:'];
+        }
+        if(IsSet($message['Headers']['in-reply-to:']))
+        {
+            $results['In-Reply-To'] = $message['Headers']['in-reply-to:'];
+        }
+        if(IsSet($message['Headers']['references:']))
+        {
+            $results['References'] = $message['Headers']['references:'];
+        }
 		if(IsSet($message['Headers']['date:']))
 		{
 			if(IsSet($message['DecodedHeaders']['date:'])

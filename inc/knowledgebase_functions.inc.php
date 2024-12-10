@@ -26,6 +26,8 @@ function hesk_kbCategoriesArray($public_only = true)
 
     while ($category = hesk_dbFetchAssoc($res))
     {
+        $category['children'] = array();
+        $category['descendants'] = array();
         $categories[$category['id']] = $category;
     }
 
@@ -56,6 +58,30 @@ function hesk_kbCategoriesArray($public_only = true)
 
         $categories[$id]['parents'] = array_reverse($categories[$id]['parents']);
     }
+
+    // Get children for each category
+    foreach ($categories as $id => $category) {
+        if ($category['parent'] == 0) {
+            continue;
+        }
+
+        $categories[$category['parent']]['children'][] = $id;
+
+        foreach ($category['parents'] as $parent) {
+            $categories[$parent]['descendants'][] = $id;
+        }
+    }
+
+    // Uncomment if you want to remove direct children from "descendants"
+    /*
+    foreach ($categories as $id => $category) {
+        if (count($category['children']) == 0 || count($category['descendants']) == 0) {
+            continue;
+        }
+
+        $categories[$id]['descendants'] = array_diff($categories[$id]['descendants'], $categories[$id]['children']);
+    }
+    */
 
     return $categories;
 } // END hesk_kbCategoriesArray()

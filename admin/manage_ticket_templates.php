@@ -167,7 +167,7 @@ $num = hesk_dbNumRows($result);
                 echo '';
             }
 
-            $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+            $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                 $hesklang['delete_tpl'],
                 'manage_ticket_templates.php?a=remove&amp;id='.$mysaved['id'].'&amp;token='.hesk_token_echo(0));
 
@@ -222,7 +222,7 @@ $num = hesk_dbNumRows($result);
                 <div class="form-group">
                     <label for="canned_message"><?php echo $hesklang['message']; ?></label>
                     <span id="HeskMsg">
-                        <textarea class="form-control <?php echo in_array('msg', $errors) ? 'isError' : ''; ?>" name="msg" rows="40" cols="70" id="canned_message"><?php
+                        <textarea class="form-control <?php echo in_array('msg', $errors) ? 'isError' : ''; ?>" name="msg" rows="40" cols="70" id="canned_message" style="resize: vertical; transition: none;"><?php
                             if (isset($_SESSION['canned']['msg'])) {
                                 echo stripslashes($_SESSION['canned']['msg']);
                             }
@@ -266,7 +266,7 @@ function setMessage(msgid) {
         tinymce.get("canned_message").setContent('');
         tinymce.get("canned_message").execCommand('mceInsertRawHTML', false, myMsgTxt[msgid]);
         <?php else: ?>
-        document.getElementById('HeskMsg').innerHTML='<textarea class="form-control" id="canned_message" name="msg" rows="40" cols="70">'+myMsgTxt[msgid]+'</textarea>';
+        document.getElementById('HeskMsg').innerHTML='<textarea class="form-control" id="canned_message" name="msg" rows="40" cols="70" style="resize: vertical; transition: none;">'+myMsgTxt[msgid]+'</textarea>';
         <?php endif; ?>
         document.getElementById('HeskTitle').innerHTML='<input type="text" class="form-control" id="canned_title" name="name" maxlength="50" value="'+myTitle[msgid]+'">';
     } else {

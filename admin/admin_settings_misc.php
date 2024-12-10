@@ -25,7 +25,6 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 // Save the default language for the settings page before choosing user's preferred one
 $hesk_settings['language_default'] = $hesk_settings['language'];
 require(HESK_PATH . 'inc/common.inc.php');
-$hesk_settings['language'] = $hesk_settings['language_default'];
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/setup_functions.inc.php');
 hesk_load_database_functions();
@@ -116,7 +115,7 @@ hesk_handle_messages();
                         ?>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group flex-row">
                     <label>
                         <span><?php echo $hesklang['tfor']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>misc.html#65','400','500')">
@@ -158,7 +157,7 @@ hesk_handle_messages();
                         });
                     </script>
                 </div>
-                <div class="form-group">
+                <div class="form-group flex-row">
                     <label>
                         <span><?php echo $hesklang['dfor']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>misc.html#66','400','500')">
@@ -208,7 +207,7 @@ hesk_handle_messages();
                         });
                     </script>
                 </div>
-                <div class="form-group">
+                <div class="form-group flex-row">
                     <label>
                         <span><?php echo $hesklang['dtfor']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>misc.html#67','400','500')">
@@ -284,7 +283,7 @@ hesk_handle_messages();
                 </div>
                 <p>&nbsp;</p>
                 <?php hesk_show_info( sprintf($hesklang['jsc_notice'], '<svg class="icon icon-info"><use xlink:href="'.HESK_PATH.'img/sprite.svg#icon-info"></use></svg>') ); ?>
-                <div class="form-group">
+                <div class="form-group flex-row">
                     <label>
                         <span><?php echo $hesklang['cdfor']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>misc.html#68','400','500')">

@@ -103,7 +103,7 @@ if (hesk_SESSION('iserror')) {
                        class="form-control"
                        id="name"
                        maxlength="100"
-                       value="<?php echo stripslashes($category['name']); ?>">
+                       value="<?php echo $category['name']; ?>">
             </div>
             <div class="category-create__select">
                 <span><?php echo $hesklang['def_pri']; ?></span>

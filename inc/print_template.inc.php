@@ -32,17 +32,44 @@ foreach ($tickets as $ticket) {
             $ticket['priority']=$hesklang['low'];
     }
 
+    // Replies
+    $replies = array();
+    foreach ($ticket['replies'] as $reply) {
+        $reply['dt'] = hesk_date($reply['dt'], true);
+        $reply['message'] = hesk_unhortenUrl($reply['message']);
+        if ($reply['name'] === null) {
+            if (intval($reply['staffid']) > 0) {
+                $reply['name'] = $hesklang['staff_deleted'];
+            } else {
+                $reply['name'] = $hesklang['anon_name'];
+            }
+        }
+
+        $replies[] = $reply;
+    }
+    $ticket['replies'] = $replies;
+
     // Set last replier name
-    if ($ticket['lastreplier'])
-    {
-        if (empty($ticket['repliername']))
-        {
+    if ($ticket['lastreplier']) {
+        if (empty($ticket['repliername'])) {
             $ticket['repliername'] = $hesklang['staff'];
         }
-    }
-    else
-    {
-        $ticket['repliername'] = $ticket['name'];
+    } else {
+        if (!function_exists('hesk_get_customers_for_ticket')) {
+            require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
+        }
+
+        // Get the last reply and pull its name
+        $reply_count = count($ticket['replies']);
+        if ($reply_count > 0) {
+            $last_reply = $ticket['replies'][$reply_count - 1];
+
+            $customers = hesk_get_customers_for_ticket($ticket['id']);
+            $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
+            $ticket['repliername'] = $last_reply['name'];
+        } else {
+            $ticket['repliername'] = '';
+        }
     }
 
     // Other variables that need processing
@@ -81,16 +108,6 @@ foreach ($tickets as $ticket) {
     {
         $ticket['message'] = hesk_unhortenUrl($ticket['message']);
     }
-
-    // Replies
-    $replies = array();
-    while ($reply = hesk_dbFetchAssoc($ticket['replies'])) {
-        $reply['dt'] = hesk_date($reply['dt'], true);
-        $reply['message'] = hesk_unhortenUrl($reply['message']);
-
-        $replies[] = $reply;
-    }
-    $ticket['replies'] = $replies;
 
     $formatted_tickets[] = $ticket;
 }

@@ -7,6 +7,8 @@ global $hesk_settings, $hesklang;
  * @var array $visibleCustomFieldsAfterMessage
  * @var array $customFieldsBeforeMessage
  * @var array $customFieldsAfterMessage
+ * @var bool $customerLoggedIn - `true` if a customer is logged in, `false` otherwise
+ * @var array $customerUserContext - User info for a customer if logged in.  `null` if a customer is not logged in.
  */
 
 // This guard is used to ensure that users can't hit this outside of actual HESK code
@@ -17,6 +19,7 @@ if (!defined('IN_SCRIPT')) {
 require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
 require_once(TEMPLATE_PATH . 'customer/util/custom-fields.php');
 require_once(TEMPLATE_PATH . 'customer/util/attachments.php');
+require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +61,7 @@ require_once(TEMPLATE_PATH . 'customer/util/attachments.php');
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
+                    <?php renderLoginNavbarElements($customerUserContext); ?>
                     <?php if ($hesk_settings['can_sel_lang']): ?>
                         <div class="header__lang">
                             <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
@@ -104,9 +108,8 @@ require_once(TEMPLATE_PATH . 'customer/util/attachments.php');
         <div class="main__content">
             <div class="contr">
                 <div style="margin-bottom: 20px;">
-                    <?php
-                    hesk3_show_messages($messages);
-                    ?>
+                    <?php hesk3_show_messages($serviceMessages); ?>
+                    <?php hesk3_show_messages($messages); ?>
                 </div>
                 <h3 class="article__heading article__heading--form">
                     <div class="icon-in-circle">
@@ -120,33 +123,106 @@ require_once(TEMPLATE_PATH . 'customer/util/attachments.php');
                     <span><?php echo $hesklang['req_marked_with']; ?></span>
                     <span class="label required"></span>
                 </div>
-                <form class="form form-submit-ticket ticket-create <?php echo count($_SESSION['iserror']) ? 'invalid' : ''; ?>" method="post" action="submit_ticket.php?submit=1" name="form1" id="form1" enctype="multipart/form-data">
-                    <section class="form-groups">
-                        <div class="form-group error">
-                            <label class="label required"><?php echo $hesklang['name']; ?>:</label>
-                            <input type="text" name="name" class="form-control <?php if (in_array('name',$_SESSION['iserror'])) {echo 'isError';} ?>" maxlength="50" value="<?php if (isset($_SESSION['c_name'])) {echo stripslashes(hesk_input($_SESSION['c_name']));} ?>" required>
-                        </div>
+                <form class="form form-submit-ticket ticket-create <?php echo count($_SESSION['iserror']) ? 'invalid' : ''; ?>" method="post" action="submit_ticket.php?submit=1" name="form1" id="form1" enctype="multipart/form-data" onsubmit="<?php if ($hesk_settings['submitting_wait']): ?>hesk_showLoadingMessage('recaptcha-submit');<?php endif; ?>">
+                    <?php if (!$customerLoggedIn) { ?>
+                    <div class="form-group">
+                        <label class="label required"><?php echo $hesklang['name']; ?>:</label>
+                        <?php
+                        $input_css = 'form-control';
+                        if (in_array('name', $_SESSION['iserror'])) {
+                            $input_css .= ' isError';
+                        }
+                        ?>
+                        <input type="text" name="name"
+                               class="<?php echo $input_css; ?>"
+                               maxlength="50"
+                               value="<?php
+                               if (isset($_SESSION['c_name'])) {
+                                   echo stripslashes(hesk_input($_SESSION['c_name']));
+                               } ?>"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>"><?php echo $hesklang['email']; ?>:</label>
+                        <?php
+                        $input_css = 'form-control';
+                        if (in_array('email', $_SESSION['iserror'])) {
+                            $input_css .= ' isError';
+                        }
+                        if (in_array('email', $_SESSION['isnotice'])) {
+                            $input_css .= ' isNotice';
+                        }
+                        ?>
+                        <input type="email"
+                               class="<?php echo $input_css; ?>"
+                               name="email" id="email" maxlength="1000"
+                               value="<?php
+                               if (isset($_SESSION['c_email'])) {
+                                   echo stripslashes(hesk_input($_SESSION['c_email']));
+                               } ?>" <?php if($hesk_settings['detect_typos']) { echo ' onblur="HESK_FUNCTIONS.suggestEmail(\'email\', \'email_suggestions\', 0)"'; } ?>
+                               <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>>
+                        <div id="email_suggestions"></div>
+                    </div>
+                    <?php
+                    if ($hesk_settings['confirm_email']):
+                        ?>
+                        <?php
+                        $input_css = 'form-control';
+                        if (in_array('email2', $_SESSION['iserror'])) {
+                            $input_css .= ' isError';
+                        }
+                        if (in_array('email2', $_SESSION['isnotice'])) {
+                            $input_css .= ' isNotice';
+                        }
+                        if ($customerLoggedIn) {
+                            $input_css .= ' as-text';
+                        }
+                        ?>
                         <div class="form-group">
-                            <label class="label <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>"><?php echo $hesklang['email']; ?>:</label>
+                            <label class="label <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>"><?php echo $hesklang['confemail']; ?>:</label>
                             <input type="<?php echo $hesk_settings['multi_eml'] ? 'text' : 'email'; ?>"
-                                   class="form-control <?php if (in_array('email',$_SESSION['iserror'])) {echo 'isError';} elseif (in_array('email',$_SESSION['isnotice'])) {echo 'isNotice';} ?>"
-                                   name="email" id="email" maxlength="1000"
-                                   value="<?php if (isset($_SESSION['c_email'])) {echo stripslashes(hesk_input($_SESSION['c_email']));} ?>" <?php if($hesk_settings['detect_typos']) { echo ' onblur="HESK_FUNCTIONS.suggestEmail(\'email\', \'email_suggestions\', 0)"'; } ?>
+                                   class="<?php echo $input_css; ?>"
+                                   name="email2" id="email2" maxlength="1000"
+                                <?php if ($customerLoggedIn) { echo 'readonly'; } ?>
+                                   value="<?php if (isset($_SESSION['c_email2'])) {echo stripslashes(hesk_input($_SESSION['c_email2']));} ?>"
                                    <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>>
-                            <div id="email_suggestions"></div>
                         </div>
-                        <?php if ($hesk_settings['confirm_email']): ?>
-                            <div class="form-group">
-                                <label class="label <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>"><?php echo $hesklang['confemail']; ?>:</label>
-                                <input type="<?php echo $hesk_settings['multi_eml'] ? 'text' : 'email'; ?>"
-                                       class="form-control <?php if (in_array('email2',$_SESSION['iserror'])) {echo 'isError';} elseif (in_array('email2',$_SESSION['isnotice'])) {echo 'isNotice';} ?>"
-                                       name="email2" id="email2" maxlength="1000"
-                                       value="<?php if (isset($_SESSION['c_email2'])) {echo stripslashes(hesk_input($_SESSION['c_email2']));} ?>"
-                                       <?php if ($hesk_settings['require_email']) { ?>required<?php } ?>>
-                            </div>
-                        <?php endif; ?>
-                    </section>
-                    <?php if ($hesk_settings['cust_urgency']): ?>
+                    <?php endif;
+                    }
+                    if ($hesk_settings['multi_eml'] && !isset($_SESSION['c_followers'])): ?>
+                    <div class="form-group" id="cc-link">
+                        <a href="#" onclick="HESK_FUNCTIONS.toggleLayerDisplay('cc-div');HESK_FUNCTIONS.toggleLayerDisplay('cc-link')">
+                            <?php echo $hesklang['add_cc']; ?>
+                        </a>
+                    </div>
+                    <?php endif;
+                    if ($hesk_settings['multi_eml']):
+                        $display = isset($_SESSION['c_followers']) ? 'block' : 'none';
+                    ?>
+                    <div class="form-group" id="cc-div" style="display: <?php echo $display; ?>">
+                        <label class="label"><?php echo $hesklang['cc']; ?>:</label>
+                        <?php
+                        $input_css = 'form-control';
+                        if (in_array('followers', $_SESSION['iserror'])) {
+                            $input_css .= ' isError';
+                        }
+                        if (in_array('followers', $_SESSION['isnotice'])) {
+                            $input_css .= ' isNotice';
+                        }
+                        ?>
+                        <input type="text"
+                               class="<?php echo $input_css; ?>"
+                               name="follower_email" id="follower_email" maxlength="1000"
+                               value="<?php
+                               if (isset($_SESSION['c_followers'])) {
+                                   echo stripslashes(hesk_input($_SESSION['c_followers']));
+                               } ?>" <?php if($hesk_settings['detect_typos']) { echo ' onblur="HESK_FUNCTIONS.suggestEmail(\'follower_email\', \'follower_email_suggestions\', 0)"'; } ?>>
+                        <div id="follower_email_suggestions"></div>
+                        <p><?php if ($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required']) echo $hesklang['only_verified_cc'] . ' '; echo $hesklang['cc_help']; ?></p>
+                    </div>
+                    <?php
+                    endif;
+                    if ($hesk_settings['cust_urgency']): ?>
                         <section class="param">
                             <span class="label required <?php if (in_array('priority',$_SESSION['iserror'])) echo 'isErrorStr'; ?>"><?php echo $hesklang['priority']; ?>:</span>
                             <div class="dropdown-select center out-close priority">
@@ -197,7 +273,7 @@ require_once(TEMPLATE_PATH . 'customer/util/attachments.php');
                                 <textarea class="form-control <?php if (in_array('message',$_SESSION['iserror'])) {echo 'isError';} ?>"
                                           name="message" rows="12" cols="60"
                                           <?php if ($hesk_settings['require_message']) { ?>required<?php } ?>><?php if (isset($_SESSION['c_message'])) {echo stripslashes(hesk_input($_SESSION['c_message']));} ?></textarea>
-                                <?php if (has_public_kb() && $hesk_settings['kb_recommendanswers']): ?>
+                                <?php if (has_public_kb() && $hesk_settings['kb_recommendanswers'] && ! isset($_REQUEST['do_not_suggest'])): ?>
                                     <div class="kb-suggestions">
                                         <h6><?php echo $hesklang['sc']; ?>:</h6>
                                         <ul id="kb-suggestion-list" class="type--list">
@@ -346,6 +422,12 @@ require_once(TEMPLATE_PATH . 'customer/util/attachments.php');
                 </form>
             </div>
         </div>
+        <div id="loading-overlay" class="loading-overlay">
+            <div id="loading-message" class="loading-message">
+                <div class="spinner"></div>
+                <p><?php echo $hesklang['sending_wait']; ?></p>
+            </div>
+        </div>
 <?php
 /*******************************************************************************
 The code below handles HESK licensing and must be included in the template.
@@ -374,7 +456,7 @@ END LICENSE CODE
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/jquery-3.5.1.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js"></script>
+<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/datepicker.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/dropzone.min.js"></script>
 <script type="text/javascript">
@@ -401,23 +483,58 @@ if (defined('RECAPTCHA'))
         }
         </script>';
 }
+
+function hesk_jsString($str)
+{
+    $str  = addslashes($str);
+    $str  = str_replace('<br />' , '' , $str);
+    $from = array("/\r\n|\n|\r/", '/\<a href="mailto\:([^"]*)"\>([^\<]*)\<\/a\>/i', '/\<a href="([^"]*)" target="_blank"\>([^\<]*)\<\/a\>/i');
+    $to   = array("\\r\\n' + \r\n'", "$1", "$1");
+    return preg_replace($from,$to,$str);
+} // END hesk_jsString()
 ?>
 <script>
     $(document).ready(function() {
         $('#select_category').selectize();
+        hesk_loadNoResultsSelectizePlugin('<?php echo hesk_jsString($hesklang['no_results_found']); ?>');
         <?php
+
         foreach ($customFieldsBeforeMessage as $customField)
         {
             if ($customField['type'] == 'select')
             {
-                echo "$('#{$customField['name']}').selectize();";
+                if ($customField['value']['is_searchable'] == 1) {
+                    echo "$('#{$customField['name']}').addClass('read-write').attr('placeholder', '".$hesklang["search_by_pattern"]."').selectize({
+                        delimiter: ',',
+                        valueField: 'id',
+                        labelField: 'displayName',
+                        searchField: ['displayName'],
+                        create: false,
+                        copyClassesToDropdown: true,
+                        plugins: ['no_results'],
+                    });";
+                } else {
+                    echo "$('#{$customField['name']}').selectize();";
+                }
             }
         }
         foreach ($customFieldsAfterMessage as $customField)
         {
             if ($customField['type'] == 'select')
             {
-                echo "$('#{$customField['name']}').selectize();";
+                if ($customField['value']['is_searchable'] == 1) {
+                    echo "$('#{$customField['name']}').addClass('read-write').attr('placeholder', '".$hesklang["search_by_pattern"]."').selectize({
+                        delimiter: ',',
+                        valueField: 'id',
+                        labelField: 'displayName',
+                        searchField: ['displayName'],
+                        create: false,
+                        copyClassesToDropdown: true,
+                        plugins: ['no_results'],
+                    });";
+                } else {
+                    echo "$('#{$customField['name']}').selectize();";
+                }
             }
         }
         ?>

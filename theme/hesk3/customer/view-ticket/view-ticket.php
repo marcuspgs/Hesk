@@ -1,6 +1,9 @@
 <?php
 global $hesk_settings, $hesklang;
 /**
+ * @var array $customerUserContext - User info for the customer.
+ * @var array $messages
+ * @var array $serviceMessages
  * @var array $ticket
  * @var boolean $ticketJustReopened
  * @var string $trackingID
@@ -20,6 +23,7 @@ if (!defined('IN_SCRIPT')) {
 require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
 require_once(TEMPLATE_PATH . 'customer/util/custom-fields.php');
 require(TEMPLATE_PATH . 'customer/view-ticket/partial/add-reply.php');
+require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,6 +63,7 @@ require(TEMPLATE_PATH . 'customer/view-ticket/partial/add-reply.php');
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
+                    <?php renderLoginNavbarElements($customerUserContext); ?>
                     <?php if ($hesk_settings['can_sel_lang']): ?>
                         <div class="header__lang">
                             <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
@@ -91,6 +96,14 @@ require(TEMPLATE_PATH . 'customer/view-ticket/partial/add-reply.php');
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>">
                         <span><?php echo $hesk_settings['hesk_title']; ?></span>
                     </a>
+                    <?php if ($customerUserContext): ?>
+                    <svg class="icon icon-chevron-right">
+                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
+                    </svg>
+                    <a href="my_tickets.php">
+                        <span><?php echo $hesklang['customer_my_tickets_heading']; ?></span>
+                    </a>
+                    <?php endif; ?>
                     <svg class="icon icon-chevron-right">
                         <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
                     </svg>
@@ -101,9 +114,8 @@ require(TEMPLATE_PATH . 'customer/view-ticket/partial/add-reply.php');
         <div class="main__content">
             <div class="contr">
                 <div style="margin-bottom: 20px;">
-                    <?php
-                    hesk3_show_messages($messages);
-                    ?>
+                    <?php hesk3_show_messages($serviceMessages); ?>
+                    <?php hesk3_show_messages($messages); ?>
                 </div>
                 <div class="ticket">
                     <div class="ticket__body">
@@ -122,29 +134,83 @@ require(TEMPLATE_PATH . 'customer/view-ticket/partial/add-reply.php');
                             <h3><?php echo $ticket['subject']; ?></h3>
                             <div class="block--head">
                                 <div class="d-flex">
-                                    <div class="contact">
-                                        <?php if ($ticket['email'] == ''): ?>
-                                            <span><?php echo $hesklang['name']; ?>:</span>
-                                            <span><?php echo $ticket['name']; ?></span>
-                                        <?php else: ?>
-                                            <span><?php echo $hesklang['contact']; ?>:</span>
-                                            <div class="dropdown left out-close">
-                                                <label>
-                                                    <span><?php echo $ticket['name']; ?></span>
-                                                    <svg class="icon icon-chevron-down">
-                                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-chevron-down"></use>
-                                                    </svg>
-                                                </label>
-                                                <ul class="dropdown-list">
-                                                    <li class="noclose">
-                                                        <span class="title"><?php echo $hesklang['email']; ?>:</span>
-                                                        <span class="value"><a href="mailto:<?php echo $ticket['email']; ?>"><?php echo $ticket['email']; ?></a></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                    <div class="contact grid">
+                                        <div class="requester-header">
+                                            <span><?php echo $hesklang['m_from']; ?>:</span>
+                                        </div>
+                                        <div class="requester">
+                                            <?php
+                                            $requesters = array_filter($ticket['customers'], function($customer) { return $customer['customer_type'] === 'REQUESTER'; });
+                                            $requesters = array_values($requesters); // Re-index keys
+                                            if (count($requesters) && $requesters[0]['email'] === ''): ?>
+                                                <div class="dropdown customer left out-close">
+                                                    <label>
+                                                        <svg class="icon icon-person">
+                                                            <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-person"></use>
+                                                        </svg>
+                                                        <span><?php echo $requesters[0]['name']; ?></span>
+                                                    </label>
+                                                </div>
+                                            <?php else:
+                                                if (count($requesters)):
+                                                    $requester = $requesters[0];
+                                                    ?>
+                                                    <div class="dropdown customer left out-close">
+                                                        <label>
+                                                            <svg class="icon icon-person">
+                                                                <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-person"></use>
+                                                            </svg>
+                                                            <span><?php echo $requester['name']; ?></span>
+                                                            <svg class="icon icon-chevron-down">
+                                                                <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-down"></use>
+                                                            </svg>
+                                                        </label>
+                                                        <ul class="dropdown-list">
+                                                            <li class="noclose">
+                                                                <span class="title"><?php echo $hesklang['email']; ?>:</span>
+                                                                <span class="value">
+                                                            <a href="mailto:<?php echo $requester['email']; ?>"><?php echo $requester['email']; ?></a>
+                                                        </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            &raquo; <time class="timeago tooltip" datetime="<?php echo date("c", strtotime($ticket['dt'])) ; ?>" title="<?php echo hesk_date($ticket['dt'], true); ?>"><?php echo hesk_date($ticket['dt'], true); ?></time>
+                                        </div>
+                                        <?php
+                                        $ccs = array_filter($ticket['customers'], function($customer) { return $customer['customer_type'] === 'FOLLOWER'; });
+
+                                        if (count($ccs)):
+                                        ?>
+                                        <div class="cc-header">
+                                            <span><?php echo $hesklang['cc']; ?>:</span>
+                                        </div>
+                                        <div class="cc">
+                                            <?php foreach ($ccs as $cc): ?>
+                                                <div class="dropdown customer left out-close">
+                                                    <label>
+                                                        <svg class="icon icon-person">
+                                                            <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-person"></use>
+                                                        </svg>
+                                                        <span><?php echo $cc['name'] === '' ? $cc['email'] : $cc['name']; ?></span>
+                                                        <svg class="icon icon-chevron-down">
+                                                            <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-down"></use>
+                                                        </svg>
+                                                    </label>
+                                                    <ul class="dropdown-list">
+                                                        <li class="noclose">
+                                                            <span class="title"><?php echo $hesklang['email']; ?>:</span>
+                                                            <span class="value">
+                                                        <a href="mailto:<?php echo $cc['email']; ?>"><?php echo $cc['email']; ?></a>
+                                                    </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
                                         <?php endif; ?>
                                     </div>
-                                    <time class="timeago tooltip" datetime="<?php echo date("c", strtotime($ticket['dt'])) ; ?>" title="<?php echo hesk_date($ticket['dt'], true); ?>"><?php echo hesk_date($ticket['dt'], true); ?></time>
                                 </div>
                                 <a title="<?php echo $hesklang['btn_print']; ?>" href="print.php?track=<?php echo $ticket['trackid'].$hesk_settings['e_query']; ?>" target="_blank" class="btn btn-action tooltip">
                                     <svg class="icon icon-print">
@@ -291,7 +357,7 @@ END LICENSE CODE
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/jquery-3.5.1.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js"></script>
+<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/dropzone.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <?php if ($hesk_settings['time_display']): ?>

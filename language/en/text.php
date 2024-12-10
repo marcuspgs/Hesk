@@ -3,7 +3,7 @@
 *
 * Language file for Help Desk Software HESK (https://www.hesk.com)
 * Language: English
-* Version: 3.4.0
+* Version: 3.5.0
 *
 * ==> CONTRIBUTORS
 *
@@ -46,21 +46,27 @@ $hesklang['_COLLATE']='utf8_unicode_ci';
 $hesklang['EMAIL_HR']='------ Reply above this line ------';
 
 // EMAIL SUBJECTS
-$hesklang['new_ticket_staff']       = '[#%%TRACK_ID%%] New ticket: %%SUBJECT%%';
-$hesklang['ticket_received']        = '[#%%TRACK_ID%%] Ticket received: %%SUBJECT%%';
-$hesklang['ticket_assigned_to_you'] = '[#%%TRACK_ID%%] Ticket assigned: %%SUBJECT%%';
-$hesklang['new_reply_by_customer']  = '[#%%TRACK_ID%%] New reply to: %%SUBJECT%%';
-$hesklang['new_reply_by_staff']     = '[#%%TRACK_ID%%] New reply to: %%SUBJECT%%';
-$hesklang['category_moved']         = '[#%%TRACK_ID%%] Ticket moved: %%SUBJECT%%';
-$hesklang['new_note']               = '[#%%TRACK_ID%%] Note added to: %%SUBJECT%%';
-$hesklang['new_pm']                 = 'New private message: %%SUBJECT%%';
-$hesklang['forgot_ticket_id']       = 'List of your support tickets';
-$hesklang['ticket_closed']			= '[#%%TRACK_ID%%] Ticket closed/resolved'; // New in 2.6.0
-$hesklang['overdue_ticket']         = '[#%%TRACK_ID%%] Ticket overdue'; // New in 3.2.0
-$hesklang['ticket_escalated']       = '[#%%TRACK_ID%%] ESCALATED: %%SUBJECT%%'; // New in 3.2.0
-$hesklang['new_ticket_by_staff']    = '[#%%TRACK_ID%%] Ticket received: %%SUBJECT%%'; // New in 3.3.0
-$hesklang['mfa_verification']       = '%%VERIFICATION_CODE%% is your verification code'; // New in 3.3.0
-$hesklang['follow_up_email']        = 'Be honest - how did we do?'; // New in 3.3.0
+$hesklang['new_ticket_staff']             = '[#%%TRACK_ID%%] New ticket: %%SUBJECT%%';
+$hesklang['ticket_received']              = '[#%%TRACK_ID%%] Ticket received: %%SUBJECT%%';
+$hesklang['ticket_assigned_to_you']       = '[#%%TRACK_ID%%] Ticket assigned: %%SUBJECT%%';
+$hesklang['new_reply_by_customer']        = '[#%%TRACK_ID%%] New reply to: %%SUBJECT%%';
+$hesklang['new_reply_by_staff']           = '[#%%TRACK_ID%%] New reply to: %%SUBJECT%%';
+$hesklang['category_moved']               = '[#%%TRACK_ID%%] Ticket moved: %%SUBJECT%%';
+$hesklang['new_note']                     = '[#%%TRACK_ID%%] Note added to: %%SUBJECT%%';
+$hesklang['new_pm']                       = 'New private message: %%SUBJECT%%';
+$hesklang['forgot_ticket_id']             = 'List of your support tickets';
+$hesklang['ticket_closed']			      = '[#%%TRACK_ID%%] Ticket closed/resolved'; // New in 2.6.0
+$hesklang['overdue_ticket']               = '[#%%TRACK_ID%%] Ticket overdue'; // New in 3.2.0
+$hesklang['ticket_escalated']             = '[#%%TRACK_ID%%] ESCALATED: %%SUBJECT%%'; // New in 3.2.0
+$hesklang['new_ticket_by_staff']          = '[#%%TRACK_ID%%] Ticket received: %%SUBJECT%%'; // New in 3.3.0
+$hesklang['mfa_verification']             = '%%VERIFICATION_CODE%% is your verification code'; // New in 3.3.0
+$hesklang['follow_up_email']              = 'Be honest - how did we do?'; // New in 3.3.0
+$hesklang['customer_verify_registration'] = 'Verify Your Registration'; // New in 3.5.0
+$hesklang['customer_verify_new_email']    = 'Verify Your New Email Address'; // New in 3.5.0
+$hesklang['customer_reset_password']      = 'Reset your help desk password'; // New in 3.5.0
+$hesklang['customer_approved']            = 'Account Approved'; // New in 3.5.0
+$hesklang['customer_rejected']            = 'Account Rejected'; // New in 3.5.0
+$hesklang['email_rejected']               = 'Account required to submit support tickets'; // New in 3.5.0
 
 // ERROR MESSAGES
 $hesklang['cant_connect_db']='Can\'t connect to database!';
@@ -762,7 +768,6 @@ $hesklang['tislock2']='This ticket has been locked, you cannot post a reply.';
 $hesklang['nsfo']='No relevant articles found.';
 $hesklang['elocked']='This ticket has been locked or deleted.';
 $hesklang['nti2']='Insert a new ticket';
-$hesklang['nti3']='Use this form to create a new ticket in a customer\'s name. Enter <i>customer</i> information in the form (customer name, customer email, ...) and NOT your name! Ticket will be created as if the customer submitted it.';
 $hesklang['addop']='Options';
 $hesklang['seno']='Send email notification to the customer';
 $hesklang['otas']='Show the ticket after submission';
@@ -910,8 +915,6 @@ $hesklang['dela']='Delete this attachment';
 $hesklang['pda']='Do you want to permanently delete this attachment?';
 $hesklang['mopt']='More options';
 $hesklang['lopt']='Less options';
-$hesklang['meml']='Multiple emails';
-$hesklang['meml2']='Allow customers to enter multiple contact emails';
 
 
 // Added or modified in version 2.4
@@ -1437,7 +1440,6 @@ $hesklang['d_custom']='Custom format';
 $hesklang['d_ci']='ADVANCED USERS ONLY: a valid PHP date format, see PHP manual.';
 $hesklang['cf_noe']='Enter a valid email address into <i>%s</i>';
 $hesklang['cf_noem']='Enter one or more valid email addresses into <i>%s</i>';
-$hesklang['cf_limit']='You have 50 active custom fields, no new can be created.';
 $hesklang['can_resolve']='Can resolve tickets';
 $hesklang['can_change_cat']='Change ticket category (to any)';
 $hesklang['can_change_own_cat']='Change ticket category (to allowed)';
@@ -1587,7 +1589,7 @@ $hesklang['q_a']='Answer';
 $hesklang['admin_login']='Welcome! Please log in.';
 $hesklang['this_field_is_required']='This field is required';
 $hesklang['reset_your_password']='Reset your password';
-$hesklang['reset_password_instructions']='Please fill out the form below. We will send you a link to where you can reset your password.';
+$hesklang['reset_password_instructions']='Please enter your email address below. We will send you a link to where you can reset your password.';
 $hesklang['enter_email']='Enter email';
 $hesklang['passs']='Reset Password';
 $hesklang['password_reset_check_your_email']='Check your email';
@@ -2116,7 +2118,7 @@ $hesklang['hlic_paid']='Licensed';
 $hesklang['antdemo']='Submitting tickets from the admin panel has been disabled in the demo mode.<br><br>Please use the <a href="%s" target="_blank">public side</a> to submit a test ticket.';
 
 // Added or modified in HESK 3.4.0
-$hesklang['email_authentication_method'] = 'Authentication method';
+$hesklang['email_authentication_method']='Authentication method';
 $hesklang['email_authentication_method_username_password']='Basic (Username / Password)';
 $hesklang['email_authentication_method_oauth']='OAuth';
 $hesklang['email_authentication_method_oauth_disabled']='OAuth - No verified OAuth providers configured.';
@@ -2156,6 +2158,261 @@ $hesklang['oauth_provider_verified']='Verified';
 $hesklang['oauth_provider_click_to_verify']='Click to verify';
 $hesklang['can_due_date']='Can set due date'; // Permission to set and modify due date
 $hesklang['can_due_date_e']='You do not have permission to set due dates';
+
+// Added or modified in HESK 3.5.0
+$hesklang['require_curl']='This functionality requires <strong>cURL</strong> support for PHP enabled on your server. Please ask your web host to enable cURL for PHP.';
+$hesklang['customer_accounts_heading']='Customer Accounts';
+$hesklang['customer_accounts']='Customer accounts';
+$hesklang['customer_accounts_off']='<strong>Disabled</strong>';
+$hesklang['customer_accounts_allowed']='<strong>Enabled - Optional</strong> (customers can submit support tickets without registering or logging in)';
+$hesklang['customer_accounts_required_to_submit']='<strong>Enabled - Required for tickets</strong> (only logged-in customers can submit support tickets)';
+$hesklang['customer_accounts_required']='<strong>Enabled - Required to access</strong> (only logged-in customers can access the help desk and knowledgebase)';
+$hesklang['customer_accounts_reg']='Account registration';
+$hesklang['customer_accounts_reg_customer']='Customers can register accounts';
+$hesklang['customer_accounts_reg_approve']='Customers can register account, staff must approve new registrations';
+$hesklang['customer_accounts_reg_staff']='Only staff can register customer accounts';
+$hesklang['customer_accounts_allow_email_changes']='Allow customers to change their email address';
+$hesklang['customer_accounts_allow_email_resends']='Time until customers can request new verification email';
+$hesklang['customer_login']='Login';
+$hesklang['customer_logout']='Logout';
+$hesklang['customer_register']='Register';
+$hesklang['customer_accounts_disabled']='Customer logins and registrations are disabled.';
+$hesklang['customer_accounts_registration_disabled']='Customer registrations are disabled.';
+$hesklang['customer_forgot_password']='Forgot password?';
+$hesklang['customer_email']='Email Address';
+$hesklang['customer_accounts_email_banned']='You have been banned from using this helpdesk.';
+$hesklang['customer_registration_successful']='Registration Successful!';
+$hesklang['customer_registration_email_exists_no_reset_link']='An account with email %s already exists.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists']='An account with email %s already exists. <a href="login.php">Do you wish to log in instead</a>?'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_email_verification']='An account with email %s already exists and is pending email verification.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_approval']='An account with email %s already exists and is pending staff approval.'; // %s - Entered email address
+$hesklang['customer_registration_check_your_email']='Check Your Email!';
+$hesklang['customer_registration_check_your_email_content']='You must verify your email address before being able to log in.<br><br>If you do not receive it within a few minutes, please check your Junk, Bulk or Spam folders. Mark the message as <b>Not SPAM</b> to avoid problems receiving our correspondence in the future.';
+$hesklang['customer_login_not_verified']='You must verify your email address before being able to log in.';
+$hesklang['customer_login_not_verified2']='If you did not receive the verification email from us, please check your Junk, Bulk or Spam folders. Mark the message as <b>Not SPAM</b> to avoid problems receiving our correspondence in the future.';
+$hesklang['customer_login_resend_verification_email']='Re-send verification email';
+$hesklang['customer_login_resend_verification_email_none']='There are no pending email verifications to send.';
+$hesklang['customer_login_resend_verification_email_too_early']='You cannot request a new verification email at this time, please try again later.';
+$hesklang['customer_login_not_approved']='A member of staff must approve your account before being able to log in. Once approved, you will be notified via email.'; // %s - Resend email notification link
+$hesklang['customer_registration_verify_header']='Verify Registration';
+$hesklang['customer_registration_verify_success']='Your email has been verified and you may now log in using the form below.';
+$hesklang['customer_registration_verify_approval_needed']='Your email has been verified. However, a member of staff must approve your account before being able to log in. Once approved, you will be notified via email.';
+$hesklang['customer_registration_verify_failure']='Your email could not be verified. Either the link has already been used or has expired.';
+$hesklang['emails_to_customers']='&raquo; Emails sent to customers';
+$hesklang['emails_to_staff']='&raquo; Emails sent to staff';
+$hesklang['emails_to_everyone']='&raquo; Emails sent to staff or customers';
+$hesklang['new_customer_approval']='You have customer accounts pending approval'; // Email subject
+$hesklang['desc_new_customer_approval']='(Staff) Customer accounts pending approval';
+$hesklang['n_cust_app']='There are pending customer approvals'; // Notify me when...
+$hesklang['et_num_customers']='Number of pending approvals';
+$hesklang['et_link_customers']='Link to the Manage customers page';
+$hesklang['et_link_verify']='Verification link';
+$hesklang['et_cust_login']='Customer login URL';
+$hesklang['submit_ticket_customer_email_exists']='A customer with this email already exists. Please <a href="login.php?email=%s">log in</a> to submit a ticket.'; // %s - User's email
+$hesklang['customer_login_email_required']='Please enter a valid email address.';
+$hesklang['customer_login_password_required']='Please enter your password.';
+$hesklang['customer_login_remember_just_email']='Remember just my email';
+$hesklang['customer_login_remember_email']='Remember my email';
+$hesklang['customer_wrong_user']='Your email address %s is not registered with us.<br><br>Do you wish to <a href="register.php">create an account</a>?'; // %s - Entered email address
+$hesklang['customer_wrong_pass']='Your email address and password do not match our records.<br><br>Do you wish to <a href="login.php?submittedForgot=1">reset your password</a>?';
+$hesklang['customer_must_be_logged_in_to_view']='Please log in to continue.';
+$hesklang['customer_register_here']='If you don\'t have an account with us, you can <a href="register.php">register here</a>.';
+$hesklang['create_account']='Create an account';
+$hesklang['customer_my_tickets_heading']='My tickets';
+$hesklang['customer_my_tickets_description']='View all of your previous tickets';
+$hesklang['customer_my_tickets_search_for_tickets']='Search for tickets';
+$hesklang['customer_password_reset_successful']='Your new password has been saved. You may now log in.';
+$hesklang['customer_profile']='Profile';
+$hesklang['customer_edit_profile']='Edit Profile';
+$hesklang['customer_edit_pass']='Edit Password';
+$hesklang['customer_edit_pass_same']='Your new password must not be the same as your current one.';
+$hesklang['customer_change_email']='Change Email';
+$hesklang['customer_change_email_banned']='The email you entered is banned.';
+$hesklang['customer_change_email_pending']='There is a current request to change your email address to: <b>%s</b><br><br>We have sent an email to this address. Please click the link inside the email to confirm the change.'; // %s - new email
+$hesklang['customer_change_resend']='<a href="profile.php?action=email-resend">Re-send confirmation email</a>';
+$hesklang['customer_change_email_submitted']='Please click the verification link that was sent to <b>%s</b> to verify your new email.'; // %s - new email
+$hesklang['customer_change_email_verify_success']='Your new email address has been verified and your profile updated.';
+$hesklang['customer_change_email_disabled']='The ability to update your email is disabled. Contact us if you wish to change your email address.';
+$hesklang['customer_profile_saved']='Your profile has been saved.';
+$hesklang['customers']='Customers';
+$hesklang['customers_intro']='Customer accounts allow customers to view all of their tickets in a central location.';
+$hesklang['sure_remove_customer']='Are you sure you want to remove this customer?';
+$hesklang['sure_remove_customer_additional_note']='Deleting a customer is final.  Once deleted, they cannot be recovered!';
+$hesklang['new_customer']='New Customer';
+$hesklang['new_follower']='New Follower';
+$hesklang['add_customer']='+ Add Customer'; // Appears on Customer Dropdown, stickied at the bottom
+$hesklang['add_follower']='+ Add Follower'; // Appears on Followers Dropdown, stickied at the bottom
+$hesklang['new_customer_prompt']='The provided customer does not yet exist. Click "Save" if you would like to create this customer.';
+$hesklang['followers']='Followers';
+$hesklang['no_customers']='There are currently no customers in the database.';
+$hesklang['no_customers_disabled']='You will start seeing customers here when they submit support tickets.';
+$hesklang['no_customers_enabled']='You will start seeing customers here when they register or submit support tickets.';
+$hesklang['no_customers_enabled2']='Alternatively, the buttons above this message allow you to manually create customer accounts or import existing customers into the help desk.';
+$hesklang['import_customers']='Import Customers';
+$hesklang['import_customers_tip']='Use a CSV file to import multiple customers at once.';
+$hesklang['customer_not_found']='Customer not found for ticket!';
+$hesklang['search_by_name_or_email']='Search by name or email...';
+$hesklang['search_by_pattern']='Search by pattern...';
+$hesklang['is_searchable']='Searchable';
+$hesklang['custom_is_searchable']='Searchable';
+$hesklang['yes_via_autocomplete']='YES (search via autocomplete)';
+$hesklang['nti3']='Use this form to create a new ticket in a customer\'s name. Enter <i>customer</i> information in the form! Ticket will be created as if the customer submitted it.';
+$hesklang['customer_required']='You must select a customer';
+$hesklang['customer_email_exists']='A customer with this email already exists.';
+$hesklang['customer_name_with_no_email_exists']='A customer with this name and no email already exists.';
+$hesklang['an_error_occurred_validating_email']='An error occurred when attempting to verify the entered email address.';
+$hesklang['customer_count_x_more']='+%s more'; //%s = Number of additional customers
+$hesklang['customer_account_registered']='Registered';
+$hesklang['customer_account_verified']='Verified';
+$hesklang['customer_account_verified_help']='Customers must verify their account via an activation link sent to their email address before being able to log into their account.';
+$hesklang['customer_account_setting_password_will_verify_user']='Setting a password for this customer will automatically verify their account.';
+$hesklang['deleting_customer_with_tickets']='This customer has %1$s ticket(s) <b>(%2$s open)</b> that also have other customers associated with them.<br>What should be done with these tickets?'; // %1$s = total tickets, %2$s = open tickets
+$hesklang['deleting_customer_delete_tickets']='Delete tickets';
+$hesklang['deleting_customer_anonymize_tickets']='Anonymize tickets';
+$hesklang['deleting_customer_retain_tickets']='Retain tickets';
+$hesklang['customer_resend_verification_email_needed']='A valid email address is needed to re-send a verification email.';
+$hesklang['customer_resend_verification_email_not_found']='No account exists with this email address, or the account has already been verified.';
+$hesklang['customer_resend_verification_email_sent']='A verification email has been sent to your email address.<br><br>If you do not receive it within a few minutes, please check your Junk, Bulk or Spam folders. Mark the message as <b>Not SPAM</b> to avoid problems receiving our correspondence in the future.';
+$hesklang['customer_permission_denied']='You do not have permission to modify customers.';
+$hesklang['customer_manage_approvals']='Customer accounts pending approval: <b>%s</b>'; // %s = number of customers
+$hesklang['customer_manage_approve']='Approve customer';
+$hesklang['customer_manage_bulk_approve']='Approve Selected Customers';
+$hesklang['customer_manage_bulk_approve_complete']='Customers approved: %s'; // %s = number of customers
+$hesklang['customer_manage_reject']='Reject customer';
+$hesklang['customer_manage_bulk_reject']='Reject Selected Customers';
+$hesklang['customer_manage_bulk_reject_complete']='Customers rejected: %s'; // %s = number of customers
+$hesklang['customer_manage_delete']='Delete customer';
+$hesklang['customer_manage_bulk_delete']='Delete Selected Customers';
+$hesklang['customer_manage_bulk_delete_complete']='Customers deleted: %s'; // %s = number of customers
+$hesklang['customer_manage_edit']='Edit customer';
+$hesklang['customer_manage_verification_email_sent']='Verification email has been sent to %s'; // %s = customer's email
+$hesklang['can_man_customers']='Manage customers';
+$hesklang['can_view_customers']='View all customers (but not manage them)';
+$hesklang['import_customer_select_file']='Select File';
+$hesklang['import_customer_step1_instructions']='To import customers, prepare a CSV (Comma-Separated Values) file.';
+$hesklang['import_customer_step1_note']='Select Your CSV File';
+$hesklang['import_customer_step1_separator']='Columns in my CSV file are separated by';
+$hesklang['import_customer_sample']='&raquo; Sample CSV files';
+$hesklang['import_customer_sample_1']='US-style CSV file with columns separated by ,';
+$hesklang['import_customer_sample_2']='EU-style CSV file with columns separated by ;';
+$hesklang['import_customer_upload_requirements_1']='Your CSV file must include at least a name or an email address column. The password column is optional.';
+$hesklang['import_customer_upload_requirements_2']='The first row of your file must contain column headers.';
+$hesklang['import_customer_upload_requirements_3']='Your file must be encoded in UTF-8.';
+$hesklang['import_customer_select_columns']='Select Columns';
+$hesklang['import_customer_upload_customers']='Upload Customers';
+$hesklang['import_customer_column_name']='Name Column';
+$hesklang['import_customer_column_email']='Email Column';
+$hesklang['import_customer_column_pass']='Password Column';
+$hesklang['import_customer_step2_note']='Select the correct column name from your CSV file in the dropdowns, and then click "Next".';
+$hesklang['import_customer_name_or_email_required']='Name or email is required';
+$hesklang['import_customer_step3_note']='Your customers are being imported. Do not leave this page!';
+$hesklang['import_customer_step3_pending']='Pending';
+$hesklang['import_customer_step3_successful_imports']='Successful Imports';
+$hesklang['import_customer_step3_failed_imports']='Failed Imports';
+$hesklang['import_customer_step3_progress']='Progress';
+$hesklang['import_customer_step3_complete_some_failed']='The import process is complete, however <b>%s</b> customers failed to import. Check the table below for more information.'; // %s == number of failed imports
+$hesklang['import_customer_step3_complete']='The import process is complete!';
+$hesklang['import_customer_step3_importing']='Importing';
+$hesklang['staff_deleted']='[Staff Deleted]';
+$hesklang['customer_account_approved']='Customer registration approved';
+$hesklang['customer_account_rejected']='Customer registration rejected';
+$hesklang['customer_account_deleted']='Customer registration deleted';
+$hesklang['ticket_followers']='Ticket followers';
+$hesklang['ticket_followers2']='Allow tickets to have multiple customers';
+$hesklang['add_cc']='Add Cc';
+$hesklang['cc']='Cc';
+$hesklang['cc_help']='Separate each email with a comma.';
+$hesklang['search_customers']='Search Customers';
+$hesklang['page_size']='Page Size';
+$hesklang['customers_on_pages']='Number of customers: %d | Number of pages: %d'; // First %d is replaced with number of customers, second %d with number of pages
+$hesklang['desc_customer_reset_password'] = '(Customer) Reset your password';
+$hesklang['desc_customer_verify_registration'] = '(Customer) Verify your registration';
+$hesklang['desc_customer_verify_new_email'] = '(Customer) Verify your new e-mail';
+$hesklang['desc_customer_approved'] = '(Customer) Account approved';
+$hesklang['desc_customer_rejected'] = '(Customer) Account rejected';
+$hesklang['desc_email_rejected_can_self_register'] = '(Customer) Ticket via email rejected; customer can self-register';
+$hesklang['desc_email_rejected_cannot_self_register'] = '(Customer) Ticket via email rejected; customer cannot self-register';
+$hesklang['user_added_success_no_pass']='New user %s has been successfully added';
+$hesklang['email_tag_requester']='Requester (From)';
+$hesklang['email_tag_requester_name']='Requester (From) Name';
+$hesklang['email_tag_requester_first_name']='Requester (From) First Name';
+$hesklang['email_tag_requester_email']='Requester (From) Email';
+$hesklang['email_tag_followers']='Followers (Cc)';
+$hesklang['email_tag_follower_names']='Follower (Cc) Names';
+$hesklang['email_tag_follower_emails']='Follower (Cc) Emails';
+$hesklang['barcode']='Barcode';
+$hesklang['barcode_use']='Display a barcode on printed tickets';
+$hesklang['barcode_staff_only']='Hide the barcode from customers';
+$hesklang['barcode_type']='Barcode type';
+$hesklang['barcode_format']='Format';
+$hesklang['barcode_width']='Width';
+$hesklang['barcode_height']='Height';
+$hesklang['barcode_color']='Color';
+$hesklang['barcode_bg']='Background';
+$hesklang['ticket_url']='Ticket URL';
+$hesklang['copy_link']='Copy ticket link';
+$hesklang['copy_link_title']='Copy public link to this ticket';
+$hesklang['copy_link_exp']='The copied link is the direct link for the customer to view this ticket';
+$hesklang['copy_link']='Copy ticket link';
+$hesklang['copy_value']='Copy this value';
+$hesklang['download_class']='This function requires the ZipArchive class. Ask your host to compile PHP with zip support.';
+$hesklang['download_all']='Download all';
+$hesklang['download_prep']='Preparing download...';
+$hesklang['download_tma']='Too many attachments';
+$hesklang['download_nva']='No valid attachments';
+$hesklang['download_ntd']='Nothing to download';
+$hesklang['resolved_at']='Resolved at';
+$hesklang['disable_GSSAPI']='Disable GSSAPI authenticator (Kerberos error work-around)';
+$hesklang['ex_history']='Include ticket history log in export';
+$hesklang['sm_location']='Location'; // Location (page) of a service message
+$hesklang['loc_sm']='Show this service message on:';
+$hesklang['loc_all']='Every customer page';
+$hesklang['loc_norec']='(not recommended)';
+$hesklang['loc_home']='Help desk homepage';
+$hesklang['loc_selected']='On selected pages';
+$hesklang['loc_selerr']='Select at least one page to show the message on';
+$hesklang['loc_t_cat']='Submit a ticket - select a category';
+$hesklang['loc_t_add']='Submit a ticket - submit a ticket form';
+$hesklang['loc_t_ok']='Submit a ticket - ticket confirmation';
+$hesklang['loc_t_view']='View a ticket';
+$hesklang['loc_t_form']='View a ticket form';
+$hesklang['loc_kb_main']='Knowledgebase homepage';
+$hesklang['loc_kb_sub']='Knowledgebase sub-category pages';
+$hesklang['loc_kb_art']='Knowledgebase articles';
+$hesklang['loc_login']='Customer login page';
+$hesklang['loc_register']='Customer registration page';
+$hesklang['loc_register_ok']='Customer registration successful';
+$hesklang['loc_acc']='Customer &quot;My tickets&quot; page';
+$hesklang['loc_profile']='Customer &quot;Profile&quot; page';
+$hesklang['sending_show']='Show &quot;Submitting&quot; notification';
+$hesklang['sending_wait']='Submitting, please wait...';
+$hesklang['e_c_email']='Enter the correct email address to view this ticket';
+$hesklang['only_verified_cc']='Followers without a verified account will be ignored.';
+$hesklang['followers_removed']='These email addresses have been removed from the ticket because they do not have a verified account:';
+$hesklang['novace']='We did not find any registered and verified accounts with this email address.';
+$hesklang['max_recipients']='Max recipients';
+$hesklang['max_recipients2']='in a single email';
+$hesklang['admin_js']='Admin JS';
+$hesklang['admin_js2']='Load an extra custom Javascript file for the admin panel';
+$hesklang['cf_limit_all']='You have reached the custom fields limit and cannot create new custom fields.';
+$hesklang['remind_assigned']='Remind assigned staff';
+$hesklang['remind_sent']='Email reminder to the assigned staff member sent';
+$hesklang['thist23']='<li class="smaller">%s | reminder sent to %s by %s</li>';
+$hesklang['ql_bookmarks']='Bookmarks';
+$hesklang['bookmark']='My Bookmark';
+$hesklang['bookmarks_add']='Add to Bookmarks';
+$hesklang['bookmarks_added']='This ticket has been added to your Bookmarks';
+$hesklang['bookmarks_remove']='Remove from Bookmarks';
+$hesklang['bookmarks_removed']='This ticket has been removed from your Bookmarks';
+$hesklang['genl_not_copied']='Error: Copying to clipboard not supported on this device/browser.';
+$hesklang['profile_duplicate_email']='User with email <b>%s</b> already exists.'; // %s: new email
+$hesklang['seq_id_numeric']='Ticket number search must contain numbers only';
+$hesklang['confirm_new_pass']='Confirm new password';
+$hesklang['piping_notify_rejected_customers1']='Customer rejection emails';
+$hesklang['piping_notify_rejected_customers2']='Send a rejection email to customers when their ticket is rejected';
+$hesklang['piping_notify_rejected_customers3']='Time between rejection emails';
+$hesklang['register_url']='Registration URL';
+$hesklang['email_subject']='Email subject';
 
 // DO NOT CHANGE BELOW
 if (!defined('IN_SCRIPT')) die('PHP syntax OK!');
