@@ -1,0 +1,11 @@
+Dragă %%NAME%%,
+
+Acest e-mail conține o listă de tichete de suport înregistrate pe adresa dumneavoastră de e-mail. Numărul tichetelor de suport găsite: %%NUM%%
+
+%%LIST_TICKETS%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

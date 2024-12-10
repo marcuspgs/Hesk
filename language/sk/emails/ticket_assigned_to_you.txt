@@ -1,0 +1,15 @@
+Dobrý deň,
+
+Bola Vám pridelená nová žiadosť o podporu. Podrobnosti žiadosti:
+
+Predmet žiadosti: %%SUBJECT%%
+Evidenčné číslo: %%TRACK_ID%%
+
+žiadosť si môžete pozrieť tu:
+%%TRACK_URL%%
+
+
+S pozdravom,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

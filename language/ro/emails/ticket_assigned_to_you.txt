@@ -1,0 +1,15 @@
+Bună ziua,
+
+Un nou tichet de suport v-a fost atribuit. Detalii tichet:
+
+Subiect tichet: %%SUBJECT%%
+ID urmărire: %%TRACK_ID%%
+
+Puteți gestiona tichetul aici:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

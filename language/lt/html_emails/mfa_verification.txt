@@ -1,0 +1,1 @@
+<p>Sveiki, %%NAME%%,<br /><br />Žemiau pateiktas jūsų daugiafaktorinės autentifikacijos patikros kodas. Šis kodas galioja 20 minučių.<br />%%VERIFICATION_CODE%%<br /><br /><br /><br />%%SITE_TITLE%%<br />%%SITE_URL%%</p>

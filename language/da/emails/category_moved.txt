@@ -1,0 +1,15 @@
+Hej,
+
+En ny supportsag er blevet flyttet til din kategori. Sagsoplysninger :
+
+Sags emne: %%SUBJECT%%
+Sags-ID: %%TRACK_ID%%
+
+Du kan behandle sagen her:
+%%TRACK_URL%% 
+
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

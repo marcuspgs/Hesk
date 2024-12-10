@@ -1,0 +1,12 @@
+Poštovani %%NAME%%,
+
+Naše osoblje je upravo odgovorilo na vaš ticket "%%SUBJECT%%".
+
+Ticket možete pogledati ovdje:
+%%TRACK_URL%%
+
+
+S poštovanjem,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

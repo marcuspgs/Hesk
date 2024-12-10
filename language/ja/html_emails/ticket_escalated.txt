@@ -1,0 +1,13 @@
+<p>こんにちは,</p>
+<p>サポートチケットがエスカレーションされました %%ESCALATED_BY_RULE%%:</p>
+<p> </p>
+<p>件名: %%SUBJECT%%</p>
+<p>カテゴリー: %%CATEGORY%%</p>
+<p>優先度: %%PRIORITY%%</p>
+<p>ステータス: %%STATUS%%</p>
+<p>担当者: %%OWNER%%</p>
+<p>トラッキングID: %%TRACK_ID%%</p>
+<p> </p>
+<p>チケットはこちらから管理することができます<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>敬具,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

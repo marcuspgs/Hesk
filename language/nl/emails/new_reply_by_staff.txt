@@ -1,0 +1,11 @@
+Hallo %%NAME%%,
+
+Er is een reactie geplaatst op je supportaanvraag "%%SUBJECT%%"
+
+Bekijk de reactie via deze link: 
+%%TRACK_URL%%
+
+Vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

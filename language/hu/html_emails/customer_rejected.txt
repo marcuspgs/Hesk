@@ -1,0 +1,5 @@
+<p>Kedves %%NAME%%,</p>
+<p>Sajnos fiókjának regisztrációját elutasították.</p>
+<p>Ha úgy gondolja, hogy ez tévedésből történt, próbálkozzon újra a regisztrációval.</p>
+<p>Üdvözlettel,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

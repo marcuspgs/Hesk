@@ -1,0 +1,6 @@
+<p>Beste %%NAME%%,</p>
+<p>Je ticket met als onderwerp "%%SUBJECT%%" is gewijzigd naar de status gesloten/opgelost.</p>
+<p>Je kunt de status van je ticket hier bekijken:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Als de bovenstaande link niet klikbaar is, kopieer en plak deze dan in de adresbalk van je webbrowser te plakken.</p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

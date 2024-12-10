@@ -1,0 +1,16 @@
+Bonjour %%NAME%%,
+
+Le statut de votre ticket "%%SUBJECT%%" a été marqué comme Fermé/Résolu.
+
+ID du ticket: %%TRACK_ID%%
+
+Vous pouvez voir le statut de votre ticket ici :
+%%TRACK_URL%%
+Si vous pensez que la réponse du Support ne vous convient pas, vous pouvez toujours demander la réouverture de celui-ci sur %%TRACK_URL%%
+
+Ceci est un message généré automatiquement et vous a été envoyé par nos serveurs. 
+Ne répondez pas à cet email car nous ne recevrions pas votre réponse.
+
+Cordialement,
+
+%%SITE_TITLE%%

@@ -1,0 +1,7 @@
+<p>Bună ziua,</p>
+<p>A fost trimis un nou tichet de asistență. Detalii tichet:</p>
+<p>Subiectul tichetului: %%SUBJECT%%</p>
+<p>ID de urmărire: %%TRACK_ID%%</p>
+<p>Puteți gestiona acest tichet aici:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Cu stimă,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

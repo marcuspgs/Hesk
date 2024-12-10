@@ -1,0 +1,18 @@
+Gentile %%NAME%%,
+abbiamo inserito la richiesta avente oggetto:
+%%SUBJECT%%
+nel nostro sistema di supporto.
+
+Generalmente cerchiamo di rispondere a tutte le richieste nel più breve tempo possibile.
+Se la lavorazione dovesse richiedere tempi insolitamente lunghi sarà nostra cura tenerLa informata.
+
+Il codice di tracciamento del suo ticket è: %%TRACK_ID%%
+
+Qui è possibile visualizzare lo stato del suo ticket:
+%%TRACK_URL%%
+
+Le verrà inviata una email di notifica quando il nostro staff risponderà al suo ticket.
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

@@ -1,0 +1,14 @@
+Zdravo,
+
+Primili ste novu privatnu poruku od %%NAME%% sa sledećim predmetom:
+
+%%SUBJECT%%
+
+Možete pogledati vašu novu poruku klikom na sledeći link:
+%%TRACK_URL%%
+
+
+S poštovanjem,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,13 @@
+Sayın %%NAME%%,
+
+"%%SUBJECT%%" konulu talebinize Destek Ekibimiz tarafından cevap verildi.
+
+Talebinize verilen cevabı okumak, bir cevap göndermek ve ayrıntıları görüntülemek için lütfen şu adresi ziyaret edin :
+%%TRACK_URL%%
+
+Yukarıdaki bağlantı tıklanabilir değilse, kopyalayıp web tarayıcınızın adres çubuğuna yapıştırmayı deneyin.
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,11 @@
+Hai,
+
+Seorang pelanggan baru saja membalas tiket "%%SUBJECT%%".
+
+Anda dapat melihat pesan balasan dan mengatur tiket ini di sini:
+%%TRACK_URL%%
+
+Hormat kami,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

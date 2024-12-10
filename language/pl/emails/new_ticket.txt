@@ -1,0 +1,17 @@
+Witaj %%NAME%%,
+
+Twoje zgłoszenie "%%SUBJECT%%" zostało przyjęte.
+
+Odpowiadamy na wszystkie zgłoszenia najszybciej jak się da, w czasie do 48 godzin. Jeżeli odpowiedź na Twoje zgłoszenie będzie wymagała więcej czasu, powiadomimy Cię o tym.
+
+Identyfikator zgłoszenia: %%TRACK_ID%%
+
+Możesz wyświetlić status Twojego zgłoszenia pod adresem
+%%TRACK_URL%%
+
+Otrzymasz powiadomienie e-mail, kiedy nasz zespół odpowie na Twoje zgłoszenie.
+
+Pozdrawiamy,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

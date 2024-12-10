@@ -1,0 +1,13 @@
+<p>Merhaba,</p>
+<p>%%ESCALATED_BY_RULE%% tarafından bir destek talebi Aktifleştirildi :</p>
+<p> </p>
+<p>Konu : %%SUBJECT%%</p>
+<p>Kategori : %%CATEGORY%%</p>
+<p>Önem Derecesi : %%PRIORITY%%</p>
+<p>Durumu : %%STATUS%%</p>
+<p>Atanan Yetkili : %%OWNER%%</p>
+<p>Takip Kodu : %%TRACK_ID%%</p>
+<p> </p>
+<p>Bu talebi buradan görüntüleyebilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Saygılarımızla,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

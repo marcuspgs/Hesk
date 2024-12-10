@@ -1,0 +1,6 @@
+<p>Dragă %%NAME%%,</p>
+<p>Vă luăm legătura cu privire la tichetul dvs. recent <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Pentru a ne ajuta să vă servim mai bine, ne-ar plăcea să aflăm despre experiența dvs. cu echipa noastră de asistență.</p>
+<p>Vă rugăm să ne spuneți cât de ușor a fost să rezolvați problema dvs. <a href="%%SURVEY_URL%%">făcând clic aici</a>.</p>
+<p>Apreciem feedback-ul dvs. Și, ca întotdeauna, dacă mai putem face ceva pentru dvs. în viitor – vă rugăm să nu ezitați să ne contactați din nou.</p>
+<p>Mulțumesc,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

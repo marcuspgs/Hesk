@@ -1,0 +1,13 @@
+<p style="text-align:right;">عزیز %%NAME%%,</p>
+<p style="text-align:right;">تیکت پشتیبانی شما با موضوع زیر ارسال شده است</p>
+<p style="text-align:right;">%%SUBJECT%%</p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">ما در اسرع وقت و در عرض 24 تا 48 ساعت به همه بلیط ها پاسخ می دهیم. اگر انتظار داریم که تیکت شما زمان بیشتری ببرد، با ارسال یک ایمیل به شما اطلاع رسانی می کنیم.</span></p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">شماره تیکت</span></p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">%%ID%%</span></p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">شناسه رهگیری تیکت</span></p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">%%TRACK_ID%%</span></p>
+<p style="text-align:right;">در اینجا می توانید وضعیت بلیط خود را مشاهده کنید</p>
+<p style="text-align:right;"><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">هنگامی که کارکنان ما به تیکت شما پاسخ دادند، یک ایمیل اطلاعیه دریافت خواهید کرد</span></p>
+<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">با تشکر</span></p>
+<p style="text-align:right;">%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

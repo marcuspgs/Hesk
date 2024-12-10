@@ -1,0 +1,8 @@
+<p>Kære %%NAME%%,</p>
+<p>Din supportsag "%%SUBJECT%%" er indsendt.</p>
+<p>Vi svarer på alle supportsager så hurtigt som muligt, inden for 24 til 48 timer. Hvis vi forventer, at din supportsag vil tage yderligere tid, vil vi opdatere dig ved at sende dig en e-mail.</p>
+<p>Supportsporing ID: %%TRACK_ID%%</p>
+<p>Du kan se status for din supportsag her:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Du vil modtage en e-mail notifikation, når vores personale svarer på din supportsag.</p>
+<p>Venligst,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

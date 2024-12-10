@@ -1,0 +1,8 @@
+<p>Benvolgut/da %%NAME%%,</p>
+<p>S'ha enviat la vostra incidència "%%SUBJECT%%".</p>
+<p>Intentem respondre totes les incidències el més aviat possible.</p>
+<p>El vostre ID de seguiment: %%TRACK_ID%%</p>
+<p>Podeu veure l'estat de la incidència aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Rebreu una notificació per correu quan els nostres tècnics responguin a la incidència.</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

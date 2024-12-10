@@ -1,0 +1,18 @@
+Dobrý deň,
+
+K žiadosti "%%SUBJECT%%", ktorá je momentálne pridelená Vám, bola pridaná poznámka. 
+
+
+Poznámku pridal/a %%NAME%%:
+
+%%MESSAGE%%
+
+
+Žiadosť si môžete pozrieť tu:
+%%TRACK_URL%%
+
+
+S pozdravom,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

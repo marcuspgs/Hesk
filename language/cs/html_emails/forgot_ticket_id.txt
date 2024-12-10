@@ -1,0 +1,8 @@
+<p>Vážený %%NAME%%,</p>
+<p>Tento e-mail obsahuje seznam všech ticketů s Vaším e-mailem.</p>
+<p>%%LIST_TICKETS%%</p>
+<p>***<br>
+Neodpovídejte prosím na tento email, schránka není monitorována.<br>
+S pozdravem,<br>
+tým podpory</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,12 @@
+Labdien,
+
+Jūsu kategorijā ir pievienots jauns pieteikums. Sīkāk:
+Tēma: %%SUBJECT%%
+Identifikators: %%TRACK_ID%%
+
+Apstrādāt un izpildīt šo pieteikumu var šeit:%%TRACK_URL%%
+
+Šis ziņojums ir nosūtīts automātiski. Lūgums uz to neatbildēt.
+------------------------
+%%SITE_TITLE%%
+%%SITE_URL%%

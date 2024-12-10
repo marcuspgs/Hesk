@@ -1,0 +1,16 @@
+Beste %%NAME%%,
+
+We nemen contact met je op over je recente ticket "%%SUBJECT%%". Om ons te helpen je beter van dienst te zijn, horen we graag hoe je onze ondersteuning hebt ervaren.
+
+Laat ons weten hoe gemakkelijk het was om via ons je vraag te beantwoord te krijgen:
+
+%%SURVEY_URL%%
+
+Wij waarderen je feedback. Wanneer we je in de toekomst nog iets voor je kunnen doen, aarzel dan niet om opnieuw contact met ons op te nemen.
+
+Bedankt!
+
+Vriendelijke groet,
+
+%%PAGINA TITEL%%
+%%SITE_URL%%

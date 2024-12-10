@@ -1,0 +1,19 @@
+Hei,
+
+tukipyyntö on eskaloitu säännöllä %%ESCALATED_BY_RULE%%:
+
+Aihe: %%SUBJECT%%
+Kategoria: %%CATEGORY%%
+Prioriteetti: %%PRIORITY%%
+Tila: %%STATUS%%
+Osoitettu: %%OWNER%%
+Seurantatunnus: %%TRACK_ID%%
+
+Voit katsoa tukipyyntöä täällä:
+%%TRACK_URL%%
+
+
+Terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

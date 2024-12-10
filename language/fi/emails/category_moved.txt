@@ -1,0 +1,15 @@
+Hei,
+
+Uusi tiketti on siirretty kategoriaasi. Tiketin yksityiskohdat:
+
+Tiketin aihe: %%SUBJECT%%
+Seurantatunnus: %%TRACK_ID%%
+
+Voit käsitellä tikettiä täällä:
+%TRACK_URL%%
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

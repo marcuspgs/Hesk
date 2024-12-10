@@ -1,0 +1,18 @@
+Dragă %%NAME%%,
+
+Tichetul de suport "%%SUBJECT%%" a fost înregistrat.
+
+Vom răspunde tuturor tichetelor cât mai curând posibil, între 24 și 48 de ore. În cazul în care ne așteptăm ca rezolvarea tichetului dumneavoastră să dureze mai mult, vă vom informa prin intermediul e-mail-ului.
+
+ID-ul de urmărire a tichetului: %%TRACK_ID%%
+
+Puteți vizualiza starea tichetului dumneavoastră aici:
+%%TRACK_URL%%
+
+Veți primi un e-mail de notificare când personalul nostru răspunde tichetului dumneavoastră.
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

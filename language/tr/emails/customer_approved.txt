@@ -1,0 +1,11 @@
+Sayın %%NAME%%,
+
+Hesap kaydınız onaylandı.
+
+Artık hesabınızı oluştururken yazdığınız Kullanıcı Adı ve Şifreyi kullanarak aşağıdaki sayfadan giriş yapabilirsiniz:
+%%CUSTOMER_LOGIN_URL%%
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

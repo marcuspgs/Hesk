@@ -1,0 +1,11 @@
+Pozdravljeni,
+
+stranka je pravkar odgovorila na zahtevek "%%SUBJECT%%".
+
+Zahtevek lahko urejate tukaj:
+%%TRACK_URL%%
+
+Lep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

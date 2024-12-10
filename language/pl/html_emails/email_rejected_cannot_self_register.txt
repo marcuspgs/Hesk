@@ -1,0 +1,5 @@
+<p>Witaj %%NAME%%,</p> 
+<p>Nie mogliśmy przetworzyć Twojego e-maila o temacie "%%SUBJECT%%", ponieważ nie posiadasz u nas konta.</p> 
+<p>Ten system pomocy technicznej jest dostępny wyłącznie dla zarejestrowanych użytkowników.</p> 
+<p>Z poważaniem,</p> 
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

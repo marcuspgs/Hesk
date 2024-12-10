@@ -1,0 +1,14 @@
+Dragă %%NAME%%,
+
+Tichetul de suport "%%SUBJECT%%" a fost actualizat ca și Inchis/Rezolvat.
+
+ID urmărire tichet: %%TRACK_ID%%
+
+Puteți vizualiza starea tichetului aici:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

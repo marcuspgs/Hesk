@@ -1,0 +1,10 @@
+Sehr geehrte(r) %%NAME%%,
+
+Wir konnten Ihre E-Mail "%%SUBJECT%%" nicht bearbeiten, weil Sie kein Konto bei uns haben.
+
+Dieser Helpdesk ist nur für registrierte Benutzer zugänglich.
+
+Mit freundlichen Grüßen
+
+%%SITE_TITLE%%
+%%SITE_URL%%

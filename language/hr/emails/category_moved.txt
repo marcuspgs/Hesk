@@ -1,0 +1,15 @@
+Hello,
+
+Novi ticket je premješten u vašu kategoriju. Detalji ticketa:
+
+Predmet ticketa: %%SUBJECT%%
+ID za praćenje: %%TRACK_ID%%
+
+Ovim ticketom možete upravljati ovdje:
+%%TRACK_URL%%
+
+
+Lijep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,17 @@
+Bună ziua,
+
+O nouă notiță a fost adaugată la tichetul "%%SUBJECT%%" care va este atribuit in prezent.
+
+Notița lui %%NAME%%:
+
+%%MESSAGE%%
+
+
+Puteți gestiona tichetul aici:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

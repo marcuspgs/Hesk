@@ -1,0 +1,12 @@
+Dragă %%NAME%%,
+
+Personalul nostru a răspuns la tichetul "%%SUBJECT%%".
+
+Puteți vizualiza tichetul aici:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,11 @@
+Benvolgut %%NAME%%,
+
+Hem rebut una sol·licitud per canviar la vostra adreça de correu electrònic.
+
+Per confirmar aquest canvi, feu clic a l'enllaç següent (caduca en 1 hora):
+%%VERIFICATION_URL%%
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

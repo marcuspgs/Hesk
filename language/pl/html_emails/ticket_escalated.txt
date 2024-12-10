@@ -1,0 +1,13 @@
+<p>Witaj,</p>
+<p>Zgłoszenie zyskało wyższy priorytet przez %%ESCALATED_BY_RULE%%:</p>
+<p> </p>
+<p>Temat: %%SUBJECT%%</p>
+<p>Kategoria: %%CATEGORY%%</p>
+<p>Priorytet: %%PRIORITY%%</p>
+<p>Status: %%STATUS%%</p>
+<p>Przydzielone do: %%OWNER%%</p>
+<p>Identyfikator: %%TRACK_ID%%</p>
+<p> </p>
+<p>Możesz przeglądnąć zgłoszenie pod adresem:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Pozdrawiamy,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

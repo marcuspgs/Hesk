@@ -1,0 +1,12 @@
+Zdravo,
+
+Korisnik je upravo odgovorio na zahtev "%%SUBJECT%%".
+
+Ovim zahtevom možete upravljati ovde:
+%%TRACK_URL%%
+
+
+S poštovanjem,,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

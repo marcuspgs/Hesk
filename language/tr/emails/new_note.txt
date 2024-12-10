@@ -1,0 +1,17 @@
+Merhaba,
+
+Size atanmış olan "%%SUBJECT%%" konulu destek talebine yeni bir not eklendi.
+
+Notu Ekleyen %%NAME%% :
+
+%%MESSAGE%%
+
+
+Bu destek talebini yönetmek için bu bağlantıya tıklayabilirsiniz :
+%%TRACK_URL%%
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

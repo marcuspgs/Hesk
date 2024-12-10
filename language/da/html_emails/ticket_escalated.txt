@@ -1,0 +1,13 @@
+<p>Hej,</p>
+<p>En supportsag er blevet eskaleret af %%ESCALATED_BY_RULE%%:</p>
+<p> </p>
+<p>Emne: %%SUBJECT%%</p>
+<p>Kategori: %%CATEGORY%%</p>
+<p>Prioritet: %%PRIORITY%%</p>
+<p>Status: %%STATUS%%</p>
+<p>Tildelt: %%OWNER%%</p>
+<p>Supportsporings ID: %%TRACK_ID%%</p>
+<p> </p>
+<p>Du kan se denne supportsag her:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Venligst,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

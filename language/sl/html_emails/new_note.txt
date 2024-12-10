@@ -1,0 +1,6 @@
+<p>Pozdravljeni,</p>
+<p>zahtevku "%%SUBJECT%%", ki vam je dodeljen, je bila dodana nova opomba uporabnika %%NAME%%:</p>
+<p>%%MESSAGE%%</p>
+<p>Zahtevek lahko urejate tukaj:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Lep pozdrav,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

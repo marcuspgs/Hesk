@@ -1,0 +1,6 @@
+<p>Bună ziua,</p>
+<p>Ați primit un nou mesaj privat de la %%NAME%% cu următorul subiect:</p>
+<p>%%SUBJECT%%</p>
+<p>Puteți vizualiza noul dvs. mesaj făcând clic pe următorul link:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Cu stimă,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

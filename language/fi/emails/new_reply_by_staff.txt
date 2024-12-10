@@ -1,0 +1,12 @@
+Hyvä %%NAME%%,
+
+Henkilökuntamme on juuri vastannut tikettiisi "%%SUBJECT%%".
+
+Voit lukea tiketin täällä:
+%%TRACK_URL%%
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

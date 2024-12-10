@@ -1,0 +1,11 @@
+Pozdravljeni %%NAME%%,
+
+pravkar smo odgovorili na vaš zahtevek "%%SUBJECT%%".
+
+Odgovor si lahko preberete tukaj:
+%%TRACK_URL%%
+
+Lep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

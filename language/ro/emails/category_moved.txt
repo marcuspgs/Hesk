@@ -1,0 +1,15 @@
+Bună ziua,
+
+Un nou tichet de suport a fost mutat în categoria dumneavoastră. Detalii tichet:
+
+Subiectul tichetului: %%SUBJECT%%
+ID urmărire: %%TRACK_ID%%
+
+Puteți gestiona acest tichet aici:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,7 @@
+Naujas bilietas buvo perkeltas į kitą kategoriją. Bilieto informacija:
+%%TRACK_URL%%
+
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,19 @@
+Üdvözöljük!
+
+Egy támogatott hibajegy továbbítva lett %%ESCALATED_BY_RULE%%:
+
+Tárgy: %%SUBJECT%%
+Kategoria: %%CATEGORY%%
+Prioritás: %%PRIORITY%%
+Állapot: %%STATUS%%
+Hozzárendelve: %%OWNER%%
+Azonosító ID: %%TRACK_ID%%
+
+Itt tudja kezelni a hibajegyet:
+%%TRACK_URL%%
+
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

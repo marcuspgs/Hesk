@@ -1,0 +1,7 @@
+<p>Merhaba,</p>
+<p>Kategorinize yeni bir destek talebi taşındı. Talep Detayları Aşağıdadır :</p>
+<p>Talep Konusu : %%SUBJECT%%<br />Takip Kodu ID : %%TRACK_ID%%</p>
+<p>Talebi buradan yönetebilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p> </p>
+<p>Saygılarımızla,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,14 @@
+Hei,
+
+Olet saanut uuden yksityisviestin käyttäjältä %%NAME%% seuraavalla aiheella:
+
+%%SUBJECT%%
+
+Voit lukea viestin klikkaamalla seuraavaa linkkiä:
+%%TRACK_URL%%
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

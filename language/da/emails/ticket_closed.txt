@@ -1,0 +1,13 @@
+Hej %%NAME%%,
+
+Din supportsag, "%%SUBJECT%%" er opdateret til Lukket/Løst status.
+
+Du kan se status for din sag her:
+%%TRACK_URL%% 
+
+Hvis ovenstående link ikke er klikbart, kan du prøve at kopiere og indsætte linket i adresselinjen i din webbrowser.
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

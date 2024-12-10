@@ -1,0 +1,15 @@
+Hei,
+
+tukipyyntö on myöhässä! Tukipyynnön tiedot:
+
+Tiketin aihe: %%SUBJECT%%
+Seurantatunnus: %%TRACK_ID%%
+
+Voit käsitellä pyyntöä täällä:
+%%TRACK_URL%%
+
+
+Terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

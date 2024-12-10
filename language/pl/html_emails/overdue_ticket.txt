@@ -1,0 +1,7 @@
+<p>Witaj,</p>
+<p>Zgłoszenie jest spóźnione! Szczegóły:</p>
+<p>Temat zgłoszenia: %%SUBJECT%%</p>
+<p>Identyfikator zgłoszenia: %%TRACK_ID%%</p>
+<p>Możesz zarządzać zgłoszeniem pod adresem<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Pozdrawiamy,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,19 @@
+Hai,
+
+Tiket Anda telah diteruskan oleh %%ESCALATED_BY_RULE%%:
+
+Subjek: %%SUBJECT%%
+Kategori: %%CATEGORY%%
+Prioritas: %%PRIORITY%%
+Status: %%STATUS%%
+Ditugaskan kepada: %%OWNER%%
+ID pelacakan: %%TRACK_ID%%
+
+Anda dapat melihat tiket ini di sini:
+%%TRACK_URL%%
+
+
+Hormat kami,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

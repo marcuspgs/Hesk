@@ -1,0 +1,11 @@
+Dobrý deň %%NAME%%,
+
+Tento e-mail obsahuje zoznam žiadostí o podporu, ktoré boli poslané z Vašej e-mailovej adresy. Počet nájdených žiadostí:
+
+%%LIST_TICKETS%%
+
+
+S pozdravom,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,18 @@
+Yth. %%NAME%%,
+
+Tiket bantuan Anda "%%SUBJECT%%" telah dikirimkan.
+
+Kami akan membalas semua tiket secepatnya, di antara 24 sampai 48 jam. Jika tiket Anda mungkin membutuhkan waktu tambahan, kami akan menginformasikan kepada Anda dengan mengirimkan sebuah email.
+
+ID Pelacakan TIket: %%TRACK_ID%%
+
+Anda dapat melihat status tiket Anda di sini:
+%%TRACK_URL%%
+
+Anda akan menerina pemberitahuan email ketika staf kami membalas tiket Anda.
+
+
+Hormat kami,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

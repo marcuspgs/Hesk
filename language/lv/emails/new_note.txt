@@ -1,0 +1,15 @@
+Labdien,
+
+Jums nozīmētajam pieteikumam "%%SUBJECT%%" pievienota jauna piezīme.
+
+Piezīme no %%NAME%%:
+
+%%MESSAGE%%
+
+Apstrādāt un izpildīt pieteikumu var šeit:
+%%TRACK_URL%%
+
+Šis ziņojums ir nosūtīts automātiski. Lūgums uz to neatbildēt.
+------------------------
+%%SITE_TITLE%%
+%%SITE_URL%%

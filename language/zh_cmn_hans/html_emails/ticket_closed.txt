@@ -1,0 +1,6 @@
+<p>亲爱的 %%NAME%%,</p>
+<p>您的支持工单 "%%SUBJECT%%" 已更新为关闭/已解决状态。</p>
+<p>您可以在这里查看您的工单状态：<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>如果上面的链接无法点击，请尝试复制并粘贴到您的网页浏览器地址栏中。</p>
+<p>此致,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

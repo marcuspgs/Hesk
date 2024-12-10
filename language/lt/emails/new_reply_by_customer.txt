@@ -1,0 +1,7 @@
+Klientas ką tik atsakė į bilietą.
+%%TRACK_URL%%
+
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

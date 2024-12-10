@@ -1,0 +1,11 @@
+Hyvä %%NAME%%,
+
+Tämä lista sisältää sähköpostiosoitteestasi lähetetyt tiketit. Tikettejä löytyi %%NUM%% kappaletta.
+
+%%LIST_TICKETS%%
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

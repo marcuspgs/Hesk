@@ -1,0 +1,16 @@
+Hei,
+
+En ny supporthenvendelse har blitt flyttet til din kategori.
+
+Henvendelsesdetaljer:
+Henvendelsens emne: %%SUBJECT%%
+Sporings-ID: %%TRACK_ID%%
+
+Du kan behandle denne henvendelsen her:
+%%TRACK_URL%%
+
+
+Med vennlig hilsen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

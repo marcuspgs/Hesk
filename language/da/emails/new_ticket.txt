@@ -1,0 +1,18 @@
+Hej %%NAME%%,
+
+Din supportsag "%%SUBJECT%%" er blevet indsendt.
+
+Vi svarer pĺ alle supportsager sĺ hurtigt som muligt, inden for 24 til 48 timer. Hvis vi forventer, at din supportsag vil tage yderligere tid, vil vi opdatere dig ved at sende dig en e-mail.
+
+Sagsporings-ID: %%TRACK_ID%%
+
+Du kan se status pĺ din supportsag her:
+%%TRACK_URL%%
+
+Du vil modtage en e-mail notifikation, nĺr vores personale svarer pĺ din supportsag.
+
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

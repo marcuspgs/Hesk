@@ -1,0 +1,20 @@
+Hallo %%NAME%%,
+
+Je supportaanvraag "%%SUBJECT%%" is door ons ontvangen. Wij zullen je aanvraag zo spoedig mogelijk in behandeling nemen.
+
+De Ticket ID: %%TRACK_ID%%
+
+Je kunt via deze link de status van je aanvraag volgen:
+
+%%TRACK_URL%%
+
+Je ontvangt een e-mail van ons zodra we hebben gereageerd op je vraag.
+
+
+*BEANTWOORD DEZE E-MAIL NIET*
+Dit is een automatisch bericht van de helpdesk. Stuur geen antwoord, want dat wordt niet ontvangen!
+
+Vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

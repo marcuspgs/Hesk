@@ -1,0 +1,6 @@
+<p>您好,</p>
+<p>您收到了来自 %%NAME%% 的新私人消息，主题如下：</p>
+<p>%%SUBJECT%%</p>
+<p>您可以通过点击以下链接查看您的新消息:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>此致,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

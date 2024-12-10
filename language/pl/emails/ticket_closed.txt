@@ -1,0 +1,13 @@
+Witaj %%NAME%%,
+
+Twoje zgłoszenie "%%SUBJECT%%" zostało zamknięte/rozwiązane.
+
+Możesz wyświetlić status zgłoszenia pod adresem
+%%TRACK_URL%%
+
+Jeżeli ten link nie działa, prosimy skopiuj go i wklej do swojej przeglądarki.
+
+Pozdrawiamy,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,11 @@
+Hej,
+
+En kunde har lige svaret pĺ supportsagen: "%%SUBJECT%%".
+
+Du kan lćse svarbeskeden og administrere denne supportsag her:
+%%TRACK_URL%% 
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

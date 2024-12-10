@@ -1,0 +1,13 @@
+Kedves %%NAME%%,
+
+Érdeklődünk a legutóbbi "%%SUBJECT%%" jegyével kapcsolatban. Annak érdekében, hogy jobban kiszolgálhassuk Önt, szeretnénk tudni véleményét a támogatási csapatunkkal kapcsolatos tapasztalatairól.
+
+Kérjük, ossza meg velünk, mennyire volt egyszerű a probléma megoldása:
+%%SURVEY_URL%%
+
+Nagyra értékeljük visszajelzését. És mint mindig, ha van még valami, amit a jövőben tehetünk Önért – kérjük, vegye fel velünk újra a kapcsolatot.
+
+Köszönjük,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,5 @@
+<p>Sayın %%NAME%%,</p>
+<p>Hesap oluşturduğunuz için teşekkür ederiz. Hesabınızı etkinleştirmek için aşağıdaki bağlantıya tıklayın :</p>
+<p><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>Saygılarımızla,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

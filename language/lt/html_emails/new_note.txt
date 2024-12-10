@@ -1,0 +1,1 @@
+<p>Prie bilieto "%%SUBJECT%%", kuris šiuo metu yra priskirtas jums, buvo pridėta nauja pastaba.<br />%%TRACK_URL%%</p>

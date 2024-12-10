@@ -1,0 +1,25 @@
+Caro Utilizador(a) %%NAME%%,
+
+O seu ticket "%%SUBJECT%%" foi enviado.
+A nossa equipa vai tentar responder a todos os tickets enviados o mais rápido possível.
+
+MENSAGEM:
+%%MESSAGE%%
+
+
+Número de identificação deste ticket: %%TRACK_ID%%
+
+Você pode acompanhar o status de seu ticket clicando aqui:
+%%TRACK_URL%%
+
+Você receberá e-mails de notificação sempre que haja uma resposta ao seu ticket.
+
+
+*NÃO RESPONDA A ESTE E-MAIL !!!*
+Esta é uma mensagem automática enviada pelo Sistema de Gestão de tickets. Não responda este e-mail, pois não irá receber nenhuma resposta!
+
+Atenciosamente,
+Sistema de Gestão de Tickets.
+
+%%SITE_TITLE%%
+%%SITE_URL%%

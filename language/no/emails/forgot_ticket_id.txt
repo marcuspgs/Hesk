@@ -1,0 +1,11 @@
+Hei %%NAME%%,
+
+Denne e-posten inneholder en liste over supporthenvendelser registrert med din e-postadresse. Antall supporthenvendelser funnet: %%NUM%%
+
+%%LIST_TICKETS%%
+
+
+Med vennlig hilsen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

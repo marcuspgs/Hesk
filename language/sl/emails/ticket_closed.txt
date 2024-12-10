@@ -1,0 +1,11 @@
+Pozdravljeni %%NAME%%,
+
+vaš zahtevek "%%SUBJECT%%" je bil zaključen.
+
+Status zahtevka si lahko ogledate tukaj:
+%%TRACK_URL%%
+
+Lep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

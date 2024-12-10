@@ -1,0 +1,11 @@
+您好 %%NAME%%,
+
+本郵件列出了您使用該Email提出的所有支援票證。總共找到的支援票證數量是： %%NUM%% 個。
+
+%%LIST_TICKETS%%
+
+
+此致,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

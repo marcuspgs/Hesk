@@ -1,0 +1,13 @@
+<p>Bună ziua,</p>
+<p>Un tichet de asistență a fost escaladat de %%ESCALATED_BY_RULE%%:</p>
+<p> </p>
+<p>Subiect: %%SUBJECT%%</p>
+<p>Categorie: %%CATEGORY%%</p>
+<p>Prioritate: %%PRIORITY%%</p>
+<p>Stare: %%STATUS%%</p>
+<p>Atribuit: %%OWNER%%</p>
+<p>ID de urmărire: %%TRACK_ID%%</p>
+<p> </p>
+<p>Puteți vedea acest tichet aici:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Cu stimă,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

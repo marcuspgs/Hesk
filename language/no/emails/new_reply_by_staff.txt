@@ -1,0 +1,12 @@
+Hei %%NAME%%,
+
+En av våre medarbeidere har akkurat besvart din supporthenvendelse "%%SUBJECT%%".
+
+Du kan se supporthenvendelsen her:
+%%TRACK_URL%%
+
+
+Med vennlig hilsen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,6 @@
+<p>Benvolgut/da %%NAME%%,</p>
+<p>La vostra incidència "%%SUBJECT%%" ha estat marcada com a tancada/resolta.</p>
+<p>Podeu veure l'estat de la vostra incidència a:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Si l'enllaç no és clicable, proveu de copiar i enganxar-lo a la barra d'adreces del vostre navegador web.</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

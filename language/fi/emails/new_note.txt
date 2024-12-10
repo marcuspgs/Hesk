@@ -1,0 +1,17 @@
+Hei,
+
+Uusi merkintä lisätty sinulle osoitettuun tikettiin "%%SUBJECT%%”.
+
+Merkinnän on tehnyt %%NAME%%:
+
+%%MESSAGE%%
+
+
+Voit käsitellä tikettiä täällä:
+%%TRACK_URL%%
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

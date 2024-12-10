@@ -1,0 +1,13 @@
+Salve.
+È stato inviato un nuovo ticket.
+
+Dettagli:
+Oggetto ticket: %%SUBJECT%%
+Codice di tracciamento ticket: %%TRACK_ID%%
+
+È possibile gestire il ticket all'URL sottostante:
+%%TRACK_URL%%
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

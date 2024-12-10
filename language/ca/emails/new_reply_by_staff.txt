@@ -1,0 +1,15 @@
+Benvolgut/da %%NAME%%,
+
+Els nostres tècnics acaben de respondre la vostra incidència "%%SUBJECT%%"
+
+Podeu veure la incidència aquí:
+%%TRACK_URL%%
+
+
+*NO RESPONGUEU AQUEST CORREU*
+Aquest és un correu electrònic automàtic enviat pel nostre sistema de suport. No respongueu aquest correu ja que no rebrem la vostra resposta, utilitzeu l'enllaç de sobre per comunicar-vos de manera correcta!
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

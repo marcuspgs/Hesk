@@ -1,0 +1,14 @@
+Bună ziua,
+
+Ați primit un mesaj privat nou de la %%NAME%% cu următorul subiect:
+
+%%SUBJECT%%
+
+Puteți vizualiza noul mesaj apăsând pe legătura de mai jos:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

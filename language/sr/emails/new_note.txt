@@ -1,0 +1,18 @@
+Zdravo,
+
+Nova napomena je dodata u zahtev "%%SUBJECT%%" koji je trenutno dodeljen vama.
+
+
+Napomena od %%NAME%%:
+
+%%MESSAGE%%
+
+
+Možete upravljati ovim zahtevom ovde:
+%%TRACK_URL%%
+
+
+S poštovanjem,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

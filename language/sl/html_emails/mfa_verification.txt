@@ -1,0 +1,6 @@
+<p>Pozdravljeni %%NAME%%,</p>
+<p>to je vaša enkratna koda za dodatno preverjanje pristnosti:</p>
+<p><strong>%%VERIFICATION_CODE%%</strong></p>
+<p>Veljavnost kode je 20 minut.</p>
+<p>Lep pozdrav,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

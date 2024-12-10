@@ -1,0 +1,14 @@
+Witam,
+
+zadanie jest po terminie wykonania! Szczegóły zadania:
+
+Temat zadania: %%SUBJECT%%
+ID zadania: %%TRACK_ID%%
+
+Wejdź na stronę
+%%TRACK_URL%%
+i zobacz szczegóły.
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

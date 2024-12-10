@@ -1,0 +1,21 @@
+Hola,
+
+Una incidència ha estat escalada per %%ESCALATED_BY_RULE%%:
+
+Tema: %%SUBJECT%%
+Categoria: %%CATEGORY%%
+Prioritat: %%PRIORITY%%
+Estat: %%STATUS%%
+Assignada a: %%OWNER%%
+ID de seguiment: %%TRACK_ID%%
+
+Podeu gestionar la incidència aquí:
+%%TRACK_URL%%
+
+*NO CONTESTEU AQUEST CORREU*
+Aquest és un missatge de correu automàtic enviat pel sistema de suport. No contesteu aquest correu ja que el client no rebrà la vostra resposta!
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

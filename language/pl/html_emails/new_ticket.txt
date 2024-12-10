@@ -1,0 +1,8 @@
+<p>Szanowny %%NAME%%,</p>
+<p>Twoje zgłoszenie "%%SUBJECT%%" zostało przyjęte.</p>
+<p>Odpowiadamy na wszystkie zgłoszenia najszybciej jak się da, w ciągu 24 do 48 godzin. Jeżeli odpowiedź na Twoje zgłoszenie będzie wymagała więcej czasu, powiadomimy Cię o tym.</p>
+<p>Identyfikator zgłoszenia: %%TRACK_ID%%</p>
+<p>Możesz wyświetlić status Twojego zgłoszenia pod adresem<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Otrzymasz powiadomienie e-mail, kiedy nasz zespół odpowie na Twoje zgłoszenie.</p>
+<p>Pozdrawiamy,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

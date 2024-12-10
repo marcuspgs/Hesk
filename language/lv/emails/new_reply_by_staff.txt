@@ -1,0 +1,11 @@
+Cienītais(-tā) %%NAME%%,
+
+Tehniskā atbalsta dienesta darbinieks ir nosūtījis jums atbildi par pieteikumu "%%SUBJECT%%".
+
+Iepazīties var šeit:
+%%TRACK_URL%%
+
+Šis ziņojums ir nosūtīts automātiski. Lūgums uz to neatbildēt.
+------------------------
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,1 @@
+<p>Jūs gavote naują privačią žinutę iš "%%NAME%%".<br />Peržiūrėkite žinutę, paspaudę šią nuorodą:<br />%%TRACK_URL%%</p>

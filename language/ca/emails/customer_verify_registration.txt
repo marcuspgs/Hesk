@@ -1,0 +1,10 @@
+Benvolgut %%NAME%%,
+
+Gràcies per crear un compte. Feu clic a l'enllaç següent per activar el vostre compte:
+
+%%VERIFICATION_URL%%
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

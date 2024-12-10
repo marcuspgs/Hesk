@@ -1,0 +1,8 @@
+<p>Hola,</p>
+<p>Una incidència està vençuda! Detalls de la incidència:</p>
+<p>Tema de la incidència: %%SUBJECT%%</p>
+<p>ID de seguiment: %%TRACK_ID%%</p>
+<p>YPodeu gestionar la incidència aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p><strong>NO CONTESTEU AQUEST CORREU</strong><br />Aquest és un missatge de correu automàtic enviat des del sistema de suport. No contesteu aquest correu ja que no rebrem la vosra resposta, utilitzeu l'enllaç de sobre per una comunicació correcta!</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

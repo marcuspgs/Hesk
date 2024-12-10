@@ -1,0 +1,10 @@
+<p>Dobrý den,</p>
+<p>máte novou soukromou zprávu od %%NAME%% s předmětem:</p>
+<p>%%SUBJECT%%</p>
+<p>Zprávu zobrazíte kliknutí na následující odkaz:  <br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p> </p>
+<p>***<br>
+Neodpovídejte prosím na tento email, schránka není monitorována.<br>
+S pozdravem,<br>
+tým podpory</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

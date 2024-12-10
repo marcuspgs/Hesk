@@ -1,0 +1,11 @@
+Hej %%NAME%%,
+
+Denne email indeholder en liste over de supportsager som er oprettet med din e-mail adresse. Antal af supportsager fundet: %%NUM%%
+
+%%LIST_TICKETS%%
+
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

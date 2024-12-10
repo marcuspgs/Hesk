@@ -1,0 +1,7 @@
+<p>Hallo,</p>
+<p>Ein Ticket ist überfällig! Einzelheiten zur Eintrittskarte:</p>
+<p>Betreff des Tickets: %%SUBJECT%%</p>
+<p>Verfolgungs-ID: %%TRACK_ID%%</p>
+<p>Sie können dieses Ticket hier verwalten:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Mit freundlichen Grüßen,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,15 @@
+Dobrý deň,
+
+Nová žiadosť o podporu bola presunutá do Vašej kategórie. Podrobnosti o žiadosti:
+
+Predmet žiadosti: %%SUBJECT%%
+Evidenčné číslo: %%TRACK_ID%%
+
+Žiadosť si môžete pozrieť tu:
+%%TRACK_URL%%
+
+
+S pozdravom,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

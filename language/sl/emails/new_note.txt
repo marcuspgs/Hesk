@@ -1,0 +1,13 @@
+Pozdravljeni,
+
+zahtevku "%%SUBJECT%%", ki vam je dodeljen, je bila dodana nova opomba uporabnika %%NAME%%:
+
+%%MESSAGE%%
+
+Zahtevek lahko urejate tukaj:
+%%TRACK_URL%%
+
+Lep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

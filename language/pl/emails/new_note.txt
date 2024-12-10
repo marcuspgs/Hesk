@@ -1,0 +1,14 @@
+Witam,
+
+Do zadania "%%TRACK_ID%%" została dodana nowa notatka, która jest przydzielona do ciebie. Autorem notatki jest %%NAME%%.
+
+----------
+%%MESSAGE%%
+----------
+
+Wejdź na stronę
+%%TRACK_URL%%
+i zobacz szczegóły.
+
+%%SITE_TITLE%%
+%%SITE_URL%%

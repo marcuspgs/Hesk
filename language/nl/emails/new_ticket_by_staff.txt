@@ -1,0 +1,18 @@
+Hallo %%NAME%%,
+
+Je ondersteuningsticket "%%SUBJECT%%" is verzonden.
+
+We beantwoorden alle tickets zo snel mogelijk, binnen 24 tot 48 uur. Als we verwachten dat je ticket extra tijd in beslag zal nemen, dan houden we je per e-mail op de hoogte.
+
+Ticket ID: %%TRACK_ID%%
+
+Je kunt hier de status van je ticket bekijken:
+%%TRACK_URL%%
+
+Je ontvangt een e-mailmelding wanneer onze medewerkers op je ticket reageren.
+
+
+Vriendelijke groet,
+
+%%PAGINA TITEL%%
+%%SITE_URL%%

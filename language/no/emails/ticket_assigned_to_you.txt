@@ -1,0 +1,29 @@
+Hei,
+
+
+
+Du har blitt tilordnet en ny supporthenvendelse. Henvendelsesdetaljer:
+
+
+
+Henvendelsens emne: %%SUBJECT%%
+
+Sporings-ID: %%TRACK_ID%%
+
+
+
+Du kan behandle denne henvendelsen her:
+
+%%TRACK_URL%%
+
+
+
+
+
+Hilsen,
+
+
+
+%%SITE_TITLE%%
+
+%%SITE_URL%%

@@ -1,0 +1,19 @@
+Merhaba,
+
+%%ESCALATED_BY_RULE%% tarafından bir destek talebi Aktifleştirildi :
+
+Konu : %%SUBJECT%%
+Kategori : %%CATEGORY%%
+Öncelik : %%PRIORITY%%
+Durum : %%STATUS%%
+Atanan Yetkili : %%OWNER%%
+Takip ID : %%TRACK_ID%%
+
+Bu talebi buradan görüntüleyebilirsiniz :
+%%TRACK_URL%%
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

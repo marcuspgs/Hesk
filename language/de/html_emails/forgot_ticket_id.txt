@@ -1,0 +1,5 @@
+<p>Liebe(r) %%NAME%%,</p>
+<p>Diese E-Mail enthält eine Liste der Supportanfragen, die mit Ihrer E-Mail-Adresse eingereicht wurden. Anzahl der gefundenen Supportanfragen: <strong>%%NUM%%</strong></p>
+<p>%%LIST_TICKETS%%</p>
+<p>Mit freundlichen Grüßen,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,15 @@
+Hola,
+
+Se ha movido un nuevo ticket de soporte a su categoría. Detalles del ticket:
+
+Asunto del ticket: %%SUBJECT%%
+ID de seguimiento: %%TRACK_ID%%
+
+Puede gestionar este ticket aquí:
+%%TRACK_URL%%
+
+
+Saludos,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

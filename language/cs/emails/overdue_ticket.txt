@@ -1,0 +1,21 @@
+Dobrý den,
+
+ticket po termínu!
+
+Předmět ticketu: %%SUBJECT%% ID Ticketu: %%TRACK_ID%%
+
+Tento ticket můžete spravovat zde:
+%%TRACK_URL%%
+
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

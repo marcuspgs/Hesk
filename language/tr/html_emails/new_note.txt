@@ -1,0 +1,7 @@
+<p>Merhaba,</p>
+<p>Size atanmış olan "%%SUBJECT%%" konulu destek talebine yeni bir not eklendi.</p>
+<p>Notu Ekleyen %%NAME%%:</p>
+<p>%%MESSAGE%%</p>
+<p>Bu destek talebini yönetmek için bu bağlantıya tıklayabilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Saygılarımızla,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

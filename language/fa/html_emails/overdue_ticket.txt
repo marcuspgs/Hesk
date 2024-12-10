@@ -1,0 +1,8 @@
+<p style="text-align:right;">سلام</p>
+<p style="text-align:right;">یک تیکت عقب افتاده . جزئیات</p>
+<p style="text-align:right;">موضوع تیکت: %%SUBJECT%%</p>
+<p style="text-align:right;">شناسه رهگیری: %%TRACK_ID%%</p>
+<p style="text-align:right;">شما می توانبد این تیکت را از اینجا مدیریت کنید</p>
+<p style="text-align:right;"><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p style="text-align:right;">موفق باشید</p>
+<p style="text-align:right;">%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

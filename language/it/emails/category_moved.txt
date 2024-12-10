@@ -1,0 +1,13 @@
+Salve!
+Un nuovo ticket è stato spostato in una categoria di vostra competenza.
+
+Dettagli ticket
+Oggetto Ticket: %%SUBJECT%%
+Codice di tracciamento ticket: %%TRACK_ID%%
+
+È possibile gestire il ticket all'URL sottostante:
+%%TRACK_URL%%
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

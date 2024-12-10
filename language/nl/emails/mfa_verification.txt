@@ -1,0 +1,10 @@
+Hallo %%NAME%%,
+
+Hieronder vind je de verificatiecode voor meervoudige verificatie. Deze code verloopt over 20 minuten.
+
+%%VERIFICATIE CODE%%
+
+Vriendelijke groet,
+
+%%PAGINA TITEL%%
+%%SITE_URL%%

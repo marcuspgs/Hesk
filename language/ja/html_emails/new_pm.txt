@@ -1,0 +1,6 @@
+<p>こんにちは、</p>
+<p>%%NAME%% から次の件名で新しいプライベートメッセージを受け取りました：</p>
+<p>%%SUBJECT%%</p>
+<p>以下のリンクをクリックして新しいメッセージをご覧いただけます：<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>敬具,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

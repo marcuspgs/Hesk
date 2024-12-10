@@ -1,0 +1,5 @@
+<p>Estimado %%NAME%%:</p>
+<p>Hemos recibido una solicitud para cambiar su dirección de correo electrónico.</p>
+<p>Para confirmar este cambio, haga clic en el siguiente enlace (caduca en 1 hora):<br /><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>Atentamente,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

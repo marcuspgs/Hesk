@@ -1,0 +1,12 @@
+Bună ziua,
+
+Un client a răspuns tichetului "%%SUBJECT%%".
+
+Puteți gestiona tichetul aici:
+%%TRACK_URL%%
+
+
+Cu mulțumiri,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,14 @@
+Pozdravljeni,
+
+dodeljen vam je bil nov zahtevek.
+
+Naslov zahtevka: %%SUBJECT%%
+Sledilna koda: %%TRACK_ID%%
+
+Zahtevek lahko urejate tukaj:
+%%TRACK_URL%%
+
+Lep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

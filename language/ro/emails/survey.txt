@@ -1,0 +1,13 @@
+Dragă %%NAME%%,
+
+Vă contactăm cu privire la tichetul dvs. recent „%%SUBJECT%%”. Pentru a ne ajuta să vă servim mai bine, ne-ar plăcea să aflăm despre experiența dumneavoastră cu echipa noastră de asistență.
+
+Vă rugăm să ne spuneți cât de ușor a fost rezolvarea problemei dvs.:
+%%SURVEY_URL%%
+
+Apreciem parerea dumneavoastra. Și, ca întotdeauna, dacă mai putem face ceva pentru dvs. în viitor - vă rugăm să nu ezitați să ne contactați din nou.
+
+Mulțumiri,
+
+%%TITLUL SITE-ULUI%%
+%%ADRESA PAGINII%%

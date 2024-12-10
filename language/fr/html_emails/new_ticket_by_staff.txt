@@ -1,0 +1,9 @@
+<p>Cher %%NAME%%,</p>
+<p>Votre ticket d'assistance "%%SUBJECT%%" a été soumis.</p>
+<p>Nous répondons à tous les tickets dans les plus brefs délais, sous 24 à 48 heures. Si nous prévoyons que votre ticket prendra plus de temps, nous vous tiendrons au courant en vous envoyant un e-mail.</p>
+<p>Identifiant de suivi des tickets : %%TRACK_ID%%</p>
+<p>Vous pouvez voir le statut de votre ticket ici :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Vous recevrez une notification par e-mail lorsque notre personnel répondra à votre ticket.</p>
+<p>Cordialement,</p>
+<p>%%SITE_TITLE%%</p>
+<p><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,15 @@
+Hei,
+
+Uusi tiketti on osoitettu sinulle. Tiketin yksityiskohdat:
+
+Tukipyynnön aihe: %%SUBJECT%%
+Seurantatunnus: %%TRACK_ID%%
+
+Voit käsitellä tikettiä täällä:
+%%TRACK_URL%%
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

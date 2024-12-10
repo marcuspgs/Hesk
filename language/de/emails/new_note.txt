@@ -1,0 +1,21 @@
+Hallo,
+
+eine neue Notiz wurde dem mir zugewiesenen Ticket mit dem Betreff "%%SUBJECT%%" hinzugefügt.
+
+Notiz von %%NAME%%:
+
+%%MESSAGE%%
+
+Ticket hier verwalten:
+%%TRACK_URL%%
+
+
+* BITTE NICHT AUF DIESE EMAIL ANTWORTEN! *
+Das ist eine automatisch erstellte Email, Anworten darauf können nicht nachverfolgt werden!
+
+Um die eigenen Einstellungen zu Emailbenachrichtigungen anzupassen, bitte im Verwaltungsbereich anmelden und auf "Mein Profil" klicken.
+
+Ihr Support-Team,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

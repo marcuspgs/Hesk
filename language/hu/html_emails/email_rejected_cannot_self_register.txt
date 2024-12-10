@@ -1,0 +1,5 @@
+<p>Kedves %%NAME%%,</p>
+<p>Nem tudtuk feldolgozni "%%SUBJECT%%" e-mailjét, mert nincs fiókja nálunk.</p>
+<p>Ez a help desk csak regisztrált felhasználók számára érhető el.</p>
+<p>Üdvözlettel,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

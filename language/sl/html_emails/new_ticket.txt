@@ -1,0 +1,8 @@
+<p>Pozdravljeni %%NAME%%,</p>
+<p>prejeli smo vaš zahtevek "%%SUBJECT%%".</p>
+<p>Potrudili se bomo, da nanj odgovorimo v najkrajšem možnem času. V primeru, da bo reševanje vašega zahtevka trajalo dlje, vas bomo o tem obvestili.</p>
+<p>Sledilna koda zahtevka: %%TRACK_ID%%</p>
+<p>Status zahtevka si lahko ogledate tukaj:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>O odgovoru na vaš zahtevek boste obveščeni po elektronski pošti.</p>
+<p>Lep pozdrav,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

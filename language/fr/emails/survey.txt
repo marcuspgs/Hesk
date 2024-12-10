@@ -1,0 +1,17 @@
+Cher %%NAME%%,
+
+Nous vous contactons au sujet de votre récent ticket "%%SUBJECT%%". Pour nous aider à mieux vous servir, nous aimerions connaître votre expérience avec notre équipe d'assistance.
+
+Veuillez nous indiquer comment c'est déroulé la résolution de votre problème:
+%%SURVEY_URL%%
+
+Nous apprécions vos commentaires. Et comme toujours, s'il y a autre chose que nous pouvons faire pour vous à l'avenir, n'hésitez pas à nous recontacter.
+
+Merci,
+
+Ceci est un message généré automatiquement envoyé par nos serveurs. 
+Ne répondez pas à cet email car nous ne recevrions pas votre réponse.
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

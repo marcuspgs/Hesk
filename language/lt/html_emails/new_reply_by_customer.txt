@@ -1,0 +1,1 @@
+<p>Klientas ką tik atsakė į bilietą.<br />%%TRACK_URL%%<br /><br /><br /><br />%%SITE_TITLE%%<br />%%SITE_URL%%</p>

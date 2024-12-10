@@ -1,0 +1,12 @@
+﻿Hej,
+
+Du har fått ett nytt privat meddelande från %%NAME%% med följande ämne: %%SUBJECT%%
+
+Du kan granska ditt nya meddelande genom att klicka på följande länk:
+%%TRACK_URL%%
+
+
+Med vänliga hälsningar,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

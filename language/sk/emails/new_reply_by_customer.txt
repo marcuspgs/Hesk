@@ -1,0 +1,12 @@
+Dobrý deň,
+
+Klient práve odpovedal na žiadosť "%%SUBJECT%%".
+
+Žiadosť si môžete pozrieť tu:
+%%TRACK_URL%%
+
+
+S pozdravom,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

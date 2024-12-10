@@ -1,0 +1,17 @@
+Hai,
+
+Sebuah catatan telah ditambahkan ke tiket "%%SUBJECT%%" yang ditugaskan kepada Anda.
+
+Catatan oleh %%NAME%%:
+
+%%MESSAGE%%
+
+
+Anda dapat mengelola tiket di sini:
+%%TRACK_URL%%
+
+
+Hormat kami,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

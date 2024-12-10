@@ -1,0 +1,24 @@
+Dobrý den,
+
+Ticket byl eskalován pravidlem %%ESCALATED_BY_RULE%%:
+
+Předmět: %%SUBJECT%%
+Kategorie: %%CATEGORY%%
+Priorita: %%PRIORITY%%
+Stav: %%STATUS%%
+Přiřazen komu: %%OWNER%%
+ID Ticketu: %%TRACK_ID%%
+
+Ticket můžete zobrazit zde:
+%%TRACK_URL%%
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,10 @@
+Witaj %%NAME%%,
+
+Nie mogliśmy przetworzyć Twojego e-maila o temacie "%%SUBJECT%%", ponieważ nie posiadasz u nas konta.
+
+Aby przesyłać zgłoszenia do pomocy technicznej za pomocą e-maila, najpierw zarejestruj się tutaj:
+%%CUSTOMER_REGISTER_URL%%
+
+Z poważaniem,
+%%SITE_TITLE%%
+%%SITE_URL%%

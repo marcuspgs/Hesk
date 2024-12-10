@@ -1,0 +1,7 @@
+<p>Hej,</p>
+<p>En ny supportsag er blevet tildelt dig. Supportsags oplysninger:</p>
+<p>Support emne: %%SUBJECT%%</p>
+<p>Supportssporings ID: %%TRACK_ID%%</p>
+<p>Du kan administrere denne supportsag her:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Venligst,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

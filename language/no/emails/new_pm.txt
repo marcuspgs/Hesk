@@ -1,0 +1,14 @@
+Hei,
+
+Du har mottatt en ny privat melding fra %%NAME%% med følgende emne:
+
+%%SUBJECT%%
+
+Du kan lese den nye beskjeden ved å klikke på følgende lenke:
+%%TRACK_URL%%
+
+
+Med vennlig hilsen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

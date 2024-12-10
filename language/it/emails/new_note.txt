@@ -1,0 +1,15 @@
+Salve.
+È stata aggiunta una nuova nota al ticket avente oggetto:
+%%SUBJECT%%
+che attualmente risulta di tua competenza.
+
+Nota da %%NAME%%:
+-----------------------------------------------------------------
+%%MESSAGE%%
+-----------------------------------------------------------------
+È possibile gestire il ticket all'URL sottostante:
+%%TRACK_URL%%
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

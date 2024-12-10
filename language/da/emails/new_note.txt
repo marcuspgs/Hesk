@@ -1,0 +1,18 @@
+Hej,
+
+Der er oprettet en ny note til sagen "%%SUBJECT%%" der i řjeblikket er tildelt dig.
+
+
+Note fra %%NAME%%:
+
+%%MESSAGE%%
+
+
+Du kan behandle supportsagen her:
+%%TRACK_URL%% 
+
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

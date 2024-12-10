@@ -1,0 +1,5 @@
+<p>Sehr geehrte(r) %%NAME%%,</p>
+<p>Vielen Dank, dass Sie ein Konto erstellt haben. Klicken Sie auf den unten stehenden Link, um Ihr Konto zu aktivieren:</p>
+<p><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>Mit freundlichen Grüßen</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

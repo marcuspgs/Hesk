@@ -1,0 +1,15 @@
+Zdravo,
+
+Novi zahtev za podršku je poslat. Detalji zahteva:
+
+Predmet zahteva: %%SUBJECT%%
+Broj zahteva: %%TRACK_ID%%
+
+Možete upravljati ovim zahtevom ovde:
+%%TRACK_URL%%
+
+
+S poštovanjem,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

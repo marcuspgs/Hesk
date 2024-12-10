@@ -1,0 +1,9 @@
+Witaj %%NAME%%,
+
+Nie mogliśmy przetworzyć Twojego e-maila o temacie "%%SUBJECT%%", ponieważ nie posiadasz u nas konta.
+
+Ten system pomocy technicznej jest dostępny wyłącznie dla zarejestrowanych użytkowników.
+
+Z poważaniem,
+%%SITE_TITLE%%
+%%SITE_URL%%

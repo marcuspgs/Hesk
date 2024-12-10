@@ -1,0 +1,7 @@
+<p style="text-align:right;">  عزیز %%NAME%%,</p>
+<p style="text-align:right;">ما به تازگی به به تیکت شما پاسخ داده ایم .</p>
+<p style="text-align:right;">موضوع تیکت "%%SUBJECT%%".</p>
+<p style="text-align:right;">برای خواندن پیام، ارسال پاسخ و مشاهده جزئیات، لطفاً به لینک زیر مراجعه کنید</p>
+<p style="text-align:right;"><a href="%%TRACK_URL%%">%%TRACK_URL%%</a> <br /><br /></p>
+<p style="text-align:right;">با تشکر</p>
+<p style="text-align:right;">%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

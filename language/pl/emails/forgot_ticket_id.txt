@@ -1,0 +1,10 @@
+Witaj %%NAME%%,
+
+Ten e-mail zawiera listę zgłoszeń do pomocy przesłanych na Twój adres e-mail. Liczba znalezionych zgłoszeń: %%NUM%%
+
+%%LIST_TICKETS%%
+
+Pozdrawiamy,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

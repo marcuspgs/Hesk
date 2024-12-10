@@ -1,0 +1,12 @@
+Hei,
+
+En kunde har akkurat svart på henvendelse "%%SUBJECT%%".
+
+Du kan behandle denne henvendelsen her:
+%%TRACK_URL%%
+
+
+Med vennlig hilsen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,11 @@
+Benvolgut %%NAME%%,
+
+No hem pogut processar el vostre correu electrònic "%%SUBJECT%%" perquè no teniu cap compte amb nosaltres.
+
+Per enviar tiqutes d'assistència per correu electrònic, registreu-vos primer a:
+%%CUSTOMER_REGISTER_URL%%
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

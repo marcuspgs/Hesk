@@ -1,0 +1,15 @@
+Hej,
+
+En supportsag er forfalden! Sagsdetaljer:
+
+Sags emne: %%SUBJECT%%
+Supportsags-ID: %%TRACK_ID%%
+
+Du kan behandle supportsagen her:
+%%TRACK_URL%%
+
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

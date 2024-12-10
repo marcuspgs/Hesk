@@ -1,0 +1,14 @@
+Dobrý deň,
+
+prišla Vám nová súkromná správa od %%NAME%% s nasledujúcim predmetom:
+
+%%SUBJECT%%
+
+Správu si môžete pozrieť cez tento odkaz: 
+%%TRACK_URL%%
+
+
+S pozdravom,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,8 @@
+<p style="text-align:right;">سلام</p>
+<p style="text-align:right;">شما یک پیام خصوصی جدید از شخص زیر با موضوع زیر دریافت کرده اید</p>
+<p style="text-align:right;">%%NAME%%</p>
+<p style="text-align:right;">%%SUBJECT%%</p>
+<p style="text-align:right;">با کلیک بر روی لینک زیر می توانید پیام جدید خود را مشاهده کنید</p>
+<p style="text-align:right;"><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p style="text-align:right;">موفق باشید</p>
+<p style="text-align:right;">%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

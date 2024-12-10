@@ -1,0 +1,6 @@
+<p>Beste %%NAME%%,</p>
+<p>We hebben zojuist gereageerd op je ticket met als onderwerp "%%SUBJECT%%".</p>
+<p>Als je het bericht wilt lezen, een antwoord wilt sturen en/of details wilt bekijken, ga dan naar:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a><br /><br /></p>
+<p>Als de bovenstaande link niet klikbaar is, kopieër en plak deze dan in de adresbalk van je webbrowser.</p>
+<p>Vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

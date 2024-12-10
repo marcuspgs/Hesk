@@ -1,0 +1,18 @@
+Hyvä %%NAME%%,
+
+Tikettisi "%%SUBJECT%%" on lähetetty.
+
+Vastaamme kaikkiin tiketteihin mahdollisimman pian, 24-48 tunnin kuluessa. Jos kuitenkin katsomme pyyntösi vievän enemmän aikaa, lähetämme sinulle asiasta tiedon sähköpostitse.
+
+Tikettisi seurantatunnus: %%TRACK_ID%%
+
+Näet tikettisi tilanteen täältä:
+%%TRACK_URL%%
+
+Saat ilmoituksen sähköpostiisi, kun henkilökuntamme vastaa tikettiisi.
+
+
+Ystävällisin terveisin,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

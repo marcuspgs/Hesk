@@ -1,0 +1,10 @@
+Hola %%NAME%%,
+
+A sota hi ha el codi de verificació per a l'autenticació multi-factor. Aquest codi caduca en 20 minuts.
+
+%%VERIFICATION_CODE%%
+
+Gràcies,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,10 @@
+Hola %%NAME%%,
+
+A continuación se muestra su código de verificación de autenticación multifactor. Este código caduca en 20 minutos.
+
+%%VERIFICATION_CODE%%
+
+Gracias,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

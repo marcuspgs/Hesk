@@ -1,0 +1,14 @@
+Hai,
+
+Anda telah menerima sebuah pesan privat baru dari %%NAME%% dengan subjek berikut:
+
+%%SUBJECT%%
+
+Anda dapat melihat pesan baru dengan klik tautan berikut:
+%%TRACK_URL%%
+
+
+Hormat kami,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

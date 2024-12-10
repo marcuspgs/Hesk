@@ -1,0 +1,13 @@
+Hej %%NAME%%,
+
+Vi har netop besvaret din supportsag "%%SUBJECT%%".
+
+For at lćse beskeden, indsende et svar og se detaljer, besřg venligst:
+%%TRACK_URL%% 
+
+Hvis ovenstĺende link ikke er klikbart, kan du prřve at kopiere og indsćtte linket i adresselinjen i din webbrowser.
+
+Venligst,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

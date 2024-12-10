@@ -1,0 +1,14 @@
+Sayın %%NAME%%,
+
+Bu e-posta mesajında, sizin e-posta adresinizle gönderilen destek taleplerinin bir listesi bulunmaktadır.
+
+Bulunan Destek Talebi Sayısı : %%NUM%%
+
+
+%%LIST_TICKETS%%
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

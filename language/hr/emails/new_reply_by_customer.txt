@@ -1,0 +1,12 @@
+Pozdrav,
+
+Korisnik je upravo odgovorio na ticket "%%SUBJECT%%".
+
+Ovim ticketom možete upravljati ovdje:
+%%TRACK_URL%%
+
+
+Lijep pozdrav,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
