@@ -1,6 +1,0 @@
-<p>Vážený(á) %%NAME%%,</p>
-<p>píšeme na základě Vašeho ticketu "%%SUBJECT%%". Abychom mohli poskytovat lepší služby, prosíme o sdělení dojmů z kvality služeb poskytovaných naším týmem podpory.</p>
-<p>Dejte nám prosím vědět, jak jste byli spokojeni <a href="%%SURVEY_URL%%">kliknutím zde</a>.</p>
-<p>Oceníme Vaši zpětnou vazbu a jako vždy, v případě, že budete potřebovat pomoci, se na nás neváhejte opět obrátit.</p>
-<p>Děkujeme,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

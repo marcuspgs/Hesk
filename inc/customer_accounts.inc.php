@@ -437,7 +437,7 @@ function hesk_remove_mfa_for_customer($customer_id) {
 function hesk_get_customers_for_ticket($ticket_id) {
     global $hesk_settings;
 
-    $customers_res = hesk_dbQuery("SELECT `customers`.`id`, `customers`.`name`, `customers`.`email`, `ticket_to_customer`.`customer_type` 
+    $customers_res = hesk_dbQuery("SELECT `customers`.`id`, `customers`.`name`, `customers`.`email`, `customers`.`language`, `ticket_to_customer`.`customer_type`
         FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` `customers`
         INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` `ticket_to_customer`
             ON `customers`.`id` = `ticket_to_customer`.`customer_id`
@@ -446,6 +446,12 @@ function hesk_get_customers_for_ticket($ticket_id) {
     $customers = [];
     while ($row = hesk_dbFetchAssoc($customers_res)) {
         $customers[] = $row;
+    }
+
+    if (defined('HESK_DEMO')) {
+        array_walk($customers, function(&$k) {
+            $k['email'] = 'hidden@demo.com';
+        });
     }
 
     return $customers;
@@ -591,6 +597,12 @@ function hesk_customerAutoLogin($noredirect = false)
     $row = hesk_dbFetchAssoc($result);
     $user = $row['email'];
     define('HESK_USER_CUSTOMER', $user);
+
+    // Change language?
+    if ($hesk_settings['language'] != $row['language']) {
+        hesk_setLanguage($row['language']);
+        hesk_setcookie('hesk_language',$row['language'],time()+31536000,'/');
+    }
 
     // Each token should only be used once, so update the old one with a new one
     $selector = base64_encode(random_bytes(9));

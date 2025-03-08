@@ -1,6 +1,0 @@
-<p>Kære %%NAME%%,</p>
-<p>Din supportsag "%%SUBJECT%%" er blevet opdateret til en lukket/afklaret status.</p>
-<p>Du kan se status for din supportsag her:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Hvis ovenstående link ikke er klikbart, kan du prøve at kopiere og indsætte linket i adresselinjen i din webbrowser.</p>
-<p>Venligst,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

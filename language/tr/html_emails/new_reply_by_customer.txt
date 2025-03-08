@@ -1,5 +1,0 @@
-<p>Merhaba,</p>
-<p>"%%SUBJECT%%" konulu destek talebi müşteri tarafından cevaplandı.</p>
-<p>Bu talebe verilen yanıtı okumak ve talebi yönetmek için bu bağlantıyı kullanabilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

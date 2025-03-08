@@ -1,5 +1,0 @@
-<p>Sayın %%NAME%%,</p>
-<p>Ne yazık ki, hesap oluşturma talebiniz reddedildi.</p>
-<p>Bunun hatalı bir işlem olduğunu düşünüyorsanız, lütfen tekrar kayıt olmayı deneyin.</p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

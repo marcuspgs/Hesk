@@ -1,8 +1,0 @@
-<p>Liebe(r) %%NAME%%,</p>
-<p>Ihr Support-Ticket "%%SUBJECT%%" wurde erstellt.</p>
-<p>Wir beantworten alle Anfragen so schnell wie möglich, innerhalb von 24 bis 48 Stunden. Wenn wir davon ausgehen, dass Ihr Ticket mehr Zeit in Anspruch nehmen wird, informieren wir Sie per E-Mail.</p>
-<p>Ticket-Verfolgungs-ID: %%TRACK_ID%%</p>
-<p>Sie können den Status Ihres Tickets hier einsehen:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Sie erhalten eine E-Mail-Benachrichtigung, wenn unsere Mitarbeiter auf Ihr Ticket antworten.</p>
-<p>Mit freundlichen Grüßen,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

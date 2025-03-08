@@ -1,5 +1,0 @@
-<p>Witaj,</p>
-<p>Klient właśnie przesłał odpowiedź do zgłoszenia "%%SUBJECT%%".</p>
-<p>Możesz odczytać wiadomość i zarządzać zgłoszeniem pod adresem:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Pozdrawiamy,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

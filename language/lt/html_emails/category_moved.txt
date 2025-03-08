@@ -1,1 +1,0 @@
-<p>Sveiki, %%NAME%%,<br /><br />Naujas palaikymo bilietas buvo perkeltas į kitą kategoriją. Bilieto informacija:<br />Bilieto tema: "%%SUBJECT%%"<br />Sekimo ID: %%TRACK_ID%%<br /><br />%%TRACK_URL%%<br /><br /><br /><br />%%SITE_TITLE%%<br />%%SITE_URL%%</p>

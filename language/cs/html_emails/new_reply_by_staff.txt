@@ -1,8 +1,0 @@
-<p>Vážený %%NAME%%,</p>
-<p>náš tým podpory právě odpověděl na Váš ticket: "%%SUBJECT%%"</p>
-<p>Ticket můžete zobrazit na adrese:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a> <br /><br /></p>
-<p>***<br>
-Neodpovídejte prosím na tento email, schránka není monitorována.<br>
-S pozdravem,<br>
-tým podpory</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

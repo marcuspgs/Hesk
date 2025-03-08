@@ -1,6 +1,0 @@
-<p>Merhaba,</p>
-<p>%%NAME%% adlı kullanıcıdan, aşağıdaki konu ile ilgili yeni bir mesaj aldınız :</p>
-<p>%%SUBJECT%%</p>
-<p>Aşağıdaki bağlantıyı tıklayıp yeni mesajınızı görüntüleyebilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

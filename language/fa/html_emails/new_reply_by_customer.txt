@@ -1,7 +1,0 @@
-<p style="text-align:right;">سلام</p>
-<p class="MsoNormal" dir="rtl"><span lang="ar-sa" style="font-family:tahoma, arial, helvetica, sans-serif;" xml:lang="ar-sa">یک مشتری به تازگی به تیکت پاسخ داده است</span></p>
-<p style="text-align:right;">موضوع: "%%SUBJECT%%".</p>
-<p class="MsoNormal" dir="rtl"><span lang="fa" style="font-family:Arial, sans-serif;" xml:lang="fa">شما </span><span lang="ar-sa" style="font-family:Arial, sans-serif;" xml:lang="ar-sa">می توانید پیام پاسخ را بخوانید و این تیکت را در اینجا مدیریت کنید</span></p>
-<p style="text-align:right;"><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p style="text-align:right;">موفق باشید</p>
-<p style="text-align:right;">%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

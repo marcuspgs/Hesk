@@ -1,5 +1,0 @@
-<p>Pozdravljeni %%NAME%%,</p>
-<p>vaš zahtevek "%%SUBJECT%%" je bil zaključen.</p>
-<p>Status zahtevka si lahko ogledate tukaj:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Lep pozdrav,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

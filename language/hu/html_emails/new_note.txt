@@ -1,7 +1,0 @@
-<p>Üdvözöljük!</p>
-<p>Egy új jegyzetet adtak a "%%SUBJECT%%" hibajegyhez, ami Önhöz van rendelve.</p>
-<p>Jegyzetet írta: %%NAME%%:</p>
-<p>%%MESSAGE%%</p>
-<p>It tudja kezelni a hibajegyet:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Üdvözlettel,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

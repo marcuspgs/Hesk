@@ -1,2 +1,0 @@
-Pateiktas naujas palaikymo bilietas.
-%%TRACK_URL%%

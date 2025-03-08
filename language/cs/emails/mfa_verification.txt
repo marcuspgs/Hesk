@@ -1,8 +1,0 @@
-Dobrý den %%NAME%%,
-
-níže naleznete jednorázový ověřovací kód, tento kód je platný 20 minut.
-
-%%VERIFICATION_CODE%%
-
-%%SITE_TITLE%%
-%%SITE_URL%%

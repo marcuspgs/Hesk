@@ -1,5 +1,0 @@
-<p>Sehr geehrte(r) %%NAME%%,</p>
-<p>Wir konnten Ihre E-Mail "%%SUBJECT%%" nicht bearbeiten, weil Sie kein Konto bei uns haben.</p>
-<p>Dieser Helpdesk ist nur für registrierte Benutzer zugänglich.</p>
-<p>Mit freundlichen Grüßen</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

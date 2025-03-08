@@ -51,6 +51,13 @@ while ($row = hesk_dbFetchAssoc($customers_rs)) {
     ];
 }
 
+if (defined('HESK_DEMO')) {
+    array_walk($response_rows, function(&$k) {
+        $k['email'] = 'hidden@demo.com';
+        $k['displayName'] = formatDisplayName($k);
+    });
+}
+
 http_response_code(200);
 print json_encode($response_rows);
 exit();

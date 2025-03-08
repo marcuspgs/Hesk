@@ -25,8 +25,12 @@ function hesk_newTicket($ticket)
     $name = $primary_customer['name'];
     $email = $primary_customer['email'];
     if ($primary_customer['verified'] !== 1) {
-        $name = $ticket['name'];
-        $email = $ticket['email'];
+        if (isset($ticket['name'])) {
+            $name = $ticket['name'];
+        }
+        if (isset($ticket['email'])) {
+            $email = $ticket['email'];
+        }
     }
     // Generate a subject if necessary
     if (hesk_mb_strlen($ticket['subject']) < 1)

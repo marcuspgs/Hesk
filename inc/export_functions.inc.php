@@ -240,6 +240,11 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
             require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
         }
         $customers = hesk_get_customers_for_ticket($ticket['id']);
+        if (defined('HESK_DEMO')) {
+            array_walk($customers, function(&$k) {
+                $k['email'] = 'hidden@demo.com';
+            });
+        }
         $found_requester = false;
         $requester = [];
         $followers = [];

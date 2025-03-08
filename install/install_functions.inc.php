@@ -15,7 +15,7 @@
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 // We will be installing this HESK version:
-define('HESK_NEW_VERSION','3.5.1');
+define('HESK_NEW_VERSION','3.5.2');
 define('REQUIRE_PHP_VERSION','5.6.0');
 define('REQUIRE_MYSQL_VERSION','5.0.7');
 
@@ -76,7 +76,7 @@ function hesk_iTestDatabaseConnection($use_existing_settings = false)
 		$hesk_settings['db_host'] = hesk_input( hesk_POST('host') );
 		$hesk_settings['db_name'] = hesk_input( hesk_POST('name') );
 		$hesk_settings['db_user'] = str_replace('&amp;', '&', hesk_input( hesk_POST('user') ) );
-		$hesk_settings['db_pass'] = str_replace('&amp;', '&', hesk_input( hesk_POST('pass') ) );
+		$hesk_settings['db_pass'] = str_replace(array('&amp;', '&gt;', '&lt;'), array('&', '>', '<'), hesk_input( hesk_POST('pass') ) );
 
 		if (INSTALL_PAGE == 'install.php')
 		{
@@ -569,7 +569,7 @@ function hesk_iDatabase($problem=0)
 	</tr>
 	<tr>
 	<td width="200">User Password:</td>
-	<td><input type="text" name="pass" value="<?php echo str_replace('&', '&amp;', $hesk_settings['db_pass']); ?>" size="40" autocomplete="off" /></td>
+	<td><input type="text" name="pass" value="<?php echo str_replace(array('&', '>', '<'), array('&amp;', '&gt;', '&lt;'), $hesk_settings['db_pass']); ?>" size="40" autocomplete="off" /></td>
 	</tr>
 	<?php
 	if (INSTALL_PAGE == 'install.php')

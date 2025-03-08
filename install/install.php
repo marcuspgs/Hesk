@@ -743,11 +743,12 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (
   `customer_id` mediumint(5) unsigned NULL DEFAULT NULL,
   `rating` enum('1','5') COLLATE utf8_unicode_ci DEFAULT NULL,
   `read` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `eid` varchar(100) NULL DEFAULT NULL,
+  `eid` varchar(1000) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `replyto` (`replyto`),
   KEY `dt` (`dt`),
-  KEY `staffid` (`staffid`)
+  KEY `staffid` (`staffid`),
+  KEY `customer_id` (`customer_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 ");
 
@@ -949,7 +950,7 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` (
   `overdue_email_sent` tinyint(1) DEFAULT '0',
   `satisfaction_email_sent` tinyint(1) DEFAULT '0',
   `satisfaction_email_dt` timestamp NULL DEFAULT NULL,
-  `eid` varchar(100) NULL DEFAULT NULL,
+  `eid` varchar(1000) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `trackid` (`trackid`),
   KEY `archive` (`archive`),

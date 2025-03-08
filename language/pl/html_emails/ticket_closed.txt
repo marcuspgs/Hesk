@@ -1,6 +1,0 @@
-<p>Witaj %%NAME%%,</p>
-<p>Twoje zgłoszenie "%%SUBJECT%%" zostało zamknięte/rozwiązane.</p>
-<p>Możesz wyświetlić status zgłoszenia pod adresem<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Jeżeli ten link nie działa, prosimy skopiuj go i wklej do swojej przeglądarki.</p>
-<p>Pozdrawiamy,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

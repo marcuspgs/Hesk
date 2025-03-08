@@ -1,5 +1,0 @@
-<p>Bună %%NAME%%,</p>
-<p>Mai jos este codul dvs. de verificare a autentificării cu mai mulți factori. Acest cod expiră în 20 de minute.</p>
-<p><strong>%%VERIFICATION_CODE%%</strong></p>
-<p>Mulțumesc,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

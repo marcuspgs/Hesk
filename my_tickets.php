@@ -31,6 +31,11 @@ hesk_dbConnect();
 
 $user_context = hesk_isCustomerLoggedIn();
 
+// Fix a bug before we find a better way to do it :)
+if ($user_context === true) {
+    $user_context = hesk_isCustomerLoggedIn();
+}
+
 $additional_sql_filters = '';
 $page_size = intval(hesk_REQUEST('page-size', 20));
 $page_number = intval(hesk_REQUEST('page-number', 1));

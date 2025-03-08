@@ -1,1 +1,0 @@
-<p>Sveiki, %%NAME%%,<br /><br />Šiame el. laiške pateiktas palaikymo bilietų sąrašas, pateiktų naudojant jūsų el. pašto adresą. Rastas palaikymo bilietų skaičius: %%NUM%%<br />%%LIST_TICKETS%%<br /><br /><br /><br />%%SITE_TITLE%%<br />%%SITE_URL%%</p>

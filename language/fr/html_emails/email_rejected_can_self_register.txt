@@ -1,4 +1,0 @@
-<p>Chère/cher %%NAME%%,</p>
-<p>Nous n'avons pas pu traiter votre e-mail "%%SUBJECT%%" car vous n'avez pas de compte chez nous.<br /><br />Pour soumettre des tickets de support par e-mail, veuillez d'abord vous inscrire à l'adresse suivante :<br /><a href="%%CUSTOMER_REGISTER_URL%%">%%CUSTOMER_REGISTER_URL%%</a></p>
-<p>Cordialement,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

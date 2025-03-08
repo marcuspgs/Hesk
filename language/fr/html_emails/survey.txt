@@ -1,6 +1,0 @@
-<p>Cher %%NAME%%,</p>
-<p>Nous vous contactons au sujet de votre récent billet <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Pour nous aider à mieux vous servir, nous aimerions connaître votre expérience avec notre équipe d'assistance.</p>
-<p>Veuillez nous faire savoir si votre problème a été résolu facilement. <a href="%%SURVEY_URL%%">en cliquant ici</a>.</p>
-<p>Nous apprécions vos commentaires. Et comme toujours, si nous pouvons faire autre chose pour vous à l'avenir, n'hésitez pas à nous contacter à nouveau.</p>
-<p>Merci,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

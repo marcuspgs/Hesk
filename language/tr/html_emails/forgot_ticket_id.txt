@@ -1,5 +1,0 @@
-<p>Sayın %%NAME%%,</p>
-<p>Bu e-posta mesajında, sizin e-posta adresinizle gönderilen destek taleplerinin bir listesi bulunmaktadır. Bulunan Destek Talebi Sayısı : <strong>%%NUM%%</strong></p>
-<p>%%LIST_TICKETS%%</p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

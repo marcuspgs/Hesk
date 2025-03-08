@@ -1,5 +1,0 @@
-<p>Bonjour,</p>
-<p>Un client vient de répondre au ticket "%%SUBJECT%%".</p>
-<p>Vous pouvez lire le message de réponse et gérer ce ticket ici. :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Cordialement,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

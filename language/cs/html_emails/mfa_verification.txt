@@ -1,5 +1,0 @@
-<p>Dobrý den %%NAME%%,</p>
-<p>níže naleznete jednorázový ověřovací kód, tento k=od je platný 20 minut.</p>
-<p><strong>%%VERIFICATION_CODE%%</strong></p>
-<p>S pozdravem,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

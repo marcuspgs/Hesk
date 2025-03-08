@@ -1,6 +1,0 @@
-<p>Kære %%NAME%%,</p>
-<p>Vi kontakter dig vedrørende din seneste supportsag <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. For at hjælpe os med at betjene dig bedst muligt, vil vi meget gerne høre om din oplevelse med vores supportteam.</p>
-<p>Fortæl os venligst, hvor nemt det var at få løst dit problem <a href="%%SURVEY_URL%%">ved at klikke her</a>.</p>
-<p>Vi sætter pris på din feedback. Og som altid, hvis der er andet, vi kan gøre for dig i fremtiden - så tøv ikke med at kontakte os igen.</p>
-<p>Tak,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

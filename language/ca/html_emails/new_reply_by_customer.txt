@@ -1,7 +1,0 @@
-<p>Hola,</p>
-<p>Un client acaba de contestar a la incidència "%%SUBJECT%%".</p>
-<p>Podeu veure la incidència aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p><strong>NO RESPONGUEU A AQUEST CORREU</strong><br />Aquest és un missatge de correu automàtic enviat des del sistema de suport. No respongueu aquest correu ja que el client no rebrà la vostra resposta!</p>
-<p>Per canviar les preferències de notificació per correu entreu a l'administració de help desk i aneu a "Perfil".</p>
-<p>Atentament,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

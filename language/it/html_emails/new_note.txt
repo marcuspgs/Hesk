@@ -1,7 +1,0 @@
-<p>Ciao,</p>
-<p>Una nuova nota è stata aggiunta al ticket "%%SUBJECT%%".</p>
-<p>Nota da %%NAME%%:</p>
-<p>%%MESSAGE%%</p>
-<p>Puoi gestire il tuo ticket da qui:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Cordiali saluti,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

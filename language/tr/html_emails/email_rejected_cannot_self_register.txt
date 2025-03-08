@@ -1,5 +1,0 @@
-<p>Sayın %%NAME%%,</p>
-<p>"%%SUBJECT%%" konulu e-postanızı işleme koyamadık, çünkü sistemimizde bir hesabınız bulunmuyor.</p>
-<p>Bu Yardım Masası yalnızca kayıtlı kullanıcılara açıktır.</p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

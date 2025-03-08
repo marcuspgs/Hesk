@@ -1,7 +1,0 @@
-<p>Ciao,</p>
-<p>Un nuovo ticket di supporto è stato spostato nella tua categoria. Dettagli del ticket:</p>
-<p>Oggetto del ticket: %%SUBJECT%%<br />ID per il tracciamento: %%TRACK_ID%%</p>
-<p>Puoi monitorare qui il tuo ticket:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p> </p>
-<p>Grazie,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

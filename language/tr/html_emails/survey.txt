@@ -1,6 +1,0 @@
-<p>Sayın %%NAME%%,</p>
-<p><a href="%%TRACK_URL%%">%%SUBJECT%%</a> Konulu, son talebiniz ile ilgili olarak sizinle iletişime geçiyoruz. Size daha iyi hizmet vermemize yardımcı olmak için, Destek Ekibimizle olan deneyiminizi duymak isteriz.</p>
-<p>Lütfen <a href="%%SURVEY_URL%%">burayı tıklayıp</a> sorununuzu çözmenin ne kadar kolay olduğunu bize bildirin.</p>
-<p>Geribildirim için teşekkürler. Ve her zaman olduğu gibi, gelecekte sizin için yapabileceğimiz başka bir şey olursa - lütfen tekrar bize ulaşmaktan çekinmeyin.</p>
-<p>Teşekkür Ederiz,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

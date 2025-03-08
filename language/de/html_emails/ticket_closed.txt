@@ -1,6 +1,0 @@
-<p>Liebe(r) %%NAME%%,</p>
-<p>Ihr Support-Ticket "%%SUBJECT%%" wurde auf einen geschlossenen/gelösten Status aktualisiert.</p>
-<p>Sie können den Status Ihres Tickets hier einsehen:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Wenn Sie den obigen Link nicht anklicken können, versuchen Sie, ihn zu kopieren und in die Adressleiste Ihres Webbrowsers einzufügen.</p>
-<p>Mit freundlichen Grüßen,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

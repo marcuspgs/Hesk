@@ -1,8 +1,0 @@
-<p>Beste %%NAME%%,</p>
-<p>Je ticket met als onderwerp "%%SUBJECT%%" is verzonden.</p>
-<p>We beantwoorden alle tickets zo snel mogelijk, binnen 24 tot 48 uur. Als we verwachten dat je ticket extra tijd in beslag zal nemen, houden we je per e-mail op de hoogte.</p>
-<p>Ticket ID: %%TRACK_ID%%</p>
-<p>Je kunt de status van je ticket hier bekijken:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Je ontvangt een e-mailmelding wanneer een van onze medewerkers op je ticket reageert.</p>
-<p>Vriendelijke groet,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

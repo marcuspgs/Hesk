@@ -1,5 +1,0 @@
-<p>Chère/cher %%NAME%%,</p>
-<p>Nous n'avons pas pu traiter votre e-mail "%%SUBJECT%%" car vous n'avez pas de compte chez nous.</p>
-<p>Ce service d'assistance n'est disponible que pour les utilisateurs enregistrés.</p>
-<p>Cordialement,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

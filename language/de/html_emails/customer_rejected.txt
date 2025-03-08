@@ -1,5 +1,0 @@
-<p>Sehr geehrte(r) %%NAME%%,</p>
-<p>Leider wurde Ihre Kontoanmeldung abgelehnt.</p>
-<p>Wenn Sie glauben, dass dies irrtümlich geschehen ist, versuchen Sie bitte, sich erneut zu registrieren.</p>
-<p>Mit freundlichen Grüßen</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

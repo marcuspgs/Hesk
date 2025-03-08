@@ -1058,6 +1058,7 @@ function hesk_forceLogoutCustomer($error_message = '', $redirect = 'index.php', 
 
     // Stop the session and clear cookies
     hesk_session_stop();
+    hesk_setcookie('hesk_customer_remember', '');
 
     // Send the user to the login page?
     if ($redirect !== false) {

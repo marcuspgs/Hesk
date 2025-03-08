@@ -2024,6 +2024,11 @@ img:not([src]):not([srcset]) {
     padding: 0 16px!important
 }
 
+.dropdown .dropdown-list>li.noclose > a, .dropdown-select .dropdown-list>li.noclose > a { /* jsut affect direct anchor children ,like icons to copy the value, but not actual value */
+    padding-left: 0 !important;
+    margin-left: -13px;
+}
+
 .dropdown .dropdown-list>li a:hover, .dropdown-select .dropdown-list>li a:hover {
     color: #fff;
 }
@@ -2044,7 +2049,7 @@ img:not([src]):not([srcset]) {
     color: #fff !important;
 }
 
-.dropdown .dropdown-list>li:hover svg, .dropdown-select .dropdown-list>li:hover svg {
+.dropdown .dropdown-list>li:not(.noclose):hover svg, .dropdown-select .dropdown-list>li:not(.noclose):hover svg {
     fill: #fff !important;
 }
 
@@ -5180,6 +5185,20 @@ p.rate {
 }
 
 .value svg.copied {
+    fill: #002d73;
+    width: 0.8em;
+    height: 0.8em;
+}
+/* To handle same animation on Customer dropdown, we have to treat it a bit differently as above:
+As changing width/height, might otherwise cause a weird flicker/width change of the whole dropdown which looks bad,
+so in this case we rather to it with a scale transform, so it doesn't affect dropdown widht
+*/
+.dropdown .dropdown-list > li.noclose svg.copied,
+.dropdown-select .dropdown-list > li.noclose svg.copied {
+    fill: #002d73;
+    transform: scale(0.8);
+}
+.noclose svg.copied { /* TO handle same animation on Customer dropdown */
     fill: #002d73;
     width: 0.8em;
     height: 0.8em;

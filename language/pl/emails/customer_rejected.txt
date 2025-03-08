@@ -1,9 +1,0 @@
-Witaj %%NAME%%,
-
-Niestety, Twoja rejestracja konta została odrzucona.
-
-Jeśli uważasz, że nastąpił błąd, spróbuj zarejestrować się ponownie.
-
-Z poważaniem,
-%%SITE_TITLE%%
-%%SITE_URL%%

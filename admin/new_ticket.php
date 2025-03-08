@@ -159,16 +159,20 @@ $hesk_settings['categories'] = array();
 
 if (hesk_checkPermission('can_submit_any_cat', 0))
 {
-    $res = hesk_dbQuery("SELECT `id`, `name`, `priority` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
+    $res = hesk_dbQuery("SELECT `id`, `name`, `priority`, `autoassign` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
 }
 else
 {
-    $res = hesk_dbQuery("SELECT `id`, `name`, `priority` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE ".hesk_myCategories('id')." ORDER BY `cat_order` ASC");
+    $res = hesk_dbQuery("SELECT `id`, `name`, `priority`, `autoassign` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE ".hesk_myCategories('id')." ORDER BY `cat_order` ASC");
 }
 
 while ($row=hesk_dbFetchAssoc($res))
 {
-	$hesk_settings['categories'][$row['id']] = array('name' => $row['name'], 'priority' => $row['priority']);
+	$hesk_settings['categories'][$row['id']] = array(
+        'name' => $row['name'],
+        'priority' => $row['priority'],
+        'autoassign' => $row['autoassign']
+    );
 }
 
 $number_of_categories = count($hesk_settings['categories']);
@@ -1258,7 +1262,8 @@ if ($predefined_name !== '') {
 
                             if ($hesk_settings['autoassign'])
                             {
-                                echo '<option value="-2"> &gt; ' . $hesklang['aass'] . ' &lt; </option>';
+                                $select = ( ! isset($_SESSION['as_owner']) && ! empty($hesk_settings['categories'][$category]['autoassign']) ) ? 'selected="selected"' : '';
+                                echo '<option value="-2" '.$select.'> &gt; ' . $hesklang['aass'] . ' &lt; </option>';
                             }
 
                             $owner = isset($_SESSION['as_owner']) ? intval($_SESSION['as_owner']) : 0;

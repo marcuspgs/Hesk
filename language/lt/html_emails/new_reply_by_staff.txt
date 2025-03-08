@@ -1,4 +1,0 @@
-<p>Sveiki, %%NAME%%,</p>
-<p>Jūsų bilietui "%%SUBJECT%%" buvo pateiktas atsakymas:</p>
-<p>"%%MESSAGE%%"</p>
-<p>Norėdami pateikti savo atsakymą arba peržiūrėti informaciją, apsilankykite: <br />%%TRACK_URL%%<br /><br /><br /><br />%%SITE_TITLE%%<br />%%SITE_URL%%</p>

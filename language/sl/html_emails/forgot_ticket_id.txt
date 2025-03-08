@@ -1,5 +1,0 @@
-<p>Pozdravljeni %%NAME%%,</p>
-<p>to sporočilo vsebuje seznam zahtevkov, povezanih z vašim elektronskim naslovom. Število najdenih zahtevkov: <strong>%%NUM%%</strong></p>
-<p>%%LIST_TICKETS%%</p>
-<p>Lep pozdrav,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

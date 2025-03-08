@@ -1,7 +1,0 @@
-<p>Hallo,</p>
-<p>Dem Ticket wurde eine neue Notiz hinzugefügt "%%SUBJECT%%".</p>
-<p>Anmerkung von %%NAME%%:</p>
-<p>%%MESSAGE%%</p>
-<p>Sie können dieses Ticket hier verwalten:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Mit freundlichen Grüßen,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

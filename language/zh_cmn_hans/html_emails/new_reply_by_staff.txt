@@ -1,6 +1,0 @@
-<p>尊敬的 %%NAME%%,</p>
-<p>我们刚刚回复了您的工单 "%%SUBJECT%%"。</p>
-<p>要阅读消息、提交回复并查看详细信息，请访问:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a> <br /><br /></p>
-<p>如果上面的链接不可点击，请尝试将其复制并粘贴到您浏览器的地址栏中。</p>
-<p>此致,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

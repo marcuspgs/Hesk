@@ -1,7 +1,0 @@
-<p>Merhaba,</p>
-<p>Yeni müşteri hesapları personel onayını beklemektedir.</p>
-<p>Bekleyen Onay Sayısı : <strong>%%NUM%%</strong></p>
-<p>Müşteri hesap kayıtlarını buradan onaylayabilir veya reddedebilirsiniz :<br />
-<a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

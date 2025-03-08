@@ -1,5 +1,0 @@
-<p>Beste %%NAME%%,</p>
-<p>Hieronder staat de verificatiecode voor meervoudige verificatie. Deze code verloopt over 20 minuten.</p>
-<p><strong>%%VERIFICATION_CODE%%</strong></p>
-<p>Vriendelijke groet,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

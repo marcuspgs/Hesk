@@ -1490,12 +1490,12 @@ function hesk_iUpdateTables()
         ");
 
         hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`
-                    ADD `eid` varchar(100) NULL DEFAULT NULL AFTER `satisfaction_email_dt`,
+                    ADD `eid` varchar(1000) NULL DEFAULT NULL AFTER `satisfaction_email_dt`,
                     CHANGE `name` `u_name` varchar(255) NOT NULL default '',
                     CHANGE `email` `u_email` varchar(1000) NOT NULL default ''");
         hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies`
                     ADD `customer_id` mediumint(8) unsigned NULL DEFAULT NULL AFTER `staffid`,
-                    ADD `eid` varchar(100) NULL DEFAULT NULL AFTER `read`;");
+                    ADD `eid` varchar(1000) NULL DEFAULT NULL AFTER `read`;");
         hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."reset_password`
                     ADD `user_type` varchar(8) NOT NULL DEFAULT 'STAFF' AFTER `dt`");
         hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens`
@@ -1547,6 +1547,14 @@ function hesk_iUpdateTables()
     }
 
     // 3.5.1 no changes
+
+    // Updating 3.5.x to 3.5.2
+    if ($update_all_next || $hesk_settings['update_from'] == '3.5.0') {
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` CHANGE `eid` `eid` VARCHAR(1000) NULL DEFAULT NULL, ADD KEY `customer_id` (`customer_id`)");
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` CHANGE `eid` `eid` VARCHAR(1000) NULL DEFAULT NULL");
+
+        $update_all_next = 1;
+    }
 
 	// Insert the "HESK updated to latest version" mail for the administrator
     $offer_license = file_exists(HESK_PATH.'hesk_license.php') ? "" : "<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n";
@@ -1941,6 +1949,14 @@ function hesk_iDetectVersion()
     // Version 3.5.0 tables installed?
     if (in_array($hesk_settings['db_pfix'].'customers', $tables))
     {
+        // Version 3.5.2 tables installed?
+        $res = hesk_dbQuery("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".hesk_dbEscape($hesk_settings['db_pfix'])."tickets' AND table_schema = '".hesk_dbEscape($hesk_settings['db_name'])."' AND column_name = 'eid' LIMIT 0, 1");
+        $row = hesk_dbFetchRow($res);
+        if ($row[0] == 1000)
+        {
+            return '3.5.2';
+        }
+
         return '3.5.0';
     }
 

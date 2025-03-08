@@ -37,7 +37,15 @@ $emails = array_keys(hesk_validEmails());
 // Which language are we editing?
 if ($hesk_settings['can_sel_lang'])
 {
-	$hesk_settings['edit_language'] = hesk_REQUEST('edit_language');
+    $hesk_settings['edit_language'] = hesk_REQUEST('edit_language');
+
+    // If user closed the edit template modal without saving; remember the language used
+    if (empty($hesk_settings['edit_language']) && ! empty($_SESSION['edit_language']))
+    {
+        $hesk_settings['edit_language'] = $_SESSION['edit_language'];
+    }
+
+    // If not a valid language, default to settings
 	if ( ! isset($hesk_settings['languages'][$hesk_settings['edit_language']]) )
 	{
 		$hesk_settings['edit_language'] = $hesk_settings['language'];
@@ -47,6 +55,7 @@ else
 {
 	$hesk_settings['edit_language'] = $hesk_settings['language'];
 }
+hesk_cleanSessionVars('edit_language');
 
 // What should we do?
 if ( $action = hesk_REQUEST('a') )
@@ -224,6 +233,9 @@ if ($action == 'edit')
     {
         hesk_error($hesklang['et_fw']);
     }
+
+    // We need this to remember which language was being edited if the modal is closed without saving
+    $_SESSION['edit_language'] = $hesk_settings['edit_language'];
 
     // Start the edit form
     ?>

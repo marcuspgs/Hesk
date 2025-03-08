@@ -101,15 +101,33 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                     <section class="ticket__body_block naked">
                         <div class="profile__info">
                             <h3><?php echo $hesklang['customer_edit_profile']; ?></h3>
+                            <?php if ( ! $userCanChangeEmail): ?>
+                                <div class="form-group">
+                                    <label class="label"><?php echo $hesklang['email']; ?>:</label>
+                                    <?php echo $customerUserContext['email']; ?>
+                                </div>
+                            <?php endif; ?>
                             <form action="profile.php" method="post" class="form ticket-create" novalidate>
                                 <div class="form-group required">
-                                    <label class="label"><?php echo $hesklang['name']; ?></label>
+                                    <label class="label"><?php echo $hesklang['name']; ?>:</label>
                                     <input type="text" name="name" maxlength="255"
                                            class="form-control <?php if (in_array('name', $validationFailures)) {echo 'isError';} ?>"
                                            value="<?php echo $customerUserContext['name']; ?>"
                                            required>
                                     <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
                                 </div>
+                                <?php if ($hesk_settings['can_sel_lang']): ?>
+                                <div class="form-group">
+                                    <label class="label"><?php echo $hesklang['chol']; ?>:</label>
+                                    <select class="" name="language" id="preferred-language">
+                                    <?php
+                                    foreach ($hesk_settings['languages'] as $lang => $info) {
+                                        echo '<option value="'.$lang.'" ' . ($lang == $customerUserContext['language'] ? 'selected' : '') . '>'.$lang.'</option>';
+                                    }
+                                    ?>
+                                    </select>
+                                </div>
+                                <?php endif; ?>
                                 <div class="profile__control">
                                     <div class="profile__edit">
                                         <input type="hidden" name="action" value="profile">
@@ -262,6 +280,12 @@ END LICENSE CODE
     $('input[name="password"]').keyup(function() {
         HESK_FUNCTIONS.checkPasswordStrength(this.value);
     });
+
+    <?php if ($hesk_settings['can_sel_lang']): ?>
+    $(document).ready(function() {
+        $('#preferred-language').selectize();
+    });
+    <?php endif; ?>
 </script>
 </body>
 

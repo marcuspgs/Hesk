@@ -1,6 +1,0 @@
-<p>Gentile %%NAME%%,</p>
-<p>Ti stiamo contattando in merito al tuo recente ticket <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Per aiutarci a servirti meglio, Ci piacerebbe conoscere la tua eesperienza con il nostro supporto.</p>
-<p>Per favore, facci sapere quanto è stato facile per te risolvere il problema <a href="%%SURVEY_URL%%">cliccando qui</a>.</p>
-<p>Apprezziamo il tuo feedback. Come sempre, se c'è dell'altro che possiamo fare per te, non esitare a contattarci.</p>
-<p>Grazie,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

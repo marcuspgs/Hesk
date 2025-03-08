@@ -1,6 +1,0 @@
-<p>Pozdravljeni %%NAME%%,</p>
-<p>pišemo vam v zvezi z vašim zahtevkom <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Rabi si slišali vaše mnenje, da vam v prihodnje lahko še bolje pomagamo.</p>
-<p>Prosim ocenite vašo izkušnjo z nami s <a href="%%SURVEY_URL%%">klikom na to povezavo</a>.</p>
-<p>Zahvaljujemo se vam za vaše mnenje. V kolikor boste v prihodnje zopet potrebovali pomoč se brez zadržkov obrnite na nas.</p>
-<p>Lep pozdrav,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

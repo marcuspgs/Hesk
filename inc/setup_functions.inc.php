@@ -158,9 +158,9 @@ function hesk_testMySQL()
 	$set['db_pass'] = hesk_input( hesk_POST('s_db_pass') );
 	$set['db_pfix'] = preg_replace('/[^0-9a-zA-Z_]/', '', hesk_POST('s_db_pfix', 'hesk_') );
 
-	// Allow & in password and username
+	// Allow some special chars in password and username
     $set['db_user'] = str_replace('&amp;', '&', $set['db_user']);
-    $set['db_pass'] = str_replace('&amp;', '&', $set['db_pass']);
+    $set['db_pass'] = str_replace(array('&amp;', '&gt;', '&lt;'), array('&', '>', '<'), $set['db_pass']);
 
 	// MySQL tables used by HESK
 	$tables = array(

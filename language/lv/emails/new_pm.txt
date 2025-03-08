@@ -1,11 +1,0 @@
-Labdien,
-
-Jūs saņēmāt jaunu personīgo ziņojumu no %%NAME%% ar šādu tēmu:
-%%SUBJECT%%
-
-Jūs to variet izlasīt šeit:%%TRACK_URL%%
-
-Šis ziņojums ir nosūtīts automātiski. Lūgums uz to neatbildēt.
-------------------------
-%%SITE_TITLE%%
-%%SITE_URL%%

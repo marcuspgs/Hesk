@@ -1,7 +1,0 @@
-<p>Merhaba,</p>
-<p>Yardım Masasına yeni bir destek talebi gönderildi. Talep Detayları :</p>
-<p>Talep Konusu : %%SUBJECT%%</p>
-<p>Takip Kodu : %%TRACK_ID%%</p>
-<p>Talebi buradan yönetebilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

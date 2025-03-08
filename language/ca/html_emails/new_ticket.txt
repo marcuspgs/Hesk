@@ -1,9 +1,0 @@
-<p>Benvolgut/da %%NAME%%,</p>
-<p>La vostra incidència "%%SUBJECT%%" s'ha enviat.</p>
-<p>Intentem respondre totes les incidències el més aviat possible.</p>
-<p>El vostre ID de seguiment: %%TRACK_ID%%</p>
-<p>Podeu veure l'estat de la vostra incidència aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Rebreu una notificació per correu quan els nostres tècnics responguin a la vostra incidència.</p>
-<p><strong>NO CONTESTEU AQUEST CORREU</strong><br />Aquest és un missatge de correu automàtic enviat des del sistema de suport. No contesteu aquest correu ja que no rebrem la vosra resposta, utilitzeu l'enllaç de sobre per una comunicació correcta!</p>
-<p>Atenció,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

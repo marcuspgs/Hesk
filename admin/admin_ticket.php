@@ -1060,21 +1060,27 @@ $options = array(
                                         <li class="noclose">
                                             <span class="title"><?php echo $hesklang['email']; ?>:</span>
                                             <span class="value"><a href="mailto:<?php echo $requester['email']; ?>"><?php echo $requester['email']; ?></a></span>
+                                            <a href="javascript:" title="<?php echo $hesklang['copy_value']; ?>" onclick="navigator.clipboard.writeText('<?php echo $requester['email']; ?>');$('#copy-email').addClass('copied');setTimeout(function(){$('#copy-email').removeClass('copied')}, 150);">
+                                                <svg class="icon icon-merge copy-me" id="copy-email">
+                                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-merge"></use>
+                                                </svg>
+                                            </a>
                                         </li>
                                         <?php
                                     }
                                     ?>
                                     <li class="noclose">
                                         <span class="title"><?php echo $hesklang['ip']; ?>:</span>
-                                        <span class="value">
-                                <?php
-                                if ($ticket['ip'] == '' || $ticket['ip'] == 'Unknown' || $ticket['ip'] == $hesklang['unknown']) {
-                                    echo $hesklang['unknown'];
-                                } else {
-                                    ?>
-                                    <a href="../ip_whois.php?ip=<?php echo urlencode($ticket['ip']); ?>"><?php echo $ticket['ip']; ?></a>
-                                <?php } ?>
-                            </span>
+                                        <?php if ($ticket['ip'] == '' || $ticket['ip'] == 'Unknown' || $ticket['ip'] == $hesklang['unknown']): ?>
+                                        <span class="value"><?php echo $hesklang['unknown']; ?></span>
+                                        <?php else: ?>
+                                        <span class="value"><a href="../ip_whois.php?ip=<?php echo urlencode($ticket['ip']); ?>"><?php echo $ticket['ip']; ?></a></span>
+                                        <a href="javascript:" title="<?php echo $hesklang['copy_value']; ?>" onclick="navigator.clipboard.writeText('<?php echo $ticket['ip']; ?>');$('#copy-ip').addClass('copied');setTimeout(function(){$('#copy-ip').removeClass('copied')}, 150);">
+                                            <svg class="icon icon-merge copy-me" id="copy-ip">
+                                                <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-merge"></use>
+                                            </svg>
+                                        </a>
+                                        <?php endif; ?>
                                     </li>
                                     <li class="separator"></li>
                                     <?php if (($hesk_settings['customer_accounts'] && $can_man_customers) ||
@@ -2970,6 +2976,7 @@ function hesk_printCanned()
 		myMsg = myMsg.replace(/%%HESK_ID%%/g, '<?php echo hesk_jsString($ticket['id']); ?>');
 		myMsg = myMsg.replace(/%%HESK_TRACKID%%/g, '<?php echo hesk_jsString($ticket['trackid']); ?>');
 		myMsg = myMsg.replace(/%%HESK_TRACK_ID%%/g, '<?php echo hesk_jsString($ticket['trackid']); ?>');
+		myMsg = myMsg.replace(/%%HESK_SUBJECT%%/g, '<?php echo hesk_jsString($ticket['subject']); ?>');
 		myMsg = myMsg.replace(/%%HESK_REQUESTER%%/g, '<?php echo hesk_jsString(hesk_output_customer_name_and_email($requester)); ?>');
         myMsg = myMsg.replace(/%%HESK_NAME%%/g, '<?php echo hesk_jsString($requester !== null ? $requester['name'] : $hesklang['anon_name']); ?>');
 		myMsg = myMsg.replace(/%%HESK_REQUESTER_NAME%%/g, '<?php echo hesk_jsString($requester !== null ? $requester['name'] : $hesklang['anon_name']); ?>');
@@ -2988,6 +2995,7 @@ function hesk_printCanned()
         myMsg = myMsg.replace(/%25%25HESK_ID%25%25/g, encodeURIComponent('<?php echo hesk_jsString($ticket['id']); ?>'));
         myMsg = myMsg.replace(/%25%25HESK_TRACKID%25%25/g, encodeURIComponent('<?php echo hesk_jsString($ticket['trackid']); ?>'));
         myMsg = myMsg.replace(/%25%25HESK_TRACK_ID%25%25/g, encodeURIComponent('<?php echo hesk_jsString($ticket['trackid']); ?>'));
+        myMsg = myMsg.replace(/%25%25HESK_SUBJECT%25%25/g, encodeURIComponent('<?php echo hesk_jsString($ticket['subject']); ?>'));
         myMsg = myMsg.replace(/%25%25HESK_REQUESTER%25%25/g, '<?php echo hesk_jsString(hesk_output_customer_name_and_email($requester)); ?>');
         myMsg = myMsg.replace(/%25%25HESK_REQUESTER_NAME%25%25/g, '<?php echo hesk_jsString($requester !== null ? $requester['name'] : $hesklang['anon_name']); ?>');
         myMsg = myMsg.replace(/%25%25HESK_NAME%25%25/g, '<?php echo hesk_jsString($requester !== null ? $requester['name'] : $hesklang['anon_name']); ?>');

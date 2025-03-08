@@ -1,6 +1,0 @@
-<p>Sayın %%NAME%%,</p>
-<p>"%%SUBJECT%%" konulu talebinize Destek Ekibimiz tarafından cevap verildi.</p>
-<p>Talebinize verilen cevabı okumak, bir cevap göndermek ve ayrıntıları görüntülemek için lütfen şu adresi ziyaret edin :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a> <br /><br /></p>
-<p>Yukarıdaki bağlantı tıklanabilir değilse, kopyalayıp web tarayıcınızın adres çubuğuna yapıştırmayı deneyin.</p>
-<p>Saygılarımızla,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

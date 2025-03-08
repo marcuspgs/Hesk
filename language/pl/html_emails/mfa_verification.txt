@@ -1,5 +1,0 @@
-<p>Witaj %%NAME%%,</p>
-<p>Poniżej znajduje się Twój kod weryfikacyjny uwierzytelniania wieloskładnikowego. Ten kod wygasa za 20 minut.</p>
-<p><strong>%%VERIFICATION_CODE%%</strong></p>
-<p>Dziękujemy,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

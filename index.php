@@ -516,14 +516,14 @@ function forgot_tid()
 	hesk_dbConnect();
 
     // Get tickets from the database
-	$res = hesk_dbQuery('SELECT DISTINCT `tickets`.`trackid`, `tickets`.`subject`, `tickets`.`status`, `customers`.`name` 
+	$res = hesk_dbQuery('SELECT DISTINCT `tickets`.`trackid`, `tickets`.`subject`, `tickets`.`status`, `tickets`.`lastchange`, `customers`.`name`
         FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` AS `tickets` FORCE KEY (`statuses`) 
 	    INNER JOIN `'.hesk_dbEscape($hesk_settings['db_pfix']).'ticket_to_customer` AS `ticket_to_customer`
 	        ON `tickets`.`id` = `ticket_to_customer`.`ticket_id`
 	    INNER JOIN `'.hesk_dbEscape($hesk_settings['db_pfix']).'customers` AS `customers`
 	        ON `ticket_to_customer`.`customer_id` = `customers`.`id`
 	    WHERE ' . ($hesk_settings['open_only'] ? "`status` <> '3' AND " : '') . ' ' . hesk_dbFormatEmail($email) . ' 
-	    ORDER BY `status` ASC, `lastchange` DESC ');
+	    ORDER BY `tickets`.`status` ASC, `tickets`.`lastchange` DESC ');
 
 	$num = hesk_dbNumRows($res);
 	if ($num < 1)

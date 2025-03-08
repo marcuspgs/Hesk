@@ -260,6 +260,9 @@ $num = hesk_dbNumRows($result);
                         <a href="javascript:" onclick="hesk_insertRichTag('HESK_TRACK_ID')">
                             <?php echo $hesklang['trackID']; ?>
                         </a>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_SUBJECT')">
+                            <?php echo $hesklang['subject']; ?>
+                        </a>
                         <a href="javascript:" onclick="hesk_insertRichTag('HESK_REQUESTER')">
                             <?php echo $hesklang['email_tag_requester']; ?>
                         </a>

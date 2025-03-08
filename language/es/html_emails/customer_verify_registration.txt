@@ -1,5 +1,0 @@
-<p>Estimado %%NAME%%:</p>
-<p>Gracias por crear una cuenta. Haga clic en el siguiente enlace para activar su cuenta:</p>
-<p><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
-<p>Atentamente,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

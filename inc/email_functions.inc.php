@@ -46,7 +46,12 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
         }
 
         // Make sure customer gets response in correct language
-        $language = isset($customer['language']) ? $customer['language'] : HESK_DEFAULT_LANGUAGE;
+        $language = HESK_DEFAULT_LANGUAGE;
+        if (isset($customer['language'])) {
+            $language = $customer['language'];
+        } elseif (isset($ticket['language'])) {
+            $language = $ticket['language'];
+        }
 
         if (!isset($language)) {
             $language_to_customers[$language] = [];

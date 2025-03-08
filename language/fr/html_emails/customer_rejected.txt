@@ -1,5 +1,0 @@
-<p>Chère/cher %%NAME%%,</p>
-<p>Malheureusement, votre inscription a été rejetée.</p>
-<p>Si vous pensez que cela a été fait par erreur, veuillez essayer de vous inscrire à nouveau.</p>
-<p>Cordialement,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

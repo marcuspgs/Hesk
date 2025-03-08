@@ -1,6 +1,0 @@
-<p>Hallo,</p>
-<p>Je hebt een nieuw privébericht ontvangen van %%NAME%% met het volgende onderwerp:</p>
-<p>%%SUBJECT%%</p>
-<p>Je kunt het bericht bekijken door op de volgende link te klikken:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Vriendelijke groet,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

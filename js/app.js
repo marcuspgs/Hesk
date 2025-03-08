@@ -583,10 +583,34 @@ $(document).ready(function () {
         $('input:text:visible:first').focus();
         e.preventDefault();
     });
-    $('.right-bar').click(function (e) {
-        if ($(e.target).closest('.right-bar__body').length) return;
-        closeRightBar(e);
-    });
+    /*
+    To avoid weird situations where a user could click and drag inside the right bar body,
+    and then went out and released, Chrome would treat it as a click and close.
+    If we detect the drag, we can ignore such clicks.
+     */
+    let rightBarClickStartX, rightBarClickStartY;
+    $('.right-bar')
+        .on('mousedown', function (e) {
+            // Store the initial position of the mouse when pressing down
+            rightBarClickStartX = e.pageX;
+            rightBarClickStartY = e.pageY;
+        })
+        .click(function (e) {
+            // Check if the mouse has moved significantly between mousedown and click
+            const moveX = Math.abs(e.pageX - rightBarClickStartX);
+            const moveY = Math.abs(e.pageY - rightBarClickStartY);
+
+            // Threshold to detect a drag (adjust if necessary)
+            const dragThreshold = 10;
+
+            if (moveX > dragThreshold || moveY > dragThreshold) {
+                // If the mouse moved, treat it as a drag and ignore the click
+                return;
+            }
+
+            if ($(e.target).closest('.right-bar__body').length) return;
+            closeRightBar(e);
+        });
     $('.right-bar__body h3 a').click(function (e) {
         closeRightBar(e);
 

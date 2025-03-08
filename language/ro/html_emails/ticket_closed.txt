@@ -1,6 +1,0 @@
-<p>Dragă %%NAME%%,</p>
-<p>Tichetul dvs. de asistență „%%SUBJECT%%” a fost actualizat la starea închisă/rezolvată.</p>
-<p>Puteți vedea starea tichetului dvs. aici:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Dacă nu se poate face clic pe linkul de mai sus, încercați să îl copiați și să îl inserați în bara de adrese a browserului dvs. web.</p>
-<p>Cu stimă,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

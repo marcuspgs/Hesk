@@ -1,7 +1,0 @@
-<p>Здравствуйте,</p>
-<p>В заявку добавлено новое примечание "%%SUBJECT%%".</p>
-<p>Примечание от %%NAME%%:</p>
-<p>%%MESSAGE%%</p>
-<p>Ссылка на заявку:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>С уважением,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

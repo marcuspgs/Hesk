@@ -1,7 +1,0 @@
-<p>您好,</p>
-<p>在票据 "%%SUBJECT%%" 上添加了新备注。</p>
-<p>备注由 %%NAME%% 提供:</p>
-<p>%%MESSAGE%%</p>
-<p>您可以在这里管理该票据:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>此致,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,7 +1,0 @@
-<p>こんにちは</p>
-<p>新しいサポートチケットが、あなたのカテゴリーに移動されました。チケットの詳細は以下の通りです:</p>
-<p>件名: %%SUBJECT%%<br />トラッキングID: %%TRACK_ID%%</p>
-<p>このチケットはこちらから管理できます:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p> </p>
-<p>敬具</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

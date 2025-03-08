@@ -1,5 +1,0 @@
-<p style="text-align:right;">سلام %%NAME%%,</p>
-<p style="text-align:right;">در زیر کد تأیید احراز هویت چند عاملی شما آمده است. این کد 20 دقیقه دیگر منقضی می شود</p>
-<p style="text-align:right;"><strong>%%VERIFICATION_CODE%%</strong></p>
-<p style="text-align:right;">با تشکر</p>
-<p style="text-align:right;">%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

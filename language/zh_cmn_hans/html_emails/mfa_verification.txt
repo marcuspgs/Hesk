@@ -1,5 +1,0 @@
-<p>您好 %%NAME%%,</p>
-<p>以下是您的多因素身份验证验证码。此代码将在20分钟内过期。</p>
-<p><strong>%%VERIFICATION_CODE%%</strong></p>
-<p>谢谢,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

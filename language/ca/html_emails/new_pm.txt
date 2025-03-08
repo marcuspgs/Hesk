@@ -1,8 +1,0 @@
-<p>Hola,</p>
-<p>Heu rebut un nou missatge privat de %%NAME%% amb el següent tema:</p>
-<p>%%SUBJECT%%</p>
-<p>Podeu veure el nou missatge prement sobre l'enllaç següent:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Podeu escollir no ser notificat de nous missatges canviant la opció al vostre perfil.</p>
-<p><strong>NO CONTESTEU AQUEST CORREU</strong><br />Aquest és un missatge de correu automàtic enviat des del sistema de suport. No contesteu aquest correu ja que no rebrem la vosra resposta, utilitzeu l'enllaç de sobre per una comunicació correcta!</p>
-<p>Atentament,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

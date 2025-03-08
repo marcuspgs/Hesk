@@ -1,9 +1,0 @@
-Witaj %%NAME%%,
-
-Dziękujemy za założenie konta. Kliknij poniższy link, aby aktywować swoje konto:
-
-%%VERIFICATION_URL%%
-
-Z poważaniem,
-%%SITE_TITLE%%
-%%SITE_URL%%

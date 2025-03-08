@@ -1,6 +1,0 @@
-<p>Liebe(r) %%NAME%%,</p>
-<p>Wir melden uns wegen Ihres kürzlich erhaltenen Tickets <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Damit wir Ihnen noch besser helfen können, würden wir uns freuen, wenn Sie uns Ihre Erfahrungen mit unserem Support-Team mitteilen.</p>
-<p>Bitte teilen Sie uns mit, wie einfach es war, Ihr Problem zu lösen <a href="%%SURVEY_URL%%">indem Sie hier klicken</a>.</p>
-<p>Wir freuen uns über Ihr Feedback. Und wie immer, wenn wir in Zukunft etwas für Sie tun können, zögern Sie bitte nicht, uns erneut zu kontaktieren.</p>
-<p>Danke,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

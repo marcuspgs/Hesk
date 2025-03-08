@@ -104,6 +104,7 @@ $info = array(
 'id'			=> $ticket['id'],
 'time_worked'   => $ticket['time_worked'],
 'last_reply_by' => hesk_getReplierName($ticket),
+'language'      => $ticket['language'],
 );
 
 // 2. Add custom fields to the array

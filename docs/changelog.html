@@ -15,7 +15,7 @@
 <tr>
 <td width="50%" style="text-align:left;vertical-align:top">
  <ul class="nobullets">
- <li>Version: 3.5.1 from 15th November 2024</li>
+ <li>Version: 3.5.2 from 12th January 2025</li>
  <li>Developed by: Klemen Stirn, Mike Koch</li>
  <li><a href="https://www.hesk.com">Help Desk Software HESK</a></li>
  <li><a href="https://www.phpjunkyard.com">Free PHP Scripts</a></li>
@@ -33,6 +33,22 @@
 </table>
 
 <h2>HESK 3 CHANGELOG</h2>
+
+<p><b>Changes in 3.5.2</b> - 12th January 2025<br />
+- you can now copy the customer email and IP address when viewing details from admin ticket<br />
+- when submitting a ticket from admin panel, the category assign settings are now used to select default owner<br />
+- added ticket subject tag for use in canned responses<br />
+- provide a way for customers to change their preferred default language<br />
+- fix: query searches by customer in replies can take a long time<br />
+- fix: SQL error when retrieving existing ticket IDs in MySQL strict mode<br />
+- fix: the "View all customers (but not manage them)" permission not showing customers<br />
+- fix: suppress admin panel submit a ticket PHP notices when Debug mode is activated<br />
+- fix: very long email IDs can be truncated when inserted into the database<br />
+- fix: allow additional characters in MySQL password<br />
+- fix: customer emails sent in default, not selected language<br />
+- fix: customer auto-login not working correctly in a specific case<br />
+- fix: preserve selected language when closing the email template edit modal<br />
+- fix: customer not always logged out automatically after password change</p>
 
 <p><b>Changes in 3.5.1</b> - 15th November 2024<br />
 - fix: cannot delete customers from the database when customer accounts are disabled<br />
@@ -1010,7 +1026,7 @@
 
 <p>&nbsp;</p>
 
-<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2024. All rights reserved.<br />
+<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2025. All rights reserved.<br />
 &reg; HESK is a registered trademark of Klemen Stirn.</p>
 
 </div>

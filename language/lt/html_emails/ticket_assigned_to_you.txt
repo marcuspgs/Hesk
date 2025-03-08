@@ -1,1 +1,0 @@
-<p>Jums buvo priskirtas naujas bilietas.<br />%%TRACK_URL%%</p>

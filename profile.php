@@ -82,9 +82,24 @@ function handle_profile_update(&$hesk_error_buffer, $customerUserContext) {
         $hesk_error_buffer['name'] = $hesklang['enter_your_name'];
     }
 
+    $language_sql = '';
+    if ($hesk_settings['can_sel_lang']) {
+        $language = hesk_input( hesk_POST('language') ) or $language = $hesk_settings['language'];
+        if (isset($hesk_settings['languages'][$language])) {
+            $language_sql = ", `language` = '".hesk_dbEscape($language)."' ";
+            if ($language != $hesk_settings['language']) {
+                hesk_setLanguage($language);
+                $customerUserContext['language'] = $language;
+                hesk_setcookie('hesk_language', $language, time()+31536000, '/');
+            }
+        }
+    }
+
     if (count($hesk_error_buffer) === 0) {
         hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
-                SET `name` = '".hesk_dbEscape($name)."'
+                SET
+                    `name` = '".hesk_dbEscape($name)."'
+                    $language_sql
                 WHERE `id` = ".intval($_SESSION['customer']['id']));
         $_SESSION['customer']['name'] = $name;
         $customerUserContext['name'] = $name;
@@ -123,7 +138,7 @@ function handle_password_change(&$hesk_error_buffer) {
         $hesk_error_buffer['password'] = $hesklang['e_new_pass'];
     } elseif (strlen($new_password) < 5) {
         $hesk_error_buffer['password'] = $hesklang['password_not_valid'];
-    } elseif (hesk_password_verify($new_password, $user_row['pass'])) {
+    } elseif (isset($user_row) && hesk_password_verify($new_password, $user_row['pass'])) {
         $hesk_error_buffer['password'] = $hesklang['customer_edit_pass_same'];
     }
 

@@ -1,5 +1,0 @@
-<p>Estimado %%NAME%%:</p>
-<p>No pudimos procesar su correo electrónico "%%SUBJECT%%" porque no tiene una cuenta con nosotros.</p>
-<p>Este servicio de asistencia técnica está disponible únicamente para usuarios registrados.</p>
-<p>Atentamente,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

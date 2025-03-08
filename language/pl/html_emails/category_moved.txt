@@ -1,7 +1,0 @@
-<p>Witaj,</p>
-<p>Nowe zgłoszenie zostało przeniesione do Twojej kategorii. Szczegóły zgłoszenia:</p>
-<p>Temat zgłoszenia: %%SUBJECT%%<br />Tracking ID: %%TRACK_ID%%</p>
-<p>Możesz zarządzać tym zgłoszeniem tutaj:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p> </p>
-<p>Pozdrawiamy,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

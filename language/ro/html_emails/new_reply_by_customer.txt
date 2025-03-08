@@ -1,5 +1,0 @@
-<p>Bună ziua,</p>
-<p>Un client tocmai a răspuns la tichet „%%SUBJECT%%”.</p>
-<p>Puteți citi mesajul de răspuns și gestionați acest tichet aici:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p>Cu stimă,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

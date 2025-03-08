@@ -1,6 +1,0 @@
-<p>Estimado %%NAME%%,</p>
-<p>Nos ponemos en contacto con Usted en relación a su reciente ticket <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Para ayudarnos a servirle mejor, nos encantaría escuchar su experiencia con nuestro equipo de soporte.</p>
-<p>Por favor, háganos saber lo fácil que fue resolver su problema <a href="%%SURVEY_URL%%">haciendo click aquí</a>.</p>
-<p>Agradecemos sus comentarios. Y como siempre, si hay algo más que podamos hacer por Usted en el futuro, no dude en volver a ponerse en contacto con nosotros..</p>
-<p>Gracias,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

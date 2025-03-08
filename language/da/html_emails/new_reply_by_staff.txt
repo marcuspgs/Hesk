@@ -1,6 +1,0 @@
-<p>Kære %%NAME%%,</p>
-<p>Vi har lige svaret på din supportsag "%%SUBJECT%%".</p>
-<p>For at læse beskeden, indsende et svar og se detaljer, besøg venligst:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a> <br /><br /></p>
-<p>Hvis ovenstående link ikke er klikbart, kan du prøve at kopiere og indsætte linket i adresselinjen i din webbrowser.</p>
-<p>Venligst,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

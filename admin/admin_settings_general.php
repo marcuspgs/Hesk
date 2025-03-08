@@ -355,7 +355,7 @@ hesk_handle_messages();
                         </a>
                     </label>
                     <div class="input-wrapper has-side-checkbox">
-                        <input type="password" class="form-control" name="s_db_pass" id="m4" maxlength="255" value="<?php echo str_replace('&', '&amp;', $hesk_settings['db_pass']); ?>" autocomplete="off">
+                        <input type="password" class="form-control" name="s_db_pass" id="m4" maxlength="255" value="<?php echo str_replace(array('&', '>', '<'), array('&amp;', '&gt;', '&lt;'), $hesk_settings['db_pass']); ?>" autocomplete="off">
                         <div class="checkbox-custom">
                             <input type="checkbox" id="m4_pass" onchange="hesk_toggleShowPassword('m4');">
                             <label for="m4_pass">

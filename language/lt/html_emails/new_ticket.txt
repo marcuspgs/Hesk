@@ -1,1 +1,0 @@
-<p>Sveiki, %%NAME%%,<br /><br />Jūsų pagalbos bilietas „%%SUBJECT%%“ buvo pateiktas.<br />Bilieto sekimo ID: %%TRACK_ID%%<br /><br />Galite peržiūrėti savo bilieto būklę čia:<br />%%TRACK_URL%%<br /><br />Kai informatikas atsakys į jūsų bilietą, gausite papildomą el. pašto pranešimą, <br /><br /><br /><br />%%SITE_TITLE%%<br />%%SITE_URL%%</p>

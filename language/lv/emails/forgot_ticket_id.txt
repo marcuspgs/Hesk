@@ -1,8 +1,0 @@
-Cienītais(-tā) %%NAME%%,
-Šajā ziņojumā ir saraksts ar pieteikumiem, kas sūtīti no Jūsu e-pasta adreses. 
-Pieteikumu skaits: %%NUM%%
-%%LIST_TICKETS%%
-Šis ziņojums ir nosūtīts automātiski. Lūgums uz to neatbildēt.
-------------------------
-%%SITE_TITLE%%
-%%SITE_URL%%

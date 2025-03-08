@@ -31,6 +31,7 @@ hesk_isLoggedIn();
 /* Check permissions for this feature */
 $can_man_customers = hesk_checkPermission('can_man_customers', false);
 $can_edit_tickets = hesk_checkPermission('can_edit_tickets', false);
+$can_view_customers = hesk_checkPermission('can_view_customers', false);
 if ($can_man_customers || (!$hesk_settings['customer_accounts'] && $can_edit_tickets)) {
     $elevation_target = !isset($_GET['track']) ?
         'manage_customers.php' :
@@ -248,7 +249,7 @@ if ( $action = hesk_REQUEST('a') )
         </div>
         <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
     </form>
-    <?php if ($can_man_customers): ?>
+    <?php if ($can_man_customers || $can_view_customers): ?>
     <?php
     $offset = ($search_pagenumber - 1) * $search_pagesize;
 
@@ -451,6 +452,10 @@ if ( $action = hesk_REQUEST('a') )
                     <tbody>
                     <?php
                     foreach ($customers as $myuser) {
+                        if (defined('HESK_DEMO')) {
+                            $myuser['email'] = 'hidden@demo.com';
+                        }
+
                         $table_row = '';
                         if (isset($_SESSION['seluser']) && is_array($_SESSION['seluser']) && in_array($myuser['id'], $_SESSION['seluser'])) {
                             $table_row = 'class="ticket-new"';
@@ -725,6 +730,10 @@ function edit_user()
     {
 		$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id`= {$id} LIMIT 1");
     	$_SESSION['userdata'] = hesk_dbFetchAssoc($res);
+
+        if (defined('HESK_DEMO')) {
+            $_SESSION['userdata']['email'] = 'hidden@demo.com';
+        }
 
         /* Store original username for display until changes are saved successfully */
         $_SESSION['original_user'] = $_SESSION['userdata']['email'];
