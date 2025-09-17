@@ -1,0 +1,5 @@
+<p>Witaj %%NAME%%,</p> 
+<p>Dziękujemy za założenie konta. Kliknij poniższy link, aby aktywować swoje konto:</p> 
+<p><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p> 
+<p>Z poważaniem,</p> 
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

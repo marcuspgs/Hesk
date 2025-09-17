@@ -1,0 +1,5 @@
+<p>Αγαπητέ/ή %%NAME%%,</p>
+<p>Αυτό το email περιέχει μια λίστα με support tickets που υποβλήθηκαν με τη διεύθυνση email σας. Αριθμός support tickets που βρέθηκαν: <strong>%%NUM%%</strong></p>
+<p>%%LIST_TICKETS%%</p>
+<p>Με εκτίμηση,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

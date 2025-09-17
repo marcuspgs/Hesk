@@ -1,0 +1,17 @@
+Vážený(á) %%NAME%%,
+
+Tento email obsahuje seznam ticketů vložených s použitím Vaší emailové adresy. Počet nalezených ticketů: %%NUM%%
+
+%%LIST_TICKETS%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

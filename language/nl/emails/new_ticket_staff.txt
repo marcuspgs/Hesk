@@ -1,0 +1,19 @@
+Er is een nieuwe supportaanvraag voor de helpdesk geplaatst.
+
+Beheer de aanvraag hier: %%TRACK_URL%%
+
+Details:
+
+Naam: %%NAME%%
+Onderwerp: %%SUBJECT%%
+Categorie: %%CATEGORY%%
+Ticket ID: %%TRACK_ID%%
+Prioriteit: %%PRIORITY%%
+
+Inhoud:
+%%MESSAGE%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

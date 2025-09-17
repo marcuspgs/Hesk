@@ -1,0 +1,10 @@
+Gentile %%NAME%%,
+
+sfortunatamente, la registrazione del tuo account è stata rifiutata.
+
+Se credi possa esserci stato un errore, prova a registrarti di nuovo.
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,5 @@
+<p>Hallo,</p>
+<p>Een klant heeft zojuist gereageerd op ticket "%%SUBJECT%%".</p>
+<p>Je kunt het antwoord hier lezen en dit ticket beheren:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

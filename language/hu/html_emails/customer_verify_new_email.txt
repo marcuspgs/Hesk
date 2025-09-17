@@ -1,0 +1,5 @@
+<p>Kedves %%NAME%%,</p>
+<p>E-mail címének megváltoztatására vonatkozó kérést kaptunk.</p>
+<p>A módosítás megerősítéséhez kattintson az alábbi linkre (1 óra múlva lejár):<br /><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>Üdvözlettel,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

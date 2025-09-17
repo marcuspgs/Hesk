@@ -21,6 +21,7 @@ require(HESK_PATH . 'inc/admin_functions.inc.php');
 hesk_load_database_functions();
 require(HESK_PATH . 'inc/email_functions.inc.php');
 require(HESK_PATH . 'inc/posting_functions.inc.php');
+require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 // We only allow POST requests from the HESK form to this file
 if ( $_SERVER['REQUEST_METHOD'] != 'POST' )
@@ -86,6 +87,11 @@ $submit_as_customer = isset($_POST['submit_as_customer']) ? true : false;
 
 // Load statuses
 require_once(HESK_PATH . 'inc/statuses.inc.php');
+
+if ($hesk_settings['staff_ticket_formatting'] == 2 && ! class_exists('DOMDocument')) {
+    $hesk_error_buffer[] = $hesklang['require_xml'];
+    $message = '';
+}
 
 if (strlen($message))
 {
@@ -252,14 +258,18 @@ if ($hesk_settings['attachments']['use'] && !empty($attachments))
     }
 }
 
+$primary_customer = hesk_get_primary_customer_for_ticket($replyto, false);
+$customer_id = $primary_customer === null ? 'NULL' : intval($primary_customer['id']);
+$customers = hesk_get_customers_for_ticket($replyto);
+$customer_emails = implode(';', array_map(function($customer) { return $customer['email']; }, $customers));
 // Add reply
 if ($submit_as_customer)
 {
-	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`message_html`,`dt`,`attachments`) VALUES ('".intval($replyto)."','".hesk_dbEscape(addslashes($ticket['name']))."','".hesk_dbEscape($message."<br /><br /><i>{$hesklang['creb']} ".addslashes($_SESSION['name'])."</i>")."','".hesk_dbEscape($message_html."<br /><br /><i>{$hesklang['creb']} ".addslashes($_SESSION['name'])."</i>")."',NOW(),'".hesk_dbEscape($myattachments)."')");
+	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`message`,`message_html`,`dt`,`attachments`,`customer_id`) VALUES ('".intval($replyto)."','".hesk_dbEscape($message."<br /><br /><i>{$hesklang['creb']} ".addslashes($_SESSION['name'])."</i>")."','".hesk_dbEscape($message_html."<br /><br /><i>{$hesklang['creb']} ".addslashes($_SESSION['name'])."</i>")."',NOW(),'".hesk_dbEscape($myattachments)."', {$customer_id})");
 }
 else
 {
-	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`message_html`,`dt`,`attachments`,`staffid`) VALUES ('".intval($replyto)."','".hesk_dbEscape(addslashes($_SESSION['name']))."','".hesk_dbEscape($message)."','".hesk_dbEscape($message_html)."',NOW(),'".hesk_dbEscape($myattachments)."','".intval($_SESSION['id'])."')");
+	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`message`,`message_html`,`dt`,`attachments`,`staffid`) VALUES ('".intval($replyto)."','".hesk_dbEscape($message)."','".hesk_dbEscape($message_html)."',NOW(),'".hesk_dbEscape($myattachments)."','".intval($_SESSION['id'])."')");
 }
 
 /* Track ticket status changes for history */
@@ -269,20 +279,7 @@ $revision = '';
 if ( ! empty($_POST['set_priority']) )
 {
     $priority = intval( hesk_POST('priority') );
-    if ($priority < 0 || $priority > 3)
-    {
-    	hesk_error($hesklang['select_priority']);
-    }
-
-	$options = array(
-		0 => $hesklang['critical'],
-		1 => $hesklang['high'],
-		2 => $hesklang['medium'],
-		3 => $hesklang['low']
-	);
-
-    $revision = sprintf($hesklang['thist8'],hesk_date(),$options[$priority],addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
-
+    $revision = sprintf($hesklang['thist8'],hesk_date(),hesk_get_priority_name($priority),addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
     $priority_sql = ",`priority`='$priority', `history`=CONCAT(`history`,'".hesk_dbEscape($revision)."') ";
 }
 else
@@ -419,13 +416,14 @@ hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` SET `re
 
 // 1. Generate the array with ticket info that can be used in emails
 $info = array(
-'email'			=> $ticket['email'],
+'email'			=> $customer_emails,
 'category'		=> $ticket['category'],
 'priority'		=> $ticket['priority'],
 'owner'			=> $ticket['owner'],
+'collaborators' => hesk_getTicketsCollaboratorIDs($ticket['id']),
 'trackid'		=> $ticket['trackid'],
 'status'		=> $new_status,
-'name'			=> $ticket['name'],
+'name'			=> $primary_customer['name'],
 'subject'		=> $ticket['subject'],
 'message'		=> stripslashes($message),
 'attachments'	=> $myattachments,
@@ -435,7 +433,7 @@ $info = array(
 'id'			=> $ticket['id'],
 'language'		=> $ticket['language'],
 'time_worked'   => $ticket['time_worked'],
-'last_reply_by'	=> ($submit_as_customer ? $ticket['name'] : $_SESSION['name']),
+'last_reply_by'	=> ($submit_as_customer ? $primary_customer['name'] : $_SESSION['name']),
 );
 
 // 2. Add custom fields to the array
@@ -457,15 +455,21 @@ $ticket = hesk_ticketToPlain($info, 1, 0);
 // Notify the assigned staff?
 if ($submit_as_customer)
 {
-	if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id'])
-	{
-		hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my');
-	}
+    hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my', 'notify_collaborator_customer_reply', array($_SESSION['id']));
 }
 // Notify customer?
 elseif ( ! isset($_POST['no_notify']) || intval( hesk_POST('no_notify') ) != 1)
 {
 	hesk_notifyCustomer('new_reply_by_staff');
+}
+
+if ($ticket['collaborators'] && ! $submit_as_customer) {
+    hesk_notifyAssignedStaff(false, 'collaborator_staff_reply', 'notify_collaborator_staff_reply', 'notify_collaborator_staff_reply', array($_SESSION['id']));
+
+    // Submitted as resolved
+    if ($submit_as_status && $new_status == 3) {
+        hesk_notifyAssignedStaff(false, 'collaborator_resolved', 'notify_collaborator_resolved', 'notify_collaborator_resolved', array($_SESSION['id']));
+    }
 }
 
 // Delete any existing drafts from this owner for this ticket

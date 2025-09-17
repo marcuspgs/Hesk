@@ -1,0 +1,13 @@
+Hallo,
+
+Er staan nieuwe klantaccounts te wachten op goedkeuring door een medewerker.
+
+Aantal goedkeuringen in behandeling: %%NUM%%
+
+Je kunt klantregistraties goedkeuren of weigeren via:
+%%VERIFICATION_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

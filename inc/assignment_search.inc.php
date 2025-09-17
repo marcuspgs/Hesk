@@ -21,6 +21,8 @@ $s_my[$fid] = empty($_GET['s_my']) ? 0 : 1;
 $s_ot[$fid] = empty($_GET['s_ot']) ? 0 : 1;
 // -> UNASSIGNED
 $s_un[$fid] = empty($_GET['s_un']) ? 0 : 1;
+// -> Collaborate
+$s_co[$fid] = 1;
 
 // Overwrite by quick links? Ignore for ticket searches
 if ( ! isset($is_quick_link))
@@ -33,6 +35,15 @@ elseif ($is_quick_link == 'my')
     $s_my[$fid] = 1;
     $s_ot[$fid] = 0;
     $s_un[$fid] = 0;
+    $s_co[$fid] = 0;
+}
+// Quick link: tickets where I am collaborator
+elseif ($is_quick_link == 'cbm')
+{
+    $s_my[$fid] = 0;
+    $s_ot[$fid] = 0;
+    $s_un[$fid] = 0;
+    $s_co[$fid] = 1;
 }
 // Quick link: assigned to other
 elseif ($is_quick_link == 'ot')
@@ -40,6 +51,7 @@ elseif ($is_quick_link == 'ot')
     $s_my[$fid] = 0;
     $s_ot[$fid] = 1;
     $s_un[$fid] = 0;
+    $s_co[$fid] = 0;
 }
 // Quick link: unassigned
 elseif ($is_quick_link == 'un')
@@ -47,6 +59,7 @@ elseif ($is_quick_link == 'un')
     $s_my[$fid] = 0;
     $s_ot[$fid] = 0;
     $s_un[$fid] = 1;
+    $s_co[$fid] = 0;
 }
 
 // Is assignment selection the same as a quick link?
@@ -69,7 +82,7 @@ if ($is_quick_link === false)
 // -> Setup SQL based on selected ticket assignments
 
 /* Make sure at least one is chosen */
-if ( ! $s_my[$fid] && ! $s_ot[$fid] && ! $s_un[$fid])
+if ( ! $s_my[$fid] && ! $s_ot[$fid] && ! $s_un[$fid] && $is_quick_link != 'cbm')
 {
 	$s_my[$fid] = 1;
 	$s_ot[$fid] = 1;
@@ -96,7 +109,7 @@ if ( ! hesk_checkPermission('can_view_unassigned',0))
 }
 
 /* Process assignments */
-if ( ! $s_my[$fid] || ! $s_ot[$fid] || ! $s_un[$fid])
+if ( ! $s_my[$fid] || ! $s_ot[$fid] || ! $s_un[$fid] )
 {
 	if ($s_my[$fid] && $s_ot[$fid])
     {
@@ -128,7 +141,7 @@ if ( ! $s_my[$fid] || ! $s_ot[$fid] || ! $s_un[$fid])
     elseif ($s_my[$fid] && $s_un[$fid])
     {
     	// My tickets + unassigned
-    	$sql .= " AND `owner` IN ('0', '" . intval($_SESSION['id']) . "') ";
+        $sql .= " AND (`w`.`user_id`=".intval($_SESSION['id'])." OR `owner` IN ('0', '" . intval($_SESSION['id']) . "')) ";
     }
     elseif ($s_ot[$fid] && $s_un[$fid])
     {

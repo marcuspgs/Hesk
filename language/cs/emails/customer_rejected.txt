@@ -1,0 +1,17 @@
+Vážený(á) %%NAME%%,
+
+Bohužel registrace Vašeho účtu byla zamítnuta.
+
+Pokud se domníváte, že se jedná o omyl, zkuste se zaregistrovat znovu.
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

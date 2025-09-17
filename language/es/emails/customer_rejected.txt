@@ -1,0 +1,10 @@
+Estimado %%NAME%%:
+
+Lamentablemente, el registro de su cuenta ha sido rechazado.
+
+Si cree que se ha producido un error, intente registrarse de nuevo.
+
+Atentamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

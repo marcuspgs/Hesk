@@ -1,0 +1,10 @@
+Chère/cher %%NAME%%,
+
+Merci de créer un compte. Cliquez sur le lien ci-dessous pour activer votre compte :
+
+%%VERIFICATION_URL%%
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

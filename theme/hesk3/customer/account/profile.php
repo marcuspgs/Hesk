@@ -26,15 +26,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
     <title><?php echo $hesk_settings['hesk_title']; ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo HESK_PATH; ?>img/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo HESK_PATH; ?>img/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo HESK_PATH; ?>img/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="<?php echo HESK_PATH; ?>img/favicon/site.webmanifest" />
-    <link rel="mask-icon" href="<?php echo HESK_PATH; ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="<?php echo HESK_PATH; ?>img/favicon/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#2d89ef" />
-    <meta name="msapplication-config" content="<?php echo HESK_PATH; ?>img/favicon/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
+    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
     <!--[if IE]>
@@ -45,8 +37,9 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 
 <body class="cust-help">
 <?php include(TEMPLATE_PATH . '../../header.txt'); ?>
+<?php renderCommonElementsAfterBody(); ?>
 <div class="wrapper">
-    <main class="main">
+    <main class="main" id="maincontent">
         <header class="header">
             <div class="contr">
                 <div class="header__inner">
@@ -54,21 +47,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
                     <?php renderLoginNavbarElements($customerUserContext); ?>
-                    <?php if ($hesk_settings['can_sel_lang']): ?>
-                        <div class="header__lang">
-                            <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
-                            <div class="dropdown-select center out-close">
-                                <select name="language" onchange="this.form.submit()">
-                                    <?php hesk_listLanguages(); ?>
-                                </select>
-                            </div>
-                            <?php foreach (hesk_getCurrentGetParameters() as $key => $value): ?>
-                            <input type="hidden" name="<?php echo hesk_htmlentities($key); ?>"
-                                   value="<?php echo hesk_htmlentities($value); ?>">
-                            <?php endforeach; ?>
-                            </form>
-                        </div>
-                    <?php endif; ?>
+                    <?php renderNavbarLanguageSelect(); ?>
                 </div>
             </div>
         </header>
@@ -100,17 +79,17 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                 <div class="ticket ticket--profile">
                     <section class="ticket__body_block naked">
                         <div class="profile__info">
-                            <h3><?php echo $hesklang['customer_edit_profile']; ?></h3>
+                            <h1><?php echo $hesklang['customer_edit_profile']; ?></h1>
                             <?php if ( ! $userCanChangeEmail): ?>
                                 <div class="form-group">
                                     <label class="label"><?php echo $hesklang['email']; ?>:</label>
                                     <?php echo $customerUserContext['email']; ?>
                                 </div>
                             <?php endif; ?>
-                            <form action="profile.php" method="post" class="form ticket-create" novalidate>
+                            <form action="profile.php" method="post" aria-label="<?php echo $hesklang['customer_edit_profile']; ?>" class="form ticket-create" novalidate>
                                 <div class="form-group required">
-                                    <label class="label"><?php echo $hesklang['name']; ?>:</label>
-                                    <input type="text" name="name" maxlength="255"
+                                    <label class="label" for="name"><?php echo $hesklang['name']; ?>:</label>
+                                    <input type="text" id="name" name="name" maxlength="255"
                                            class="form-control <?php if (in_array('name', $validationFailures)) {echo 'isError';} ?>"
                                            value="<?php echo $customerUserContext['name']; ?>"
                                            required>
@@ -118,7 +97,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                 </div>
                                 <?php if ($hesk_settings['can_sel_lang']): ?>
                                 <div class="form-group">
-                                    <label class="label"><?php echo $hesklang['chol']; ?>:</label>
+                                    <label class="label" for="preferred-language"><?php echo $hesklang['chol']; ?>:</label>
                                     <select class="" name="language" id="preferred-language">
                                     <?php
                                     foreach ($hesk_settings['languages'] as $lang => $info) {
@@ -141,26 +120,26 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                     </section>
                     <section class="ticket__body_block naked">
                         <div class="profile__info">
-                            <h3><?php echo $hesklang['customer_edit_pass']; ?></h3>
-                            <form action="profile.php" method="post" class="form ticket-create" novalidate>
+                            <h2><?php echo $hesklang['customer_edit_pass']; ?></h2>
+                            <form action="profile.php" method="post" aria-label="<?php echo $hesklang['customer_edit_pass']; ?>" class="form ticket-create" novalidate>
                                 <?php hesk_show_info($hesklang['cur_pass2'] . '<br><br>' . $hesklang['cur_pass3'], ' ', false); ?>
                                 <div class="form-group required">
-                                    <label class="label"><?php echo $hesklang['cur_pass']; ?></label>
-                                    <input type="password" name="current-password" maxlength="255"
+                                    <label class="label" for="current-password"><?php echo $hesklang['cur_pass']; ?></label>
+                                    <input type="password" id="current-password" name="current-password" maxlength="255"
                                            class="form-control <?php if (in_array('current-password', $validationFailures)) {echo 'isError';} ?>"
                                            required>
                                     <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
                                 </div>
                                 <div class="form-group required">
-                                    <label class="label"><?php echo $hesklang['new_pass']; ?></label>
-                                    <input type="password" name="password" maxlength="255"
+                                    <label class="label" for="password"><?php echo $hesklang['new_pass']; ?></label>
+                                    <input type="password" id="password" name="password" maxlength="255"
                                            class="form-control <?php if (in_array('password', $validationFailures)) {echo 'isError';} ?>"
                                            required>
                                     <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
                                 </div>
                                 <div class="form-group required">
-                                    <label class="label"><?php echo $hesklang['confirm_new_pass']; ?></label>
-                                    <input type="password" name="confirm-password" maxlength="255"
+                                    <label class="label" for="confirm-password"><?php echo $hesklang['confirm_new_pass']; ?></label>
+                                    <input type="password" id="confirm-password" name="confirm-password" maxlength="255"
                                            class="form-control <?php if (in_array('confirm-password', $validationFailures)) {echo 'isError';} ?>"
                                            required>
                                     <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
@@ -188,16 +167,16 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                     <?php if ($userCanChangeEmail): ?>
                     <section class="ticket__body_block naked">
                         <div class="profile__info">
-                            <h3><?php echo $hesklang['customer_change_email']; ?></h3>
+                            <h2><?php echo $hesklang['customer_change_email']; ?></h2>
                             <?php
                             if ( ! is_null($pendingEmailChange)) {
                                 hesk_show_notice(sprintf($hesklang['customer_change_email_pending'], $pendingEmailChange['new_email']) . ($pendingEmailChange['email_sent_too_recently'] ? '' : '<br><br>' . $hesklang['customer_change_resend']), ' ', false);
                             }
                             ?>
-                            <form action="profile.php" method="post" class="form ticket-create" novalidate>
+                            <form action="profile.php" method="post" aria-label="<?php echo $hesklang['customer_change_email']; ?>" class="form ticket-create" novalidate>
                                 <div class="form-group required">
-                                    <label class="label"><?php echo $hesklang['email']; ?></label>
-                                    <input type="email" name="email" maxlength="255"
+                                    <label class="label" for="email"><?php echo $hesklang['email']; ?></label>
+                                    <input type="email" id="email" name="email" maxlength="255"
                                            class="form-control <?php if (in_array('email', $validationFailures)) {echo 'isError';} ?>"
                                            value="<?php echo $customerUserContext['email']; ?>"
                                            required>
@@ -217,21 +196,27 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                     <?php endif; ?>
                     <section class="ticket__body_block naked">
                         <div class="profile__info">
-                            <h3><?php echo $hesklang['mfa']; ?></h3>
+                            <h2><?php echo $hesklang['mfa']; ?></h2>
                             <div class="subtext">
-                                <?php if ($customerUserContext['mfa_enrollment'] === '0') { ?>
-                                    <div class="text-danger">
-                                        <?php echo $hesklang['mfa_disabled']; ?>
-                                    </div>
-                                <?php } elseif ($customerUserContext['mfa_enrollment'] === '1') { ?>
+                                <?php if ($customerUserContext['mfa_enrollment'] === '0'): ?>
+                                    <?php if ($hesk_settings['require_mfa_customers'] && strlen($customerUserContext['email'])): ?>
                                     <div class="text-success">
                                         <?php echo sprintf($hesklang['mfa_enabled'], $hesklang['mfa_method_email']); ?>
                                     </div>
-                                <?php } elseif ($customerUserContext['mfa_enrollment'] === '2') { ?>
+                                    <?php else: ?>
+                                    <div class="text-danger">
+                                        <?php echo $hesklang['mfa_disabled']; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                <?php elseif ($customerUserContext['mfa_enrollment'] === '1'): ?>
+                                    <div class="text-success">
+                                        <?php echo sprintf($hesklang['mfa_enabled'], $hesklang['mfa_method_email']); ?>
+                                    </div>
+                                <?php elseif ($customerUserContext['mfa_enrollment'] === '2'): ?>
                                     <div class="text-success">
                                         <?php echo sprintf($hesklang['mfa_enabled'], $hesklang['mfa_method_auth_app']); ?>
                                     </div>
-                                <?php } ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="profile__control">

@@ -1,0 +1,6 @@
+<p>Witaj %%NAME%%,</p>
+<p>Kontaktujemy się w sprawie zgłoszenia <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Abyśmy mogli lepiej Ci służyć, chętnie poznamy Twoje doświadczenia z naszym zespołem wsparcia.</p>
+<p>Daj nam znać, jak łatwo było rozwiązać Twój problem <a href="%%SURVEY_URL%%">klikając w ten link</a>.</p>
+<p>Jesteśmy wdzięczni za Twoją opinię. I jak zawsze, jeśli będziemy mogli jeszcze coś dla Ciebie zrobić w przyszłości, nie wahaj się z nami skontaktować ponownie.</p>
+<p>Dziękujemy,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

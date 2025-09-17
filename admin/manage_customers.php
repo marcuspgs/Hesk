@@ -255,12 +255,12 @@ if ( $action = hesk_REQUEST('a') )
 
     $where_clause = 'WHERE 1=1 ';
     if ($search_name) {
-        $where_clause .= "AND `name` LIKE '%".hesk_dbEscape($search_name)."%' ";
+        $where_clause .= "AND `hc`.`name` LIKE '%".hesk_dbEscape($search_name)."%' ";
     }
     if ($search_email) {
-        $where_clause .= "AND `email` LIKE '%".hesk_dbEscape($search_email)."%'";
+        $where_clause .= "AND `hc`.`email` LIKE '%".hesk_dbEscape($search_email)."%'";
     }
-    $count_res = hesk_dbQuery("SELECT COUNT(1) AS `cnt` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
+    $count_res = hesk_dbQuery("SELECT COUNT(1) AS `cnt` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `hc`
                     {$where_clause}");
     $total_count = 0;
     if ($row = hesk_dbFetchAssoc($count_res)) {
@@ -275,84 +275,37 @@ if ( $action = hesk_REQUEST('a') )
         $total_count = intval($row['cnt']);
     }
 
-    if (!in_array($search_sort_column, ['id', 'name', 'email'])) {
+    if (!in_array($search_sort_column, ['id', 'name', 'email', 'tickets'])) {
         $search_sort_column = 'name';
     }
     $sql_sort = 'DESC';
     if ($search_sort_direction !== '') {
         $sql_sort = $search_sort_direction === 'ASC' ? 'ASC' : 'DESC';
     }
-    $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+    $res = hesk_dbQuery("SELECT `hc`.*, COUNT(CASE WHEN htc.customer_type = 'REQUESTER' THEN 1 END) AS `tickets`, COUNT(CASE WHEN htc.customer_type = 'FOLLOWER' THEN 1 END) AS `following`
+                    FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `hc`
+                    LEFT JOIN `hesk_ticket_to_customer` AS `htc` ON `hc`.`id` = `htc`.`customer_id`
                     {$where_clause}
-                    ORDER BY CASE WHEN `verified` = 2 THEN 0 ELSE 1 END ASC, `{$search_sort_column}` {$search_sort_direction}
+                    GROUP BY `hc`.`id`, `hc`.`name`, `hc`.`email`
+                    ORDER BY CASE WHEN `hc`.`verified` = 2 THEN 0 ELSE 1 END ASC, `{$search_sort_column}` {$search_sort_direction}
                     LIMIT {$search_pagesize} OFFSET {$offset}");
     $customers = [];
     while ($customer = hesk_dbFetchAssoc($res)) {
-        $customers[] = $customer;
+        $customers[$customer['id']] = $customer;
     }
     $customer_ids = count($customers) > 0 ?
         array_map(function($customer) { return intval($customer['id']); }, $customers) :
         [-1];
 
-    $customers_per_ticket = [];
-    $customers_per_ticket_rs = hesk_dbQuery('SELECT COUNT(1) AS `cnt`, `customer_mappings`.`ticket_id` AS `ticket_id` 
-                        FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` AS `tickets` 
-                        INNER JOIN `'.hesk_dbEscape($hesk_settings['db_pfix']).'ticket_to_customer` AS `customer_mappings`
-                            ON `tickets`.`id` = `customer_mappings`.`ticket_id`
-                        WHERE `customer_mappings`.`customer_id` IN ('.implode(',', $customer_ids).')
-                        GROUP BY `customer_mappings`.`ticket_id`');
-    while ($row = hesk_dbFetchAssoc($customers_per_ticket_rs)) {
-        $customers_per_ticket[$row['ticket_id']] = intval($row['cnt']);
-    }
-
-
-    $tickets_per_user = array();
-    $tickets_per_user_rs = hesk_dbQuery('SELECT `customer_mappings`.`ticket_id` AS `ticket_id`, 
-                                                            `customer_mappings`.`customer_id` AS `customer_id`, 
-                                                            CASE WHEN `status` = 3 THEN 0 ELSE 1 END AS `open` 
-                        FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` AS `tickets` 
-                        INNER JOIN `'.hesk_dbEscape($hesk_settings['db_pfix']).'ticket_to_customer` AS `customer_mappings`
-                            ON `tickets`.`id` = `customer_mappings`.`ticket_id`
-                        WHERE `customer_mappings`.`customer_id` IN ('.implode(',', $customer_ids).')');
-    while ($row = hesk_dbFetchAssoc($tickets_per_user_rs)) {
-        if (!isset($tickets_per_user[$row['customer_id']])) {
-            $tickets_per_user[$row['customer_id']] = array(
-                'open' => 0,
-                'open_multiple_customers' => 0,
-                'closed' => 0,
-                'closed_multiple_customers' => 0,
-                'total' => 0,
-                'total_multiple_customers' => 0
-            );
-        }
-
-        $tickets_per_user[$row['customer_id']]['total']++;
-        if ($row['open']) {
-            $tickets_per_user[$row['customer_id']]['open']++;
-        } else {
-            $tickets_per_user[$row['customer_id']]['closed']++;
-        }
-
-        if ($customers_per_ticket[$row['ticket_id']] > 1) {
-            $tickets_per_user[$row['customer_id']]['total_multiple_customers']++;
-
-            if ($row['open']) {
-                $tickets_per_user[$row['customer_id']]['open_multiple_customers']++;
-            } else {
-                $tickets_per_user[$row['customer_id']]['closed_multiple_customers']++;
-            }
-        }
-    }
     $delete_modal_ids = [];
     foreach ($customers as $customer) {
         if ($can_man_customers) {
-            $modal_body = $hesklang['sure_remove_customer']."<br>".$hesklang['sure_remove_customer_additional_note'];
-            if (isset($tickets_per_user[$customer['id']]) && $tickets_per_user[$customer['id']]['total_multiple_customers'] > 0) {
-                $total_tickets = $tickets_per_user[$customer['id']]['total_multiple_customers'];
-                $open_tickets = $tickets_per_user[$customer['id']]['open_multiple_customers'];
+            $modal_body = $hesklang['sure_remove_customer']."<br>".$hesklang['sure_remove_customer_additional_note']."<br>";
 
+            // What to do with tickets opened by this customer?
+            if (isset($customer['tickets']) && $customer['tickets'] > 0) {
                 $modal_body .= '<br><div class="notification orange" style="margin-bottom: 5px">';
-                $modal_body .= sprintf($hesklang['deleting_customer_with_tickets'], $total_tickets, $open_tickets);
+                $modal_body .= sprintf($hesklang['deleting_customer_tickets'], $customer['tickets']);
                 $modal_body .= '</div>';
                 $modal_body .= '
                                 <div class="radio-center">
@@ -360,25 +313,33 @@ if ( $action = hesk_REQUEST('a') )
                                         <div class="radio-custom">
                                             <input type="radio" id="delete-method-retain-'.$customer['id'].'" name="delete-method" value="retain" checked>
                                             <label for="delete-method-retain-'.$customer['id'].'">
-                                                <strong>'. $hesklang['deleting_customer_retain_tickets'] .'</strong><br>
+                                                <strong>'. $hesklang['deleting_customer_retain_tickets2'] .'</strong><br>
                                             </label>
                                         </div>
                                         <div class="radio-custom">
                                             <input type="radio" id="delete-method-anonymize-'.$customer['id'].'" name="delete-method" value="anonymize">
                                             <label for="delete-method-anonymize-'.$customer['id'].'">
-                                                <strong>'. $hesklang['deleting_customer_anonymize_tickets'] .'</strong><br>
+                                                <strong>'. $hesklang['deleting_customer_anonymize_tickets2'] .'</strong><br>
                                             </label>
                                         </div>
                                         <div class="radio-custom">
                                             <input type="radio" id="delete-method-delete-'.$customer['id'].'" name="delete-method" value="delete">
                                             <label for="delete-method-delete-'.$customer['id'].'">
-                                                <strong>'. $hesklang['deleting_customer_delete_tickets'] .'</strong><br>
+                                                <strong>'. $hesklang['deleting_customer_delete_tickets2'] .'</strong><br>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                                 ';
             }
+
+            // Tickets folowed by this customer:
+            if (isset($customer['following']) && $customer['following'] > 0) {
+                $modal_body .= '<br><div class="notification blue" style="margin-bottom: 5px">';
+                $modal_body .= sprintf($hesklang['deleting_customer_follower'], $customer['following']);
+                $modal_body .= '</div>';
+            }
+
             $modal_body .= '<input type="hidden" name="a" value="remove">
                             <input type="hidden" name="id" value="'.$customer['id'].'">
                             <input type="hidden" name="token" value="'.hesk_token_echo(0).'">';
@@ -439,6 +400,14 @@ if ( $action = hesk_REQUEST('a') )
                             <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'email', $search_sort_direction); ?>">
                                 <div class="sort">
                                     <span><?php echo $hesklang['email']; ?></span>
+                                    <i class="handle"></i>
+                                </div>
+                            </a>
+                        </th>
+                        <th class="sindu-handle <?php echo $search_sort_column === 'tickets' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
+                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'tickets', $search_sort_direction); ?>">
+                                <div class="sort">
+                                    <span><?php echo $hesklang['not']; ?></span>
                                     <i class="handle"></i>
                                 </div>
                             </a>
@@ -533,6 +502,7 @@ $checkbox_code
 <td>$myuser[id]</td>
 <td>$myuser[name]</td>
 <td><a href="mailto:$myuser[email]">$myuser[email]</a></td>
+<td><a href="find_tickets.php?what=customer&amp;q={$myuser['id']}&amp;s_my=1&amp;s_ot=1&amp;s_un=1">$myuser[tickets]</a></td>
 
 EOC;
 
@@ -853,13 +823,14 @@ function update_user()
     $myuser['id'] = $tmp;
 
     /* Check for duplicate emails.  Don't care about registration state as the staff member can update an existing record */
-    $result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
-	    WHERE `email` = '".hesk_dbEscape($myuser['email'])."'
-	        AND `id` <> ".intval($myuser['id'])." 
-	    LIMIT 1");
-    if (hesk_dbNumRows($result) != 0)
-    {
-        hesk_process_messages($hesklang['customer_email_exists'],'manage_customers.php');
+    if ( ! empty($myuser['email'])) {
+        $result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+            WHERE `email` = '".hesk_dbEscape($myuser['email'])."'
+                AND `id` <> ".intval($myuser['id'])."
+            LIMIT 1");
+        if (hesk_dbNumRows($result) != 0) {
+            hesk_process_messages($hesklang['customer_email_exists'],'manage_customers.php');
+        }
     }
 
 	$res = hesk_dbQuery("SELECT `id`, `verified` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id` = ".intval($tmp));
@@ -995,36 +966,32 @@ function remove()
 	$myuser = intval( hesk_GET('id' ) ) or hesk_error($hesklang['no_valid_id']);
 
     // Make sure we have permission to edit this user
-    if (!$can_man_customers)
-    {
+    if (!$can_man_customers) {
         hesk_process_messages($hesklang['customer_permission_denied'],'manage_customers.php');
     }
 
-    // Delete solo tickets for customer
-    hesk_deleteTicketsForCustomer($myuser);
-
-    // What should we do with the customer's tickets that have multiple customers?
+    // Should we delete or anonymize tickets opened by this customer?
     $delete_method = hesk_GET('delete-method');
     if ($delete_method === 'delete') {
-        // Delete tickets
-        hesk_deleteTicketsForCustomer($myuser, false);
+        hesk_deleteTicketsForCustomer($myuser);
     } elseif ($delete_method === 'anonymize') {
-        // Anonymize tickets
         hesk_anonymizeTicketsForCustomer($myuser);
     } else {
-        // Remove customer from tickets, but leave the tickets alone
-        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` WHERE `customer_id` = ".$myuser);
+        // Keep tickets
     }
 
-    /* Delete user info */
+    // Remove customer from all tickets
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` WHERE `customer_id` = ".$myuser);
+
+    // Delete user info
 	$res = hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id`='".$myuser."'");
-	if (hesk_dbAffectedRows() != 1)
-    {
+	if (hesk_dbAffectedRows() != 1) {
         hesk_process_messages($hesklang['int_error'].': '.$hesklang['user_not_found'],'./manage_customers.php');
     }
 
-    // Clear users' MFA tokens
+    // Clear users' MFA tokens and backup codes
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$myuser} AND `user_type` = 'CUSTOMER'");
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` WHERE `user_id` = {$myuser} AND `user_type` = 'CUSTOMER'");
 
     hesk_process_messages($hesklang['sel_user_removed'],'./manage_customers.php','SUCCESS');
 } // End remove()
@@ -1166,10 +1133,10 @@ function handle_bulk_action() {
         }
         $message = $hesklang['customer_manage_bulk_reject_complete'];
     } elseif (isset($_POST['bulk_delete'])) {
-        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
-            SET `verified` = 0,
-                `pass` = NULL
-            WHERE `id` IN (".implode(',', $ids).")");
+        foreach ($ids as $customer_id) {
+            $_GET['id'] = $customer_id;
+            delete_registration(false);
+        }
         $message = $hesklang['customer_manage_bulk_delete_complete'];
     } else {
         hesk_error($hesklang['int_error'].': '.$hesklang['invalid_action']);

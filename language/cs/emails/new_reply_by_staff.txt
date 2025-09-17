@@ -1,0 +1,17 @@
+Vážený(á) %%NAME%%,
+
+náš tým podpory právě odpověděl na Váš ticket: "%%SUBJECT%%"
+
+Ticket můžete zobrazit na adrese:
+%%TRACK_URL%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+tým podpory
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,15 @@
+Üdvözöljük!
+
+Egy új hibajegy került beküldésre. Hibajegy részletei:
+
+Hibajegy tárgya: %%SUBJECT%%
+Azonosító ID: %%TRACK_ID%%
+
+Itt tudja kezelni a hibajegyet:
+%%TRACK_URL%%
+
+
+Üdvözlettel,
+
+HelpDesk
+Adminisztrátor

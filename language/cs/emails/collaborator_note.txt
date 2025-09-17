@@ -1,0 +1,21 @@
+Dobrý den,
+
+Byla přidána nová poznámka k ticketu "%%SUBJECT%%" na kterém spolupracujete.
+
+Poznámka od %%NAME%%:
+
+%%MESSAGE%%
+
+Tento ticket můžete spravovat na následující adrese:
+%%TRACK_URL%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+%%SITE_TITLE%%
+%%SITE_URL%%

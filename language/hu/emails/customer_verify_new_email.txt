@@ -1,0 +1,11 @@
+Kedves %%NAME%%,
+
+E-mail címének megváltoztatására vonatkozó kérést kaptunk.
+
+A módosítás megerősítéséhez kattintson az alábbi linkre (1 óra múlva lejár):
+%%VERIFICATION_URL%%
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

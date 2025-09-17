@@ -1,0 +1,5 @@
+<p>Estimado %%NAME%%:</p>
+<p>Se ha aprobado el registro de su cuenta.</p>
+<p>Ahora puede iniciar sesión a continuación con el nombre de usuario y la contraseña que utilizó al crear su cuenta:<br /><a href="%%CUSTOMER_LOGIN_URL%%">%%CUSTOMER_LOGIN_URL%%</a></p>
+<p>Atentamente,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

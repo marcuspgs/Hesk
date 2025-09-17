@@ -1,0 +1,10 @@
+Sayın %%NAME%%,
+
+Ne yazık ki, hesap oluşturma talebiniz reddedildi.
+
+Bunun hatalı bir işlem olduğunu düşünüyorsanız, lütfen tekrar kayıt olmayı deneyin.
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

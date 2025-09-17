@@ -1,0 +1,14 @@
+Hallo,
+
+Medewerker %%NAME%% heeft zojuist gereageerd op een supportticket.
+
+Onderwerp van het ticket: %%SUBJECT%%
+Tracking-ID: %%TRACK_ID%%
+
+Je kunt dit ticket hier beheren:
+%%TRACK_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

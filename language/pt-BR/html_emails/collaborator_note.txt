@@ -1,0 +1,7 @@
+<p>Olá,</p>
+<p>Uma nova nota foi adicionada ao ticket "%%SUBJECT%%" no qual você colabora.</p>
+<p>Nota por %%NAME%%:</p>
+<p>%%MESSAGE%%</p>
+<p>Você pode gerenciar este ticket aqui:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Atenciosamente,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

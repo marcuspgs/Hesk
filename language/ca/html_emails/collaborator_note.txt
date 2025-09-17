@@ -1,0 +1,7 @@
+<p>Hola,</p>
+<p>S'ha afegit una nova nota al tiquet "%%SUBJECT%%" en què col·labores.</p>
+<p>Nota de %%NAME%%:</p>
+<p>%%MESSAGE%%</p>
+<p>Pots gestionar aquest tiquet aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Salutacions,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

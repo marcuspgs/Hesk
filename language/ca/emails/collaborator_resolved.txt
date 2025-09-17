@@ -1,0 +1,14 @@
+Hola,
+
+Un tiquet en què col·labores ha estat resolt. Detalls del tiquet:
+
+Assumpte del tiquet: %%SUBJECT%%
+ID de seguiment: %%TRACK_ID%%
+
+Pots gestionar aquest tiquet aquí:
+%%TRACK_URL%%
+
+Salutacions,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,20 @@
+Dobrý den,
+
+do Vámi obsluhované kategorie byl přesunut ticket:
+
+Předmět ticketu: %%SUBJECT%% ID ticketu: %%TRACK_ID%%
+
+Tento ticket můžete spravovat na následující adrese:
+%%TRACK_URL%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

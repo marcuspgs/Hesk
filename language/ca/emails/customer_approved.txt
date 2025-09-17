@@ -1,0 +1,11 @@
+Benvolgut %%NAME%%,
+
+S'ha aprovat el registre del vostre compte.
+
+Ara podeu iniciar sessió a continuació amb el nom d'usuari i la contrasenya que vau utilitzar en crear el vostre compte:
+%%CUSTOMER_LOGIN_URL%%
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

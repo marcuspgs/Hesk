@@ -3,7 +3,7 @@
 *
 * Language file for Help Desk Software HESK (https://www.hesk.com)
 * Language: Català (Catalan)
-* Version: 3.4.x
+* Version: 3.6.x
 *
 * ==> CONTRIBUTORS
 *
@@ -1465,7 +1465,6 @@ $hesklang['d_custom']='Format personalitzat';
 $hesklang['d_ci']='NOMÉS PER A USUARIS AVANÇATS: Un format de data PHP vàlid, consulteu el manual de PHP.';
 $hesklang['cf_noe']='Introduïu una adreça de correu electrònic vàlida a <i>%s</i>';
 $hesklang['cf_noem']='Introduïu una o més adreces de correu electrònic vàlides a <i>%s</i>';
-$hesklang['cf_limit']='Tens 50 camps personalitzats actius, no se\'n poden crear de nous.';
 $hesklang['can_resolve']='Podeu resoldre tiquets';
 $hesklang['can_change_own_cat']='Canviar categoria de tiquet (permès)';
 $hesklang['can_submit_any_cat']='Podeu enviar tiquets a qualsevol categoria';
@@ -2125,6 +2124,472 @@ $hesklang['can_due_date']='Podeu establir la data de venciment'; // Permission t
 $hesklang['can_due_date_e']='No teniu permís per establir dates de venciment';
 
 // Added in version 3.5.0
+$hesklang['customer_verify_registration']='Verifiqueu el vostre registre';
+$hesklang['customer_verify_new_email']='Verifiqueu la vostra nova adreça de correu electrònic';
+$hesklang['customer_reset_password']='Restabliu la contrasenya de suport tècnic';
+$hesklang['customer_approved']='Compte aprovat';
+$hesklang['customer_rejected']='Compte rebutjat';
+$hesklang['email_rejected']='Compte necessari per enviar tiquets de suport';
+$hesklang['require_curl']='Aquesta funcionalitat requereix compatibilitat amb <strong>cURL</strong> per a PHP habilitada al vostre servidor. Demaneu al vostre proveïdor d\'allotjament web que habiliti cURL per a PHP.';
+$hesklang['customer_accounts_heading']='Comptes de clients';
+$hesklang['customer_accounts']='Comptes de clients';
+$hesklang['customer_accounts_off']='<strong>Deshabilitat</strong>';
+$hesklang['customer_accounts_allowed']='<strong>Habilitat: opcional</strong> (els clients poden enviar tiquets de suport sense registrar-se ni iniciar sessió)';
+$hesklang['customer_accounts_required_to_submit']='<strong>Habilitat: obligatori per als tiquets</strong> (només els clients que hagin iniciat sessió poden enviar tiquets de suport)';
+$hesklang['customer_accounts_required']='<strong>Habilitat: obligatori per accedir</strong> (només els clients que hagin iniciat sessió poden accedir al servei d\'assistència ia la base de coneixements)';
+$hesklang['customer_accounts_reg']='Registre de compte';
+$hesklang['customer_accounts_reg_customer']='Els clients poden registrar comptes';
+$hesklang['customer_accounts_reg_approve']='Els clients poden registrar comptes, el personal ha d\'aprovar els registres nous';
+$hesklang['customer_accounts_reg_staff']='Només el personal pot registrar comptes de clients';
+$hesklang['customer_accounts_allow_email_changes']='Permetre que els clients canviïn la vostra adreça de correu electrònic';
+$hesklang['customer_accounts_allow_email_resends']='Temps fins que els clients puguin sol·licitar un nou correu electrònic de verificació';
+$hesklang['customer_login']='Iniciar sessió';
+$hesklang['customer_logout']='Tancar sessió';
+$hesklang['customer_register']='Registrar-se';
+$hesklang['customer_accounts_disabled']='Els inicis de sessió i registres de clients estan deshabilitats.';
+$hesklang['customer_accounts_registration_disabled']='Els registres de clients estan deshabilitats.';
+$hesklang['customer_forgot_password']='Heu oblidat la vostra contrasenya?';
+$hesklang['customer_email']='Adreça de correu electrònic';
+$hesklang['customer_accounts_email_banned']='Se us ha prohibit utilitzar aquest servei d\'assistència.';
+$hesklang['customer_registration_successful']='Registre exitós!';
+$hesklang['customer_registration_email_exists_no_reset_link']='Ja existeix un compte amb el correu electrònic %s.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists']='Ja existeix un compte amb el correu electrònic %s. <a href="login.php">Voleu iniciar sessió al vostre lloc</a>?'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_email_verification']='Ja existeix un compte amb el correu electrònic %s i està pendent de verificació de correu electrònic.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_approval']='Ja hi ha un compte amb el correu electrònic %s i està pendent d\'aprovació del personal.'; // %s - Entered email address
+$hesklang['customer_registration_check_your_email']='Reviseu el vostre correu electrònic!';
+$hesklang['customer_registration_check_your_email_content']='Ha de verificar la seva adreça de correu electrònic abans de poder iniciar sessió.<br><br>Si no el rep en uns minuts, reviseu les vostres carpetes de correu no desitjat, escombraries o correu brossa. Marqueu el missatge com a <b>No SPAM</b> per evitar problemes en rebre la nostra correspondència en el futur.';
+$hesklang['customer_login_not_verified']='Heu de verificar la vostra adreça de correu electrònic abans de poder iniciar sessió.';
+$hesklang['customer_login_not_verified2']='Si no heu rebut el nostre correu electrònic de verificació, reviseu les vostres carpetes de correu brossa, escombraries o correu brossa. Marqueu el missatge com a <b>No SPAM</b> per evitar problemes en rebre la nostra correspondència en el futur.';
+$hesklang['customer_login_resend_verification_email']='Reenviar correu electrònic de verificació';
+$hesklang['customer_login_resend_verification_email_none']='No hi ha verificacions de correu electrònic pendents per enviar.';
+$hesklang['customer_login_resend_verification_email_too_early']='No podeu sol·licitar un nou correu electrònic de verificació en aquest moment, torneu-ho a provar més tard.';
+$hesklang['customer_login_not_approved']='Un membre del personal ha d\'aprovar el vostre compte abans de poder iniciar sessió. Un cop aprovada, se us notificarà per correu electrònic.'; // %s - Resend email notification link
+$hesklang['customer_registration_verify_header']='Verificar registre';
+$hesklang['customer_registration_verify_success']='El vostre correu electrònic ha estat verificat i ara podeu iniciar sessió utilitzant el formulari a continuació.';
+$hesklang['customer_registration_verify_approval_needed']='El vostre correu electrònic ha estat verificat. No obstant això, un membre del personal ha d\'aprovar el vostre compte abans de poder iniciar sessió. Un cop aprovada, se us notificarà per correu electrònic.';
+$hesklang['customer_registration_verify_failure']='No s\'ha pogut verificar el vostre correu electrònic. L\'enllaç ja s\'ha utilitzat o expirat.';
+$hesklang['emails_to_customers']='&raquo; Correus electrònics enviats a clients';
+$hesklang['emails_to_staff']='&raquo; Correus electrònics enviats al personal';
+$hesklang['emails_to_everyone']='&raquo; Correus electrònics enviats al personal o als clients';
+$hesklang['new_customer_approval']='Té comptes de clients pendents d\'aprovació'; // Email subject
+$hesklang['desc_new_customer_approval']='(Personal) Comptes de clients pendents d\'aprovació';
+$hesklang['n_cust_app']='Hi ha aprovacions de clients pendents'; // Notify me when...
+$hesklang['et_num_customers']='Nombre d\'aprovacions pendents';
+$hesklang['et_link_customers']='Enllaç a la pàgina Administrar clients';
+$hesklang['et_link_verify']='Enllaç de verificació';
+$hesklang['et_cust_login']='URL d\'inici de sessió del client';
+$hesklang['submit_ticket_customer_email_exists']='Ja existeix un client amb aquest correu electrònic. Si us plau, <a href="login.php?email=%s">inicieu sessió</a> per enviar un tiquet.'; // %s - User's email
+$hesklang['customer_login_email_required']='Si us plau, introduïu una adreça de correu electrònic vàlida.';
+$hesklang['customer_login_password_required']='Si us plau, introduïu la vostra contrasenya.';
+$hesklang['customer_login_remember_just_email']='Recordar només el meu correu electrònic';
+$hesklang['customer_login_remember_email']='Recordar el meu correu electrònic';
+$hesklang['customer_wrong_user']='La vostra adreça de correu electrònic %s no està registrada amb nosaltres.<br><br>Voleu <a href="register.php">crear un compte</a>?'; // %s - Entered email address
+$hesklang['customer_wrong_pass']='La vostra adreça de correu electrònic i contrasenya no coincideixen amb els nostres registres.<br><br>Voleu <a href="login.php?submittedForgot=1">restablir la contrasenya</a >?';
+$hesklang['customer_must_be_logged_in_to_view']='Inicia sessió per continuar.';
+$hesklang['customer_register_here']='Si no teniu un compte amb nosaltres, podeu <a href="register.php">registrar-vos aquí</a>.';
+$hesklang['create_account']='Crear un compte';
+$hesklang['customer_my_tickets_heading']='Els meus tiquets';
+$hesklang['customer_my_tickets_description']='Veure tots els vostres tiquets anteriors';
+$hesklang['customer_my_tickets_search_for_tickets']='Cerca tiquets';
+$hesklang['customer_password_reset_successful']='La nova contrasenya ha estat guardada. Ara podeu iniciar sessió.';
+$hesklang['customer_profile']='Perfil';
+$hesklang['customer_edit_profile']='Editar perfil';
+$hesklang['customer_edit_pass']='Edita la contrasenya';
+$hesklang['customer_edit_pass_same']='La nova contrasenya no ha de ser la mateixa que l\'actual.';
+$hesklang['customer_change_email']='Canviar correu electrònic';
+$hesklang['customer_change_email_banned']='El correu electrònic que heu introduït està prohibit.';
+$hesklang['customer_change_email_pending']='Hi ha una sol·licitud actual per canviar la vostra adreça de correu electrònic a: <b>%s</b><br><br>Hem enviat un correu electrònic a aquesta adreça. Feu clic a l\'enllaç dins del correu electrònic per confirmar el canvi.'; // %s - new email
+$hesklang['customer_change_resend']='<a href="profile.php?action=email-resend">Reenviar correu electrònic de confirmació</a>';
+$hesklang['customer_change_email_submitted']='Feu clic a l\'enllaç de verificació que es va enviar a <b>%s</b> per verificar el nou correu electrònic.'; // %s - new email
+$hesklang['customer_change_email_verify_success']='La nova adreça de correu electrònic ha estat verificada i el vostre perfil actualitzat.';
+$hesklang['customer_change_email_disabled']='La possibilitat d\'actualitzar el vostre correu electrònic està deshabilitada. Poseu-vos en contacte amb nosaltres si voleu canviar la vostra adreça de correu electrònic.';
+$hesklang['customer_profile_saved']='El vostre perfil ha estat desat.';
+$hesklang['customers']='Clients';
+$hesklang['customers_intro']='Els comptes de clients permeten als clients veure tots els seus tiquets en una ubicació central.';
+$hesklang['sure_remove_customer']='Esteu segur que voleu suprimir aquest client?';
+$hesklang['sure_remove_customer_additional_note']='L\'eliminació d\'un client és definitiva. Un cop eliminat, no es pot recuperar.';
+$hesklang['new_customer']='Nou client';
+$hesklang['new_follower']='Nou seguidor';
+$hesklang['add_customer']='+ Afegeix client'; // Appears on Customer Dropdown, stickied at the bottom
+$hesklang['add_follower']='+ Afegeix seguidor'; // Appears on Followers Dropdown, stickied at the bottom
+$hesklang['new_customer_prompt']='El client proporcionat encara no existeix. Feu clic a "Desa" si voleu crear aquest client.';
+$hesklang['followers']='Seguidors';
+$hesklang['no_customers']='Actualment no hi ha clients a la base de dades.';
+$hesklang['no_customers_disabled']='Començarà a veure clients aquí quan enviïn tiquets de suport.';
+$hesklang['no_customers_enabled']='Començarà a veure clients aquí quan es registrin o enviïn tiquets de suport.';
+$hesklang['no_customers_enabled2']='Alternativament, els botons sobre aquest missatge us permeten crear manualment comptes de clients o importar clients existents al servei d\'assistència.';
+$hesklang['import_customers']='Importa clients';
+$hesklang['import_customers_tip']='Utilitzeu un fitxer CSV per importar diversos clients alhora.';
+$hesklang['customer_not_found']='No s\'ha trobat el client per al tiquet!';
+$hesklang['search_by_name_or_email']='Cerca per nom o correu electrònic...';
+$hesklang['search_by_pattern']='Cerca per patró...';
+$hesklang['is_searchable']='Es pot cercar';
+$hesklang['custom_is_searchable']='Es pot cercar';
+$hesklang['yes_via_autocomplete']='Sí (cercar mitjançant autocompletar)';
+$hesklang['customer_required']='Heu de seleccionar un client';
+$hesklang['customer_email_exists']='Ja existeix un client amb aquest correu electrònic.';
+$hesklang['customer_name_with_no_email_exists']='Ja existeix un client amb aquest nom i sense correu electrònic.';
+$hesklang['an_error_occurred_validating_email']='Es va produir un error en intentar verificar l\'adreça de correu electrònic ingressada.';
+$hesklang['customer_count_x_more']='+%s més'; // %s = Number of additional customers
+$hesklang['customer_account_registered']='Registrat';
+$hesklang['customer_account_verified']='Verificat';
+$hesklang['customer_account_verified_help']='Els clients han de verificar el vostre compte mitjançant un enllaç d\'activació enviat a la vostra adreça de correu electrònic abans de poder iniciar sessió al vostre compte.';
+$hesklang['customer_account_setting_password_will_verify_user']='En establir una contrasenya per a aquest client, es verificarà automàticament el vostre compte.';
+$hesklang['deleting_customer_with_tickets']='Aquest client té %1$s ticket(s) <b>(%2$s oberts)</b> que també tenen altres clients associats.<br>Què cal fer amb aquests tiquets?'; // %1$s = total tickets, %2$s = open tickets
+$hesklang['customer_resend_verification_email_needed']='Es necessita una adreça de correu electrònic vàlida per tornar a enviar un correu electrònic de verificació.';
+$hesklang['customer_resend_verification_email_not_found']='No hi ha cap compte amb aquesta adreça de correu electrònic o el compte ja ha estat verificat.';
+$hesklang['customer_resend_verification_email_sent']='S\'ha enviat un correu electrònic de verificació a la vostra adreça de correu electrònic.<br><br>Si no el rep en uns minuts, reviseu les vostres carpetes de correu no desitjat, correu massiu o spam . Marqueu el missatge com a <b>No SPAM</b> per evitar problemes en rebre la nostra correspondència en el futur.';
+$hesklang['customer_permission_denied']='No teniu permís per modificar clients.';
+$hesklang['customer_manage_approvals']='Comptes de clients pendents d\'aprovació: <b>%s</b>'; // %s = number of customers
+$hesklang['customer_manage_approve']='Aprovar client';
+$hesklang['customer_manage_bulk_approve']='Aprovar clients seleccionats';
+$hesklang['customer_manage_bulk_approve_complete']='Clients aprovats: %s'; // %s = number of customers
+$hesklang['customer_manage_reject']='Rebutjar client';
+$hesklang['customer_manage_bulk_reject']='Rebutjar clients seleccionats';
+$hesklang['customer_manage_bulk_reject_complete']='Clients rebutjats: %s'; // %s = number of customers
+$hesklang['customer_manage_delete']='Eliminar client';
+$hesklang['customer_manage_bulk_delete']='Eliminar clients seleccionats';
+$hesklang['customer_manage_bulk_delete_complete']='Clients eliminats: %s'; // %s = number of customers
+$hesklang['customer_manage_edit']='Editar client';
+$hesklang['customer_manage_verification_email_sent']='S\'ha enviat un correu electrònic de verificació a %s'; // %s = customer's email
+$hesklang['can_man_customers']='Administrar clients';
+$hesklang['can_view_customers']='Veure tots els clients (però no administrar-los)';
+$hesklang['import_customer_select_file']='Seleccionar fitxer';
+$hesklang['import_customer_step1_instructions']='Per importar clients, prepareu un fitxer CSV (valors separats per comes).';
+$hesklang['import_customer_step1_note']='Seleccioneu el fitxer CSV';
+$hesklang['import_customer_step1_separator']='Les columnes del meu fitxer CSV estan separades per';
+$hesklang['import_customer_sample']='&raquo; Fitxers CSV de mostra';
+$hesklang['import_customer_sample_1']='Fitxer CSV d\'estil nord-americà amb columnes separades per ,';
+$hesklang['import_customer_sample_2']='Fitxer CSV d\'estil europeu amb columnes separades per ;';
+$hesklang['import_customer_upload_requirements_1']='El vostre fitxer CSV ha d\'incloure almenys una columna de nom o adreça de correu electrònic. La columna de contrasenya és opcional.';
+$hesklang['import_customer_upload_requirements_2']='La primera fila del vostre fitxer ha de contenir capçaleres de columna.';
+$hesklang['import_customer_upload_requirements_3']='El vostre fitxer ha d\'estar codificat a UTF-8.';
+$hesklang['import_customer_select_columns']='Seleccioneu columnes';
+$hesklang['import_customer_upload_customers']='Carregar clients';
+$hesklang['import_customer_column_name']='Columna de nom';
+$hesklang['import_customer_column_email']='Columna de correu electrònic';
+$hesklang['import_customer_column_pass']='Columna de contrasenya';
+$hesklang['import_customer_step2_note']='Seleccioneu el nom de columna correcte del vostre fitxer CSV als menús desplegables i després feu clic a "Següent".';
+$hesklang['import_customer_name_or_email_required']='Es requereix el nom o el correu electrònic';
+$hesklang['import_customer_step3_note']='S\'estan important els vostres clients. No abandoneu aquesta pàgina!';
+$hesklang['import_customer_step3_pending']='Pendent';
+$hesklang['import_customer_step3_successful_imports']='Importacions exitoses';
+$hesklang['import_customer_step3_failed_imports']='Importacions fallides';
+$hesklang['import_customer_step3_progress']='Progrés';
+$hesklang['import_customer_step3_complete_some_failed']='El procés d\'importació es va completar, però <b>%s</b> clients no van poder importar. Consulteu la taula a continuació per obtenir més informació.'; // %s == number of failed imports
+$hesklang['import_customer_step3_complete']='El procés d\'importació s\'ha completat!';
+$hesklang['import_customer_step3_importing']='Important';
+$hesklang['staff_deleted']='[Personal eliminat]';
+$hesklang['customer_account_approved']='Registre de client aprovat';
+$hesklang['customer_account_rejected']='Registre de client rebutjat';
+$hesklang['customer_account_deleted']='Registre de client suprimit';
+$hesklang['ticket_followers']='Seguidors de tiquets';
+$hesklang['ticket_followers2']='Permetre que els tiquets tinguin diversos clients';
+$hesklang['add_cc']='Afegeix Cc';
+$hesklang['cc']='Cc';
+$hesklang['cc_help']='Separa cada correu electrònic amb una coma.';
+$hesklang['search_customers']='Cerca clients';
+$hesklang['page_size']='Mida de pàgina';
+$hesklang['customers_on_pages']='Nombre de clients: %d | Nombre de pàgines: %d'; // First %d is replaced with number of customers, second %d with number of pages
+$hesklang['desc_customer_reset_password']='(Client) Restabliu la contrasenya';
+$hesklang['desc_customer_verify_registration']='(Client) Verifiqueu el vostre registre';
+$hesklang['desc_customer_verify_new_email']='(Client) Verifiqueu el vostre nou correu electrònic';
+$hesklang['desc_customer_approved']='(Client) Compte aprovat';
+$hesklang['desc_customer_rejected']='(Client) Compte rebutjat';
+$hesklang['desc_email_rejected_can_self_register']='(Client) Tiquet per correu electrònic rebutjat; el client es pot registrar per si mateix';
+$hesklang['desc_email_rejected_cannot_self_register']='(Client) Tiquet per correu electrònic rebutjat; el client no es pot registrar per si mateix';
+$hesklang['user_added_success_no_pass']='S\'ha afegit correctament el nou usuari %s';
+$hesklang['email_tag_requester']='Sol·licitant (De)';
+$hesklang['email_tag_requester_name']='Nom del sol·licitant (De)';
+$hesklang['email_tag_requester_first_name']='Nom del sol·licitant (De)';
+$hesklang['email_tag_requester_email']='Correu electrònic del sol·licitant (De)';
+$hesklang['email_tag_followers']='Seguidors (Cc)';
+$hesklang['email_tag_follower_names']='Noms dels seguidors (Cc)';
+$hesklang['email_tag_follower_emails']='Correus electrònics dels seguidors (Cc)';
+$hesklang['barcode']='Codi de barres';
+$hesklang['barcode_use']='Mostrar un codi de barres als tiquets impresos';
+$hesklang['barcode_staff_only']='Ocultar el codi de barres als clients';
+$hesklang['barcode_type']='Tipus de codi de barres';
+$hesklang['barcode_format']='Format';
+$hesklang['barcode_width']='Amplada';
+$hesklang['barcode_height']='Alçada';
+$hesklang['barcode_color']='Color';
+$hesklang['barcode_bg']='Fons';
+$hesklang['copy_link']='Copiar enllaç del tiquet';
+$hesklang['copy_link_title']='Copiar enllaç públic a aquest tiquet';
+$hesklang['copy_link_exp']='L\'enllaç copiat és l\'enllaç directe perquè el client vegi aquest tiquet';
+$hesklang['copy_value']='Copia aquest valor';
+$hesklang['download_class']='Aquesta funció requereix la classe ZipArchive. Demaneu al vostre host que compile PHP amb suport per a zip.';
+$hesklang['download_all']='Descarregar-ho tot';
+$hesklang['download_prep']='Preparant descàrrega...';
+$hesklang['download_tma']='Massa fitxers adjunts';
+$hesklang['download_nva']='No hi ha fitxers adjunts vàlids';
+$hesklang['download_ntd']='No hi ha res a descarregar';
+$hesklang['resolved_at']='Resolt a';
+$hesklang['disable_GSSAPI']='Deshabilitar l\'autenticador GSSAPI (solució temporal per a errors de Kerberos)';
+$hesklang['ex_history']='Incloure el registre de l\'historial de tiquets en l\'exportació';
+$hesklang['sm_location']='Ubicació'; // Location (page) of a service message
+$hesklang['loc_sm']='Mostrar aquest missatge de servei a:';
+$hesklang['loc_all']='Cada pàgina del client';
+$hesklang['loc_norec']='(no recomanat)';
+$hesklang['loc_home']='Pàgina d\'inici del servei d\'assistència tècnica';
+$hesklang['loc_selected']='A les pàgines seleccionades';
+$hesklang['loc_selerr']='Seleccioneu almenys una pàgina on mostrar el missatge';
+$hesklang['loc_t_cat']='Enviar un tiquet - seleccionar una categoria';
+$hesklang['loc_t_add']='Enviar un tiquet - enviar un formulari de tiquet';
+$hesklang['loc_t_ok']='Enviar un tiquet - confirmació del tiquet';
+$hesklang['loc_t_view']='Veure un tiquet';
+$hesklang['loc_t_form']='Veure un formulari de tiquet';
+$hesklang['loc_kb_main']='Pàgina d\'inici de la base de coneixements';
+$hesklang['loc_kb_sub']='Pàgines de subcategories de la base de coneixements';
+$hesklang['loc_kb_art']='Articles de la base de coneixements';
+$hesklang['loc_login']='Pàgina d\'inici de sessió del client';
+$hesklang['loc_register']='Pàgina de registre del client';
+$hesklang['loc_register_ok']='El client s\'ha registrat correctament';
+$hesklang['loc_acc']='Pàgina &quot;Els meus tiquets&quot; del client';
+$hesklang['loc_profile']='Pàgina &quot;Perfil&quot; del client';
+$hesklang['sending_show']='Mostra la notificació &quot;Enviant&quot;';
+$hesklang['sending_wait']='Enviant, espereu...';
+$hesklang['e_c_email']='Introduïu l\'adreça de correu electrònic correcta per veure aquest tiquet';
+$hesklang['only_verified_cc']='Els seguidors que no tinguin un compte verificat seran ignorats.';
+$hesklang['followers_removed']='Aquestes adreces de correu electrònic s\'han eliminat del tiquet perquè no tenen un compte verificat:';
+$hesklang['novace']='No trobem cap compte registrat i verificat amb aquesta adreça de correu electrònic.';
+$hesklang['max_recipients']='Màxim de destinataris';
+$hesklang['max_recipients2']='en un sol correu electrònic';
+$hesklang['admin_js']='JS d\'administrador';
+$hesklang['admin_js2']='Carregar un fitxer Javascript personalitzat addicional per al tauler d\'administració';
+$hesklang['cf_limit_all']='Ha arribat al límit de camps personalitzats i no podeu crear camps personalitzats nous.';
+$hesklang['remind_assigned']='Recordatori al personal assignat';
+$hesklang['remind_sent']='Recordatori per correu electrònic enviat al membre del personal assignat';
+$hesklang['thist23']='<li class="smaller">%s | recordatori enviat a %s per %s</li>';
+$hesklang['ql_bookmarks']='Marcadors';
+$hesklang['bookmark']='El meu marcador';
+$hesklang['bookmarks_add']='Afegeix a marcadors';
+$hesklang['bookmarks_added']='Aquest tiquet ha estat afegit als vostres marcadors';
+$hesklang['bookmarks_remove']='Treure de marcadors';
+$hesklang['bookmarks_removed']='Aquest tiquet ha estat eliminat dels vostres marcadors';
+$hesklang['genl_not_copied']='Error: Copiar al porta-retalls no és compatible amb aquest dispositiu/navegador.';
+$hesklang['profile_duplicate_email']='L\'usuari amb el correu electrònic <b>%s</b> ja existeix.'; // %s: new email
+$hesklang['seq_id_numeric']='La cerca de número de tiquet ha de contenir només números';
+$hesklang['confirm_new_pass']='Confirmar nova contrasenya';
+$hesklang['piping_notify_rejected_customers1']='Correus electrònics de rebuig de clients';
+$hesklang['piping_notify_rejected_customers2']='Enviar un correu electrònic de rebuig als clients quan el vostre tiquet sigui rebutjat';
+$hesklang['piping_notify_rejected_customers3']='Temps entre correus electrònics de rebuig';
+$hesklang['register_url']='URL de registre';
+$hesklang['email_subject']='Assumpte del correu electrònic';
+
+// Added in version 3.6.0
+$hesklang['collaborator_added']='[#%%TRACK_ID%%] Col·laborant en el tiquet: %%SUBJECT%%';
+$hesklang['collaborator_staff_reply']='[#%%TRACK_ID%%] El personal ha respost a: %%SUBJECT%%';
+$hesklang['collaborator_note']='[#%%TRACK_ID%%] S\'ha afegit una nota a: %%SUBJECT%%';
+$hesklang['collaborator_overdue']='[#%%TRACK_ID%%] Tiquet vençut: %%SUBJECT%%';
+$hesklang['collaborator_resolved']='[#%%TRACK_ID%%] Tiquet resolt: %%SUBJECT%%';
+$hesklang['satisfaction']['ignore']='Data límit per a correus de seguiment:'; // do not send emails to tickets resolved before cutoff date
+$hesklang['satisfaction']['ignore_before']='No enviar correus a tiquets resolts fa més de'; // ... more than [X days] ago
+$hesklang['satisfaction']['ignore_after']='fa (ha de ser un període més llarg que \"%s\")'; // ... more than [X days] ago
+$hesklang['satisfaction']['wrong_cutoff']='El període de data límit ha de ser més llarg que el retard del correu de seguiment';
+$hesklang['available_language']='Idiomes disponibles';
+$hesklang['click_to_show_available_language']='Fes clic per veure els idiomes disponibles';
+$hesklang['install_lan']='Instal·lar';
+$hesklang['remove_lan']='Eliminar';
+$hesklang['title_lan']='Títol';
+$hesklang['description_lan']='Descripció';
+$hesklang['completed_lan']='Completat';
+$hesklang['no_language_availble']='No hi ha idiomes disponibles';
+$hesklang['success_install_lan_txt']='L\'idioma s\'ha afegit correctament';
+$hesklang['error_install_lan_txt']='No s\'ha pogut afegir l\'idioma';
+$hesklang['success_remove_lan_txt']='L\'idioma s\'ha eliminat correctament';
+$hesklang['error_remove_lan_txt']='No s\'ha pogut eliminar l\'idioma';
+$hesklang['remove_default_language_error']='L\'idioma per defecte ha de romandre actiu i no es pot eliminar';
+$hesklang['click_for_manual_step']='Fes clic per a la instal·lació manual';
+$hesklang['upgrade_lan']='Actualitzar';
+$hesklang['success_upgrade_lan_txt']='L\'idioma s\'ha actualitzat correctament';
+$hesklang['error_upgrade_lan_txt']='No s\'ha pogut actualitzar l\'idioma';
+$hesklang['please_wait']='Si us plau, espera...';
+$hesklang['add_a_note']='Afegir una nota';
+$hesklang['add_a_reply']='Afegir una resposta';
+$hesklang['customer_id']='ID del client';
+$hesklang['deleting_customer_tickets']='Tiquets oberts pel client: <b>%1$s</b><br>Què hauríem de fer amb aquests tiquets?'; // %1$s = number of tickets
+$hesklang['deleting_customer_follower']='Tiquets on el client està copiat: <b>%1$s</b><br>Aquests perdran aquest client com a seguidor; els tiquets es mantindran sense canvis.'; // %1$s = number of tickets
+$hesklang['deleting_customer_delete_tickets2']='Eliminar permanentment els tiquets';
+$hesklang['deleting_customer_anonymize_tickets2']='Anonimitzar tiquets (eliminar missatges i dades personals)';
+$hesklang['deleting_customer_retain_tickets2']='Conservar els tiquets (deixar totes les dades intactes)';
+$hesklang['for_staff']='per al personal del servei tècnic'; // Setting enabled: "for help desk staff"
+$hesklang['for_customers']='per als clients'; // Setting enabled: "for customers"
+$hesklang['imap_mailbox_txt']='Bústia IMAP';
+$hesklang['file_attachment_options']='Opcions d\'adjunció de correus electrònics';
+$hesklang['link_to_attachments_in_emails']='Enllaç als adjunts en els correus';
+$hesklang['add_attachments_directly_to_emails']='Afegir adjunts directament als correus';
+$hesklang['directly_attach_file_smaller_than']='Adjuntar directament només fitxers més petits de';
+$hesklang['directly_attach_file_of_any_size']='Adjuntar directament fitxers de qualsevol mida';
+$hesklang['directly_attach_only_first_x_attachments']='Adjuntar directament només els primers';
+$hesklang['directly_attach_all_attachments']='Adjuntar directament tots els adjunts';
+$hesklang['directly_attach_size']='Mida de l\'adjunt';
+$hesklang['directly_attach_no_of_files']='Nombre de fitxers';
+$hesklang['notice_about_directly_attach_files']='Adjuntar molts fitxers o fitxers grans pot causar retards en la comunicació amb el servidor SMTP';
+$hesklang['fatt_2']='Fitxers addicionals adjunts a aquest missatge:';
+$hesklang['no_collaborators']='Cap';
+$hesklang['collaborate']='Col·labora en aquest tiquet';
+$hesklang['collaborators']='Col·laboradors';
+$hesklang['ql_cbm']='Col·laborador';
+$hesklang['collaborating']='Ara estàs col·laborant en aquest tiquet';
+$hesklang['not_collaborating']='Ja no estàs col·laborant en aquest tiquet';
+$hesklang['add_collaborator']='Afegir un col·laborador';
+$hesklang['user_collaborator_added']='L\'usuari s\'ha afegit com a col·laborador en aquest tiquet';
+$hesklang['remove_collaborator']='Eliminar col·laborador';
+$hesklang['staff_name']='Nom del personal';
+$hesklang['user_collaborator_removed']='L\'usuari s\'ha eliminat com a col·laborador en aquest tiquet';
+$hesklang['desc_collaborator_added']='(Personal) Estàs col·laborant en un nou tiquet';
+$hesklang['desc_collaborator_staff_reply']='(Personal) Un membre del personal ha respost a un tiquet col·laborat';
+$hesklang['desc_collaborator_note']='(Personal) S\'ha afegit una nova nota a un tiquet col·laborat';
+$hesklang['desc_collaborator_resolved']='(Personal) Un tiquet col·laborat ha estat resolt';
+$hesklang['desc_collaborator_overdue']='(Personal) Un tiquet col·laborat està vençut';
+$hesklang['notify_collaborator_added']='M\'han afegit com a col·laborador d\'un tiquet';
+$hesklang['notify_collaborator_customer_reply']='El client ha respost a un tiquet col·laborat';
+$hesklang['notify_collaborator_staff_reply']='El personal ha respost a un tiquet col·laborat';
+$hesklang['notify_collaborator_note']='El personal ha afegit una nota a un tiquet col·laborat';
+$hesklang['notify_collaborator_resolved']='El personal ha resolt un tiquet col·laborat';
+$hesklang['notify_collaborator_overdue']='El tiquet col·laborat està vençut';
+$hesklang['recurring_tickets']['tab']='Tiquets recurrents'; // Menu link
+$hesklang['recurring_tickets']['page_title']='Tiquets recurrents'; // Page H2 title
+$hesklang['recurring_tickets']['intro']='Automatitza les tasques repetitives; deixa que Hesk generi tiquets rutinaris per a tu, exactament quan els necessitis.';
+$hesklang['recurring_tickets']['active_rules']='Regles actives';
+$hesklang['recurring_tickets']['new']='Nova regla de tiquet recurrent';
+$hesklang['recurring_tickets']['no_rules']='No tens cap regla de tiquet recurrent. Crea\'n una fent clic al botó \"Nova regla de tiquet recurrent\" de dalt.';
+$hesklang['recurring_tickets']['title']='Títol de la regla';
+$hesklang['recurring_tickets']['titlet']='Un títol descriptiu, per exemple: Reassignar tiquets no respostos en un dia';
+$hesklang['recurring_tickets']['default_title']='Regla de %1$s'; // Default rule title; %1$s = user name
+$hesklang['recurring_tickets']['trigger']='Activador de la regla';
+$hesklang['recurring_tickets']['trigt']='Defineix la condició que activarà (executarà) aquesta regla.';
+$hesklang['recurring_tickets']['hits']='Activacions'; // How many times a rule has been triggered
+$hesklang['recurring_tickets']['step1']='Hora de creació'; // Title of step 1 when creating/editing a rule
+$hesklang['recurring_tickets']['step2']='Configuració general'; // Title of step 2 when creating/editing a rule
+$hesklang['recurring_tickets']['step3']='Camps personalitzats'; // Title of step 3 when creating/editing a rule
+$hesklang['recurring_tickets']['step4']='Contingut'; // Title of step 4 when creating/editing a rule
+$hesklang['recurring_tickets']['delete']='Eliminar aquesta regla?';
+$hesklang['recurring_tickets']['edit']='Editant la regla de tiquet recurrent amb ID %1$s'; // %1$s = rule ID number
+$hesklang['recurring_tickets']['within']='Dins de:';
+$hesklang['recurring_tickets']['minutes']='minuts';
+$hesklang['recurring_tickets']['hours']='hores';
+$hesklang['recurring_tickets']['days']='dies';
+$hesklang['recurring_tickets']['weeks']='setmanes';
+$hesklang['recurring_tickets']['months']='mesos';
+$hesklang['recurring_tickets']['years']='anys';
+$hesklang['recurring_tickets']['setpri']='Establir la prioritat a:';
+$hesklang['recurring_tickets']['setsta']='Establir l\'estat a:';
+$hesklang['recurring_tickets']['assto']='Assignar el tiquet a:';
+$hesklang['recurring_tickets']['asm']='Un altre membre del personal';
+$hesklang['recurring_tickets']['notify']='Notificar als membres del personal...';
+$hesklang['recurring_tickets']['ato']='Aplicar a:';
+$hesklang['recurring_tickets']['save']='Desar la regla';
+$hesklang['recurring_tickets']['e_tt']='El temps ha d\'estar entre 1 i 10000';
+$hesklang['recurring_tickets']['nocat']='Selecciona almenys una categoria';
+$hesklang['recurring_tickets']['nouser']='Selecciona almenys un usuari';
+$hesklang['recurring_tickets']['nostatus']='Selecciona almenys un estat';
+$hesklang['recurring_tickets']['nocata']='%1$s no té accés a aquestes categories:'; // %1$s = user name
+$hesklang['recurring_tickets']['rule_added']='S\'ha creat una nova regla';
+$hesklang['recurring_tickets']['mdf']='S\'han desat els paràmetres de la regla';
+$hesklang['recurring_tickets']['e_id']='No s\'ha trobat cap regla amb aquest ID';
+$hesklang['recurring_tickets']['deleted']='S\'ha eliminat la regla seleccionada';
+$hesklang['recurring_tickets']['log_title']='Regla #%1$s (%2$s)'; // Used in ticket history log. %1$s = rule ID, %2$s = rule title
+$hesklang['recurring_tickets']['active']='Activa'; // Is the rule active (live)?
+$hesklang['recurring_tickets']['activate']='Activar aquesta regla (començar a utilitzar-la)';
+$hesklang['recurring_tickets']['activated']='S\'ha activat la regla seleccionada'; // %1$s = rule log title
+$hesklang['recurring_tickets']['deactivate']='Desactivar aquesta regla (deixar d\'utilitzar-la)';
+$hesklang['recurring_tickets']['deactivated']='S\'ha desactivat la regla seleccionada'; // %1$s = rule log title
+$hesklang['recurring_tickets']['no_active']='No hi ha regles de tiquets recurrents actives';
+$hesklang['recurring_tickets']['tools']='Eines';
+$hesklang['recurring_tickets']['tbef']='Abans que una regla estigui activa, cal activar-la fent clic a la casella de la columna \"ACTIVA\".<br><br>
+								<strong>Les regles actives es processen cada %2$s minuts.</strong>'; // %1$s = replaced by icon, %2$s = number of minutes, usually 5 or more
+$hesklang['recurring_tickets']['r']='[REGLA]';
+$hesklang['recurring_tickets']['r2']='[REGLA] Regla #%s';
+$hesklang['recurring_tickets']['r3']='Regla #%s';
+$hesklang['recurring_tickets']['i']='[INFO]';
+$hesklang['recurring_tickets']['matched']='Nombre de tiquets ja creats avui: %1$s'; // %1$s = number of tickets
+$hesklang['recurring_tickets']['reset']='Reiniciar aquesta regla';
+$hesklang['recurring_tickets']['reset2']='Estàs segur que vols reiniciar aquesta regla?<br><br>Les activacions de la regla es posaran a 0 i qualsevol tiquet ja generat avui podria tornar-se a generar en la propera execució del cron.';
+$hesklang['recurring_tickets']['reset3']='S\'ha reiniciat la regla seleccionada';
+$hesklang['recurring_tickets']['test']='Simular aquesta regla';
+$hesklang['recurring_tickets']['testa']='Simular totes les regles';
+$hesklang['recurring_tickets']['testaa']='Simular totes les regles actives';
+$hesklang['recurring_tickets']['testr']='Resultats de la simulació';
+$hesklang['recurring_tickets']['rsim']='Repetir simulació';
+$hesklang['recurring_tickets']['sim']='MODE SIMULACIÓ, no es fan canvis a la base de dades';
+$hesklang['recurring_tickets']['sic']='SIMULACIÓ COMPLETA';
+$hesklang['recurring_tickets']['rrule_type_required']='Si us plau, selecciona un activador de regla recurrent vàlid.';
+$hesklang['recurring_tickets']['rrule_string_required']='Si us plau, selecciona totes les opcions requerides per a l\'activador de la regla recurrent.';
+$hesklang['recurring_tickets']['rrule_invalid_interval']='Introdueix un valor d\'interval de 1 o més per a \"Cada\".';
+$hesklang['recurring_tickets']['disable_note']='*Si es canvia alguna configuració crítica de Hesk després de crear una regla, aquesta es desactivarà en el següent intent d\'execució i caldrà editar-la per complir els nous requisits de validació.';
+$hesklang['recurring_tickets']['thist1']='<li class=\"smaller\">%1$s \n enviat per la Regla de Tiquets Recurrent \"%2$s\"</li>'; // Used in ticket history log. %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist2']='<li class=\"smaller\">%1$s \n assignat a %2$s per la Regla de Tiquets Recurrent \"%3$s\"</li>'; // %1$s = date,  %2$s = assignee, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist3']='<li class=\"smaller\">%1$s \n tancat automàticament per la Regla de Tiquets Recurrent \"%2$s\"</li>'; // %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist9']='<li class=\"smaller\">%1$s \n estat canviat a %2$s per la Regla de Tiquets Recurrent \"%3$s\"</li>'; // %1$s = date, %2$s new status, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist10']='<li class=\"smaller\">%1$s \n assignat automàticament a %2$s per la Regla de Tiquets Recurrent \"%3$s\"</li>'; // %1$s = date, %2$s = new owner, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['rule_was_disabled']='La regla s\'ha desactivat a causa d\'errors de validació. Consulta els detalls a continuació.';
+$hesklang['recurring_tickets']['errors_title']='Una o més de les teves regles han generat errors en intentar executar-se i han estat desactivades.';
+$hesklang['recurring_tickets']['rule_errors']='<hr>Errors de la Regla #%s:';
+$hesklang['recurring_tickets']['create_customers']='No hi ha clients existents - crea\'ls <a href=\"%s\" target=\"_blank\">aquí</a>.';
+$hesklang['recurring_tickets']['exec_dates']='Dates d\'execució de la regla';
+$hesklang['recurring_tickets']['show_exec_dates']='[Mostra les dates d\'execució actuals de la regla]';
+$hesklang['recurring_tickets']['no_exec_dates']='Selecciona activadors de regla vàlids per veure les dates d\'execució.';
+$hesklang['recurring_tickets']['invalid_disabled']='configuració de regla no vàlida - regla desactivada.';
+$hesklang['recurring_tickets']['next_occ']='Properes ocurrències de la regla %s:';
+$hesklang['recurring_tickets']['occ_on']='el %s';
+$hesklang['recurring_tickets']['not_firing_today']='no cal executar-la avui.';
+$hesklang['recurring_tickets']['rules_fulfilled']='regles recurrents complertes - tiquet creat avui!';
+$hesklang['recurring_tickets']['validation_failed']='validació fallida - regla desactivada. Detalls a continuació:';
+$hesklang['recurring_tickets']['validation_error']='Error de validació:';
+$hesklang['recurring_tickets']['processed']='processada.';
+$hesklang['recurring_tickets']['created_ticket']='tiquet creat amb ID: %1$s, ID de seguiment: %2$s';
+$hesklang['recurring_tickets']['due_date_note']='relatiu a la data de creació del tiquet';
+$hesklang['priorities']='Prioritats';
+$hesklang['priority_intro']='Utilitza aquesta eina per gestionar les prioritats dels tiquets del teu servei d\'assistència';
+$hesklang['new_priority']='Nova prioritat';
+$hesklang['edit_priority']='Editar prioritat';
+$hesklang['priority_title']='Títol';
+$hesklang['can_customers_select_it']='Els clients poden seleccionar aquesta prioritat?';
+$hesklang['selected_by_customer']='Seleccionable pels clients';
+$hesklang['err_priority']='Introdueix el títol de la prioritat';
+$hesklang['priority_added']='S\'ha afegit una nova prioritat';
+$hesklang['priority_e_id']='ID de prioritat no vàlid';
+$hesklang['priority_mdf']='S\'ha desat la prioritat';
+$hesklang['priority_deleted']='Prioritat eliminada';
+$hesklang['priority_not_found']='Aquesta prioritat no existeix';
+$hesklang['priority_not_empty']='Aquesta prioritat no es pot eliminar perquè hi ha tiquets amb aquesta prioritat';
+$hesklang['click_to_enable_drag_drop']='Fes clic per activar l\'arrossega i deixa anar per a la fila, després arrossega-la amunt o avall per reordenar les prioritats.';
+$hesklang['confirm_delete_priority']='Estàs segur que vols eliminar aquesta prioritat?';
+$hesklang['reordered_message']='S\'ha desat l\'ordre de la llista de prioritats.';
+$hesklang['list_tkt_priority']='Llistar tots els tiquets amb aquesta prioritat';
+$hesklang['deletion_priority_restricted']='Aquesta és una prioritat especial i no es pot eliminar';
+$hesklang['priority_limit']='No pots crear més prioritats';
+$hesklang['skip_to_main_content']='Saltar al contingut principal';
+$hesklang['opens_dialog']='Obre un diàleg';
+$hesklang['create_a_ticket']='Crear un tiquet';
+$hesklang['toggle_navigation']='Alternar la navegació';
+$hesklang['add_a_ticket_reply']='Afegir una resposta al tiquet';
+$hesklang['linked_tickets']='Tiquets enllaçats';
+$hesklang['no_linked_tickets']='No hi ha tiquets enllaçats';
+$hesklang['link_ticket']='Enllaçar tiquet';
+$hesklang['can_link_tickets_e']='No estàs autoritzat a enllaçar/desenllaçar aquest tiquet';
+$hesklang['link_ticket_success']='El tiquet s\'ha enllaçat correctament';
+$hesklang['link_ticket_required_error']='Per enllaçar un tiquet, introdueix un ID de seguiment vàlid';
+$hesklang['link_ticket_itself_error']='Un tiquet no es pot enllaçar amb ell mateix. Introdueix un ID de seguiment diferent';
+$hesklang['already_linked_error']='El tiquet ja està enllaçat';
+$hesklang['unlink_success']='El tiquet s\'ha desenllaçat correctament';
+$hesklang['unlink_error']='No existeix cap registre enllaçat';
+$hesklang['link_history']='<li class=\"smaller\">%s \n tiquet %s enllaçat per %s</li>';
+$hesklang['unlink_history']='<li class=\"smaller\">%s \n tiquet %s desenllaçat per %s</li>';
+$hesklang['can_link_tickets']='Pot enllaçar tiquet';
+$hesklang['link_a_ticket']='Enllaçar un tiquet';
+$hesklang['mfa_curl']='No es pot generar una imatge QR per escanejar perquè el suport <strong>cURL</strong> no està habilitat al teu servidor.';
+$hesklang['require_xml']='Cal tenir habilitat PHP-XML per a missatges en text enriquit (HTML). Demana al teu proveïdor que activi XML per a PHP.';
+$hesklang['thist24']='<li class=\"smaller\">%1$s \n %2$s afegit com a col·laborador per %3$s</li>';
+$hesklang['thist25']='<li class=\"smaller\">%1$s \n %2$s eliminat com a col·laborador per %3$s</li>';
+$hesklang['recurring_tickets']['intro2']='Ideal per a tasques de manteniment preventiu, revisions mensuals d\'accés, seguiments recurrents amb clients i més.';
+$hesklang['recurring_tickets']['feat1']='<strong>Programa i oblida.</strong> Diàriament, cada dilluns, cada març, el dia 15 de cada mes o qualsevol data futura';
+$hesklang['recurring_tickets']['feat2']='<strong>Arriben preomplerts i assignats.</strong> Tria categoria, prioritat, agent i fins a 100 valors de camps personalitzats';
+$hesklang['recurring_tickets']['feat3']='<strong>Previsualitza dates i simula.</strong> Veu cada tiquet que Hesk generarà abans d\'activar una regla, sense sorpreses.';
+$hesklang['unlink_btn']='Desenllaçar';
 
 // DO NOT CHANGE BELOW
 if (!defined('IN_SCRIPT')) die('PHP syntax OK!');

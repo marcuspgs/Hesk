@@ -1,0 +1,18 @@
+Vážený(á) %%NAME%%,
+
+Obdrželi jsme žádost o změnu vaší e-mailové adresy.
+
+Pro potvrzení této změny klikněte na odkaz níže (platnost vyprší za 1 hodinu):
+%%VERIFICATION_URL%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,15 @@
+Üdvözöljük!
+
+Egy új támogatási jegyen dolgozol együtt.
+
+Hibajegy tárgya: %%SUBJECT%%
+Azonosító ID: %%TRACK_ID%%
+
+Itt tudja kezelni a hibajegyet:
+%%TRACK_URL%%
+
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

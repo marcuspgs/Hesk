@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite1091e0370784c28d59518869c75bfb7
+class ComposerStaticInit2a93de94d52249c19656a13ab26d7112
 {
     public static $files = array (
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
@@ -14,6 +14,7 @@ class ComposerStaticInite1091e0370784c28d59518869c75bfb7
         'R' => 
         array (
             'RobThree\\Auth\\' => 14,
+            'RRule\\' => 6,
         ),
         'P' => 
         array (
@@ -25,6 +26,10 @@ class ComposerStaticInite1091e0370784c28d59518869c75bfb7
         'RobThree\\Auth\\' => 
         array (
             0 => __DIR__ . '/..' . '/robthree/twofactorauth/lib',
+        ),
+        'RRule\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rlanvin/php-rrule/src',
         ),
         'PHPMailer\\PHPMailer\\' => 
         array (
@@ -41,6 +46,11 @@ class ComposerStaticInite1091e0370784c28d59518869c75bfb7
         'PHPMailer\\PHPMailer\\PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/PHPMailer.php',
         'PHPMailer\\PHPMailer\\POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/POP3.php',
         'PHPMailer\\PHPMailer\\SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/SMTP.php',
+        'RRule\\RRule' => __DIR__ . '/..' . '/rlanvin/php-rrule/src/RRule.php',
+        'RRule\\RRuleInterface' => __DIR__ . '/..' . '/rlanvin/php-rrule/src/RRuleInterface.php',
+        'RRule\\RRuleTrait' => __DIR__ . '/..' . '/rlanvin/php-rrule/src/RRuleTrait.php',
+        'RRule\\RSet' => __DIR__ . '/..' . '/rlanvin/php-rrule/src/RSet.php',
+        'RRule\\RfcParser' => __DIR__ . '/..' . '/rlanvin/php-rrule/src/RfcParser.php',
         'RobThree\\Auth\\Providers\\Qr\\BaconQrCodeProvider' => __DIR__ . '/..' . '/robthree/twofactorauth/lib/Providers/Qr/BaconQrCodeProvider.php',
         'RobThree\\Auth\\Providers\\Qr\\BaseHTTPQRCodeProvider' => __DIR__ . '/..' . '/robthree/twofactorauth/lib/Providers/Qr/BaseHTTPQRCodeProvider.php',
         'RobThree\\Auth\\Providers\\Qr\\EndroidQrCodeProvider' => __DIR__ . '/..' . '/robthree/twofactorauth/lib/Providers/Qr/EndroidQrCodeProvider.php',
@@ -70,9 +80,9 @@ class ComposerStaticInite1091e0370784c28d59518869c75bfb7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite1091e0370784c28d59518869c75bfb7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite1091e0370784c28d59518869c75bfb7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite1091e0370784c28d59518869c75bfb7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2a93de94d52249c19656a13ab26d7112::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2a93de94d52249c19656a13ab26d7112::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2a93de94d52249c19656a13ab26d7112::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -36,9 +36,9 @@ if (hesk_check_maintenance(false)) {
 
 hesk_overdue_ticket_log($hesklang['overdue_starting']);
 
-$sql = "SELECT `ticket`.`id` AS `id`, `ticket`.`trackid` AS `trackid`, `ticket`.`name` AS `name`, `ticket`.`subject` AS `subject`,
+$sql = "SELECT `ticket`.`id` AS `id`, `ticket`.`trackid` AS `trackid`, `ticket`.`subject` AS `subject`,
     `ticket`.`message` AS `message`, `ticket`.`message_html` AS `message_html`, `ticket`.`category` AS `category`, `ticket`.`priority` AS `priority`,
-    `ticket`.`owner` AS `owner`, `ticket`.`status` AS `status`, `ticket`.`email` AS `email`, `ticket`.`dt` AS `dt`,
+    `ticket`.`owner` AS `owner`, `ticket`.`status` AS `status`, `ticket`.`dt` AS `dt`,
     `ticket`.`lastchange` AS `lastchange`, `ticket`.`due_date` AS `due_date`, `user`.`language` AS `user_language`, `user`.`email` AS `user_email`,
     `ticket`.`time_worked` AS `time_worked`, `ticket`.`lastreplier` AS `lastreplier`, `ticket`.`replierid` AS `replierid`,
     `ticket`.`custom1` AS `custom1`, `ticket`.`custom2` AS `custom2`, `ticket`.`custom3` AS `custom3`, `ticket`.`custom4` AS `custom4`,
@@ -74,7 +74,7 @@ if (!$number_of_tickets) {
     exit();
 }
 
-$user_rs = hesk_dbQuery("SELECT `id`, `isadmin`, `categories`, `email`, `name`, `notify_overdue_unassigned`, `notify_overdue_my`,
+$user_rs = hesk_dbQuery("SELECT `id`, `isadmin`, `categories`, `email`, `name`, `notify_overdue_unassigned`, `notify_overdue_my`, `notify_collaborator_overdue`,
     CASE WHEN `heskprivileges` LIKE '%can_view_unassigned%' THEN 1 ELSE 0 END AS `can_view_unassigned`
     FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users`
     WHERE (`notify_overdue_unassigned` = '1' OR `notify_overdue_my` = '1')
@@ -96,13 +96,18 @@ while ($ticket = hesk_dbFetchAssoc($rs)) {
     $ticket['last_reply_by'] = hesk_getReplierName($ticket);
     $ticket['due_date_sql'] = $ticket['due_date'];
     $ticket['due_date'] = hesk_format_due_date($ticket['due_date']);
+    $ticket['collaborators'] = hesk_getTicketsCollaboratorIDs($ticket['id']);
     $ticket = hesk_ticketToPlain($ticket, 1, 0);
+
+    $customers = hesk_get_customers_for_ticket($ticket['id']);
+    $customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
+    $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
+    $ticket['email'] = implode(';', $customer_emails);
+    $ticket['name'] = implode(';', $customer_names);
 
     $owner_email = (!empty($ticket['user_email'])) ? $ticket['user_email'] : $hesklang['unas'];
     if (!$hesk_settings['simulate_overdue_tickets']) {
-        if ($ticket['owner'] && ( ! isset($users[$ticket['owner']]) || $users[$ticket['owner']]['notify_overdue_my'] != 1)) {
-            hesk_overdue_ticket_log("[{$hesklang['success']}]\n{$hesklang['trackID']}: {$ticket['trackid']}\n{$hesklang['email']}: {$owner_email}");
-        } elseif (hesk_sendOverdueTicketReminder($ticket, $users)) {
+        if (hesk_sendOverdueTicketReminder($ticket, $users)) {
             $tickets_to_flag[] = $ticket['id'];
             $tickets_log_sql[] = "('".intval($ticket['id'])."', '".intval($ticket['category'])."', '".intval($ticket['priority'])."', '".intval($ticket['status'])."', '".intval($ticket['owner'])."', '".hesk_dbEscape($ticket['due_date_sql'])."')";
             $successful_emails++;

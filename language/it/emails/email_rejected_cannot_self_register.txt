@@ -1,0 +1,10 @@
+Gentile %%NAME%%,
+
+non siamo riusciti a elaborare la tua email "%%SUBJECT%%" perché non hai un account.
+
+Questo help desk è disponibile solamente agli utenti registrati.
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

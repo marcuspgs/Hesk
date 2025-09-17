@@ -1,0 +1,10 @@
+Beste %%NAME%%,
+
+Bedankt voor het aanmaken van een account. Gebruik onderstaande URL om je account te activeren:
+
+%%VERIFICATION_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,5 @@
+<p>Vážený(á) %%NAME%%,</p>
+<p>Vaše registrace účtu byla schválena.</p>
+<p>Nyní se můžete níže přihlásit pomocí uživatelského jména a hesla, které jste použili při vytváření účtu:<br /><a href="%%CUSTOMER_LOGIN_URL%%">%%CUSTOMER_LOGIN_URL%%</a></p>
+<p>S pozdravem,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

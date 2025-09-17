@@ -1,0 +1,12 @@
+Ciao,
+
+ci sono dei nuovi account clienti in attesa di approvazione da parte dello staff.
+
+Numero di approvazioni in sospeso: %%NUM%%
+
+Puoi approvare o rifiutare le registrazioni degli account clienti qui: %%VERIFICATION_URL%%
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

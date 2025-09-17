@@ -55,6 +55,9 @@ function hesk_get_customer_account_by_email($email, $registration = false, $veri
     $rs = hesk_dbQuery($sql);
 
     if ($row = hesk_dbFetchAssoc($rs)) {
+        if (empty($row['email'])) {
+            $row['email'] = '';
+        }
         return $row;
     }
 
@@ -70,6 +73,9 @@ function hesk_get_customer_account_by_id($id) {
     $rs = hesk_dbQuery($sql);
 
     if ($row = hesk_dbFetchAssoc($rs)) {
+        if (empty($row['email'])) {
+            $row['email'] = '';
+        }
         return $row;
     }
 
@@ -82,8 +88,17 @@ function hesk_get_or_create_customer($name, $email, $create_if_not_found = true)
     $name = $name === null ? '' : trim($name);
     $email = $email === null ? '' : $email;
 
+    // If email is empty just create a new account
+    if (empty($email)) {
+        if ($create_if_not_found) {
+            hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` (`name`) VALUES ('".hesk_dbEscape($name)."')");
+            return hesk_dbInsertID();
+        }
+        return null;
+    }
+
     //-- If we already have a customer record based on name and email, return its id
-    $existing_customer_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
+    $existing_customer_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
         WHERE `email` = '".hesk_dbEscape(trim($email))."'
             AND `name` = '".hesk_dbEscape(trim($name))."'
         LIMIT 1");
@@ -445,6 +460,9 @@ function hesk_get_customers_for_ticket($ticket_id) {
 
     $customers = [];
     while ($row = hesk_dbFetchAssoc($customers_res)) {
+        if (empty($row['email'])) {
+            $row['email'] = '';
+        }
         $customers[] = $row;
     }
 

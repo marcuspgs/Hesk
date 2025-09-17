@@ -1,0 +1,16 @@
+Hallo,
+
+Dem Ticket wurde eine neue Notiz hinzugefügt "%%SUBJECT%%" an dem Sie mitarbeiten.
+
+Anmerkung von %%NAME%%:
+
+%%MESSAGE%%
+
+Sie können dieses Ticket hier verwalten:
+%%TRACK_URL%%
+
+
+Mit freundlichen Grüßen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

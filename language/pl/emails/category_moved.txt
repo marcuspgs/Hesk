@@ -1,0 +1,11 @@
+Witam,
+
+zostało zarejestrowane nowe zadanie o symbolu %%TRACK_ID%% i przeniesiona do twojej kategorii.
+
+Wejdź na stronę
+%%TRACK_URL%%
+i zobacz szczegóły.
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

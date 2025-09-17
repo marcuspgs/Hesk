@@ -19,6 +19,7 @@ define('TEMPLATE_PATH', HESK_PATH . "theme/{$hesk_settings['site_theme']}/");
 require(HESK_PATH . 'inc/common.inc.php');
 require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 require_once(HESK_PATH . 'inc/statuses.inc.php');
+require_once(HESK_PATH . 'inc/priorities.inc.php');
 
 // Are we in maintenance mode?
 hesk_check_maintenance();
@@ -55,7 +56,11 @@ if (!in_array($order_by, ['id','trackid','lastchange','subject','status','priori
     $order_by = '';
     $order_direction = 'desc';
 } else {
-    $sql_order_by = "`{$order_by}`";
+    if ($order_by == 'priority') {
+        $sql_order_by = "`priority_order`";
+    } else {
+        $sql_order_by = "`{$order_by}`";
+    }
 }
 
 if ($search_criteria !== '') {
@@ -89,9 +94,12 @@ if ($status !== 'ALL') {
 // Fetch tickets
 $offset = ($page_number - 1) * $page_size;
 
-$sql_format = "SELECT %s FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
+$sql_format = "SELECT %s,`priority_order` AS `vv`
+ FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
     INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_customers`
         ON `tickets`.`id` = `ticket_customers`.`ticket_id`
+    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."custom_priorities` AS `custom_priorities`
+        ON `priority` = `custom_priorities`.`id`
     WHERE `customer_id` = ".intval($user_context['id'])." "
     .$additional_sql_filters;
 
@@ -155,20 +163,8 @@ while ($ticket = hesk_dbFetchAssoc($tickets_rs)) {
 
     $ticket['status_id'] = $ticket['status'];
     $ticket['status'] = hesk_get_ticket_status($ticket['status']);
-
-    switch ($ticket['priority'])
-    {
-        case 0:
-            $ticket['priority'] = 'critical';
-            break;
-        case 1:
-            $ticket['priority'] = 'high';
-            break;
-        case 2:
-            $ticket['priority'] = 'medium';
-            break;
-        default:
-            $ticket['priority'] = 'low';
+    if ( ! isset($hesk_settings['priorities'][$ticket['priority']])) {
+        $ticket['priority'] = array_keys($hesk_settings['priorities'])[0];
     }
 
     $tickets[] = $ticket;

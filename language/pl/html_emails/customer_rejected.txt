@@ -1,0 +1,5 @@
+<p>Witaj %%NAME%%,</p> 
+<p>Niestety, Twoja rejestracja konta została odrzucona.</p> 
+<p>Jeśli uważasz, że nastąpił błąd, spróbuj zarejestrować się ponownie.</p> 
+<p>Z poważaniem,</p> 
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -31,9 +31,6 @@ hesk_isLoggedIn();
 // Check permissions for this feature
 hesk_checkPermission('can_man_settings');
 
-// Load statuses
-require_once(HESK_PATH . 'inc/statuses.inc.php');
-
 $help_folder = '../language/' . $hesk_settings['languages'][$hesk_settings['language']]['folder'] . '/help_files/';
 
 // What should we do?
@@ -59,6 +56,13 @@ if ( $action = hesk_REQUEST('a') )
 
     $provider = hesk_dbFetchAssoc($res);
 
+    // Any errors so far?
+    if (($error = hesk_GET('error')) !== '') {
+        $error_description = hesk_GET('error_description');
+        hesk_process_messages(hesk_htmlspecialchars($error) . '<br><br>' . hesk_htmlspecialchars($error_description), './oauth_providers.php');
+        exit();
+    }
+
     //-- Mark the provider as valid and grab the initial token
     hesk_oauth_fetch_and_store_initial_token($provider, hesk_GET('code'));
 }
@@ -68,6 +72,12 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 
 // Print main manage users page
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
+
+// We need cURL for OAuth
+$hesk_settings['curl_enabled'] = function_exists('curl_init');
+if ( ! $hesk_settings['curl_enabled']) {
+    hesk_show_error($hesklang['require_curl']);
+}
 
 /* This will handle error, success and notice messages */
 if (!hesk_SESSION('edit_provider') && !hesk_SESSION(array('new_provider','errors'))) {
@@ -91,7 +101,7 @@ $oauth_providers_rs = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_setting
                 </div>
             </div>
         </h2>
-        <?php if ($action !== 'edit_provider'): ?>
+        <?php if ($hesk_settings['curl_enabled'] && $action !== 'edit_provider'): ?>
         <div class="btn btn--blue-border" ripple="ripple" data-action="create-custom-status">
             <?php echo $hesklang['email_oauth_new_provider']; ?>
         </div>
@@ -136,7 +146,7 @@ $oauth_providers_rs = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_setting
                         <?php endif; ?>
                     </td>
                     <td class="nowrap buttons">
-                        <?php $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                        <?php $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                             $hesklang['email_oauth_confirm_delete_provider'],
                             'oauth_providers.php?a=remove_provider&amp;id='. $row['id'] .'&amp;token='. hesk_token_echo(0)); ?>
                         <p>
@@ -287,7 +297,7 @@ function save_provider()
 	// A security check
 	# hesk_token_check('POST');
 
-	// Get custom status ID
+	// Get ID
 	$id = intval( hesk_POST('id') ) or hesk_error($hesklang['status_e_id']);
 
 	// Validate inputs
@@ -340,14 +350,14 @@ function edit_provider()
 {
 	global $hesk_settings, $hesklang;
 
-	// Get custom status ID
+	// Get ID
 	$id = intval( hesk_GET('id') ) or hesk_error($hesklang['status_e_id']);
 
 	// Get details from the database
 	$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."oauth_providers` WHERE `id`={$id} LIMIT 1");
 	if ( hesk_dbNumRows($res) != 1 )
 	{
-		hesk_error($hesklang['status_not_found']);
+		hesk_error($hesklang['oauth_provider_not_found']);
 	}
 	$provider = hesk_dbFetchAssoc($res);
 
@@ -392,7 +402,7 @@ function remove_provider()
 	}
 	else
 	{
-		hesk_process_messages($hesklang['status_not_found'],'./oauth_providers.php');
+		hesk_process_messages($hesklang['oauth_provider_not_found'],'./oauth_providers.php');
 	}
 
 } // End remove_provider()

@@ -21,7 +21,7 @@ $hesk_settings['possible_ticket_list'] = array(
 'dt' => $hesklang['submitted'],
 'lastchange' => $hesklang['last_update'],
 'category' => $hesklang['category'],
-'name' => $hesklang['name'],
+'name' => $hesklang['customer'],
 'email' => $hesklang['email'],
 'subject' => $hesklang['subject'],
 'status' => $hesklang['status'],
@@ -154,9 +154,6 @@ function hesk_mergeTickets($merge_these, $merge_into)
 	}
 
     /* Set some variables for later */
-    $merge['attachments'] = '';
-	$merge['replies'] = array();
-    $merge['notes'] = array();
     $sec_worked = 0;
     $history = '';
     $merged = '';
@@ -172,7 +169,12 @@ function hesk_mergeTickets($merge_these, $merge_into)
     	$this_id = intval($this_id) or hesk_error($hesklang['id_not_valid']);
 
         /* Get required ticket information */
-        $res = hesk_dbQuery("SELECT `id`,`trackid`,`category`,`name`,`message`,`message_html`,`dt`,`time_worked`,`attachments` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`='".intval($this_id)."' LIMIT 1");
+        $res = hesk_dbQuery("SELECT `tickets`.`id` AS `id`,`trackid`,`category`,`ticket_customers`.`customer_id` AS `customer_id`,`message`,`message_html`,`dt`,`time_worked`,`attachments` 
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
+            LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_customers`
+                ON `tickets`.`id` = `ticket_customers`.`ticket_id`
+                AND `ticket_customers`.`customer_type` = 'REQUESTER' 
+            WHERE `tickets`.`id`='".intval($this_id)."' LIMIT 1");
 		if (hesk_dbNumRows($res) != 1)
 		{
 			continue;
@@ -186,7 +188,8 @@ function hesk_mergeTickets($merge_these, $merge_into)
         }
 
         /* Insert ticket message as a new reply to target ticket */
-		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`message_html`,`dt`,`attachments`) VALUES ('".intval($ticket['id'])."','".hesk_dbEscape(addslashes($row['name']))."','".hesk_dbEscape(addslashes($row['message']))."','".hesk_dbEscape(addslashes($row['message_html']))."','".hesk_dbEscape($row['dt'])."','".hesk_dbEscape($row['attachments'])."')");
+        $customer_id = $row['customer_id'] !== null ? intval($row['customer_id']) : 'NULL';
+		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`customer_id`,`message`,`message_html`,`dt`,`attachments`) VALUES ('".intval($ticket['id'])."',".$customer_id.",'".hesk_dbEscape(addslashes($row['message']))."','".hesk_dbEscape(addslashes($row['message_html']))."','".hesk_dbEscape($row['dt'])."','".hesk_dbEscape($row['attachments'])."')");
 
 		/* Update attachments  */
 		hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."attachments` SET `ticket_id`='".hesk_dbEscape($ticket['trackid'])."' WHERE `ticket_id`='".hesk_dbEscape($row['trackid'])."'");
@@ -195,7 +198,8 @@ function hesk_mergeTickets($merge_these, $merge_into)
         $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `replyto`='".intval($row['id'])."' ORDER BY `id` ASC");
         while ( $reply = hesk_dbFetchAssoc($res) )
         {
-			hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`message_html`,`dt`,`attachments`,`staffid`,`rating`,`read`) VALUES ('".intval($ticket['id'])."','".hesk_dbEscape(addslashes($reply['name']))."','".hesk_dbEscape(addslashes($reply['message']))."','".hesk_dbEscape(addslashes($reply['message_html']))."','".hesk_dbEscape($reply['dt'])."','".hesk_dbEscape($reply['attachments'])."','".intval($reply['staffid'])."','".intval($reply['rating'])."','".intval($reply['read'])."')");
+            $customer_id = $reply['customer_id'] !== null ? intval($reply['customer_id']) : 'NULL';
+			hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`message`,`message_html`,`dt`,`attachments`,`staffid`,`customer_id`,`rating`,`read`) VALUES ('".intval($ticket['id'])."','".hesk_dbEscape(addslashes($reply['message']))."','".hesk_dbEscape(addslashes($reply['message_html']))."','".hesk_dbEscape($reply['dt'])."','".hesk_dbEscape($reply['attachments'])."','".intval($reply['staffid'])."',".$customer_id.",'".intval($reply['rating'])."','".intval($reply['read'])."')");
         }
 
 		/* Delete replies to the old ticket */
@@ -210,6 +214,21 @@ function hesk_mergeTickets($merge_these, $merge_into)
 
 		/* Delete replies to the old ticket */
 		hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."notes` WHERE `ticket`='".intval($row['id'])."'");
+
+        /* Insert old ticket's requester and followers to the new tickets as followers, assuming they're not already on it */
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` (`ticket_id`, `customer_id`, `customer_type`)
+            SELECT ".intval($ticket['id']).", `customer_id`, 'FOLLOWER'
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `outer_ticket_to_customer`
+            WHERE `ticket_id` = ".intval($row['id'])."
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `inner_ticket_to_customer`
+                    WHERE `inner_ticket_to_customer`.`ticket_id` = ".intval($ticket['id'])."
+                    AND `inner_ticket_to_customer`.`customer_id` = `outer_ticket_to_customer`.`customer_id` 
+                )");
+        /* Delete old ticket's customer mappings */
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer`
+            WHERE `ticket_id` = ".intval($row['id']));
 
 	    /* Delete old ticket */
 		hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`='".intval($row['id'])."'");
@@ -385,34 +404,6 @@ function hesk_getHTML($in)
 } // END hesk_getHTML()
 
 
-function hesk_activeSessionValidate($username, $password_hash, $tag)
-{
-	// Salt and hash need to be separated by a |
-	if ( ! strpos($tag, '|') )
-	{
-		return false;
-	}
-
-	// Get two parts of the tag
-	list($salt, $hash) = explode('|', $tag, 2);
-
-	// Make sure the hash matches existing username and password
-	if ($hash == sha1($salt . hesk_mb_strtolower($username) . $password_hash) )
-	{
-		return true;
-	}
-
-	return false;
-} // END hesk_activeSessionValidate()
-
-
-function hesk_activeSessionCreateTag($username, $password_hash)
-{
-	$salt = uniqid(mt_rand(), true);
-	return $salt . '|' . sha1($salt . hesk_mb_strtolower($username) . $password_hash);
-} // END hesk_activeSessionCreateTag()
-
-
 function hesk_autoLogin($noredirect=0)
 {
 	global $hesk_settings, $hesklang, $hesk_db_link;
@@ -551,7 +542,7 @@ function hesk_isLoggedIn()
 	// Admin login URL
 	$url = $hesk_settings['hesk_url'] . '/' . $hesk_settings['admin_dir'] . '/index.php?a=login&notice=1&goto='.urlencode($referer);
 
-    if ( empty($_SESSION['id']) || empty($_SESSION['session_verify']) )
+    if ( empty($_SESSION['id']) || empty($_SESSION['session_verify']))
     {
     	if ($hesk_settings['autologin'] && hesk_autoLogin(1) )
         {
@@ -574,7 +565,7 @@ function hesk_isLoggedIn()
         // hesk_session_regenerate_id();
 
 		// Let's make sure access data is up-to-date
-		$res = hesk_dbQuery( "SELECT `user`, `pass`, `isadmin`, `categories`, `heskprivileges` FROM `".$hesk_settings['db_pfix']."users` WHERE `id` = '".intval($_SESSION['id'])."' LIMIT 1" );
+		$res = hesk_dbQuery( "SELECT `user`, `pass`, `isadmin`, `categories`, `heskprivileges`, `signature` FROM `".$hesk_settings['db_pfix']."users` WHERE `id` = '".intval($_SESSION['id'])."' LIMIT 1" );
 
 		// Exit if user not found
 		if (hesk_dbNumRows($res) != 1)
@@ -607,6 +598,8 @@ function hesk_isLoggedIn()
 			$_SESSION['heskprivileges'] = $me['heskprivileges'];
 		}
 
+        $_SESSION['signature'] = $me['signature'];
+
 		// Users online
 		if ($hesk_settings['online'])
 		{
@@ -618,97 +611,6 @@ function hesk_isLoggedIn()
     }
 
 } // END hesk_isLoggedIn()
-
-
-function hesk_verifyGoto()
-{
-	// Default redirect URL
-	$url_default = 'admin_main.php';
-
-	// If no "goto" parameter is set, redirect to the default page
-	if ( ! hesk_isREQUEST('goto') )
-	{
-		return $url_default;
-	}
-
-	// Get the "goto" parameter
-	$url = hesk_REQUEST('goto');
-
-	// Fix encoded "&"
-	$url = str_replace('&amp;', '&', $url);
-
-	// Parse the URL for verification
-	$url_parts = parse_url($url);
-
-	// The "path" part is required
-	if ( ! isset($url_parts['path']) )
-	{
-		return $url_default;
-	}
-
-	// Extract the file name from path
-	$url = basename($url_parts['path']);
-
-	// Allowed files for redirect
-	$OK_urls = array(
-		'admin_main.php' => '',
-		'admin_settings_email.php' => '',
-		'admin_settings_general.php' => '',
-		'admin_settings_help_desk.php' => '',
-		'admin_settings_knowledgebase.php' => '',
-		'admin_settings_misc.php' => '',
-		'admin_settings_save.php' => 'admin_settings_general.php',
-		'admin_settings_ticket_list.php' => '',
-		'admin_ticket.php' => '',
-		'archive.php' => '',
-		'assign_owner.php' => '',
-		'banned_emails.php' => '',
-		'banned_ips.php' => '',
-		'change_status.php' => '',
-		'custom_fields.php' => '',
-		'custom_statuses.php' => '',
-		'edit_post.php' => '',
-		'email_templates.php' => '',
-		'export.php' => '',
-		'find_tickets.php' => '',
-		'generate_spam_question.php' => '',
-		'knowledgebase_private.php' => '',
-		'lock.php' => '',
-		'mail.php' => '',
-		'mail.php?a=read&id=1' => '',
-		'manage_canned.php' => '',
-		'manage_categories.php' => '',
-		'manage_knowledgebase.php' => '',
-		'manage_ticket_templates.php' => '',
-		'manage_users.php' => '',
-		'module_statistics.php' => '',
-		'module_escalate.php' => '',
-		'module_satisfaction.php' => '',
-		'module_satisfaction_optout.php' => '',
-		'new_ticket.php' => '',
-		'oauth_providers.php' => '',
-		'profile.php' => '',
-		'reports.php' => '',
-		'service_messages.php' => '',
-		'show_tickets.php' => '',
-	);
-
-	// URL must match one of the allowed ones
-	if ( ! isset($OK_urls[$url]) )
-	{
-		return $url_default;
-	}
-
-	// Modify redirect?
-	if ( strlen($OK_urls[$url]) )
-	{
-		$url = $OK_urls[$url];
-	}
-
-	// All OK, return the URL with query if set
-	return isset($url_parts['query']) ? $url.'?'.$url_parts['query'] : $url;
-
-} // END hesk_verifyGoto()
 
 
 function hesk_Pass2Hash($plaintext) {
@@ -723,34 +625,6 @@ function hesk_Pass2Hash($plaintext) {
     $corehash = sha1($majorsalt);
     return $corehash;
 } // END hesk_Pass2Hash()
-
-
-function hesk_password_hash($password)
-{
-    if ( ! function_exists('password_hash')) {
-        global $hesklang;
-        die($hesklang['old_php_version']);
-    }
-
-    return password_hash($password, PASSWORD_DEFAULT);
-} // END hesk_password_hash()
-
-
-function hesk_password_verify($password, $hash)
-{
-    if ( ! function_exists('password_verify')) {
-        global $hesklang;
-        die($hesklang['old_php_version']);
-    }
-
-    return password_verify($password, $hash);
-} // END hesk_password_verify()
-
-
-function hesk_password_needs_rehash($hash)
-{
-    return password_needs_rehash($hash, PASSWORD_DEFAULT);
-} // END hesk_password_needs_rehash()
 
 
 function hesk_formatDate($dt, $from_database=true)
@@ -771,7 +645,7 @@ function hesk_jsString($str)
 } // END hesk_jsString()
 
 
-function hesk_myOwnership()
+function hesk_myOwnership($consider_collaborators = false)
 {
     // Admins can see all tickets
     if ( ! empty($_SESSION['isadmin']) )
@@ -788,6 +662,10 @@ function hesk_myOwnership()
     if ($can_view_unassigned && $can_view_ass_others)
     {
         return '1';
+    }
+
+    if ($consider_collaborators) {
+        return " ( `w`.`user_id`=7 OR ( (`owner` IN ('0', '" . intval($_SESSION['id']) . "') OR `assignedby` = " . intval($_SESSION['id']) . ") ) ) ";
     }
 
     // Can see my tickets, unassigned and tickets I assigned to others
@@ -916,6 +794,9 @@ function hesk_purge_cache($type = '', $expire_after_seconds = 0)
         case 'status':
             $files = glob($cache_dir.'status_*', GLOB_NOSORT);
             break;
+        case 'priority':
+            $files = glob($cache_dir.'priority_*', GLOB_NOSORT);
+            break;
         case 'cf':
             $files = glob($cache_dir.'cf_*', GLOB_NOSORT);
             break;
@@ -939,6 +820,10 @@ function hesk_purge_cache($type = '', $expire_after_seconds = 0)
 
 function hesk_rrmdir($dir, $keep_top_level=false)
 {
+    if ( ! is_dir($dir)) {
+        return false;
+    }
+
     $files = $keep_top_level ? array_diff(scandir($dir), array('.','..','index.htm')) : array_diff(scandir($dir), array('.','..'));
 
     foreach ($files as $file)
@@ -950,14 +835,80 @@ function hesk_rrmdir($dir, $keep_top_level=false)
 
 } // END hesk_rrmdir()
 
-// Checks the user if they're elevated and not expired. If not, redirect to the elevator
-function hesk_check_user_elevation($post_elevation_redirect) {
-    if (!hesk_SESSION('elevated') || hesk_SESSION('elevated') < new DateTime()) {
-        $_SESSION['elevated'] = null;
-        $_SESSION['elevator_target'] = $post_elevation_redirect;
-        header('Location: elevator.php');
-        exit();
+
+function hesk_deleteTicketsForCustomer($customer_id) {
+    global $hesk_settings;
+
+    $sql = "SELECT `tickets`.`id`, `tickets`.`trackid` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
+            ON `ticket_to_customer`.`ticket_id` = `tickets`.`id`
+        WHERE `ticket_to_customer`.`customer_id` = ".intval($customer_id)."
+        AND `ticket_to_customer`.`customer_type` = 'REQUESTER'";
+
+    $tickets_rs = hesk_dbQuery($sql);
+    while ($ticket = hesk_dbFetchAssoc($tickets_rs)) {
+        hesk_fullyDeleteTicket($ticket['id'], $ticket['trackid']);
     }
+}
+
+
+function hesk_fullyDeleteTicket($ticket_id, $ticket_trackid)
+{
+    global $hesk_settings;
+
+    /* Delete attachment files */
+    $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."attachments` WHERE `ticket_id`='".hesk_dbEscape($ticket_trackid)."'");
+    if (hesk_dbNumRows($res))
+    {
+        $hesk_settings['server_path'] = dirname(dirname(__FILE__));
+
+        while ($file = hesk_dbFetchAssoc($res))
+        {
+            hesk_unlink($hesk_settings['server_path'].'/'.$hesk_settings['attach_dir'].'/'.$file['saved_name']);
+        }
+    }
+
+    /* Delete attachments info from the database */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."attachments` WHERE `ticket_id`='".hesk_dbEscape($ticket_trackid)."'");
+
+    /* Delete the ticket */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`='".intval($ticket_id)."'");
+
+    /* Delete replies to the ticket */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `replyto`='".intval($ticket_id)."'");
+
+    /* Delete ticket notes */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."notes` WHERE `ticket`='".intval($ticket_id)."'");
+
+    /* Delete ticket reply drafts */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."reply_drafts` WHERE `ticket`=".intval($ticket_id));
+
+    /* Delete ticket/customer mappings */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` WHERE `ticket_id` = ".intval($ticket_id));
+
+    /* Delete bookmarks */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."bookmarks` WHERE `ticket_id` = ".intval($ticket_id));
 
     return true;
 }
+
+
+function hesk_isTicketBookmarked($ticket_id, $user_id)
+{
+    global $hesk_settings, $hesklang, $hesk_db_link;
+
+    $result = hesk_dbQuery('SELECT `id` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'bookmarks` WHERE `ticket_id`='.intval($ticket_id).' AND `user_id`='.intval($user_id).' LIMIT 1');
+
+    return hesk_dbNumRows($result);
+} // END hesk_isTicketBookmarked()
+
+
+function hesk_json_exit($status = 'Error', $data = '') {
+    $json_data = [
+        'status' => $status,
+        'data'   => $data,
+    ];
+    echo json_encode($json_data);
+    exit;
+} // END hesk_json_exit()
+

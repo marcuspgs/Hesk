@@ -1,0 +1,16 @@
+Merhaba,
+
+Üzerinde çalıştığınız bir talebin son kullanma tarihi geçmiş!
+Talep detayları :
+
+Talep Konusu : %%SUBJECT%%
+Takip ID: %%TRACK_ID%%
+
+Bu talebi buradan yönetebilirsiniz :
+%%TRACK_URL%%
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

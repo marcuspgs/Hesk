@@ -1,0 +1,8 @@
+<p>Kedves %%NAME%%,</p>
+<p>A "%%SUBJECT%%" hibajegyét elmentettük.</p>
+<p>Amint lehet válaszolunk az összes hibajegyre, általában 12-24 órán belül. Ha úgy látjuk, hogy több időre van szükség, emailt küldünk Önnek.</p>
+<p>Hibajegy azonosító ID: %%TRACK_ID%%</p>
+<p>Itt tudja megtekinteni a hibajegy állapotát:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Email értesítést fog kapni, amikor munkatársaink válaszolnak a hibajegyre.</p>
+<p>Üdvözlettel,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

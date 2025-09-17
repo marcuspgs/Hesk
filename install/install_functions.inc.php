@@ -15,7 +15,7 @@
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 // We will be installing this HESK version:
-define('HESK_NEW_VERSION','3.4.3');
+define('HESK_NEW_VERSION','3.6.0');
 define('REQUIRE_PHP_VERSION','5.6.0');
 define('REQUIRE_MYSQL_VERSION','5.0.7');
 
@@ -42,6 +42,21 @@ if (!isset($hesk_settings['samesite']))
 if (!isset($hesk_settings['force_ssl']))
 {
     $hesk_settings['force_ssl'] = 0;
+}
+// Added for IMAP Mailbox
+if (!isset($hesk_settings['imap_mailbox']))
+{
+    $hesk_settings['imap_mailbox'] = 'INBOX';
+}
+
+//Added for direct attachment settings
+if (!isset($hesk_settings['attachments']['attachment_in_email_type']))
+{
+    $hesk_settings['attachments']['attachment_in_email_type'] = 0;
+    $hesk_settings['attachments']['direct_attachment_in_email'] = 0;
+    $hesk_settings['attachments']['direct_attachment_in_email_no_of_files'] = 2;
+    $hesk_settings['attachments']['first_x_attachments'] = 2;
+    $hesk_settings['attachments']['file_max_size'] = 2048;
 }
 
 error_reporting(E_ALL);
@@ -76,7 +91,7 @@ function hesk_iTestDatabaseConnection($use_existing_settings = false)
 		$hesk_settings['db_host'] = hesk_input( hesk_POST('host') );
 		$hesk_settings['db_name'] = hesk_input( hesk_POST('name') );
 		$hesk_settings['db_user'] = str_replace('&amp;', '&', hesk_input( hesk_POST('user') ) );
-		$hesk_settings['db_pass'] = str_replace('&amp;', '&', hesk_input( hesk_POST('pass') ) );
+		$hesk_settings['db_pass'] = str_replace(array('&amp;', '&gt;', '&lt;'), array('&', '>', '<'), hesk_input( hesk_POST('pass') ) );
 
 		if (INSTALL_PAGE == 'install.php')
 		{
@@ -234,6 +249,8 @@ $hesk_settings[\'webmaster_mail\']=\'' . $set['webmaster_mail'] . '\';
 $hesk_settings[\'site_theme\']=\'' . $set['site_theme'] . '\';
 $hesk_settings[\'admin_css\']=' . $set['admin_css'] . ';
 $hesk_settings[\'admin_css_url\']=\'' . $set['admin_css_url'] . '\';
+$hesk_settings[\'admin_js\']=' . $set['admin_js'] . ';
+$hesk_settings[\'admin_js_url\']=\'' . $set['admin_js_url'] . '\';
 
 // --> Language settings
 $hesk_settings[\'can_sel_lang\']=' . $set['can_sel_lang'] . ';
@@ -283,10 +300,32 @@ $hesk_settings[\'spam_notice\']=' . $set['spam_notice'] . ';
 $hesk_settings[\'list_users\']=' . $set['list_users'] . ';
 $hesk_settings[\'debug_mode\']=' . $set['debug_mode'] . ';
 $hesk_settings[\'short_link\']=' . $set['short_link'] . ';
+$hesk_settings[\'submitting_wait\']=' . $set['submitting_wait'] . ';
 $hesk_settings[\'select_cat\']=' . $set['select_cat'] . ';
 $hesk_settings[\'select_pri\']=' . $set['select_pri'] . ';
 $hesk_settings[\'cat_show_select\']=' . $set['cat_show_select'] . ';
 $hesk_settings[\'staff_ticket_formatting\']=' . $set['staff_ticket_formatting'] . ';
+
+// --> Barcode
+$hesk_settings[\'barcode\']=array(
+\'print\' => ' . $set['barcode']['print'] . ',
+\'staff_only\' => ' . $set['barcode']['staff_only'] . ',
+\'type\' => \'' . $set['barcode']['type'] . '\',
+\'format\' => \'' . $set['barcode']['format'] . '\',
+\'width\' => ' . $set['barcode']['width'] . ',
+\'height\' => ' . $set['barcode']['height'] . ',
+\'color\' => \'' . $set['barcode']['color'] . '\',
+\'bg\' => \'' . $set['barcode']['bg'] . '\',
+);
+
+// --> Customer Accounts
+$hesk_settings[\'customer_accounts\']=' . $set['customer_accounts'] . ';
+$hesk_settings[\'customer_accounts_required\']=' . $set['customer_accounts_required'] . ';
+$hesk_settings[\'customer_accounts_customer_self_register\']=' . $set['customer_accounts_customer_self_register'] . ';
+$hesk_settings[\'customer_accounts_admin_approvals\']=' . $set['customer_accounts_admin_approvals'] . ';
+$hesk_settings[\'customer_autologin\']=' . $set['customer_autologin'] . ';
+$hesk_settings[\'customer_accounts_allow_email_changes\']=' . $set['customer_accounts_allow_email_changes'] . ';
+$hesk_settings[\'customer_accounts_verify_email_cooldown\']=' . $set['customer_accounts_verify_email_cooldown'] . ';
 
 // --> SPAM Prevention
 $hesk_settings[\'secimg_use\']=' . $set['secimg_use'] . ';
@@ -309,14 +348,20 @@ $hesk_settings[\'samesite\']=\'' . $set['samesite'] . '\';
 $hesk_settings[\'force_ssl\']=' . $set['force_ssl'] . ';
 $hesk_settings[\'url_key\']=\'' . $set['url_key'] . '\';
 $hesk_settings[\'require_mfa\']=' . $set['require_mfa'] . ';
+$hesk_settings[\'require_mfa_customers\']=' . $set['require_mfa_customers'] . ';
 $hesk_settings[\'elevator_duration\']=\'' . $set['elevator_duration'] . '\';
 
 // --> Attachments
-$hesk_settings[\'attachments\']=array (
+$hesk_settings[\'attachments\']=array(
 \'use\' => ' . $set['attachments']['use'] . ',
 \'max_number\' => ' . $set['attachments']['max_number'] . ',
 \'max_size\' => ' . $set['attachments']['max_size'] . ',
-\'allowed_types\' => array(\'' . implode('\',\'',$set['attachments']['allowed_types']) . '\')
+\'allowed_types\' => array(\'' . implode('\',\'',$set['attachments']['allowed_types']) . '\'),
+\'attachment_in_email_type\' => ' .$set['attachments']['attachment_in_email_type'].',
+\'direct_attachment_in_email\' => ' .$set['attachments']['direct_attachment_in_email'].',
+\'direct_attachment_in_email_no_of_files\' => ' .$set['attachments']['direct_attachment_in_email_no_of_files'].',
+\'first_x_attachments\' => ' .$set['attachments']['first_x_attachments'].',
+\'file_max_size\' => ' .$set['attachments']['file_max_size'].',
 );
 
 
@@ -346,6 +391,7 @@ $hesk_settings[\'kb_related\']=' . $set['kb_related'] . ';
 // --> Email sending
 $hesk_settings[\'noreply_mail\']=\'' . $set['noreply_mail'] . '\';
 $hesk_settings[\'noreply_name\']=\'' . $set['noreply_name'] . '\';
+$hesk_settings[\'email_max_recipients\']=' . $set['email_max_recipients'] . ';
 $hesk_settings[\'email_formatting\']=' . $set['email_formatting'] . ';
 $hesk_settings[\'smtp\']=' . $set['smtp'] . ';
 $hesk_settings[\'smtp_host_name\']=\'' . $set['smtp_host_name'] . '\';
@@ -368,11 +414,13 @@ $hesk_settings[\'imap_host_name\']=\'' . $set['imap_host_name'] . '\';
 $hesk_settings[\'imap_host_port\']=' . $set['imap_host_port'] . ';
 $hesk_settings[\'imap_enc\']=\'' . $set['imap_enc'] . '\';
 $hesk_settings[\'imap_noval_cert\']=' . $set['imap_noval_cert'] . ';
+$hesk_settings[\'imap_disable_GSSAPI\']=' . $set['imap_disable_GSSAPI'] . ';
 $hesk_settings[\'imap_keep\']=' . $set['imap_keep'] . ';
 $hesk_settings[\'imap_user\']=\'' . $set['imap_user'] . '\';
 $hesk_settings[\'imap_password\']=\'' . $set['imap_password'] . '\';
 $hesk_settings[\'imap_conn_type\']=\'' . $set['imap_conn_type'] . '\';
 $hesk_settings[\'imap_oauth_provider\']=' . $set['imap_oauth_provider'] . ';
+$hesk_settings[\'imap_mailbox\']=\''. $set['imap_mailbox'] . '\';
 
 // --> POP3 Fetching
 $hesk_settings[\'pop3\']=' . $set['pop3'] . ';
@@ -396,6 +444,8 @@ $hesk_settings[\'pipe_block_returned\']=' . $set['pipe_block_returned'] . ';
 $hesk_settings[\'pipe_block_duplicate\']=' . $set['pipe_block_duplicate'] . ';
 $hesk_settings[\'loop_hits\']=' . $set['loop_hits'] . ';
 $hesk_settings[\'loop_time\']=' . $set['loop_time'] . ';
+$hesk_settings[\'pipe_customer_rejection_notification\']=' . $set['pipe_customer_rejection_notification'] . ';
+$hesk_settings[\'pipe_customer_rejection_email_cooldown_hours\']=' . $set['pipe_customer_rejection_email_cooldown_hours'] . ';
 
 // --> Detect email typos
 $hesk_settings[\'detect_typos\']=' . $set['detect_typos'] . ';
@@ -431,7 +481,7 @@ $hesk_settings[\'timezone\']=\'' . $set['timezone'] . '\';
 $hesk_settings[\'format_time\']=\'' . $set['format_time'] . '\';
 $hesk_settings[\'format_date\']=\'' . $set['format_date'] . '\';
 $hesk_settings[\'format_timestamp\']=\'' . $set['format_timestamp'] . '\';
-$hesk_settings[\'time_display\']=\'' . $set['time_display'] . '\';
+$hesk_settings[\'time_display\']=' . $set['time_display'] . ';
 $hesk_settings[\'format_datepicker_js\']=\'' . $set['format_datepicker_js'] . '\';
 $hesk_settings[\'format_datepicker_php\']=\'' . $set['format_datepicker_php'] . '\';
 
@@ -541,7 +591,7 @@ function hesk_iDatabase($problem=0)
 	</tr>
 	<tr>
 	<td width="200">User Password:</td>
-	<td><input type="text" name="pass" value="<?php echo str_replace('&', '&amp;', $hesk_settings['db_pass']); ?>" size="40" autocomplete="off" /></td>
+	<td><input type="text" name="pass" value="<?php echo str_replace(array('&', '>', '<'), array('&amp;', '&gt;', '&lt;'), $hesk_settings['db_pass']); ?>" size="40" autocomplete="off" /></td>
 	</tr>
 	<?php
 	if (INSTALL_PAGE == 'install.php')
@@ -796,7 +846,7 @@ function hesk_iCheckSetup()
 		'admin.php','admin_change_status.php','admin_main.php','admin_move_category','admin_reply_ticket.php',
 	    'admin_settings.php','admin_settings_save.php','admin_ticket.php','archive.php',
 	    'delete_tickets.php','find_tickets.php','manage_canned.php','manage_categories.php',
-	    'manage_users.php','profile.php','show_tickets.php',
+	    'manage_users.php','show_tickets.php',
 
 		// pre-2.1 files
 		'emails/','language/english.php',
@@ -1075,14 +1125,21 @@ function hesk_iStart()
 <tr>
 <td>
 
-	<p><b>Do you accept the HESK Software End-User License Agreement?</b></b><br />&nbsp;</p>
+    <div id="update">
+	<p><b>Do you accept the HESK Software End-User License Agreement?</b><br />&nbsp;</p>
 
 	<p align="center">
 	<input type="hidden" name="agree" value="YES" />
 	<input type="button" onclick="javascript:parent.location='index.php'" value="I DO NOT ACCEPT (Cancel setup)" class="orangebuttonsec" onmouseover="hesk_btn(this,'orangebuttonsecover');" onmouseout="hesk_btn(this,'orangebuttonsec');" />
 	&nbsp;
-	<input type="submit" onclick="javascript:this.value='Working, please wait...'" value="I ACCEPT (Click to continue) &raquo;" class="orangebutton" onmouseover="hesk_btn(this,'orangebuttonover');" onmouseout="hesk_btn(this,'orangebutton');" />
+	<input type="submit" onclick="javascript:this.value='Working, please wait...';document.getElementById('update').style.display='none';document.getElementById('working').style.display='block';" value="I ACCEPT (Click to continue) &raquo;" class="orangebutton" onmouseover="hesk_btn(this,'orangebuttonover');" onmouseout="hesk_btn(this,'orangebutton');" />
 	</p>
+
+    </div>
+
+    <div id="working" style="texyt-align:center; display:none">
+    <b>Updating, please wait...</b>
+    </div>
 
     <p><img src="https://www.hesk.com/images/space.gif" width="10" height="10" alt="" border="0" />&nbsp;</p>
 
@@ -1105,7 +1162,8 @@ function hesk_iHeader()
     	1 => '1. License agreement',
         2 => '2. Check setup',
         3 => '3. Setup Database',
-        4 => '4. Finishing touches'
+        4 => '4. Customer Migration',
+        5 => '5. Finishing touches'
         );
 
 	?>
@@ -1115,6 +1173,7 @@ function hesk_iHeader()
 	<title>HESK setup script: <?php echo HESK_NEW_VERSION; ?></title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<link href="hesk_style.css?<?php echo HESK_NEW_VERSION; ?>" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="jquery-3.5.1.min.js?<?php echo HESK_NEW_VERSION; ?>"></script>
 	<script type="text/javascript" src="hesk_javascript.js?<?php echo HESK_NEW_VERSION; ?>"></script>
 	</head>
 	<body>
@@ -1256,6 +1315,83 @@ function hesk_compareVariable($k,$v)
     	return $v;
     }
 } // END hesk_compareVariable()
+
+function hesk_iCustomerMigrationIntro() {
+    global $hesk_settings;
+
+    hesk_dbConnect();
+
+    hesk_iHeader();
+    ?>
+
+<h3>Customer Migration</h3>
+
+<br />
+
+    <div align="center">
+    <table border="0" width="750" cellspacing="1" cellpadding="5" class="white">
+    <tr>
+    <td>
+        <div id="intro">
+            <p>As of HESK 3.5.0, customer information is stored differently and requires a migration process.</p>
+            <p>Number of customers to migrate: <span id="customer-intro-count">...</span></p>
+            <noscript>
+                In order to continue, you must have Javascript enabled.
+            </noscript>
+            <div class="lds-dual-ring" id="intro-loader"></div>
+            <div id="continue-block" style="display: none">
+                <p>Click the "Migrate" button below to start the migration process.  This page will automatically update during this process.</p>
+                <button type="button"
+                        class="orangebutton"
+                        onmouseover="hesk_btn(this,'orangebuttonover');"
+                        onmouseout="hesk_btn(this,'orangebutton');"
+                        onclick="beginCustomerMigration()">Migrate</button>
+            </div>
+        </div>
+        <div id="migrating" style="display: none">
+            <?php hesk_show_notice('The migration process has begun.  Please do <b>not</b> close this window or refresh the page.'); ?>
+            <p>Migrating...</p>
+            <div style="border: 1px solid #d4d6e3; width: 100%; height: 14px">
+                <?php // Update width as progress is made ?>
+                <div class="progress-bar" style="font-size: 1px; height: 14px; width: 0; background-color: #008000; border: none;">
+                </div>
+            </div>
+            <div class="progress-values">
+                <span id="count-completed">0</span> / <span id="count-total">0</span>
+            </div>
+        </div>
+        <div id="complete" style="display: none">
+            <p>The customer migration process is complete!</p>
+            <form method="get" action="<?php echo INSTALL_PAGE; ?>">
+                <input type="hidden" name="migration-complete" value="1">
+                <button type="submit"
+                        class="orangebutton"
+                        onmouseover="hesk_btn(this,'orangebuttonover');"
+                        onmouseout="hesk_btn(this,'orangebutton');">Continue</button>
+            </form>
+        </div>
+    </td>
+    </tr>
+    </table>
+    </div>
+    <script>
+        getCustomerCount();
+    </script>
+<?php
+    hesk_iFooter();
+}
+
+function hesk_iDropOldPreCustomerColumns() {
+    global $hesk_settings;
+
+    $column_exists = hesk_dbQuery("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS 
+         WHERE TABLE_SCHEMA = '".hesk_dbEscape($hesk_settings['db_name'])."' 
+           AND TABLE_NAME = '".hesk_dbEscape($hesk_settings['db_pfix'])."replies' 
+           AND COLUMN_NAME = 'name'");
+    if (hesk_dbNumRows($column_exists) > 0) {
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` DROP COLUMN `name`");
+    }
+}
 
 
 function is__writable($path)

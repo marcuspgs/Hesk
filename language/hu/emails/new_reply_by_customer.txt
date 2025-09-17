@@ -1,0 +1,12 @@
+Üdvözöljük!
+
+Egy ügyfél válaszolt a "%%SUBJECT%%" hibajegyre.
+
+Itt tudja kezelni a hibajegyet:
+%%TRACK_URL%%
+
+
+Üdvözlettel,
+
+HelpDesk
+Adminisztrátor

@@ -1,0 +1,18 @@
+Vážený(á) %%NAME%%,
+
+Vaši e-mailovou zprávu „%%SUBJECT%%“ jsme nemohli zpracovat, protože u nás nemáte účet.
+
+Chcete-li odeslat žádost o podporu prostřednictvím e-mailu, nejprve se zaregistrujte na adrese:
+%%CUSTOMER_REGISTER_URL%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -117,7 +117,7 @@ function handle_mfa_method_selection($tfa, $user_context) {
             'mfaMethod' => 'AUTH-APP',
             'model' => [
                 'secret' => $_SESSION['customer']['tfa_secret'],
-                'qrCodeUri' => $tfa->getQRCodeImageAsDataUri($hesk_settings['hesk_title'], $_SESSION['customer']['tfa_secret'])
+                'qrCodeUri' => function_exists('curl_init') ? $tfa->getQRCodeImageAsDataUri($hesk_settings['hesk_title'], $_SESSION['customer']['tfa_secret']) : false,
             ],
             'messages' => hesk_get_messages(),
             'customerUserContext' => $user_context
@@ -187,7 +187,7 @@ function handle_mfa_verification($tfa, $user_context) {
                 'mfaMethod' => 'AUTH-APP',
                 'model' => [
                     'secret' => $_SESSION['customer']['tfa_secret'],
-                    'qrCodeUri' => $tfa->getQRCodeImageAsDataUri($hesk_settings['hesk_title'], $_SESSION['customer']['tfa_secret'])
+                    'qrCodeUri' => function_exists('curl_init') ? $tfa->getQRCodeImageAsDataUri($hesk_settings['hesk_title'], $_SESSION['customer']['tfa_secret']) : false,
                 ],
                 'messages' => hesk_get_messages(),
                 'customerUserContext' => $user_context

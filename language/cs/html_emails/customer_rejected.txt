@@ -1,0 +1,5 @@
+<p>Vážený(á) %%NAME%%,</p>
+<p>Bohužel registrace Vašeho účtu byla zamítnuta.</p>
+<p>Pokud se domníváte, že se jedná o omyl, zkuste se zaregistrovat znovu.</p>
+<p>S pozdravem,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,15 @@
+Γεια σας,
+
+Συνεργάζεστε σε ένα νέο support ticket.
+
+Θέμα ticket: %%SUBJECT%%
+Tracking ID: %%TRACK_ID%%
+
+Μπορείτε να διαχειριστείτε αυτό το ticket εδώ:
+%%TRACK_URL%%
+
+
+Με εκτίμηση,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

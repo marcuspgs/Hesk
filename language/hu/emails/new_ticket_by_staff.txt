@@ -1,0 +1,18 @@
+Kedves %%NAME%%,
+
+"%%SUBJECT%%" támogatási jegyét elküldtük.
+
+Minden jegyre a lehető leghamarabb, 24-48 órán belül válaszolunk. Ha várhatóan több időt vesz igénybe a jegye, e-mailben értesítjük.
+
+Jegy azonosítója: %%TRACK_ID%%
+
+Jegyének állapotát itt tekintheti meg:
+%%TRACK_URL%%
+
+E-mailben értesítjük, ha munkatársunk válaszol a jegyére.
+
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

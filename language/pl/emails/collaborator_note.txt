@@ -1,0 +1,15 @@
+Witaj,
+
+Dodano nową notatkę do zgłoszenia „%%SUBJECT%%”, nad którym wspólnie pracujesz.
+
+Notatka od %%NAME%%:
+
+%%MESSAGE%%
+
+Możesz zarządzać tym zgłoszeniem tutaj:
+%%TRACK_URL%%
+
+Pozdrawiam,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

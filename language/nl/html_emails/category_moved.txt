@@ -1,0 +1,8 @@
+<p>Hallo,</p>
+<p>Er is een nieuwe support aanvraag geplaatst voor je categorie. Ticketdetails:</p>
+<p>Naam: %%NAME%%<br />Onderwerp: %%SUBJECT%%</p>
+<p>Ticketonderwerp: %%SUBJECT%%<br />Categorie: %%CATEGORY%%<br />Ticketnummer: %%TRACK_ID%%<br />Prioriteit: %%PRIORITY%%</p>
+<p>Inhoud:<br />%%MESSAGE%%</p>
+<p>Je kunt hier werken aan het ticket:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

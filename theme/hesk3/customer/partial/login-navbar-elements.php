@@ -3,6 +3,16 @@
 if (!defined('IN_SCRIPT')) {
     die();
 }
+/* Added by Andraz - TODO note: renderCommonElementsAfterBody & renderNavbarLanguageSelect were added here,
+    to ensure they're loaded in all currently relevant places. Should potentially ideally be decoupled a bit more,
+    once/if customer HTML is modularized more in the future.
+*/
+function renderCommonElementsAfterBody() {
+    global $hesk_settings, $hesklang;
+    ?>
+    <a href="#maincontent" class="skiplink"><?php echo $hesklang['skip_to_main_content']; ?></a>
+    <?php
+}
 
 function renderLoginNavbarElements($userContext = null) {
     global $hesk_settings, $hesklang;
@@ -67,4 +77,24 @@ function renderLoginNavbarElements($userContext = null) {
     </div>
 <?php
     endif;
+}
+
+function renderNavbarLanguageSelect() {
+    global $hesk_settings, $hesklang;
+
+    if ($hesk_settings['can_sel_lang']) { ?>
+        <div class="header__lang">
+            <form method="get" action="" aria-label="<?php echo $hesklang['set_lang']; ?>" style="margin:0;padding:0;border:0;white-space:nowrap;">
+                <div class="dropdown-select center out-close">
+                    <select name="language" onchange="this.form.submit()">
+                        <?php hesk_listLanguages(); ?>
+                    </select>
+                </div>
+                <?php foreach (hesk_getCurrentGetParameters() as $key => $value): ?>
+                    <input type="hidden" name="<?php echo hesk_htmlentities($key); ?>"
+                           value="<?php echo hesk_htmlentities($value); ?>">
+                <?php endforeach; ?>
+            </form>
+        </div>
+    <?php }
 }

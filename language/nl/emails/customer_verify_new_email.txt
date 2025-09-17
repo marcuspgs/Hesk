@@ -1,0 +1,12 @@
+Beste %%NAME%%,
+
+We hebben een verzoek ontvangen om je e-mailadres te wijzigen.
+
+Om deze wijziging te bevestigen, klik je op de onderstaande URL (deze verloopt over 1 uur):
+
+%%VERIFICATION_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

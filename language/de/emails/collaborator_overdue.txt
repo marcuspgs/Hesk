@@ -1,0 +1,15 @@
+Hallo,
+
+Ein Ticket, an dem Sie mitarbeiten, ist überfällig! Einzelheiten zum Ticket:
+
+Betreff des Tickets: %%SUBJECT%%
+Verfolgungs-ID: %%TRACK_ID%%
+
+Sie können dieses Ticket hier verwalten:
+%%TRACK_URL%%
+
+
+Mit freundlichen Grüßen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

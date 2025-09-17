@@ -1,0 +1,6 @@
+<p>Hallo,</p>
+<p>Nieuwe klantaccounts moeten nog door het personeel worden goedgekeurd.</p>
+<p>Aantal goedkeuringen in afwachting van goedkeuring: %%NUM%%</p>
+<p>Hier kunt u registraties van klantenaccounts goed- of afkeuren:<br /><a href="%25%25VERIFICATIE_URL%25%25">%%VERIFICATIE_URL%%</a></p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

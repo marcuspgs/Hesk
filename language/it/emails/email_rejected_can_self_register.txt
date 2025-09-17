@@ -1,0 +1,10 @@
+Gentile %%NAME%%,
+
+non siamo riusciti a elaborare la tua email "%%SUBJECT%%" perché non hai un account.
+
+Per inviare ticket di supporto via email, prima effettua la registrazione su: %%CUSTOMER_REGISTER_URL%%
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

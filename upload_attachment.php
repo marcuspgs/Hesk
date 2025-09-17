@@ -32,9 +32,9 @@ if (hesk_GET('action') === 'delete') {
     return http_response_code(204);
 } elseif (!empty($_FILES)) {
     $info = hesk_uploadTempFile();
+    http_response_code($info['status_code']);
     print json_encode($info);
-
-    return http_response_code($info['status_code']);
+    return '';
 }
 
 return http_response_code(400);

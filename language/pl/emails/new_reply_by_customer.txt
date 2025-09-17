@@ -1,0 +1,10 @@
+Witam,
+
+Klient odpowiedział na twoją wiadomość dot. zadania %%TRACK_ID%%.
+
+Szczegóły dostępne są pod adresem 
+%%TRACK_URL%%
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

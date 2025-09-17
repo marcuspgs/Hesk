@@ -1,37 +1,37 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt">
 <head>
-<title>Interactive help for Hesk settings</title>
+<title>Ajuda interativa para configurações do Hesk</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="help_style.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 
-<!-- next: 73 -->
+<!-- next: 77 -->
 
-<h3>Interactive help for Hesk settings</h3>
+<h3>Ajuda interativa para configurações do Hesk</h3>
 
 <p>&nbsp;</p>
 
-<a name="55"></a><p class="title">Email sender</p>
-<p>Select wether HESK should send emails usign PHP mail() function or using a manually setup SMTP server.</p>
+<a name="55"></a><p class="title">Remetente de email</p>
+<p>Selecione se o HESK deve enviar emails usando a função mail() do PHP ou usando um servidor SMTP configurado manualmente.</p>
 
-<p>PHP mail() should work on most setups, if it doesn't you may try setting up a SMTP server instead.</p>
+<p>A função mail() do PHP deve funcionar na maioria das configurações. Se não funcionar, você pode tentar configurar um servidor SMTP.</p>
 
-<p>Available SMTP variables:</p>
+<p>Variáveis SMTP disponíveis:</p>
 
 <p>
-<b>SMTP Host</b> - hostname of your SMTP server, usually <i>localhost</i> or <i>mail.example.com</i><br />
-<b>SMTP Port</b> - your SMTP port, usually 25<br />
-<b>SMTP Timeout</b> - SMTP timeout in seconds<br />
-<b>Encryption</b> - enable if your SMTP server requires encrypted connections<br />
-<b>SMTP Username</b> - your SMTP username (if used)<br />
-<b>SMTP Password</b> - your SMTP password (if used)<br />
+<b>Host SMTP</b> - nome do host do seu servidor SMTP, geralmente <i>localhost</i> ou <i>mail.exemplo.com</i><br />
+<b>Porta SMTP</b> - sua porta SMTP, geralmente 25<br />
+<b>Tempo limite SMTP</b> - tempo limite SMTP em segundos<br />
+<b>Criptografia</b> - ative se o seu servidor SMTP exigir conexões criptografadas<br />
+<b>Usuário SMTP</b> - seu nome de usuário SMTP (se usado)<br />
+<b>Senha SMTP</b> - sua senha SMTP (se usada)<br />
 </p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -42,116 +42,95 @@
 
 <a name="54"></a><p class="title">Email Piping</p>
 
-<p>Enables email piping (creating tickets from emails).</p>
+<p>Ativa o email piping (criação de tickets a partir de emails).</p>
 
-<p>This option just enables piping functionality in HESK, for complete email piping setup please refer to the readme.html file.</p>
-
-<p>&nbsp;</p>
-
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-
-<a name="59"></a><p class="title">POP3 Fetching</p>
-
-<p>This setting enables or disables POP3 Fetching - creating tickets from emails by connecting to an email account using POP3 connection.
-
-<p>For instructions on how to setup POP3 Fetching please see the readme.html file.</p>
-
-<p>Available variables are:</p>
-
-<p><b>Task Timeout</b> - number of minutes to wait for an existing POP3 fetching job to
-complete. No new fetching jobs will start until the timeout is reached.
-Set to <b>0</b> to disable timeouts and always start a new fetching job.</p>
-
-<p>
-<b>POP3 Host</b> - hostname of your POP3 server, usually <i>mail.example.com</i><br />
-<b>POP3 Port</b> - your POP3 port, usually 110. Gmail for example uses 995<br />
-<b>TLS Protocol</b> - enable if your POP3 server requires TLS protocol<br />
-<b>Keep a copy</b> - if enabled HESK will <b>not</b> delete mail from POP3 server<br />
-<b>POP3 Username</b> - your POP3 username<br />
-<b>POP3 Password</b> - your POP3 password<br />
-</p>
+<p>Esta opção apenas ativa a funcionalidade de piping no HESK. Para a configuração completa do email piping, consulte o arquivo readme.html.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="67"></a><p class="title">IMAP Fetching</p>
+<a name="59"></a><p class="title">Busca POP3</p>
 
-<p>This setting enables or disables IMAP Fetching - creating tickets from emails by connecting to an email account using IMAP connection.</p>
+<p>Esta configuração ativa ou desativa a Busca POP3 - criação de tickets a partir de emails conectando-se a uma conta de email usando conexão POP3.</p>
 
-<p>For instructions on how to setup IMAP Fetching please see the readme.html file.</p>
+<p>Para instruções sobre como configurar a Busca POP3, consulte o arquivo readme.html.</p>
 
-<p>Available variables are:</p>
+<p>Variáveis disponíveis:</p>
 
-<p><b>Task Timeout</b> - number of minutes to wait for an existing IMAP fetching job to
-complete. No new fetching jobs will start until the timeout is reached.
-Set to <b>0</b> to disable timeouts and always start a new fetching job.</p>
+<p><b>Tempo limite da tarefa</b> - número de minutos para aguardar a conclusão de um trabalho de busca POP3 existente.
+Nenhum novo trabalho de busca será iniciado até que o tempo limite seja atingido.
+Defina como <b>0</b> para desativar os tempos limite e sempre iniciar um novo trabalho de busca.</p>
 
 <p>
-<b>IMAP Host</b> - hostname of your IMAP server, usually <i>mail.example.com</i><br />
-<b>IMAP Port</b> - your IMAP port, usually 143 for non-encrypted and 993 for SSL/TLS<br />
-<b>Encryption</b> - set required IMAP encryption<br />
-<b>Keep a copy</b> - if enabled HESK will <b>not</b> delete mail from IMAP server<br />
-<b>IMAP Username</b> - your IMAP username<br />
-<b>IMAP Password</b> - your IMAP password<br />
+<b>Host POP3</b> - nome do host do seu servidor POP3, geralmente <i>mail.exemplo.com</i><br />
+<b>Porta POP3</b> - sua porta POP3, geralmente 110. O Gmail, por exemplo, usa 995<br />
+<b>Protocolo TLS</b> - ative se o seu servidor POP3 exigir protocolo TLS<br />
+<b>Manter uma cópia</b> - se ativado, o HESK <b>não</b> excluirá o email do servidor POP3<br />
+<b>Usuário POP3</b> - seu nome de usuário POP3<br />
+<b>Senha POP3</b> - sua senha POP3<br />
 </p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="68"></a><p class="title">Do not validate server certificates</p>
+<a name="67"></a><p class="title">Busca IMAP</p>
 
-<p>If checked, Hesk will not validate certificates from the TLS/SSL server.</p>
+<p>Esta configuração ativa ou desativa a Busca IMAP - criação de tickets a partir de emails conectando-se a uma conta de email usando conexão IMAP.</p>
 
-<p>Certificate validation usually needs to be skipped if the server uses self-signed certificates.</p>
+<p>Para instruções sobre como configurar a Busca IMAP, consulte o arquivo readme.html.</p>
 
-<p>We strongly recommend that you do <b>not</b> disable certificate validation on production servers and when connecting to third-party servers as it makes you vulnerable to man-in-the-middle attacks.</p>
+<p>Variáveis disponíveis:</p>
 
-<p>&nbsp;</p>
+<p><b>Tempo limite da tarefa</b> - número de minutos para aguardar a conclusão de um trabalho de busca IMAP existente.
+Nenhum novo trabalho de busca será iniciado até que o tempo limite seja atingido.
+Defina como <b>0</b> para desativar os tempos limite e sempre iniciar um novo trabalho de busca.</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-
-<a name="70"></a><p class="title">Do not reply</p>
-
-<p>If checked, Hesk will try to detect emails sent from &quot;Do not reply&quot; email addresses and ignore them.</p>
-
-<p>Examples:<br>
-do-not-reply@example.com<br>
-do_not_reply@example.com<br>
-no_reply@example.com
+<p>
+<b>Host IMAP</b> - nome do host do seu servidor IMAP, geralmente <i>mail.exemplo.com</i><br />
+<b>Porta IMAP</b> - sua porta IMAP, geralmente 143 para não criptografado e 993 para SSL/TLS<br />
+<b>Criptografia</b> - defina a criptografia IMAP necessária<br />
+<b>Manter uma cópia</b> - se ativado, o HESK <b>não</b> excluirá o email do servidor IMAP<br />
+<b>Usuário IMAP</b> - seu nome de usuário IMAP<br />
+<b>Senha IMAP</b> - sua senha IMAP<br />
+<b>Caixa de correio IMAP</b> - escolha a caixa de correio IMAP para buscar emails. O padrão é INBOX. Alguns exemplos válidos: <br />
+INBOX<br />
+[Gmail]/Todos os emails<br />
+[Gmail]/Importante<br />
+[Gmail]/Com estrela<br />
 </p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="68"></a><p class="title">Não validar certificados do servidor</p>
+
+<p>Se marcado, o Hesk não validará certificados do servidor TLS/SSL.</p>
+
+<p>A validação de certificado geralmente precisa ser ignorada se o servidor usar certificados autoassinados.</p>
+
+<p>Recomendamos fortemente que você <b>não</b> desative a validação de certificado em servidores de produção e ao conectar-se a servidores de terceiros, pois isso o deixa vulnerável a ataques de intermediário.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -165,37 +144,19 @@ no_reply@example.com
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="71"></a><p class="title">Returned</p>
+<a name="70"></a><p class="title">Não responder</p>
 
-<p>If checked, Hesk will try to detect and ignore returned emails.</p>
+<p>Se marcado, o Hesk tentará detectar emails enviados de endereços de email "Não responder" e ignorá-los.</p>
 
-<p>For example, it will ignore emails sent from mail-deamon@example.com and emails with a subject such as &quot;Returned mail&quot;, &quot;Undeliverable&quot;, &quot;Out of Office&quot; or similar.</p>
-
-<p>&nbsp;</p>
-
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-
-<a name="72"></a><p class="title">Duplicates</p>
-
-<p>If checked, Hesk will detect and ignore an email if Hesk has already processed an email with the same message within &quot;Timeframe&quot; seconds.</p>
-
-<p>When testing email to ticket functionality, either disable this setting or send test emails with unique messages.</p>
+<p>Exemplos:<br>
+nao-responda@exemplo.com<br>
+nao_responda@exemplo.com<br>
+sem_resposta@exemplo.com
+</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -207,19 +168,17 @@ no_reply@example.com
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+<p>&nbsp;</p>
 
-<a name="60"></a><p class="title">Email Loops</p>
+<a name="71"></a><p class="title">Devolvidos</p>
 
-<p>Settings to help detect email loops created from autoresponders or undeliverable email.</p>
+<p>Se marcado, o Hesk tentará detectar e ignorar emails devolvidos.</p>
 
-<p>Any number of emails higher than <b>Max Hits</b> from an email address within <b>Timeframe</b> seconds
-will be ignored by email piping.</p>
-
-<p>Set <b>Max Hits</b> to <b>0</b> to disable loop detection.</p>
+<p>Por exemplo, ignorará emails enviados de mail-deamon@exemplo.com e emails com assunto como "Email devolvido", "Não entregue", "Fora do escritório" ou similar.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -229,173 +188,223 @@ will be ignored by email piping.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
-<a name="62"></a><p class="title">Detect email typos</p>
+<a name="72"></a><p class="title">Duplicatas</p>
 
-<p>This function will try to detect common email domain name misspelling and suggest a corrected version.</p>
+<p>Se marcado, o Hesk detectará e ignorará um email se já tiver processado um email com a mesma mensagem dentro de "Período de tempo" segundos.</p>
 
-<p>For example if customer enters user@<span style="color:red"><b>gmial.com</b></span> HESK will detect it and suggest
-user@<span style="color:green"><b>gmail.com</b></span> instead.</p>
-
-<p>HESK will compare email domains to the domains listed in <i>Email providers</i> list.</p>
+<p>Ao testar a funcionalidade de email para ticket, desative esta configuração ou envie emails de teste com mensagens únicas.</p>
 
 <p>&nbsp;</p>
 
-<a name="63"></a><p class="title">Email providers</p>
-
-<p>A list of common email providers your customers use. HESK will use this list to try to detect mistyped email addresses.</p>
-
-<p>Enter one domain per line, <u>without</u> the @ sign.</p>
-
-<p>You can enter any number of common domain names, but try not to overdo it - enter just the most common ones.</p>
-
-<p>&nbsp;</p>
-
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
-<a name="65"></a><p class="title">Notify customer when</p>
+<a name="60"></a><p class="title">Loops de email</p>
 
-<p>Select when HESK should send an email notification to customers:</p>
+<p>Configurações para ajudar a detectar loops de email criados a partir de respostas automáticas ou emails não entregues.</p>
+
+<p>Qualquer número de emails superior a <b>Máximo de ocorrências</b> de um endereço de email dentro de <b>Período de tempo</b> segundos
+será ignorado pelo email piping.</p>
+
+<p>Defina <b>Máximo de ocorrências</b> como <b>0</b> para desativar a detecção de loops.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="62"></a><p class="title">Detectar erros de digitação de email</p>
+
+<p>Esta função tentará detectar erros comuns de digitação no domínio de email e sugerir uma versão corrigida.</p>
+
+<p>Por exemplo, se o cliente inserir usuario@<span style="color:red"><b>gmial.com</b></span> o HESK detectará e sugerirá
+usuario@<span style="color:green"><b>gmail.com</b></span> em vez disso.</p>
+
+<p>O HESK comparará os domínios de email com os domínios listados na lista de <i>Provedores de email</i>.</p>
+
+<p>&nbsp;</p>
+
+<a name="63"></a><p class="title">Provedores de email</p>
+
+<p>Uma lista de provedores de email comuns que seus clientes usam. O HESK usará esta lista para tentar detectar endereços de email digitados incorretamente.</p>
+
+<p>Digite um domínio por linha, <u>sem</u> o sinal @.</p>
+
+<p>Você pode inserir qualquer número de nomes de domínio comuns, mas tente não exagerar - insira apenas os mais comuns.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="65"></a><p class="title">Notificar cliente quando</p>
+
+<p>Selecione quando o HESK deve enviar uma notificação por email aos clientes:</p>
 
 <ul>
-<li><b>when customer submits a new support ticket</b><br /><br />
-Note: if ticket is submitted over email (email piping or POP3 fetching), HESK can
-skip sending new ticket notification to the customer if the email subject contains
-one of the tags listed in the text box (one tag per line).<br /><br />You can use this to prevent
-automatic replies to emails detected as possible SPAM by your server SPAM filter.<br />&nbsp;
+<li><b>quando o cliente enviar um novo ticket de suporte</b><br /><br />
+Observação: se o ticket for enviado por email (email piping ou busca POP3), o HESK pode
+pular o envio de notificação de novo ticket para o cliente se o assunto do email contiver
+uma das tags listadas na caixa de texto (uma tag por linha).<br /><br />Você pode usar isso para evitar
+respostas automáticas a emails detectados como possível SPAM pelo filtro de SPAM do seu servidor.<br />&nbsp;
 </li>
-<li><b>when a support ticket is marked as Resolved</b> (without replying)</li>
+<li><b>quando um ticket de suporte for marcado como Resolvido</b> (sem responder)</li>
 </ul>
 
 <p>&nbsp;</p>
 
-<p>Note that notification preferences are set individually per ticket when staff replies to a ticket or when staff submits a ticket from the admin interface.</p>
+<p>Observe que as preferências de notificação são definidas individualmente por ticket quando um funcionário responde a um ticket ou quando um funcionário envia um ticket pela interface de administração.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-
-<a name="61"></a><p class="title">Strip quoted reply</p>
-
-<p>This function deletes quoted replies from all customer emails before they are converted into a ticket using Email piping or POP3 Fetching.</p>
-
-<p>All emails sent to customers will start with this line:</p>
-
-<p>------ Reply above this line ------</p>
-
-<p>Any text below this line will be removed when and email is imported into ticket reply.</p>
-
-<p>&nbsp;</p>
-
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="66"></a><p class="title">Require message</p>
+<a name="61"></a><p class="title">Remover resposta citada</p>
 
-<p>If enabled, emails from email piping or POP3 fetching will be ignored if they contain no message.</p>
+<p>Esta função exclui respostas citadas de todos os emails do cliente antes que sejam convertidos em um ticket.</p>
 
-<p>If disabled, even emails with no message will be turned into tickets.</p>
+<p>Todos os emails enviados aos clientes começarão com esta linha:</p>
+
+<p>------ Responda acima desta linha ------</p>
+
+<p>Qualquer texto abaixo desta linha será removido quando um email for importado para resposta de ticket.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="64"></a><p class="title">Embedded files</p>
+<a name="66"></a><p class="title">Exigir mensagem</p>
 
-<p>Enable if you wish HESK to save embedded email files (for example embedded images) as attachments when importing tickets over Email piping or POP3 Fetching.</p>
+<p>Se ativado, emails de email piping ou busca POP3 serão ignorados se não contiverem mensagem.</p>
 
-<p>Files over maximum allowed attachments limit will be ignored.</p>
-
-<p>Note that with HESK file attachments have priority over embedded files. For example if you allow 2 file attachments and receive an email with 1 file attachment
-and 3 embedded images, HESK will save the file attachment and first embedded image, the rest will be ignored.</p>
+<p>Se desativado, mesmo emails sem mensagem serão transformados em tickets.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="57"></a><p class="title">Multiple emails</p>
-<p>If a customer tries to enter several emails (separated by comma) into the Email field when submitting a ticket HESK
-will only use the first email by default and ignore any other emails.</p>
+<a name="64"></a><p class="title">Arquivos incorporados</p>
 
-<p>To allow customers to enter multiple emails enable this feature by checking the box.</p>
+<p>Ative se desejar que o HESK salve arquivos de email incorporados (por exemplo, imagens incorporadas) como anexos ao importar tickets via Email piping ou Busca POP3.</p>
 
-<p>&nbsp;</p>
+<p>Arquivos acima do limite máximo permitido de anexos serão ignorados.</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-
-<a name="50"></a><p class="title">Confirm email</p>
-<p>If selected, the &quot;Submit a ticket&quot; form will show a &quot;Confirm email&quot;
-field forcing the customer to type the email address twice. This helps avoid typos
-in email addresses.</p>
+<p>Observe que no HESK os anexos de arquivo têm prioridade sobre os arquivos incorporados. Por exemplo, se você permitir 2 anexos de arquivo e receber um email com 1 anexo de arquivo
+e 3 imagens incorporadas, o HESK salvará o anexo de arquivo e a primeira imagem incorporada, o restante será ignorado.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="58"></a><p class="title">Open only</p>
-<p>If checked then the &quot;Forgot ticket ID&quot; email (email sent to remind customers of their ticket tracking ID number)
-will only list open tickets and ignore resolved ones.</p>
+<a name="57"></a><p class="title">Seguidores de ticket</p>
+<p>Quando ativado, a equipe de suporte pode atribuir múltiplos clientes (além do cliente principal) como "seguidores". Todos os seguidores
+receberão as mesmas notificações por email que o cliente principal.</p>
+
+<p>Marcar a caixa ativa este recurso.</p>
 
 <p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="69"></a><p class="title">Email formatting</p>
-<p>Determines which email formats are included when sending out emails. Options include:</p>
+<a name="50"></a><p class="title">Confirmar email</p>
+<p>Se selecionado, o formulário "Enviar um ticket" mostrará um campo "Confirmar email"
+forçando o cliente a digitar o endereço de email duas vezes. Isso ajuda a evitar erros de digitação
+em endereços de email.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="58"></a><p class="title">Apenas abertos</p>
+<p>Se marcado, então o email "Esqueci o ID do ticket" (email enviado para lembrar os clientes de seu número de ID de acompanhamento de ticket)
+listará apenas tickets abertos e ignorará os resolvidos.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="69"></a><p class="title">Formatação de email</p>
+<p>Determina quais formatos de email são incluídos no envio de emails. As opções incluem:</p>
 
 <p>
-<b>HTML with plain text alternative from plain text template (default)</b> - emails will be sent as HTML. Hesk plain text email template content will be used for the alternative text in the email (multipart/alternative).<br />
-<b>HTML with plain text alternative generated from HTML template</b> - emails will be sent as HTML. The alternative text in the email (multipart/alternative) will be generated by converting the HTML template to plain text. Hesk plain text email templates will be ignored.<br />
-<b>HTML only</b> - emails will be sent as HTML only without multipart/alternative.<br />
-<b>Plain text only</b> - emails will be sent as plain text.<br />
+<b>HTML com alternativa em texto simples do modelo de texto simples (padrão)</b> - os emails serão enviados como HTML. O conteúdo do modelo de email em texto simples do Hesk será usado para o texto alternativo no email (multipart/alternative).<br />
+<b>HTML com alternativa em texto simples gerada a partir do modelo HTML</b> - os emails serão enviados como HTML. O texto alternativo no email (multipart/alternative) será gerado convertendo o modelo HTML para texto simples. Os modelos de email em texto simples do Hesk serão ignorados.<br />
+<b>Somente HTML</b> - os emails serão enviados apenas como HTML sem multipart/alternative.<br />
+<b>Somente texto simples</b> - os emails serão enviados como texto simples.<br />
 </p>
 
 <p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
-<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -403,6 +412,92 @@ will only list open tickets and ignore resolved ones.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+
+
+<a name="73"></a><p class="title">Desativar GSSAPI</p>
+
+<p>Às vezes, um servidor IMAP baseado no Windows retornará uma mensagem de erro como esta:</p>
+
+<p style="color:red">Aviso: Unknown: Erro de Kerberos: Arquivo de cache de credenciais '/tmp/krb123_0123' não encontrado (tente executar kinit).</p>
+
+<p>Se isso acontecer, tente ativar a opção "Desativar GSSAPI" e teste novamente a conexão IMAP.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<a name="74"></a><p class="title">Máximo de destinatários</p>
+<p>O número máximo de destinatários de email em um único email enviado pelo Hesk.</p>
+
+<p>A contagem de "Máximo de destinatários" é um total cumulativo de todos os endereços de email nos campos Para, Cc e Cco de um email.</p>
+
+<p>Defina como <b>0</b> para desativar o limite. No entanto, é altamente recomendável definir um limite razoável. Muitos provedores de email bloquearão emails enviados para muitos destinatários.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<a name="75"></a><p class="title">Emails de rejeição de cliente</p>
+<p>Os emails dos clientes podem ser rejeitados pelo HESK quando contas de cliente são necessárias, mas o endereço de email do remetente não está registrado na central de ajuda.</p>
+
+<p>Selecionar esta opção notificará o cliente de que seu email foi rejeitado. Para reduzir spam, apenas um email de rejeição é enviado a cada "Tempo entre emails de rejeição" horas.</p>
+<p><b>Observação:</b> Se um email for rejeitado devido a spam ou for considerado duplicado, nenhum email será enviado ao cliente, independentemente desta configuração.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="76"></a><p class="title">Tempo entre emails de rejeição</p>
+<p>A quantidade de tempo para aguardar antes de enviar um segundo email de rejeição a um cliente, independentemente do número de emails enviados.</p>
+
+<p>Defina como <b>0</b> para desativar o limite. No entanto, é altamente recomendável definir um limite razoável para evitar que emails excessivos sejam enviados pelo seu servidor de email.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fechar janela</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>

@@ -1,0 +1,5 @@
+<p>Gentile %%NAME%%,</p>
+<p>Grazie per aver creato un account. Clicca sul link sottostante per attivare il tuo account:</p>
+<p><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>Cordiali saluti,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

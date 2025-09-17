@@ -1,0 +1,5 @@
+<p>Vážený(á) %%NAME%%,</p>
+<p>Obdrželi jsme žádost o změnu vaší e-mailové adresy.</p>
+<p>Pro potvrzení této změny klikněte na odkaz níže (platnost vyprší za 1 hodinu):<br /><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>S pozdravem,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

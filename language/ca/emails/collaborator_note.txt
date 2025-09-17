@@ -1,0 +1,15 @@
+Hola,
+
+S'ha afegit una nova nota al tiquet "%%SUBJECT%%" en què col·labores.
+
+Nota de %%NAME%%:
+
+%%MESSAGE%%
+
+Pots gestionar aquest tiquet aquí:
+%%TRACK_URL%%
+
+Salutacions,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -65,11 +65,11 @@ function outputSearchJavascript() {
                 var $suggestionList = $('#kb-suggestion-list');
                 $suggestionList.html('');
                 var format = '<a href="knowledgebase.php?article={0}" class="suggest-preview">' +
-                    '<div class="icon-in-circle">' +
+                    '<span class="icon-in-circle" aria-hidden="true">' +
                     '<svg class="icon icon-knowledge">' +
                     '<use xlink:href="./theme/hesk3/customer/img/sprite.svg#icon-knowledge"></use>' +
                     '</svg>' +
-                    '</div>' +
+                    '</span>' +
                     '<div class="suggest-preview__text">' +
                     '<p class="suggest-preview__title">{1}</p>' +
                     '<p>{2}</p>' +

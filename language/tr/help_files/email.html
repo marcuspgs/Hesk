@@ -1,19 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Etkileşimli Hesk Ayarları Yardımı</title>
+<title>Interactive help for Hesk settings</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="help_style.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 
-<!-- next: 73 -->
+<!-- next: 77 -->
 
 <h3>ETKİLEŞİMLİ HESK AYARLARI YARDIMI</h3>
 
 <p>&nbsp;</p>
 
-<a name="55"></a><p class="title">E-Posta Gönderen</p>
+<a name="55"></a><p class="title">E-Posta Gönderici</p>
 <p>HESK'in E-Postaları PHP mail() fonksiyonunu kullanarak mı yoksa manuel olarak ayarlanan bir SMTP sunucusu kullanarak mı göndereceğini seçin.</p>
 
 <p>PHP mail() fonksiyonu çoğu kurulumda sorunsuz çalışır, çalışmazsa bunun yerine bir SMTP Mail Ayarlarını girmeyi deneyebilirsiniz.</p>
@@ -34,6 +34,8 @@
 
 <p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
 
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -334,24 +336,11 @@ Bunu, sunucunuzun SPAM filtreniz tarafından olası SPAM olarak algılanan e-pos
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="57"></a><p class="title">Çoklu E-Posta Adresi Kullanımı</p>
+<a name="57"></a><p class="title">Talep Takipçileri</p>
+<p>Etkinleştirildiğinde, yardım masası personeli birden fazla müşteriyi (ana müşteri dışında) "takipçi" olarak atayabilir. Tüm takipçiler
+birincil müşteriyle aynı e-posta bildirimlerini alacaktır.</p>
 
-<p>Bir müşteri bir talep gönderirken E-Posta Adresi alanına birkaç e-posta adresi (virgülle ayrılmış olarak) girmeye çalışırsa, HESK varsayılan olarak yalnızca ilk e-posta adresini kullanır ve diğer e-posta adreslerini yok sayar.</p>
-
-<p>Müşterilerin birden çok e-posta adresi girmesine izin vermek için kutuyu işaretleyerek bu özelliği etkinleştirebilirsiniz.</p>
-
-<p>&nbsp;</p>
-
-<p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-
-<a name="50"></a><p class="title">E-Posta Adresi Doğrulama</p>
-
-<p>Bu Ayar Seçilirse, &quot;Talep Gönderme&quot; Formunda, müşteriyi e-posta adresini iki kez yazmaya zorlayan bir &quot;E-Postayı Onayla&quot; alanı gösterilir. Bu özellik, e-posta adreslerindeki yazım hatalarını önlemeye yardımcı olur.</p>
+<p>Kutucuğu işaretlediğinizde bu özellik aktif hale gelir.</p>
 
 <p>&nbsp;</p>
 
@@ -362,9 +351,21 @@ Bunu, sunucunuzun SPAM filtreniz tarafından olası SPAM olarak algılanan e-pos
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<a name="58"></a><p class="title">Sadece Açık Durumlu Talepler</p>
+<a name="50"></a><p class="title">E-Posta Onayı</p>
+<p>Seçilirse, &quot;Talep Gönder&quot; Formu, müşterinin e-posta adresini iki kez yazmasını zorlayan bir &quot;E-Postayı Tekrar Yazın&quot;
+alanı gösterecektir. Bu, e-posta adreslerinde yazım hatalarının önlenmesine yardımcı olur.</p>
 
-<p>Bu Ayar Seçilirse, &quot;Talep Takip Kodumu Unuttum&quot; e-postası (müşterilere talep takip kodunu hatırlatmak için gönderilen e-posta) Yalnızca Açık Talepleri listeler ve çözülen talepleri yok sayar.</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="58"></a><p class="title">Sadece Açık Talepleri Göster</p>
+<p>İşaretlenirse, &quot;Talep Kimliğimi Unuttum&quot; e-postası (müşterilere bilet takip kimlik numaralarını hatırlatmak için gönderilen e-posta) yalnızca açık biletleri listeleyecek ve çözülmüş olanları yok sayacaktır.</p>
 
 <p>&nbsp;</p>
 
@@ -387,6 +388,10 @@ Bunu, sunucunuzun SPAM filtreniz tarafından olası SPAM olarak algılanan e-pos
 </p>
 
 <p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 <p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
 
@@ -396,6 +401,92 @@ Bunu, sunucunuzun SPAM filtreniz tarafından olası SPAM olarak algılanan e-pos
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+
+
+<a name="73"></a><p class="title">GSSAPI'yi Devre Dışı Bırakma</p>
+
+<p>Bazen Windows tabanlı bir IMAP sunucusu aşağıdaki gibi bir hata mesajı gösterebilir:</p>
+
+<p style="color:red">Uyarı: Bilinmeyen: Kerberos hatası: Kimlik bilgileri önbellek dosyası '/tmp/krb123_0123' bulunamadı (kinit çalıştırmayı deneyin).</p>
+
+<p>Eğer böyle bir durum olursa, &quot;GSSAPI'yi Devre Dışı Bırak&quot; seçeneğini etkinleştirmeyi deneyin, ardından IMAP bağlantısını tekrar test edin.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<a name="74"></a><p class="title">Azami Alıcı Sayısı</p>
+<p>Hesk tarafından gönderilen tek bir e-postadaki en fazla e-posta alıcısı sayısı.</p>
+
+<p>&quot;Maksimum Alıcı Sayısı&quot;, bir e-postanın Kime, Cc ve BCc alanlarındaki tüm e-posta adreslerinin kümülatif toplamıdır.</p>
+
+<p>Sınırı kapatmak için <b>0</b> olarak ayarlayın. Ancak makul bir sınır belirlemek şiddetle önerilir. Birçok e-posta sağlayıcısı çok fazla alıcıya gönderilen e-postaları engeller. Ayrıca site alan adınızı SPAM Mail Gönderici şeklinde rapolayabilir.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<a name="75"></a><p class="title">Müşteri Reddi E-Postaları</p>
+<p>Müşteri hesaplarının gerekli olduğu ancak göndericinin e-posta adresinin yardım masasında kayıtlı olmadığı durumlarda müşteri e-postaları HESK tarafından reddedilebilmektedir.</p>
+
+<p>Bu seçeneği seçmek, müşteriye e-postasının reddedildiğini bildirecektir. Spam'i azaltmak için, her "Reddetme e-postaları arasındaki süre" saatinde yalnızca bir reddetme e-postası gönderilir.</p>
+<p><b>Not:</b> Bir e-posta spam nedeniyle reddedilirse veya kopya olarak değerlendirilirse, bu ayara bakılmaksızın müşteriye e-posta gönderilmeyecektir.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="76"></a><p class="title">Reddedilme E-Postaları Arasındaki Süre</p>
+<p>Gönderilen e-posta sayısından bağımsız olarak, müşteriye ikinci bir ret e-postası gönderilmeden önce beklenmesi gereken süre.</p>
+
+<p>Sınırı kapatmak için <b>0</b> olarak ayarlayın. Ancak, posta sunucunuz tarafından aşırı e-posta gönderilmesini önlemek için makul bir sınır ayarlamanız şiddetle önerilir.</p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Pencereyi Kapat</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -406,5 +497,4 @@ Bunu, sunucunuzun SPAM filtreniz tarafından olası SPAM olarak algılanan e-pos
 <p>&nbsp;</p>
 
 </body>
-
 </html>

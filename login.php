@@ -47,7 +47,7 @@ if (hesk_GET('a') === 'logout') {
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` 
         WHERE `user_id` = ".intval($_SESSION['customer']['id'])." 
         AND `user_type` = 'CUSTOMER'");
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` 
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens`
         WHERE `user_id` = ".intval($_SESSION['customer']['id'])."
         AND `user_type` = 'CUSTOMER'");
 
@@ -211,9 +211,14 @@ function handle_login_request() {
 
     $mfa_enrollment = intval($user['mfa_enrollment']);
     if ($mfa_enrollment === 0) {
-        unset($_SESSION['login_email']);
-        hesk_process_successful_customer_login($user);
-        return;
+        // Do we require MFA? Force it if the user has an email
+        if ($hesk_settings['require_mfa_customers'] && strlen($user['email'])) {
+            $mfa_enrollment = 1;
+        } else {
+            unset($_SESSION['login_email']);
+            hesk_process_successful_customer_login($user);
+            return;
+        }
     }
 
     $message = $hesklang['mfa_verification_needed'] . '<br><br>';

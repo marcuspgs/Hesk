@@ -1,0 +1,18 @@
+Beste %%NAME%%,
+
+Een ticket is geëscaleerd door %%ESCALATED_BY_RULE%%:
+
+Onderwerp: %%SUBJECT%%
+Categorie: %%CATEGORY%%
+Prioriteit: %%PRIORITY%%
+Status: %%STATUS%%
+Toegewezen aan: %%OWNER%%
+Ticket ID: %%TRACK_ID%%
+
+Je kan het ticket hier bekijken:
+%%TRACK_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

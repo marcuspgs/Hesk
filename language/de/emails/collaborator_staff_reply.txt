@@ -1,0 +1,15 @@
+Hallo,
+
+Mitarbeiter/in %%NAME%% hat soeben auf ein Support-Ticket geantwortet.
+
+Betreff des Tickets: %%SUBJECT%%
+Verfolgungs-ID: %%TRACK_ID%%
+
+Sie können dieses Ticket hier verwalten:
+%%TRACK_URL%%
+
+
+Mit freundlichen Grüßen,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

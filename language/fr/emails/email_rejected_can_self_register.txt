@@ -1,0 +1,10 @@
+Chère/cher %%NAME%%,
+
+Nous n'avons pas pu traiter votre e-mail "%%SUBJECT%%" car vous n'avez pas de compte chez nous.
+
+Pour soumettre des tickets de support par e-mail, veuillez d'abord vous inscrire à l'adresse suivante : %%CUSTOMER_REGISTER_URL%%
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

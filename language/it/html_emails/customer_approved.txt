@@ -1,0 +1,5 @@
+<p>Gentile %%NAME%%,</p>
+<p>La registrazione del tuo account &egrave; stata approvata.</p>
+<p>Ora puoi accedere utilizzando il nome utente e la password che hai usato durante la creazione del tuo account:<br /><a href="%%CUSTOMER_LOGIN_URL%%">%%CUSTOMER_LOGIN_URL%%</a></p>
+<p>Cordiali saluti,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

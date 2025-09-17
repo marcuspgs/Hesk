@@ -1,0 +1,12 @@
+Witaj %%NAME%%,
+
+Kontaktujemy się w sprawie Twojego ostatniego zgłoszenia „%%SUBJECT%%”. Abyśmy mogli lepiej Ci służyć, chętnie poznamy Twoje doświadczenia z naszym zespołem wsparcia.
+
+Daj nam znać, czy i jak łatwo rozwiązano Twoje zgłoszenie:
+%%SURVEY_URL%%
+
+Jesteśmy wdzięczni za Twoją opinię. I jak zawsze, jeśli będziemy mogli jeszcze coś dla Ciebie zrobić w przyszłości, nie wahaj się z nami skontaktować ponownie.
+Dziękujemy.
+
+%%SITE_TITLE%%
+%%SITE_URL%%

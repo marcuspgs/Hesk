@@ -1,0 +1,19 @@
+Γεια σας,
+
+Ένα support ticket κλιμακώθηκε από %%ESCALATED_BY_RULE%%:
+
+Θέμα: %%SUBJECT%%
+Κατηγορία: %%CATEGORY%%
+Προτεραιότητα: %%PRIORITY%%
+Κατάσταση: %%STATUS%%
+Ανατέθηκε σε: %%OWNER%%
+Tracking ID: %%TRACK_ID%%
+
+Μπορείτε να δείτε αυτό το ticket εδώ:
+%%TRACK_URL%%
+
+
+Με εκτίμηση,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

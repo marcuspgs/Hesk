@@ -1,0 +1,10 @@
+Chère/cher %%NAME%%,
+
+Nous n'avons pas pu traiter votre e-mail "%%SUBJECT%%" car vous n'avez pas de compte chez nous.
+
+Ce service d'assistance n'est disponible que pour les utilisateurs enregistrés.
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

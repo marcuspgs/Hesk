@@ -10,6 +10,8 @@ global $hesk_settings, $hesklang;
 if (!defined('IN_SCRIPT')) {
     die();
 }
+
+require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,15 +21,7 @@ if (!defined('IN_SCRIPT')) {
     <title><?php echo $hesk_settings['hesk_title']; ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo HESK_PATH; ?>img/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo HESK_PATH; ?>img/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo HESK_PATH; ?>img/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="<?php echo HESK_PATH; ?>img/favicon/site.webmanifest" />
-    <link rel="mask-icon" href="<?php echo HESK_PATH; ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="<?php echo HESK_PATH; ?>img/favicon/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#2d89ef" />
-    <meta name="msapplication-config" content="<?php echo HESK_PATH; ?>img/favicon/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
+    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
     <?php include(TEMPLATE_PATH . '../../head.txt'); ?>
@@ -35,8 +29,9 @@ if (!defined('IN_SCRIPT')) {
 
 <body class="cust-help">
 <?php include(TEMPLATE_PATH . '../../header.txt'); ?>
+<?php renderCommonElementsAfterBody(); ?>
 <div class="wrapper">
-    <main class="main">
+    <main class="main" id="maincontent">
         <header class="header">
             <div class="contr">
                 <div class="header__inner">
@@ -68,7 +63,7 @@ if (!defined('IN_SCRIPT')) {
         <div class="main__content">
             <div class="contr">
                 <div class="main__content notice-flash">
-                    <div class="notification red">
+                    <div role="alert" class="notification red">
                         <b><?php echo $hesklang['error']; ?>:</b> <?php echo $error; ?>
                         <?php if ($showDebugWarning): ?>
                             <p class="text-danger text-bold" style="margin-top:10px">&nbsp;<br><?php echo $hesklang['warn']; ?></p>

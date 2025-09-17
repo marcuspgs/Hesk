@@ -1,0 +1,6 @@
+<p>Beste %%NAME%%,</p>
+<p>We hebben een verzoek ontvangen om je e-mailadres te wijzigen.</p>
+<p>Om deze wijziging te bevestigen, klik je op de onderstaande link (deze verloopt over 1 uur):</p>
+<p><a href="%%VERIFICATION_URL%%">%%VERIFICATION_URL%%</a></p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

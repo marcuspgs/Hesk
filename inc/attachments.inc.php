@@ -12,7 +12,7 @@
  */
 
 /* Check if this is a valid include */
-if (!defined('IN_SCRIPT')) {die('Invalid attempt');} 
+if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 /***************************
 Function hesk_uploadFiles()
@@ -146,14 +146,17 @@ function hesk_uploadTempFile() {
     }
 
     /* If upload was successful let's create the headers */
+    ob_start();
     if (!move_uploaded_file($_FILES['attachment']['tmp_name'], $hesk_settings['server_path'].$file_name))
     {
+        ob_end_clean();
         return array(
             'status' => 'failure',
             'status_code' => 500,
             'message' => $hesklang['error'] . ': ' . $hesklang['cannot_move_tmp']
         );
     }
+    ob_end_clean();
 
     // Generate a random ID to use when deleting temporary attachments
     $unique_id = uniqid(rand(), true);
@@ -256,9 +259,7 @@ function hesk_moveAttachment($old_name, $new_name) {
     $hesk_settings['temp_server_path'] = dirname(dirname(__FILE__)).'/'.$hesk_settings['attach_dir'].'/temp/';
     $hesk_settings['server_path'] = dirname(dirname(__FILE__)).'/'.$hesk_settings['attach_dir'].'/';
 
-    if (hesk_copy($hesk_settings['temp_server_path'].$old_name, $hesk_settings['server_path'].$new_name)) {
-        hesk_unlink($hesk_settings['temp_server_path'].$old_name);
-    }
+    hesk_rename($hesk_settings['temp_server_path'].$old_name, $hesk_settings['server_path'].$new_name);
 }
 
 function hesk_deleteTempAttachment($file_key, $delete_file = false) {
@@ -332,7 +333,7 @@ function display_dropzone_field($url, $is_admin, $id = 'filedrop', $max_files_ov
     output_dropzone_window();
 
     $acceptedFiles = implode(',', $hesk_settings['attachments']['allowed_types']);
-    $size = hesk_bytesToUnits($hesk_settings['attachments']['max_size']);
+    $size = round($hesk_settings['attachments']['max_size'] / 1048576, 8, PHP_ROUND_HALF_UP);
     $max_files = $max_files_override > -1 ? $max_files_override : $hesk_settings['attachments']['max_number'];
 
     // Let's define this function we may need if it's not defined already
@@ -345,6 +346,7 @@ function display_dropzone_field($url, $is_admin, $id = 'filedrop', $max_files_ov
     // upgrade in the future.
     echo "
     <script>
+    var pleaseWaitMessage = ".json_encode($hesklang['please_wait']).";
     Dropzone.autoDiscover = false;
     var dropzone{$id} = new Dropzone('#{$id}', {
         paramName: 'attachment',
@@ -421,9 +423,15 @@ function display_dropzone_field($url, $is_admin, $id = 'filedrop', $max_files_ov
     });
     dropzone{$id}.on('queuecomplete', function() {
         $('input[type=\"submit\"]').attr('disabled', false);
+        if(typeof attachmentQueueComplete === 'function') {
+            attachmentQueueComplete();
+        }
     });
     dropzone{$id}.on('processing', function() {
         $('input[type=\"submit\"]').attr('disabled', true);
+        if(typeof attachmentQueueProcessing === 'function') {
+            attachmentQueueProcessing();
+        }
     });
     dropzone{$id}.on('uploadprogress', function(file, percentage) {
         $(file.previewTemplate).find('#percentage').text(percentage + '%');
@@ -437,6 +445,9 @@ function display_dropzone_field($url, $is_admin, $id = 'filedrop', $max_files_ov
         }
         
         $(file.previewElement).addClass('dz-error').find('[data-dz-errormessage]').text(actualMessage);
+        if(typeof attachmentError === 'function') {
+            attachmentError();
+        }
     });
     </script>
     ";

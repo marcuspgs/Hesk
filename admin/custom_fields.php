@@ -65,9 +65,9 @@ if (!hesk_SESSION(array('new_cf','errors'))) {
 }
 
 // Did we reach the custom fields limit?
-if ($hesk_settings['num_custom_fields'] >= 50 && $action !== 'edit_cf')
+if ($hesk_settings['num_custom_fields'] >= 100 && $action !== 'edit_cf')
 {
-    hesk_show_info($hesklang['cf_limit']);
+    hesk_show_info($hesklang['cf_limit_all']);
 }
 
 $hesk_settings['datepicker']['#dmin']['position'] = 'left top';
@@ -78,6 +78,7 @@ $hesk_settings['datepicker']['#dmax']['position'] = 'left bottom';
     <section class="tools__between-head wider">
         <h2>
             <?php echo $hesklang['tab_4']; ?>
+            <?php echo '(' . $hesk_settings['num_custom_fields'] . '/100)'; ?>
             <div class="tooltype right out-close">
                 <svg class="icon icon-info">
                     <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
@@ -89,7 +90,7 @@ $hesk_settings['datepicker']['#dmax']['position'] = 'left bottom';
                 </div>
             </div>
         </h2>
-        <?php if ($hesk_settings['num_custom_fields'] < 50 && $action !== 'edit_cf'): ?>
+        <?php if ($hesk_settings['num_custom_fields'] < 100 && $action !== 'edit_cf'): ?>
         <div class="btn btn--blue-border" ripple="ripple" data-action="create-custom-field">
             <?php echo $hesklang['new_cf']; ?>
         </div>
@@ -184,7 +185,7 @@ $hesk_settings['datepicker']['#dmax']['position'] = 'left bottom';
                         <td><?php echo $cf['req']; ?></td>
                         <td><?php echo $cf['category']; ?></td>
                         <td class="nowrap buttons">
-                            <?php $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                            <?php $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                 $hesklang['del_cf'],
                                 'custom_fields.php?a=remove_cf&amp;id='. $tmp_id .'&amp;token='. hesk_token_echo(0)); ?>
                             <p>
@@ -426,6 +427,19 @@ $hesk_settings['datepicker']['#dmax']['position'] = 'left bottom';
                               rows="6"
                               cols="40"><?php echo isset($value['select_options']) && is_array($value['select_options']) ? implode("\n", $value['select_options']) : ''; ?></textarea>
                 </div>
+
+                <h4><?php echo $hesklang['custom_is_searchable']; ?></h4>
+                <section class="item--section">
+                    <?php $is_searchable = (!empty($value['is_searchable'])) ? $value['is_searchable'] : 0; ?>
+                    <div class="radio-custom">
+                        <input type="radio" name="is_searchable" id="is_searchable0" value="0" <?php if ($is_searchable == 0) {echo 'checked';} ?>>
+                        <label for="is_searchable0"><?php echo $hesklang['no']; ?></label>
+                    </div>
+                    <div class="radio-custom">
+                        <input type="radio" name="is_searchable" id="is_searchable1" value="1" <?php if ($is_searchable == 1) {echo 'checked';} ?>>
+                        <label for="is_searchable1"><?php echo $hesklang['yes_via_autocomplete']; ?></label>
+                    </div>
+                </section>
             </div>
             <div id="checkbox" style="display:<?php echo ($type == 'checkbox') ? 'block' : 'none' ?>">
                 <p><?php echo $hesklang['opt4']; ?></p>
@@ -1049,8 +1063,9 @@ function cf_validate()
 			$options = preg_split("/\\r\\n|\\r|\\n/", $cf['select_options']);
 
 			$show_select = hesk_POST('show_select') ? 1 : 0;
+			$is_searchable = hesk_POST('is_searchable') ? 1 : 0;
 
-			$cf['value'] = array('show_select' => $show_select, 'select_options' => $options);
+			$cf['value'] = array('show_select' => $show_select, 'is_searchable' => $is_searchable, 'select_options' => $options);
 
 			if (count($options) < 2)
 			{

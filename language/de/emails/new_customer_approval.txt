@@ -1,0 +1,14 @@
+Hallo,
+
+Neue Kundenkonten müssen noch vom Personal genehmigt werden.
+
+Anzahl der ausstehenden Genehmigungen: %%NUM%%
+
+Hier können Sie die Registrierung von Kundenkonten genehmigen oder ablehnen:
+%%VERIFICATION_URL%%
+
+
+Mit freundlichen Grüßen
+
+%%SITE_TITLE%%
+%%SITE_URL%%

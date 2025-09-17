@@ -1,0 +1,14 @@
+Vážený(á) %%NAME%%,
+
+váš ticket "%%SUBJECT%%" byl uzavřen.
+
+ID ticketu: %%TRACK_ID%%
+
+Na svůj ticket se můžete podívat zde:
+%%TRACK_URL%%
+
+
+Hezký den :)
+
+%%SITE_TITLE%%
+%%SITE_URL%%

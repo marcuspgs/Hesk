@@ -1,0 +1,14 @@
+Hola,
+
+El miembro del equipo %%NAME%% acaba de responder a un ticket de soporte.
+
+Asunto del ticket: %%SUBJECT%%
+ID de seguimiento: %%TRACK_ID%%
+
+Puede gestionar este ticket aquí:
+%%TRACK_URL%%
+
+Atentamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

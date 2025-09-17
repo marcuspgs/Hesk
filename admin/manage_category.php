@@ -25,22 +25,17 @@ hesk_session_start();
 hesk_dbConnect();
 hesk_isLoggedIn();
 
+// Load priorities
+require_once(HESK_PATH . 'inc/priorities.inc.php');
+
 /* Check permissions for this feature */
 hesk_checkPermission('can_man_cat');
-
-// Possible priorities
-$priorities = array(
-    'low' => array('id' => 3, 'value' => 'low', 'text' => $hesklang['low'], 'formatted' => $hesklang['low']),
-    'medium' => array('id' => 2, 'value' => 'medium', 'text' => $hesklang['medium'], 'formatted' => $hesklang['medium']),
-    'high' => array('id' => 1, 'value' => 'high', 'text' => $hesklang['high'], 'formatted' => $hesklang['high']),
-    'critical' => array('id' => 0, 'value' => 'critical', 'text' => $hesklang['critical'], 'formatted' => $hesklang['critical']),
-);
 
 // Populate default values for creation
 $category = array(
     'id' => 0,
     'name' => '',
-    'priority' => $priorities['low']['id'],
+    'priority' => $hesk_settings['priorities'][array_keys($hesk_settings['priorities'])[0]]['id'],
     'autoassign' => $hesk_settings['autoassign'],
     'autoassign_config' => null,
     'type' => 0,
@@ -103,16 +98,19 @@ if (hesk_SESSION('iserror')) {
                        class="form-control"
                        id="name"
                        maxlength="100"
-                       value="<?php echo stripslashes($category['name']); ?>">
+                       value="<?php echo $category['name']; ?>">
             </div>
             <div class="category-create__select">
                 <span><?php echo $hesklang['def_pri']; ?></span>
-                <div class="dropdown-select center out-close priority">
+                <div class="dropdown-select center out-close priority select-priority">
                     <select name="priority">
-                        <?php foreach ($priorities as $id => $priority): ?>
+                        <?php 
+                        foreach ($hesk_settings['priorities'] as $id => $priority):
+                            $data_style ='border-top-color:'.$priority['color'].';border-left-color:'.$priority['color'].';border-bottom-color:'.$priority['color'].';';
+                        ?>
                             <option value="<?php echo $priority['id']; ?>"
-                                    <?php if ($priority['id'] === intval($category['priority'])): ?>selected<?php endif; ?>>
-                                <?php echo $priority['text']; ?>
+                                    <?php if (intval($priority['id']) == intval($category['priority'])): ?>selected<?php endif; ?> data-class="priority_img priority_dwn" data-style="<?php echo $data_style;?>">
+                                <?php echo $priority['name']; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -196,7 +194,7 @@ if (hesk_SESSION('iserror')) {
                                 <label for="autoassign_user_<?php echo $user['id']; ?>"><?php echo $user['name']; ?></label>
                             </div>
                         <?php } ?>
-                        <p id="search-no-results" style="display: none"><?php echo $hesklang['no_results_found']; ?></p>
+                        <p id="search-no-results" style="display: none"><span role="alert"><?php echo $hesklang['no_results_found']; ?></span></p>
                     </div>
                     <a href="javascript:" id="select-all"><?php echo $hesklang['a_select']; ?></a>
                     &nbsp;
@@ -368,7 +366,7 @@ function try_save_category()
     $category['type'] = hesk_POST('type') === '1' ? 1 : 0;
 
     // Default priority
-    $category['priority'] = hesk_checkMinMax(hesk_POST('priority'), 0, 3, $priorities['low']['id']);
+    $category['priority'] = hesk_POST('priority');
 
     // Default due date
     $category['default_due_date_amount'] = intval(hesk_POST('due-date-amount', -1));
@@ -411,7 +409,7 @@ function try_save_category()
     $sql_friendly_due_date_unit = $sql_friendly_due_date_amount === 'NULL' ? 'NULL' : "'".hesk_dbEscape($category['default_due_date_unit'])."'";
     if ($category['id'] === 0) {
         hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` (`name`,`cat_order`,`autoassign`,
-                      `autoassign_config`,`type`, `priority`,`default_due_date_amount`,`default_due_date_unit`) 
+                      `autoassign_config`,`type`, `priority`,`default_due_date_amount`,`default_due_date_unit`)
                     VALUES ('".hesk_dbEscape($category['name'])."',
                             '".intval($my_order)."',
                             '".intval($category['autoassign'])."',

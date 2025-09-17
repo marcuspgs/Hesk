@@ -24,20 +24,16 @@ hesk_session_start();
 hesk_dbConnect();
 hesk_isLoggedIn();
 
-/* Check permissions for this feature */
-hesk_checkPermission('can_man_cat');
+// Load priorities
+require_once(HESK_PATH . 'inc/priorities.inc.php');
 
-// Possible priorities
-$priorities = array(
-	3 => array('id' => 3, 'value' => 'low', 'text' => $hesklang['low'],		'formatted' => $hesklang['low']),
-	2 => array('id' => 2, 'value' => 'medium', 'text' => $hesklang['medium'],		'formatted' => $hesklang['medium']),
-	1 => array('id' => 1, 'value' => 'high', 'text' => $hesklang['high'],		'formatted' => $hesklang['high']),
-	0 => array('id' => 0, 'value' => 'critical', 'text' => $hesklang['critical'],	'formatted' => $hesklang['critical']),
-);
+/* Check permissions for this feature */
+$can_man_cat = hesk_checkPermission('can_man_cat', 0);
 
 /* What should we do? */
 if ( $action = hesk_REQUEST('a') ) {
 	if ( defined('HESK_DEMO') )  {hesk_process_messages($hesklang['ddemo'], 'manage_categories.php', 'NOTICE');}
+    elseif ( ! $can_man_cat)         {hesk_process_messages($hesklang['no_permission'], 'manage_categories.php', 'NOTICE');}
 	elseif ($action == 'remove')     {remove();}
 	elseif ($action == 'order')      {order_cat();}
 	elseif ($action == 'type')       {toggle_type();}
@@ -71,9 +67,11 @@ if (!hesk_SESSION('error')) {
                 </div>
             </div>
         </h2>
+        <?php if ($can_man_cat): ?>
         <a href="manage_category.php" class="btn btn btn--blue-border" ripple="ripple">
             <?php echo $hesklang['add_cat']; ?>
         </a>
+        <?php endif; ?>
     </section>
     <div class="table-wrap">
         <div class="table">
@@ -107,7 +105,9 @@ if (!hesk_SESSION('error')) {
                     <th><?php echo $hesklang['aass']; ?></th>
                     <?php endif; ?>
                     <th class="due-date"><?php echo $hesklang['category_default_due_date'] ?></th>
+                    <?php if ($can_man_cat): ?>
                     <th></th>
+                    <?php endif; ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -116,7 +116,20 @@ if (!hesk_SESSION('error')) {
                 $tickets_all   = array();
                 $tickets_total = 0;
 
-                $res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `category` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` GROUP BY `category`');
+                if ($can_man_cat) {
+                    $res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `category` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` WHERE ' . ( $can_man_cat ? '1' : hesk_myCategories('category') ) . ' GROUP BY `category`');
+                } else {
+                    $res = hesk_dbQuery("SELECT COUNT(*) AS `cnt`, `category` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `ticket`
+                                        LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `w` ON (`ticket`.`id` = `w`.`ticket_id` AND `w`.`user_id` = ".intval($_SESSION['id']).")
+                                        WHERE
+                                        (
+                                            `w`.`user_id`=".intval($_SESSION['id'])."
+                                            OR
+                                            (".hesk_myOwnership().")
+                                        )
+                                        AND ".hesk_myCategories()."
+                                        GROUP BY `category`");
+                }
                 while ($tmp = hesk_dbFetchAssoc($res))
                 {
                     $tickets_all[$tmp['category']] = $tmp['cnt'];
@@ -124,7 +137,7 @@ if (!hesk_SESSION('error')) {
                 }
 
                 /* Get list of categories */
-                $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
+                $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE " . ( $can_man_cat ? '1' : hesk_myCategories('id') ) . " ORDER BY `cat_order` ASC");
                 $keyed_categories = array();
                 $options='';
 
@@ -173,11 +186,9 @@ if (!hesk_SESSION('error')) {
                         <td>
                             <span class="category-name"><?php echo $mycat['name']; ?></span>
                         </td>
-                        <td>
-                            <span class="priority<?php echo $mycat['priority']; ?>">
-                                <?php echo $priorities[$mycat['priority']]['text']; ?>
-                            </span>
-                        </td>
+                        <?php
+                            echo '<td class="td-flex">' . hesk_get_admin_ticket_priority_for_list($mycat['priority']) . '&nbsp;</td>';
+                        ?>
                         <td>
                             <?php
                             $tickets_url = 'show_tickets.php?category='.$mycat['id'].'&amp;s_all=1&amp;s_my=1&amp;s_ot=1&amp;s_un=1';
@@ -212,6 +223,7 @@ if (!hesk_SESSION('error')) {
                                 echo $mycat['default_due_date_amount'] . ' ' . $hesklang["d_{$mycat['default_due_date_unit']}"];
                             } ?>
                         </td>
+                        <?php if ($can_man_cat): ?>
                         <td class="nowrap generate">
                             <a class="tooltip" href="javascript:"
                                title="<?php echo $hesklang['geco']; ?>"
@@ -297,7 +309,7 @@ if (!hesk_SESSION('error')) {
                                     }
                                     $modal_body .= '</select>';
                                 }
-                                $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                                $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                     $modal_body,
                                     'manage_categories.php?a=remove&catid='. $mycat['id'] .'&token='. hesk_token_echo(0).'&targetCategory=1');
                                 ?>
@@ -310,6 +322,7 @@ if (!hesk_SESSION('error')) {
                             endif;
                             ?>
                         </td>
+                        <?php endif; /* endif $can_man_cat */ ?>
                     </tr>
                 <?php } ?>
                 </tbody>
@@ -323,6 +336,7 @@ if (!hesk_SESSION('error')) {
             <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
         </svg>
     </i>
+    <div class="notification--title error-title"><?php echo $hesklang['genl_not_copied']; ?></div>
     <div class="notification--title"><?php echo $hesklang['genl']; ?></div>
     <div class="notification--text"><?php echo $hesklang['genl2']; ?></div>
 </div>

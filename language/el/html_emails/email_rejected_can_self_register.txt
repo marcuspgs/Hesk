@@ -1,0 +1,4 @@
+<p>Αγαπητέ/ή %%NAME%%,</p>
+<p>Δεν μπορέσαμε να επεξεργαστούμε το email σας «%%SUBJECT%%» επειδή δεν έχετε λογαριασμό σε εμάς.<br /><br />Για να υποβάλετε support tickets μέσω email, παρακαλούμε εγγραφείτε πρώτα εδώ:<br /><a href="%%CUSTOMER_REGISTER_URL%%">%%CUSTOMER_REGISTER_URL%%</a></p>
+<p>Με εκτίμηση,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

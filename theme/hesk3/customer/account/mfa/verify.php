@@ -28,15 +28,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
     <title><?php echo $hesk_settings['hesk_title']; ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo HESK_PATH; ?>img/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo HESK_PATH; ?>img/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo HESK_PATH; ?>img/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="<?php echo HESK_PATH; ?>img/favicon/site.webmanifest" />
-    <link rel="mask-icon" href="<?php echo HESK_PATH; ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="<?php echo HESK_PATH; ?>img/favicon/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#2d89ef" />
-    <meta name="msapplication-config" content="<?php echo HESK_PATH; ?>img/favicon/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
+    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
     <!--[if IE]>
@@ -47,8 +39,9 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 
 <body class="cust-help">
 <?php include(TEMPLATE_PATH . '../../header.txt'); ?>
+<?php renderCommonElementsAfterBody(); ?>
 <div class="wrapper">
-    <main class="main">
+    <main class="main" id="maincontent">
         <header class="header">
             <div class="contr">
                 <div class="header__inner">
@@ -56,21 +49,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
                     <?php renderLoginNavbarElements($customerUserContext); ?>
-                    <?php if ($hesk_settings['can_sel_lang']): ?>
-                        <div class="header__lang">
-                            <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
-                                <div class="dropdown-select center out-close">
-                                    <select name="language" onchange="this.form.submit()">
-                                        <?php hesk_listLanguages(); ?>
-                                    </select>
-                                </div>
-                                <?php foreach (hesk_getCurrentGetParameters() as $key => $value): ?>
-                                    <input type="hidden" name="<?php echo hesk_htmlentities($key); ?>"
-                                           value="<?php echo hesk_htmlentities($value); ?>">
-                                <?php endforeach; ?>
-                            </form>
-                        </div>
-                    <?php endif; ?>
+                    <?php renderNavbarLanguageSelect(); ?>
                 </div>
             </div>
         </header>
@@ -104,14 +83,14 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                 <div style="margin-bottom: 20px;">
                     <?php hesk3_show_messages($messages); ?>
                 </div>
-                <h3 class="article__heading article__heading--form">
-                    <div class="icon-in-circle">
+                <h1 class="article__heading article__heading--form">
+                    <span class="icon-in-circle" aria-hidden="true">
                         <svg class="icon icon-document">
                             <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-lock"></use>
                         </svg>
-                    </div>
+                    </span>
                     <span class="ml-1"><?php echo $hesklang['mfa']; ?></span>
-                </h3>
+                </h1>
                 <form id="verify-form" action="manage_mfa.php" method="post" name="form1" id="formNeedValidation" class="form form-submit-ticket ticket-create" novalidate>
                     <div data-step="2">
                         <ul class="step-bar no-click">
@@ -129,7 +108,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                     <div class="step-item step-2">
                         <?php if ($mfaMethod === 'EMAIL') { ?>
                             <div>
-                                <h3><?php echo sprintf($hesklang['mfa_verification_header'], $hesklang['mfa_method_email']); ?></h3>
+                                <h2><?php echo sprintf($hesklang['mfa_verification_header'], $hesklang['mfa_method_email']); ?></h2>
                                 <?php
                                 if ($model['emailSent']) {
                                     hesk_show_notice(sprintf($hesklang['mfa_verification_email_intro'], $_SESSION['customer']['email']), ' ', false);
@@ -138,7 +117,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                             </div>
                         <?php } elseif ($mfaMethod === 'AUTH-APP') { ?>
                             <div>
-                                <h3><?php echo sprintf($hesklang['mfa_verification_header'], $hesklang['mfa_method_auth_app']); ?></h3>
+                                <h2><?php echo sprintf($hesklang['mfa_verification_header'], $hesklang['mfa_method_auth_app']); ?></h2>
                                 <p><?php echo $hesklang['mfa_verification_auth_app_intro']; ?></p>
                                 <img src="<?php echo $model['qrCodeUri']; ?>" alt="QR Code">
                                 <?php

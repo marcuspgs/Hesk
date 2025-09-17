@@ -1,0 +1,10 @@
+Witaj %%NAME%%,
+
+Poniżej znajduje się Twój kod weryfikacyjny uwierzytelniania. Ten kod wygasa za 20 minut.
+
+%%VERIFICATION_CODE%%
+
+Dziękuję.
+
+%%SITE_TITLE%%
+%%SITE_URL%%

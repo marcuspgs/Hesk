@@ -16,7 +16,7 @@ function hesk3_output_custom_fields($customFields) {
                         <?php echo $customField['name:']; ?>
                     </label>
                     <?php
-                    $i = 0;
+                    $i = 1000;
                     foreach ($customField['value']['options'] as $option):
                         ?>
                         <div class="radio-custom">
@@ -43,7 +43,7 @@ function hesk3_output_custom_fields($customFields) {
                             <option value=""><?php echo $hesklang['select']; ?></option>
                             <?php
                             endif;
-                            $i = 0;
+                            $i = 2000;
                             foreach ($customField['value']['options'] as $option):
                             ?>
                             <option <?php echo $option['selected'] ? 'selected' : '' ?>><?php echo $option['value']; ?></option>
@@ -59,7 +59,7 @@ function hesk3_output_custom_fields($customFields) {
                 <section class="param checkboxs <?php echo $customField['iserror'] ? 'isError' : '' ?>">
                     <label class="label <?php echo $customField['req'] ? 'required' : '' ?>"><?php echo $customField['name:']; ?></label>
                     <?php
-                    $i = 0;
+                    $i = 3000;
                     foreach ($customField['value']['options'] as $option):
                         ?>
                     <div class="checkbox-custom">

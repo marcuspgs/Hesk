@@ -1,0 +1,12 @@
+Je hebt een nieuw privé-bericht ontvangen.
+
+Details:
+Naam: %%NAME%%
+Onderwerp: %%SUBJECT%%
+Bericht: %%TRACK_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
+

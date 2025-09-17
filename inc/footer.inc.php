@@ -139,6 +139,13 @@ if (defined('AUTOFOCUS'))
 </script>
 <?php
 }
+// Do we need the calendar functions?
+if (defined('RRULE'))
+{
+?>
+<script src="<?php echo HESK_PATH; ?>js/rrule_es5.js"></script>
+<?php
+}
 
 // Apply status coloring to drop-down box; needs to be called after app.js
 if (isset($hesk_settings['print_status_select_box_jquery']))

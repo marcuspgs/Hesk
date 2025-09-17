@@ -1,0 +1,12 @@
+Bonjour,
+
+De nouveaux comptes clients sont en attente d'approbation par le personnel.
+
+Nombre d'approbations en attente : %%NUM%%
+
+Vous pouvez approuver ou rejeter les inscriptions des comptes clients ici : %%VERIFICATION_URL%%
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

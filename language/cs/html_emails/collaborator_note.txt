@@ -1,0 +1,7 @@
+<p>Dobrý den,</p>
+<p>Byla přidána nová poznámka k ticketu "%%SUBJECT%%" na kterém spolupracujete.</p>
+<p>Poznámka od %%NAME%%:</p>
+<p>%%MESSAGE%%</p>
+<p>Tento ticket můžete spravovat na následující adrese:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>S pozdravem,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

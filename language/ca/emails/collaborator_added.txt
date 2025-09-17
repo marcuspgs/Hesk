@@ -1,0 +1,14 @@
+Hola,
+
+Estàs col·laborant en un nou tiquet de suport.
+
+Assumpte del tiquet: %%SUBJECT%%
+ID de seguiment: %%TRACK_ID%%
+
+Pots gestionar aquest tiquet aquí:
+%%TRACK_URL%%
+
+Salutacions,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

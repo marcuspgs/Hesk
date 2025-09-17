@@ -1,0 +1,17 @@
+Vážený(á) %%NAME%%,
+
+Váš e-mail „%%SUBJECT%%“ jsme nemohli zpracovat, protože u nás nemáte účet.
+
+Tato technická podpora je k dispozici pouze registrovaným uživatelům.
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

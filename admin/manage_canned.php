@@ -184,7 +184,7 @@ $num = hesk_dbNumRows($result);
                 echo '';
             }
 
-            $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+            $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                 $hesklang['delete_saved'],
                 'manage_canned.php?a=remove&amp;id='.$mysaved['id'].'&amp;token='.hesk_token_echo(0));
 
@@ -239,7 +239,7 @@ $num = hesk_dbNumRows($result);
                 <div class="form-group">
                     <label for="canned_message"><?php echo $hesklang['message']; ?></label>
                     <span id="HeskMsg">
-                        <textarea class="form-control <?php echo in_array('msg', $errors) ? 'isError' : ''; ?>" name="msg" rows="40" cols="70" id="canned_message"><?php
+                        <textarea class="form-control <?php echo in_array('msg', $errors) ? 'isError' : ''; ?>" name="msg" rows="40" cols="70" id="canned_message" style="resize: vertical; transition: none;"><?php
                             if (isset($_SESSION['canned']['msg'])) {
                                 echo stripslashes($_SESSION['canned']['msg']);
                             }
@@ -260,14 +260,29 @@ $num = hesk_dbNumRows($result);
                         <a href="javascript:" onclick="hesk_insertRichTag('HESK_TRACK_ID')">
                             <?php echo $hesklang['trackID']; ?>
                         </a>
-                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_NAME')">
-                            <?php echo $hesklang['name']; ?>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_SUBJECT')">
+                            <?php echo $hesklang['subject']; ?>
                         </a>
-                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_FIRST_NAME')">
-                            <?php echo $hesklang['fname']; ?>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_REQUESTER')">
+                            <?php echo $hesklang['email_tag_requester']; ?>
                         </a>
-                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_EMAIL')">
-                            <?php echo $hesklang['email']; ?>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_REQUESTER_NAME')">
+                            <?php echo $hesklang['email_tag_requester_name']; ?>
+                        </a>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_REQUESTER_FIRST_NAME')">
+                            <?php echo $hesklang['email_tag_requester_first_name']; ?>
+                        </a>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_REQUESTER_EMAIL')">
+                            <?php echo $hesklang['email_tag_requester_email']; ?>
+                        </a>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_FOLLOWERS')">
+                            <?php echo $hesklang['email_tag_followers']; ?>
+                        </a>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_FOLLOWER_NAMES')">
+                            <?php echo $hesklang['email_tag_follower_names']; ?>
+                        </a>
+                        <a href="javascript:" onclick="hesk_insertRichTag('HESK_FOLLOWER_EMAILS')">
+                            <?php echo $hesklang['email_tag_follower_emails']; ?>
                         </a>
                         <a href="javascript:" onclick="hesk_insertRichTag('HESK_OWNER')">
                             <?php echo $hesklang['owner']; ?>
@@ -317,9 +332,9 @@ function setMessage(msgid) {
     if (document.getElementById) {
         <?php if ($hesk_settings['staff_ticket_formatting'] == 2): ?>
         tinymce.get("canned_message").setContent('');
-        tinymce.get("canned_message").execCommand('mceInsertRawHTML', false, myMsgTxt[msgid]);
+        tinymce.get("canned_message").setContent(myMsgTxt[msgid]);
         <?php else: ?>
-        document.getElementById('HeskMsg').innerHTML='<textarea class="form-control" id="canned_message" name="msg" rows="40" cols="70">'+myMsgTxt[msgid]+'</textarea>';
+        document.getElementById('HeskMsg').innerHTML='<textarea class="form-control" id="canned_message" name="msg" rows="40" cols="70" style="resize: vertical; transition: none;">'+myMsgTxt[msgid]+'</textarea>';
         <?php endif; ?>
         document.getElementById('HeskTitle').innerHTML='<input type="text" class="form-control" id="canned_title" name="name" maxlength="50" value="'+myTitle[msgid]+'">';
     } else {

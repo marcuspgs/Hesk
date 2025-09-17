@@ -1,0 +1,10 @@
+Kedves %%NAME%%,
+
+Sajnos fiókjának regisztrációját elutasították.
+
+Ha úgy gondolja, hogy ez tévedésből történt, próbálkozzon újra a regisztrációval.
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

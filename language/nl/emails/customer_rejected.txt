@@ -1,0 +1,10 @@
+Beste %%NAME%%,
+
+Je registratie is afgekeurd.
+
+Als dit volgens jou niet correct is, registreer je dan nogmaals.
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

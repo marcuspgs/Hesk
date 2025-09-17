@@ -1,0 +1,14 @@
+Merhaba,
+
+Yeni müşteri hesapları personel onayını beklemektedir.
+
+Bekleyen Onay Sayısı : %%NUM%%
+
+Müşteri hesap kayıtlarını buradan onaylayabilir veya reddedebilirsiniz :
+%%VERIFICATION_URL%%
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,5 @@
+<p>Benvolgut %%NAME%%,</p>
+<p>No hem pogut processar el vostre correu electrònic "%%SUBJECT%%" perquè no teniu cap compte amb nosaltres.</p>
+<p>Aquest servei d'ajuda només està disponible per als usuaris registrats.</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -41,15 +41,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
     <title><?php echo $hesk_settings['hesk_title']; ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo HESK_PATH; ?>img/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo HESK_PATH; ?>img/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo HESK_PATH; ?>img/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="<?php echo HESK_PATH; ?>img/favicon/site.webmanifest" />
-    <link rel="mask-icon" href="<?php echo HESK_PATH; ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="<?php echo HESK_PATH; ?>img/favicon/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#2d89ef" />
-    <meta name="msapplication-config" content="<?php echo HESK_PATH; ?>img/favicon/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
+    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
     <!--[if IE]>
@@ -77,8 +69,9 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 
 <body class="cust-help">
 <?php include(TEMPLATE_PATH . '../../header.txt'); ?>
+<?php renderCommonElementsAfterBody(); ?>
 <div class="wrapper">
-    <main class="main">
+    <main class="main" id="maincontent">
         <header class="header">
             <div class="contr">
                 <div class="header__inner">
@@ -86,21 +79,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
                     <?php renderLoginNavbarElements($customerUserContext); ?>
-                    <?php if ($hesk_settings['can_sel_lang']): ?>
-                        <div class="header__lang">
-                            <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
-                            <div class="dropdown-select center out-close">
-                                <select name="language" onchange="this.form.submit()">
-                                    <?php hesk_listLanguages(); ?>
-                                </select>
-                            </div>
-                            <?php foreach (hesk_getCurrentGetParameters() as $key => $value): ?>
-                            <input type="hidden" name="<?php echo hesk_htmlentities($key); ?>"
-                                   value="<?php echo hesk_htmlentities($value); ?>">
-                            <?php endforeach; ?>
-                            </form>
-                        </div>
-                    <?php endif; ?>
+                    <?php renderNavbarLanguageSelect(); ?>
                 </div>
             </div>
         </header>
@@ -127,7 +106,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
             <div class="contr">
                 <?php hesk3_show_messages($serviceMessages); ?>
                 <div class="help-search">
-                    <h2 class="search__title"><?php echo $hesklang['customer_my_tickets_heading']; ?></h2>
+                    <h1 class="search__title"><?php echo $hesklang['customer_my_tickets_heading']; ?></h1>
                     <?php displayMyTicketsSearch($searchType, $searchCriteria); ?>
                 </div>
                 <div class="table-wrap">
@@ -137,7 +116,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                             <tr>
                                 <?php if ($hesk_settings['sequential']): ?>
                                     <th class="sindu-handle <?php echo $ordering['orderBy'] === 'id' ? hesk_mb_strtolower($ordering['orderDirection']) : '' ?>">
-                                        <a href="<?php echo build_sort_url('id', $ordering, $searchType, $searchCriteria, $paging); ?>">
+                                        <a href="<?php echo build_sort_url('id', $ordering, $searchType, $searchCriteria, $paging); ?>" aria-label="<?php echo ($hesklang['sort_by'] . ' ' .  $hesklang['id']); ?>">
                                             <div class="sort">
                                                 <span><?php echo $hesklang['id']; ?></span>
                                                 <i class="handle"></i>
@@ -146,7 +125,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </th>
                                 <?php endif; ?>
                                 <th class="sindu-handle <?php echo $ordering['orderBy'] === 'trackid' ? hesk_mb_strtolower($ordering['orderDirection']) : '' ?>">
-                                    <a href="<?php echo build_sort_url('trackid', $ordering, $searchType, $searchCriteria, $paging); ?>">
+                                    <a href="<?php echo build_sort_url('trackid', $ordering, $searchType, $searchCriteria, $paging); ?>" aria-label="<?php echo ($hesklang['sort_by'] . ' ' .  $hesklang['trackID']); ?>">
                                         <div class="sort">
                                             <span><?php echo $hesklang['trackID']; ?></span>
                                             <i class="handle"></i>
@@ -154,7 +133,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </a>
                                 </th>
                                 <th class="sindu-handle <?php echo $ordering['orderBy'] === 'lastchange' ? hesk_mb_strtolower($ordering['orderDirection']) : '' ?>">
-                                    <a href="<?php echo build_sort_url('lastchange', $ordering, $searchType, $searchCriteria, $paging); ?>">
+                                    <a href="<?php echo build_sort_url('lastchange', $ordering, $searchType, $searchCriteria, $paging); ?>" aria-label="<?php echo ($hesklang['sort_by'] . ' ' .  $hesklang['last_update']); ?>">
                                         <div class="sort">
                                             <span><?php echo $hesklang['last_update']; ?></span>
                                             <i class="handle"></i>
@@ -162,7 +141,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </a>
                                 </th>
                                 <th class="sindu-handle <?php echo $ordering['orderBy'] === 'subject' ? hesk_mb_strtolower($ordering['orderDirection']) : '' ?>">
-                                    <a href="<?php echo build_sort_url('subject', $ordering, $searchType, $searchCriteria, $paging); ?>">
+                                    <a href="<?php echo build_sort_url('subject', $ordering, $searchType, $searchCriteria, $paging); ?>" aria-label="<?php echo ($hesklang['sort_by'] . ' ' .  $hesklang['subject']); ?>">
                                         <div class="sort">
                                             <span><?php echo $hesklang['subject']; ?></span>
                                             <i class="handle"></i>
@@ -170,7 +149,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </a>
                                 </th>
                                 <th class="sindu-handle <?php echo $ordering['orderBy'] === 'status' ? hesk_mb_strtolower($ordering['orderDirection']) : '' ?>">
-                                    <a href="<?php echo build_sort_url('status', $ordering, $searchType, $searchCriteria, $paging); ?>">
+                                    <a href="<?php echo build_sort_url('status', $ordering, $searchType, $searchCriteria, $paging); ?>" aria-label="<?php echo ($hesklang['sort_by'] . ' ' .  $hesklang['status']); ?>">
                                         <div class="sort">
                                             <span><?php echo $hesklang['status']; ?></span>
                                             <i class="handle"></i>
@@ -178,7 +157,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </a>
                                 </th>
                                 <th class="sindu-handle <?php echo $ordering['orderBy'] === 'priority' ? hesk_mb_strtolower($ordering['orderDirection']) : '' ?>">
-                                    <a href="<?php echo build_sort_url('priority', $ordering, $searchType, $searchCriteria, $paging); ?>">
+                                    <a href="<?php echo build_sort_url('priority', $ordering, $searchType, $searchCriteria, $paging); ?>" aria-label="<?php echo ($hesklang['sort_by'] . ' ' .  $hesklang['priority']); ?>">
                                         <div class="sort">
                                             <span><?php echo $hesklang['priority']; ?></span>
                                             <i class="handle"></i>
@@ -189,7 +168,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                             </thead>
                             <tbody>
                             <?php if (count($tickets) === 0): ?>
-                                <td colspan="<?php echo ($hesk_settings['sequential'] ? 6 : 5) ?> "><?php echo $hesklang['no_results_found']; ?></td>
+                                <td colspan="<?php echo ($hesk_settings['sequential'] ? 6 : 5) ?> "><span role="alert"><?php echo $hesklang['no_results_found']; ?></span></td>
                             <?php endif; ?>
                             <?php foreach ($tickets as $ticket): ?>
                                 <tr <?php if (intval($ticket['status_id']) === 2) { echo 'class="new"'; } ?>>
@@ -209,9 +188,9 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </td>
                                     <td><?php echo $ticket['status']; ?></td>
                                     <td>
-                                        <div class="value with-label priority" data-value="<?php echo $ticket['priority']; ?>">
-                                            <span><?php echo $hesklang[$ticket['priority']]; ?></span>
-                                        </div>
+                                        <?php $data_style = 'border-top-color:'.$hesk_settings['priorities'][$ticket['priority']]['color'].';border-left-color:'.$hesk_settings['priorities'][$ticket['priority']]['color'].';border-bottom-color:'.$hesk_settings['priorities'][$ticket['priority']]['color'].';' ?>
+                                       <div class="value with-label priority" data-value="<?php echo $hesk_settings['priorities'][$ticket['priority']]['name']; ?>">
+                                       <div class="priority_img" style="<?php echo $data_style; ?>"></div><span class="ml5"><?php echo $hesk_settings['priorities'][$ticket['priority']]['name']; ?></span>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

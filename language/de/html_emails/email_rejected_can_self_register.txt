@@ -1,0 +1,4 @@
+<p>Sehr geehrte(r) %%NAME%%,</p>
+<p>Wir konnten Ihre E-Mail "%%SUBJECT%%" nicht bearbeiten, weil Sie kein Konto bei uns haben.<br /><br />TUm Supportanfragen per E-Mail zu übermitteln, registrieren Sie sich bitte zunächst unter:<br /><a href="%%CUSTOMER_REGISTER_URL%%">%%CUSTOMER_REGISTER_URL%%</a></p>
+<p>Mit freundlichen Grüßen</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

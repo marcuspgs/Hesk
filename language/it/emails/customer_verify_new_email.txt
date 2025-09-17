@@ -1,0 +1,11 @@
+Gentile %%NAME%%,
+
+Abbiamo ricevuto una richiesta per cambiare il tuo indirizzo email.
+
+Per confermare questa modifica, fai clic sul link qui sotto (scade in 1 ora):
+%%VERIFICATION_URL%%
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

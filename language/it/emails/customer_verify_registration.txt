@@ -1,0 +1,9 @@
+Gentile %%NAME%%,
+
+Grazie per aver creato un account. Clicca sul link sottostante per attivare il tuo account:
+%%VERIFICATION_URL%%
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

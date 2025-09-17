@@ -30,15 +30,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
     <title><?php echo $hesk_settings['hesk_title']; ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo HESK_PATH; ?>img/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo HESK_PATH; ?>img/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo HESK_PATH; ?>img/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="<?php echo HESK_PATH; ?>img/favicon/site.webmanifest" />
-    <link rel="mask-icon" href="<?php echo HESK_PATH; ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-    <link rel="shortcut icon" href="<?php echo HESK_PATH; ?>img/favicon/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#2d89ef" />
-    <meta name="msapplication-config" content="<?php echo HESK_PATH; ?>img/favicon/browserconfig.xml" />
-    <meta name="theme-color" content="#ffffff" />
+    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
     <!--[if IE]>
@@ -55,8 +47,9 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 
 <body class="cust-help">
 <?php include(TEMPLATE_PATH . '../../header.txt'); ?>
+<?php renderCommonElementsAfterBody(); ?>
 <div class="wrapper">
-    <main class="main">
+    <main class="main" id="maincontent">
         <header class="header">
             <div class="contr">
                 <div class="header__inner">
@@ -64,21 +57,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
                     <?php renderLoginNavbarElements(); ?>
-                    <?php if ($hesk_settings['can_sel_lang']): ?>
-                        <div class="header__lang">
-                            <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
-                                <div class="dropdown-select center out-close">
-                                    <select name="language" onchange="this.form.submit()">
-                                        <?php hesk_listLanguages(); ?>
-                                    </select>
-                                </div>
-                                <?php foreach (hesk_getCurrentGetParameters() as $key => $value): ?>
-                                    <input type="hidden" name="<?php echo hesk_htmlentities($key); ?>"
-                                           value="<?php echo hesk_htmlentities($value); ?>">
-                                <?php endforeach; ?>
-                            </form>
-                        </div>
-                    <?php endif; ?>
+                    <?php renderNavbarLanguageSelect(); ?>
                 </div>
             </div>
         </header>
@@ -111,29 +90,29 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                     }
                     ?>
                 </div>
-                <h3 class="article__heading article__heading--form">
-                    <div class="icon-in-circle">
+                <h1 class="article__heading article__heading--form">
+                    <span class="icon-in-circle" aria-hidden="true">
                         <svg class="icon icon-document">
                             <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-team"></use>
                         </svg>
-                    </div>
+                    </span>
                     <span class="ml-1"><?php echo $hesklang['customer_login']; ?></span>
-                </h3>
+                </h1>
                 <form action="login.php" method="post" name="form1"
                       id="formNeedValidation"
                       class="form form-submit-ticket ticket-create <?php echo count($validationFailures) ? 'invalid' : '' ?>"
                       novalidate>
                     <section class="form-groups centered">
                         <div class="form-group required">
-                            <label class="label"><?php echo $hesklang['customer_email']; ?></label>
-                            <input type="text" name="email" maxlength="255"
+                            <label class="label" for="email"><?php echo $hesklang['customer_email']; ?></label>
+                            <input type="text" id="email" name="email" maxlength="255"
                                    class="form-control <?php echo in_array('login_email', $validationFailures) ? 'iserror' : '' ?>"
                                    value="<?php echo stripslashes(hesk_input($model['email'])); ?>" required>
                             <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
                         </div>
                         <div class="form-group required">
-                            <label class="label"><?php echo $hesklang['pass']; ?></label>
-                            <input type="password" name="password" class="form-control" required>
+                            <label class="label" for="password"><?php echo $hesklang['pass']; ?></label>
+                            <input type="password" id="password" name="password" class="form-control" required>
                             <div class="form-control__error"><?php echo $hesklang['this_field_is_required']; ?></div>
                         </div>
                         <?php if ($hesk_settings['customer_autologin']): ?>
@@ -170,7 +149,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 
                                 <?php if ($hesk_settings['question_use']): ?>
                                     <div class="form-group">
-                                        <label class="required"><?php echo $hesk_settings['question_ask']; ?></label>
+                                        <label class="required" for="question"><?php echo $hesk_settings['question_ask']; ?></label>
                                         <?php
                                         $value = '';
                                         if (isset($_SESSION['c_question']))
@@ -179,7 +158,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                         }
                                         ?>
                                         <input type="text" class="form-control <?php echo in_array('question',$validationFailures) ? 'isError' : ''; ?>"
-                                               name="question" size="20" value="<?php echo $value; ?>">
+                                               id="question" name="question" size="20" value="<?php echo $value; ?>">
                                     </div>
                                 <?php
                                 endif;
@@ -212,8 +191,8 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                                     <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-refresh"></use>
                                                 </svg>
                                             </a>
-                                            <label class="required"><?php echo $hesklang['sec_enter']; ?></label>
-                                            <input type="text" name="mysecnum" size="20" maxlength="5" autocomplete="off" class="form-control <?php echo $cls; ?>">
+                                            <label class="required" for="mysecnum"><?php echo $hesklang['sec_enter']; ?></label>
+                                            <input type="text" id="mysecnum" name="mysecnum" size="20" maxlength="5" autocomplete="off" class="form-control <?php echo $cls; ?>">
                                             <?php
                                         }
                                         ?>
@@ -230,7 +209,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                         <input type="hidden" name="goto" value="<?php echo $redirectUrl; ?>">
                         <button type="submit" class="btn btn-full" ripple="ripple" id="recaptcha-submit"><?php echo $hesklang['customer_login']; ?></button>
                         <?php if ($displayForgotPasswordLink): ?>
-                        <a href="login.php?forgot=1#modal-contents" data-modal="#forgot-modal" class="link"><?php echo $hesklang['customer_forgot_password']; ?></a>
+                        <a href="login.php?forgot=1#modal-contents" data-modal="#forgot-modal" title="<?php echo $hesklang['opens_dialog']; ?>" role="button" class="link"><?php echo $hesklang['customer_forgot_password']; ?></a>
                         <?php endif; ?>
                         <?php if ($hesk_settings['customer_accounts_customer_self_register']): ?>
                         <a href="register.php" class="link"><?php echo $hesklang['create_account']; ?></a>
@@ -254,7 +233,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                 </div>
                 <?php endif; ?>
                 <!-- Start forgot password form -->
-                <div id="forgot-modal" class="<?php echo !$displayForgotPasswordModal ? 'modal' : ''; ?>">
+                <div id="forgot-modal" role="dialog" aria-modal="true" aria-label="<?php echo $hesklang['reset_your_password']; ?>" class="<?php echo !$displayForgotPasswordModal ? 'modal' : ''; ?>">
                     <div id="modal-contents" class="<?php echo !$displayForgotPasswordModal ? '' : 'notification orange'; ?>" style="padding-bottom:15px">
                         <?php
                         if ($submittedForgotPasswordForm) {
@@ -265,7 +244,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                         <?php echo $hesklang['reset_password_instructions']; ?>
                         <form action="login.php" method="post" name="form2" id="form2" class="form">
                             <div class="form-group">
-                                <label class="label" style="display: none"><?php echo $hesklang['email']; ?></label>
+                                <label class="label screen-reader-text skiplink" for="forgot-email"><?php echo $hesklang['email']; ?></label>
                                 <input id="forgot-email" type="email" class="form-control" name="reset-email" value="<?php echo $model['email']; ?>">
                             </div>
 
@@ -293,8 +272,8 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                                     <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-refresh"></use>
                                                 </svg>
                                             </a>
-                                            <label class="required"><?php echo $hesklang['sec_enter']; ?></label>
-                                            <input type="text" name="mysecnum" size="20" maxlength="5" autocomplete="off" class="form-control">
+                                            <label class="required" for="mysecnum"><?php echo $hesklang['sec_enter']; ?></label>
+                                            <input type="text" id="mysecnum" name="mysecnum" size="20" maxlength="5" autocomplete="off" class="form-control">
                                             <?php
                                         }
                                         ?>

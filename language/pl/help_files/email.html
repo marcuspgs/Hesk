@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Interaktywna pomoc dotycząca ustawień Hesk</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="help_style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- next: 77 -->
+
+<h3>Interaktywna pomoc dotycząca ustawień Hesk</h3>
+
+<p>&nbsp;</p>
+
+<a name="55"></a><p class="title">Nadawca wiadomości e-mail</p>
+<p>Wybierz, czy HESK ma wysyłać wiadomości e-mail za pomocą funkcji PHP mail(), czy ręcznie skonfigurowanego serwera SMTP.</p>
+
+<p>Funkcja PHP mail() powinna działać w większości konfiguracji. Jeśli nie, możesz spróbować skonfigurować serwer SMTP.</p>
+
+<p>Dostępne zmienne SMTP:</p>
+
+<p>
+<b>Host SMTP</b> — nazwa hosta serwera SMTP, zazwyczaj <i>localhost</i> lub <i>mail.example.com</i><br />
+<b>Port SMTP</b> — Twój port SMTP, zazwyczaj 25<br />
+<b>Limit czasu SMTP</b> — limit czasu SMTP w sekundach<br />
+<b>Szyfrowanie</b> — włącz, jeśli serwer SMTP wymaga szyfrowanych połączeń<br />
+<b>Nazwa użytkownika SMTP</b> — Twój Nazwa użytkownika SMTP (jeśli używana)<br />
+<b>Hasło SMTP</b> — Twoje hasło SMTP (jeśli używane)<br />
+</p>
+
+<p></p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zamknij okno</a></p>
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+<a name="54"></a><p class="title">Przesyłanie poczty e-mail</p>
+
+<p>Włącza przesyłanie poczty e-mail (tworzenie zgłoszeń z wiadomości e-mail).</p>
+
+<p>Ta opcja włącza tylko funkcję przesyłania poczty e-mail w HESK. Aby uzyskać pełną konfigurację przesyłania poczty e-mail, zapoznaj się z plikiem readme.html Plik.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zamknij okno</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="59"></a><p class="title">Pobieranie POP3</p>
+
+<p>To ustawienie włącza lub wyłącza pobieranie POP3 — tworzenie zgłoszeń z wiadomości e-mail poprzez połączenie z kontem e-mail za pomocą połączenia POP3.
+
+<p>Instrukcje dotyczące konfiguracji pobierania POP3 znajdują się w pliku readme.html.</p>
+
+<p>Dostępne zmienne to:</p>
+
+<p><b>Limit czasu zadania</b> – liczba minut oczekiwania na zakończenie istniejącego zadania pobierania POP3. Dopóki limit czasu nie zostanie osiągnięty, żadne nowe zadanie pobierania nie zostanie rozpoczęte.
+Ustaw na <b>0</b>, aby wyłączyć limity czasu i zawsze rozpoczynać nowe zadanie pobierania.</p>
+
+<p>
+<b>Host POP3</b> — nazwa hosta serwera POP3, zazwyczaj <i>mail.example.com</i><br />
+<b>Port POP3</b> — port POP3, zazwyczaj 110. Na przykład Gmail używa 995<br />
+<b>Protokół TLS</b> — włącz, jeśli serwer POP3 wymaga protokołu TLS<br />
+<b>Zachowaj kopię</b> — jeśli włączysz HESK <b>nie</b> usunie poczty z serwera POP3<br />
+<b>Nazwa użytkownika POP3</b> — nazwa użytkownika POP3<br />
+<b>Hasło POP3</b> — hasło POP3<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zamknij okno</a></p>
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+<a name="67"></a><p class="title">Pobieranie IMAP</p>
+
+<p>To ustawienie włącza lub wyłącza pobieranie IMAP — tworzenie zgłoszeń z wiadomości e-mail poprzez połączenie z kontem e-mail za pomocą połączenia IMAP.</p>
+
+<p>Instrukcje dotyczące konfiguracji pobierania IMAP można znaleźć w pliku readme.html.</p>
+
+<p>Dostępne zmienne to:</p>
+
+<p><b>Limit czasu zadania</b> — liczba minut oczekiwania na zakończenie istniejącego zadania pobierania IMAP. Żadne nowe zadania pobierania nie zostaną rozpoczęte, dopóki nie zostanie osiągnięty limit czasu. Ustaw na <b>0</b>, aby wyłączyć limity czasu i zawsze rozpoczynać nowe zadanie pobierania.</p>
+
+<p>
+<b>Host IMAP</b> — nazwa hosta serwera IMAP, zazwyczaj <i>mail.example.com</i><br />
+<b>Port IMAP</b> — port IMAP, zazwyczaj 143 dla połączeń nieszyfrowanych i 993 dla połączeń SSL/TLS<br />
+<b>Szyfrowanie</b> — ustaw wymagane szyfrowanie IMAP<br />
+<b>Zachowaj kopię</b> — jeśli włączone, HESK <b>nie</b> usunie wiadomości z serwera IMAP<br />
+<b>Nazwa użytkownika IMAP</b> — nazwa użytkownika IMAP<br />
+<b>Hasło IMAP</b> — hasło IMAP<br />
+<b>Skrzynka pocztowa IMAP</b> — wybierz skrzynkę pocztową IMAP, z której mają być pobierane wiadomości. Domyślnie jest to SKRZYNKA ODBIORCZA. Kilka prawidłowych przykładów: <br />
+SKRZYNKA ODBIORCZA<br />
+[Gmail]/Wszystkie<br />
+[Gmail]/Ważne<br />
+[Gmail]/Oznaczone gwiazdką<br />
+</p>
+
+<p></p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zamknij okno</a></p>
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+<a name="68"></a><p class="title">Nie weryfikuj certyfikatów serwera</p>
+
+<p>Jeśli zaznaczone, Hesk nie będzie weryfikował certyfikatów z serwera TLS/SSL.</p>
+
+<p>Weryfikacja certyfikatu zazwyczaj musi zostać pominięta, jeśli serwer korzysta z certyfikatów podpisanych samodzielnie certyfikaty.</p>
+
+<p>Zdecydowanie zalecamy, aby <b>nie</b> wyłączać walidacji certyfikatów na serwerach produkcyjnych i podczas łączenia się z serwerami innych firm, ponieważ naraża to na ataki typu man-in-the-middle.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zamknij okno</a></p>
+
+<p>&nbsp;</p> ...

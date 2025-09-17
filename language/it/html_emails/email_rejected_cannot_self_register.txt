@@ -1,0 +1,5 @@
+<p>Gentile %%NAME%%,</p>
+<p>non siamo riusciti a elaborare la tua email "%%SUBJECT%%" perch&egrave; non hai un account.</p>
+<p>Questo help desk è disponibile solamente agli utenti registrati.</p>
+<p>Cordiali saluti,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

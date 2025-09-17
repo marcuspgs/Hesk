@@ -202,14 +202,17 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
                     <div>
                         <h3><?php echo sprintf($hesklang['mfa_verification_header'], $hesklang['mfa_method_auth_app']); ?></h3>
                         <p><?php echo $hesklang['mfa_verification_auth_app_intro']; ?></p>
+                        <?php if (function_exists('curl_init')): ?>
                         <img src="<?php echo $tfa->getQRCodeImageAsDataUri($hesk_settings['hesk_title'], $_SESSION['tfa_secret']); ?>" alt="QR Code">
-                        <?php
-                        hesk_show_info(sprintf($hesklang['mfa_verification_auth_app_cant_scan'], chunk_split($_SESSION['tfa_secret'], 4, ' ')), ' ', false);
-                        ?>
+                        <?php else: ?>
+                        <?php hesk_show_notice($hesklang['mfa_curl']); ?>
+                        <?php endif; ?>
+                        <?php hesk_show_info(sprintf($hesklang['mfa_verification_auth_app_cant_scan'], chunk_split($_SESSION['tfa_secret'], 4, ' ')), ' ', false); ?>
                         <p>&nbsp;</p>
                         <p><?php echo $hesklang['mfa_verification_auth_app_enter_code']; ?><br>&nbsp;</p>
                     </div>
                 <?php } ?>
+                <?php if (empty($hide_form)): ?>
                 <form id="verify-form" class="form" action="manage_mfa.php" method="post">
                     <div class="form-group">
                         <label><?php echo $hesklang['mfa_code']; ?></label>
@@ -232,6 +235,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
                         }
                     });
                 </script>
+                <?php endif; ?>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <a href="manage_mfa.php">

@@ -1,0 +1,7 @@
+<p>Γεια σας,</p>
+<p>Συνεργάζεστε σε ένα νέο ticket υποστήριξης.</p>
+<p>Θέμα ticket: %%SUBJECT%%</p>
+<p>Αριθμός παρακολούθησης: %%TRACK_ID%%</p>
+<p>Μπορείτε να διαχειριστείτε αυτό το ticket εδώ:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Με εκτίμηση,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

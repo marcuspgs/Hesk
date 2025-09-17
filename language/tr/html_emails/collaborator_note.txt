@@ -1,0 +1,7 @@
+<p>Merhaba,</p>
+<p>İşbirliği yaptığınız "%%SUBJECT%%" talebine yeni bir not eklendi.</p>
+<p>Notu ekleyen %%NAME%%:</p>
+<p>%%MESSAGE%%</p>
+<p>Bu talebi buradan yönetebilirsiniz :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Saygılarımızla,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

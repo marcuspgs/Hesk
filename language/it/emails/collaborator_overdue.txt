@@ -1,0 +1,15 @@
+Ciao,
+
+il ticket a cui stai collaborando è in ritardo! A seguire i dettagli del ticket:
+
+Oggetto: %%SUBJECT%%
+Tracking ID: %%TRACK_ID%%
+
+Puoi gestire questo ticket da qui:
+%%TRACK_URL%%
+
+
+Cordialmente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,5 @@
+<p>Gentile %%NAME%%,</p>
+<p>sfortunatamente, la registrazione del tuo account &egrave; stata rifiutata.</p>
+<p>Se credi possa esserci stato un errore, prova a registrarti di nuovo.</p>
+<p>Cordiali saluti,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

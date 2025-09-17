@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Interaktivní nápověda pro nastavení Hesk</title>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<link href="help_style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- next: 77 -->
+<h3>Interaktivní nápověda pro nastavení Hesk</h3>
+<p> </p>
+<a name="55"></a><p class="title">Odesílatel e-mailu</p>
+<p>Zvolte, zda má HESK odesílat e-maily pomocí funkce PHP mail() nebo ručně nastaveného SMTP serveru.</p>
+<p>PHP mail() by měl fungovat ve většině konfigurací, pokud ne, zkuste nastavit SMTP server.</p>
+<p>Dostupné proměnné SMTP:</p>
+<p>
+<b>SMTP Host</b> - název hostitele vašeho SMTP serveru, obvykle <i>localhost</i> nebo <i>mail.example.com</i><br/>
+<b>SMTP Port</b> - váš SMTP port, obvykle 25<br/>
+<b>SMTP Timeout</b> - časový limit SMTP v sekundách<br/>
+<b>Encryption</b> - povolit, pokud váš SMTP server vyžaduje šifrované připojení<br/>
+<b>SMTP Username</b> - vaše SMTP uživatelské jméno (pokud se používá)<br/>
+<b>SMTP Password</b> - vaše SMTP heslo (pokud se používá)<br/>
+</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="54"></a><p class="title">Přesměrování e-mailů</p>
+<p>Povoluje přesměrování e-mailů (vytváření požadavků z e-mailů).</p>
+<p>Tato volba pouze povoluje funkci přesměrování v HESK, pro kompletní nastavení se podívejte do souboru readme.html.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="59"></a><p class="title">POP3 stahování</p>
+<p>Toto nastavení povoluje nebo zakazuje POP3 stahování – vytváření požadavků z e-mailů pomocí připojení POP3.<p>Pokyny k nastavení POP3 stahování naleznete v souboru readme.html.</p>
+<p>Dostupné proměnné jsou:</p>
+<p><b>Task Timeout</b> - počet minut, po který se čeká na dokončení existující úlohy stahování POP3.
+Dokud nebude dosaženo časového limitu, nebudou spuštěny žádné nové úlohy stahování.
+Nastavte na <b>0</b>, chcete-li zakázat časové limity a vždy spustit novou úlohu načítání.</p>
+<p>
+<b>POP3 Host</b> - název hostitele vašeho serveru POP3, obvykle <i>mail.example.com</i><br/>
+<b>POP3 Port</b> - váš POP3 port, obvykle 110. Gmail například používá 995.<br/>
+<b>TLS Protocol</b> - povolit, pokud váš server POP3 vyžaduje protokol TLS<br/>
+<b>Keep a copy</b> - pokud je tato funkce povolena, HESK <b>neodstraní</b> poštu z POP3 serveru<br/>
+<b>POP3 Username</b> - vaše POP3 uživatelské jméno<br/>
+<b>POP3 Password</b> - vaše POP3 heslo<br/>
+</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="67"></a><p class="title">IMAP stahování</p>
+<p>Toto nastavení povoluje nebo zakazuje IMAP stahování – vytváření požadavků z e-mailů pomocí připojení IMAP.</p>
+<p>Pokyny k nastavení IMAP stahování naleznete v souboru readme.html.</p>
+<p>Dostupné proměnné jsou:</p>
+<p><b>Task Timeout</b> - počet minut, po který se čeká na dokončení existující úlohy načítání IMAP.
+Dokud nedojde k vypršení časového limitu, nebudou spuštěny žádné nové úlohy načítání.
+Nastavte na <b>0</b>, chcete-li zakázat časové limity a vždy spustit novou úlohu načítání.</p>
+<p>
+<b>IMAP Host</b> - název hostitele vašeho serveru IMAP, obvykle <i>mail.example.com</i><br/>
+<b>IMAP Port</b> - váš IMAP port, obvykle 143 pro nešifrované a 993 pro SSL/TLS<br/>
+<b>Encryption</b> - nastavit požadované šifrování IMAP<br/>
+<b>Keep a copy</b> - pokud je tato funkce povolena, HESK <b>neodstraní</b> poštu z IMAP serveru<br/>
+<b>IMAP Username</b> - vaše IMAP uživatelské jméno<br/>
+<b>IMAP Password</b> - vaše IMAP heslo<br/>
+<b>IMAP Mailbox</b> - vyberte složku IMAP, ze které chcete stahovat e-maily. Výchozí nastavení je INBOX. Některé platné příklady: <br/>
+INBOX<br/>
+[Gmail]/All Mail<br/>
+[Gmail]/Important<br/>
+[Gmail]/Starred<br/>
+</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="68"></a><p class="title">Neověřovat certifikáty serveru</p>
+<p>Pokud je zaškrtnuto, Hesk nebude ověřovat certifikáty ze serveru TLS/SSL.</p>
+<p>Ověření certifikátu je obvykle nutné přeskočit, pokud server používá certifikáty s vlastním podpisem.</p>
+<p>Důrazně doporučujeme, abyste <b>ne</b> deaktivovali ověřování certifikátů na produkčních serverech a při připojování k serverům třetích stran, protože vás to vystavuje riziku útoků typu „man-in-the-middle“.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="70"></a><p class="title">Neodpovídat</p>
+<p>Pokud je tato možnost zaškrtnuta, Hesk se pokusí detekovat e-maily odeslané z e-mailových adres „Neodpovídat“ a ignorovat je.</p>
+<p>Příklady:<br/>
+do-not-reply@example.com<br/>
+do_not_reply@example.com<br/>
+no_reply@example.com
+</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="71"></a><p class="title">Vrácené</p>
+<p>Pokud je tato možnost zaškrtnuta, Hesk se pokusí detekovat a ignorovat vrácené e-maily.</p>
+<p>Například bude ignorovat e-maily odeslané z adresy mail-deamon@example.com a e-maily s předmětem „Vrácená pošta“, „Nedoručitelné“, „Mimo kancelář“ nebo podobným.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="72"></a><p class="title">Duplicitní</p>
+<p>Pokud je tato možnost zaškrtnuta, Hesk detekuje a ignoruje e-mail, pokud již Hesk zpracoval e-mail se stejnou zprávou během „časového rámce“ sekund.</p>
+<p>Při testování funkce e-mailu do ticketu buďto toto nastavení deaktivujte, nebo posílejte testovací e-maily s jedinečnými zprávami.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="60"></a><p class="title">E-mailové smyčky</p>
+<p>Nastavení, která pomáhají detekovat smyčky e-mailů vytvořené z automatických odpovědí nebo nedoručitelných e-mailů.</p>
+<p>Jakýkoli počet e-mailů vyšší než <b>Max Hits</b> z e-mailové adresy v rámci <b>Timeframe</b> sekund
+bude e-mailovou frontou ignorován.</p>
+<p>Nastavte <b>Max Hits</b> na <b>0</b>, pro deaktivaci detekce smyčky.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="62"></a><p class="title">Detekovat překlepy v e-mailu</p>
+<p>Tato funkce se pokusí rozpoznat běžné chyby v názvech e-mailových domén a navrhne opravu.</p>
+<p>Pokud například zákazník zadá user@<span style="color:red"><b>gmial.com</b></span>, HESK to rozpozná a navrhne místo toho
+user@<span style="color:green"><b>gmail.com</b></span>.</p>
+<p>HESK porovná e-mailové domény s doménami uvedenými v seznamu <i>Poskytovatelé e-mailu</i>.</p>
+<p> </p>
+<a name="63"></a><p class="title">Poskytovatelé e-mailu</p>
+<p>Seznam běžných poskytovatelů e-mailových služeb, které vaši zákazníci používají. HESK tento seznam použije k detekci chybně zadaných e-mailových adres.</p>
+<p>Zadejte jednu doménu na řádek, <u>bez</u> znaku @.</p>
+<p>Můžete zadat libovolný počet běžných doménových jmen, ale snažte se to nepřehánět – zadejte pouze ta nejběžnější.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="65"></a><p class="title">Upozornit zákazníka kdy</p>
+<p>Vyberte, kdy má HESK zasílat e-mailová oznámení zákazníkům:</p>
+<ul>
+<li><b>když zákazník odešle nový požadavek na podporu</b><br><br>
+Poznámka: pokud je ticket odeslán e-mailem (e-mail piping nebo POP3 fetching), HESK může
+přeskočit odeslání oznámení o novém ticketu zákazníkovi, pokud předmět e-mailu obsahuje
+jednu ze značek uvedených v textovém poli (jedna značka na řádek).<br><br/>Tuto funkci můžete použít k zabránění
+automatickým odpovědím na e-maily, které váš serverový filtr SPAMu detekuje jako možný SPAM.<br/> 
+</br></br></br></li>
+<li><b>když je žádost o podporu označena jako Vyřešeno</b> (bez odpovědi)</li>
+</ul>
+<p> </p>
+<p>Upozorňujeme, že předvolby oznámení se nastavují individuálně pro každý ticket, když zaměstnanec odpovídá na ticket nebo když zaměstnanec odesílá ticket z administrátorského rozhraní.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="61"></a><p class="title">Odstranit citovanou odpověď</p>
+<p>Tato funkce odstraní citované odpovědi ze všech e-mailů zákazníků před jejich převedením na ticket.</p>
+<p>Všechny e-maily zasílané zákazníkům budou začínat tímto řádkem:</p>
+<p>------ Odpověď nad touto čarou ------</p>
+<p>Veškerý text pod touto čarou bude odstraněn při importu e-mailu do odpovědi na ticket.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="66"></a><p class="title">Vyžadovat zprávu</p>
+<p>Pokud je tato možnost povolena, e-maily z e-mail piping nebo POP3 budou ignorovány, pokud neobsahují žádnou zprávu.</p>
+<p>Pokud je tato funkce vypnuta, budou i e-maily bez zprávy převedeny na tickety.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="64"></a><p class="title">Vložené soubory</p>
+<p>Povolte tuto funkci, pokud chcete, aby HESK ukládal vložené soubory e-mailů (například vložené obrázky) jako přílohy při importu ticketů přes e-mail piping nebo POP3 Fetching.</p>
+<p>Soubory přesahující maximální povolený limit příloh budou ignorovány.</p>
+<p>Vezměte na vědomí, že v systému HESK mají přílohy přednost před vloženými soubory. Pokud například povolíte 2 přílohy a obdržíte e-mail s 1 přílohou
+a 3 vloženými obrázky, systém HESK uloží přílohu a první vložený obrázek, zbytek bude ignorován.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="57"></a><p class="title">Sledující požadavku</p>
+<p>Pokud je tato funkce povolena, mohou pracovníci helpdesku přiřadit více zákazníků (kromě hlavního zákazníka) jako „sledující“.  Všichni sledující
+budou dostávat stejná e-mailová oznámení jako hlavní zákazník.</p>
+<p>Zaškrtnutím políčka tuto funkci aktivujete.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="50"></a><p class="title">Potvrdit e-mail</p>
+<p>Pokud je tato možnost vybrána, formulář „Odeslat ticket“ zobrazí pole „Potvrdit e-mail“,
+které zákazníka donutí zadat e-mailovou adresu dvakrát. To pomáhá zabránit překlepům
+v e-mailových adresách.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="58"></a><p class="title">Pouze otevřené</p>
+<p>Pokud je zaškrtnuto, e-mail „Zapomenuté ID ticketu“ (e-mail zasílaný zákazníkům jako připomenutí čísla ID ticketu pro sledování)
+bude obsahovat pouze otevřené tickety a vyřešené tickety bude ignorovat.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="69"></a><p class="title">Formátování e-mailu</p>
+<p>Určuje, které formáty e-mailů budou zahrnuty při odesílání e-mailů. Možnosti zahrnují:</p>
+<p>
+<b>HTML s alternativou prostého textu z šablony prostého textu (výchozí nastavení)</b> - e-maily budou odeslány ve formátu HTML. Obsah šablony e-mailu v prostém textu Hesk bude použit jako alternativní text v e-mailu (multipart/alternative).<br/>
+<b>HTML s alternativou v prostém textu generovanou z HTML šablony</b> – e-maily budou odeslány jako HTML. Alternativní text v e-mailu (multipart/alternative) bude generován převedením HTML šablony do prostého textu. Šablony e-mailů v prostém textu Hesk budou ignorovány.<br/>
+<b>Pouze HTML</b> – e-maily budou odesílány pouze ve formátu HTML bez multipart/alternative.<br/>
+<b>Pouze prostý text</b> – e-maily budou odesílány jako prostý text.<br/>
+</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="73"></a><p class="title">Zakázat GSSAPI</p>
+<p>Někdy server IMAP založený na systému Windows vrátí chybovou zprávu, jako je tato</p>
+<p style="color:red">Upozornění: Neznámá chyba Kerberos: Nelze najít soubor mezipaměti pověření „/tmp/krb123_0123“ (zkuste spustit kinit).</p>
+<p>Pokud k tomu dojde, zkuste povolit možnost „Zakázat GSSAPI“ a poté znovu otestujte připojení IMAP.</p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="74"></a><p class="title">Maximální počet příjemců</p>
+<p>Maximální počet příjemců v jedné e-mailové zprávě odeslané systémem Hesk.</p>
+<p>Počet „Max. příjemců“ je souhrnný počet všech e-mailových adres v polích Komu, Kopie a Skrytá kopie e-mailu.</p>
+<p>Nastavte hodnotu <b>0</b>, chcete-li omezení vypnout. Důrazně však doporučujeme nastavit rozumné omezení. Mnoho poskytovatelů e-mailových služeb blokuje e-maily zasílané příliš velkému počtu příjemců.</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="75"></a><p class="title">E-maily o odmítnutí zákazníka</p>
+<p>E-maily od zákazníků mohou být společností HESK odmítnuty, pokud jsou vyžadovány zákaznické účty, ale e-mailová adresa odesílatele není registrována v helpdesku.</p>
+<p>Výběrem této možnosti bude zákazník informován, že jeho e-mail byl odmítnut. Aby se omezil počet nevyžádaných e-mailů, je každých „Čas mezi odmítnutými e-maily“ hodin zaslán pouze jeden e-mail s odmítnutím.</p>
+<p><b>Poznámka:</b> Pokud je e-mail odmítnut z důvodu spamu nebo je považován za duplikát, nebude zákazníkovi zaslán žádný e-mail bez ohledu na toto nastavení.</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<a name="76"></a><p class="title">Čas mezi odmítnutými e-maily</p>
+<p>Doba, po kterou je třeba počkat před odesláním druhého e-mailu s odmítnutím zákazníkovi, bez ohledu na počet odeslaných e-mailů.</p>
+<p>Nastavte hodnotu <b>0</b>, chcete-li omezení vypnout. Důrazně však doporučujeme nastavit rozumné omezení, aby se zabránilo odesílání nadměrného množství e-mailů z vašeho poštovního serveru.</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p align="center"><a href="#" onclick="Javascript:window.close()">Zavřít okno</a></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+</p></body>
+</html>

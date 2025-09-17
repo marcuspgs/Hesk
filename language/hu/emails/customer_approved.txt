@@ -1,0 +1,11 @@
+Kedves %%NAME%%,
+
+Fiókregisztrációját jóváhagytuk.
+
+Az alábbiakban bejelentkezhet a fiók létrehozásakor használt felhasználónévvel és jelszóval:
+%%CUSTOMER_LOGIN_URL%%
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

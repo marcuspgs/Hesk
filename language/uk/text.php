@@ -3,7 +3,7 @@
 *
 * Language file for Help Desk Software HESK (https://www.hesk.com)
 * Language: Українська (Ukrainian)
-* Version: 3.4.x
+* Version: 3.6.x
 *
 * ==> CONTRIBUTORS
 *
@@ -1470,7 +1470,6 @@ $hesklang['d_custom']='Спеціальний формат';
 $hesklang['d_ci']='ЛИШЕ ДЛЯ ДОСВІДЧЕНИХ КОРИСТУВАЧІВ: дійсний формат дати PHP, див. посібник PHP.';
 $hesklang['cf_noe']='Введіть дійсну електронну адресу в <i>%s</i>';
 $hesklang['cf_noem']='Введіть одну або кілька дійсних адрес електронної пошти у <i>%s</i>';
-$hesklang['cf_limit']='У вас є 50 активних користувацьких полів, нових не можна створити.';
 $hesklang['can_resolve']='Може вирішити запити';
 $hesklang['can_change_own_cat']='Змінити категорію запиту (на дозволені)';
 $hesklang['can_submit_any_cat']='Може подавати запити до будь-якої категорії';
@@ -2133,6 +2132,471 @@ $hesklang['can_due_date']='Можна встановити термін вико
 $hesklang['can_due_date_e']='У вас немає дозволу встановлювати термін виконання';
 
 // Added in version 3.5.0
+$hesklang['customer_verify_registration']='Підтвердіть реєстрацію';
+$hesklang['customer_verify_new_email']='Підтвердіть нову електронну адресу';
+$hesklang['customer_reset_password']='Скидання пароля служби підтримки';
+$hesklang['customer_approved']='Обліковий запис схвалено';
+$hesklang['customer_rejected']='Обліковий запис відхилено';
+$hesklang['email_rejected']='Щоб надіслати запит, потрібен обліковий запис';
+$hesklang['require_curl']='Для цієї функції необхідно, щоб на сервері було увімкнено підтримку <strong>cURL</strong> для PHP. Попросіть свого хостинг-провайдера увімкнути cURL для PHP.';
+$hesklang['customer_accounts_heading']='Облікові записи клієнтів';
+$hesklang['customer_accounts']='Облікові записи клієнтів';
+$hesklang['customer_accounts_off']='<strong>Вимкнено</strong>';
+$hesklang['customer_accounts_allowed']='<strong>Увімкнено – Необов\'язково</strong> (клієнти можуть надсилати запити без реєстрації чи входу)';
+$hesklang['customer_accounts_required_to_submit']='<strong>Увімкнено – Потрібно для запитів</strong> (надсилати запити можуть лише авторизовані клієнти)';
+$hesklang['customer_accounts_required']='<strong>Увімкнено – Потрібно для доступу</strong> (доступ до служби підтримки та бази знань мають лише авторизовані клієнти)';
+$hesklang['customer_accounts_reg']='Реєстрація облікового запису';
+$hesklang['customer_accounts_reg_customer']='Клієнти можуть реєструвати облікові записи';
+$hesklang['customer_accounts_reg_approve']='Клієнти можуть реєструвати облікові записи, працівники мають схвалювати нові реєстрації';
+$hesklang['customer_accounts_reg_staff']='Лише працівники можуть створювати облікові записи клієнтів';
+$hesklang['customer_accounts_allow_email_changes']='Дозволити клієнтам змінювати електронну адресу';
+$hesklang['customer_accounts_allow_email_resends']='Час, після якого клієнт може запросити новий лист підтвердження';
+$hesklang['customer_login']='Увійти';
+$hesklang['customer_logout']='Вийти';
+$hesklang['customer_register']='Зареєструватися';
+$hesklang['customer_accounts_disabled']='Вхід і реєстрація клієнтів вимкнені.';
+$hesklang['customer_accounts_registration_disabled']='Реєстрацію клієнтів вимкнено.';
+$hesklang['customer_forgot_password']='Забули пароль?';
+$hesklang['customer_email']='Електронна адреса';
+$hesklang['customer_accounts_email_banned']='Вам заборонено користуватися цією службою підтримки.';
+$hesklang['customer_registration_successful']='Реєстрацію завершено!';
+$hesklang['customer_registration_email_exists_no_reset_link']='Обліковий запис з адресою %s уже існує.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists']='Обліковий запис з адресою %s уже існує. <a href="login.php">Хочете увійти?</a>?'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_email_verification']='Обліковий запис з адресою %s вже існує й очікує підтвердження електронної адреси.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_approval']='Обліковий запис з адресою %s уже існує й очікує схвалення співробітником.'; // %s - Entered email address
+$hesklang['customer_registration_check_your_email']='Перевірте свою електронну пошту!';
+$hesklang['customer_registration_check_your_email_content']='Ви маєте підтвердити свою електронну адресу, перш ніж зможете увійти.<br><br>Якщо лист не надійде за кілька хвилин, перевірте папки «Небажана пошта» чи «Спам». Позначте повідомлення як <b>Не спам</b>, аби надалі отримувати нашу кореспонденцію без проблем.';
+$hesklang['customer_login_not_verified']='Щоб увійти, потрібно підтвердити електронну адресу.';
+$hesklang['customer_login_not_verified2']='Якщо ви не отримали лист підтвердження, перевірте папки «Небажана пошта» чи «Спам». Позначте лист як <b>Не спам</b>, щоб уникнути проблем з отриманням нашої кореспонденції надалі.';
+$hesklang['customer_login_resend_verification_email']='Надіслати лист підтвердження ще раз';
+$hesklang['customer_login_resend_verification_email_none']='Немає електронних адрес, що очікують на підтвердження.';
+$hesklang['customer_login_resend_verification_email_too_early']='Наразі неможливо запитати новий лист підтвердження, спробуйте пізніше.';
+$hesklang['customer_login_not_approved']='Ваш обліковий запис має схвалити співробітник. Після схвалення ви отримаєте повідомлення електронною поштою.'; // %s - Resend email notification link
+$hesklang['customer_registration_verify_header']='Підтвердження реєстрації';
+$hesklang['customer_registration_verify_success']='Електронну адресу підтверджено, тепер ви можете увійти через форму нижче.';
+$hesklang['customer_registration_verify_approval_needed']='Електронну адресу підтверджено. Однак, перш ніж ви зможете увійти, співробітник має схвалити ваш обліковий запис. Після схвалення ви отримаєте лист електронною поштою.';
+$hesklang['customer_registration_verify_failure']='Не вдалося підтвердити електронну адресу. Посилання вже використано або строк його дії минув.';
+$hesklang['emails_to_customers']='&raquo; Листи клієнтам';
+$hesklang['emails_to_staff']='&raquo; Листи співробітникам';
+$hesklang['emails_to_everyone']='&raquo; Листи співробітникам або клієнтам';
+$hesklang['new_customer_approval']='Є облікові записи клієнтів, що очікують схвалення'; // Email subject
+$hesklang['desc_new_customer_approval']='(Співробітник) Облікові записи клієнтів очікують схвалення';
+$hesklang['n_cust_app']='Очікують схвалення облікові записи клієнтів'; // Notify me when...
+$hesklang['et_num_customers']='Кількість очікуваних схвалень';
+$hesklang['et_link_customers']='Посилання на сторінку керування клієнтами';
+$hesklang['et_link_verify']='Посилання для підтвердження';
+$hesklang['et_cust_login']='URL входу клієнта';
+$hesklang['submit_ticket_customer_email_exists']='Клієнт з цією адресою вже існує. Будь ласка, <a href="login.php?email=%s">увійдіть</a>, щоб надіслати запит.'; // %s - User's email
+$hesklang['customer_login_email_required']='Введіть дійсну електронну адресу.';
+$hesklang['customer_login_password_required']='Введіть пароль.';
+$hesklang['customer_login_remember_just_email']='Запам\'ятати лише мою адресу';
+$hesklang['customer_login_remember_email']='Запам\'ятати мою адресу';
+$hesklang['customer_wrong_user']='Адреса %s не зареєстрована у нас.<br><br>Бажаєте <a href="register.php">створити обліковий запис</a>?'; // %s - Entered email address
+$hesklang['customer_wrong_pass']='Адреса електронної пошти та пароль не збігаються.<br><br>Бажаєте <a href="login.php?submittedForgot=1">скинути пароль</a>?';
+$hesklang['customer_must_be_logged_in_to_view']='Щоб продовжити, увійдіть у систему.';
+$hesklang['customer_register_here']='Якщо у вас немає облікового запису, <a href="register.php">зареєструйтесь тут</a>.';
+$hesklang['create_account']='Створити обліковий запис';
+$hesklang['customer_my_tickets_heading']='Мої запити';
+$hesklang['customer_my_tickets_description']='Переглянути всі свої попередні запити';
+$hesklang['customer_my_tickets_search_for_tickets']='Пошук запитів';
+$hesklang['customer_password_reset_successful']='Новий пароль збережено. Тепер ви можете увійти.';
+$hesklang['customer_profile']='Профіль';
+$hesklang['customer_edit_profile']='Редагувати профіль';
+$hesklang['customer_edit_pass']='Змінити пароль';
+$hesklang['customer_edit_pass_same']='Новий пароль не повинен збігатися з поточним.';
+$hesklang['customer_change_email']='Змінити електронну адресу';
+$hesklang['customer_change_email_banned']='Вказана електронна адреса заборонена.';
+$hesklang['customer_change_email_pending']='Надіслано запит на зміну вашої електронної адреси на: <b>%s</b><br><br>На цю адресу відправлено лист із посиланням для підтвердження.'; // %s - new email
+$hesklang['customer_change_resend']='<a href="profile.php?action=email-resend">Надіслати лист підтвердження ще раз</a>';
+$hesklang['customer_change_email_submitted']='Щоб підтвердити нову адресу, перейдіть за посиланням, надісланим на <b>%s</b>.'; // %s - new email
+$hesklang['customer_change_email_verify_success']='Нову електронну адресу підтверджено, профіль оновлено.';
+$hesklang['customer_change_email_disabled']='Змінювати адресу електронної пошти заборонено. Зв\'яжіться з нами, якщо хочете її змінити.';
+$hesklang['customer_profile_saved']='Профіль збережено.';
+$hesklang['customers']='Клієнти';
+$hesklang['customers_intro']='Облікові записи клієнтів дають змогу переглядати всі свої запити в одному місці.';
+$hesklang['sure_remove_customer']='Ви справді хочете видалити цього клієнта?';
+$hesklang['sure_remove_customer_additional_note']='Видалення клієнта незворотне. Після видалення відновити його неможливо!';
+$hesklang['new_customer']='Новий клієнт';
+$hesklang['new_follower']='Новий підписник';
+$hesklang['add_customer']='+ Додати клієнта'; // Appears on Customer Dropdown, stickied at the bottom
+$hesklang['add_follower']='+ Додати підписника'; // Appears on Followers Dropdown, stickied at the bottom
+$hesklang['new_customer_prompt']='Вказаний клієнт ще не існує. Натисніть «Зберегти», щоб створити його.';
+$hesklang['followers']='Підписники';
+$hesklang['no_customers']='У базі даних наразі немає клієнтів.';
+$hesklang['no_customers_disabled']='Клієнти з\'являться тут після надсилання запитів.';
+$hesklang['no_customers_enabled']='Клієнти з\'являться тут після реєстрації або надсилання запитів.';
+$hesklang['no_customers_enabled2']='Крім того, за допомогою кнопок вище можна вручну створити облікові записи клієнтів або імпортувати наявних клієнтів до служби підтримки.';
+$hesklang['import_customers']='Імпортувати клієнтів';
+$hesklang['import_customers_tip']='Щоб одночасно імпортувати кількох клієнтів, використайте файл CSV.';
+$hesklang['customer_not_found']='Клієнта для цього запиту не знайдено!';
+$hesklang['search_by_name_or_email']='Пошук за ім\'ям або електронною адресою...';
+$hesklang['search_by_pattern']='Пошук за шаблоном...';
+$hesklang['is_searchable']='Доступний для пошуку';
+$hesklang['custom_is_searchable']='Доступне для пошуку';
+$hesklang['yes_via_autocomplete']='ТАК (пошук через автодоповнення)';
+$hesklang['customer_required']='Потрібно вибрати клієнта';
+$hesklang['customer_email_exists']='Клієнт із цією електронною адресою вже існує.';
+$hesklang['customer_name_with_no_email_exists']='Клієнт з таким іменем без електронної адреси вже існує.';
+$hesklang['an_error_occurred_validating_email']='Під час перевірки електронної адреси сталася помилка.';
+$hesklang['customer_count_x_more']='+%s більше'; // %s = Number of additional customers
+$hesklang['customer_account_registered']='Зареєстровано';
+$hesklang['customer_account_verified']='Підтверджено';
+$hesklang['customer_account_verified_help']='Клієнти повинні підтвердити обліковий запис через посилання активації, надіслане на їхню електронну адресу, перш ніж увійти в систему.';
+$hesklang['customer_account_setting_password_will_verify_user']='Встановлення пароля для цього клієнта автоматично підтвердить його обліковий запис.';
+$hesklang['deleting_customer_with_tickets']='У цього клієнта є %1$s запити <b>(%2$s відкрито)</b>, до яких також прив\'язані інші клієнти.<br>Що зробити з цими запитами?'; // %1$s = total tickets, %2$s = open tickets
+$hesklang['customer_resend_verification_email_needed']='Необхідна чинна електронна адреса для повторного надсилання листа підтвердження.';
+$hesklang['customer_resend_verification_email_not_found']='Обліковий запис із цією електронною адресою відсутній або його вже підтверджено.';
+$hesklang['customer_resend_verification_email_sent']='На вашу адресу надіслано лист-підтвердження.<br><br>Якщо ви не отримали його протягом кількох хвилин, перевірте папки Спам чи Небажана пошта та позначте лист як <b>Не спам</b>, щоб уникнути подібних проблем у майбутньому.';
+$hesklang['customer_permission_denied']='У вас немає прав на зміну даних клієнтів.';
+$hesklang['customer_manage_approvals']='Облікові записи клієнтів, що очікують підтвердження: <b>%s</b>'; // %s = number of customers
+$hesklang['customer_manage_approve']='Схвалити клієнта';
+$hesklang['customer_manage_bulk_approve']='Схвалити вибраних клієнтів';
+$hesklang['customer_manage_bulk_approve_complete']='Клієнтів схвалено: %s'; // %s = number of customers
+$hesklang['customer_manage_reject']='Відхилити клієнта';
+$hesklang['customer_manage_bulk_reject']='Відхилити вибраних клієнтів';
+$hesklang['customer_manage_bulk_reject_complete']='Клієнтів відхилено: %s'; // %s = number of customers
+$hesklang['customer_manage_delete']='Видалити клієнта';
+$hesklang['customer_manage_bulk_delete']='Видалити вибраних клієнтів';
+$hesklang['customer_manage_bulk_delete_complete']='Клієнтів видалено: %s'; // %s = number of customers
+$hesklang['customer_manage_edit']='Редагувати клієнта';
+$hesklang['customer_manage_verification_email_sent']='Лист-підтвердження надіслано на %s'; // %s = customer's email
+$hesklang['can_man_customers']='Керування клієнтами';
+$hesklang['can_view_customers']='Перегляд усіх клієнтів (без керування ними)';
+$hesklang['import_customer_select_file']='Вибрати файл';
+$hesklang['import_customer_step1_instructions']='Щоб імпортувати клієнтів, підготуйте CSV-файл (comma-separated values).';
+$hesklang['import_customer_step1_note']='Виберіть свій CSV-файл';
+$hesklang['import_customer_step1_separator']='Стовпці в моєму CSV-файлі розділені';
+$hesklang['import_customer_sample']='&raquo; Приклади CSV-файлів';
+$hesklang['import_customer_sample_1']='CSV-файл (US) зі стовпцями, розділеними комами';
+$hesklang['import_customer_sample_2']='CSV-файл (EU) зі стовпцями, розділеними крапками з комою';
+$hesklang['import_customer_upload_requirements_1']='Ваш CSV-файл повинен містити принаймні стовпець з ім\'ям або електронною адресою. Стовпець пароля необов\'язковий.';
+$hesklang['import_customer_upload_requirements_2']='У першому рядку файлу мають бути заголовки стовпців.';
+$hesklang['import_customer_upload_requirements_3']='Ваш файл має бути у кодуванні UTF-8.';
+$hesklang['import_customer_select_columns']='Вибрати стовпці';
+$hesklang['import_customer_upload_customers']='Завантажити клієнтів';
+$hesklang['import_customer_column_name']='Стовпець імені';
+$hesklang['import_customer_column_email']='Стовпець електронної пошти';
+$hesklang['import_customer_column_pass']='Стовпець пароля';
+$hesklang['import_customer_step2_note']='Виберіть правильну назву стовпця із CSV-файлу в випадаючих списках, а потім натисніть «Далі».';
+$hesklang['import_customer_name_or_email_required']='Потрібно ім\'я або електронна адреса';
+$hesklang['import_customer_step3_note']='Триває імпорт клієнтів. Не залишайте цю сторінку!';
+$hesklang['import_customer_step3_pending']='Очікування';
+$hesklang['import_customer_step3_successful_imports']='Успішні імпорти';
+$hesklang['import_customer_step3_failed_imports']='Невдалі імпорти';
+$hesklang['import_customer_step3_progress']='Прогрес';
+$hesklang['import_customer_step3_complete_some_failed']='Імпорт завершено, однак не вдалося імпортувати <b>%s</b> клієнтів. Деталі див. у таблиці нижче.'; // %s == number of failed imports
+$hesklang['import_customer_step3_complete']='Імпорт завершено!';
+$hesklang['import_customer_step3_importing']='Імпортування';
+$hesklang['staff_deleted']='[Співробітника видалено]';
+$hesklang['customer_account_approved']='Реєстрацію клієнта схвалено';
+$hesklang['customer_account_rejected']='Реєстрацію клієнта відхилено';
+$hesklang['customer_account_deleted']='Реєстрацію клієнта видалено';
+$hesklang['ticket_followers']='Підписники запиту';
+$hesklang['ticket_followers2']='Дозволити запитам мати кількох клієнтів';
+$hesklang['add_cc']='Додати Cc';
+$hesklang['cc']='Cc';
+$hesklang['cc_help']='Розділяйте електронні адреси комами.';
+$hesklang['search_customers']='Пошук клієнтів';
+$hesklang['page_size']='Розмір сторінки';
+$hesklang['customers_on_pages']='Кількість клієнтів: %d | Кількість сторінок: %d'; // First %d is replaced with number of customers, second %d with number of pages
+$hesklang['desc_customer_reset_password']='(Клієнт) Скидання вашого пароля';
+$hesklang['desc_customer_verify_registration']='(Клієнт) Підтвердження вашої реєстрації';
+$hesklang['desc_customer_verify_new_email']='(Клієнт) Підтвердження нової електронної адреси';
+$hesklang['desc_customer_approved']='(Клієнт) Обліковий запис схвалено';
+$hesklang['desc_customer_rejected']='(Клієнт) Обліковий запис відхилено';
+$hesklang['desc_email_rejected_can_self_register']='(Клієнт) Запит електронною поштою відхилено; клієнт може самостійно зареєструватися';
+$hesklang['desc_email_rejected_cannot_self_register']='(Клієнт) Запит електронною поштою відхилено; клієнт не може самостійно зареєструватися';
+$hesklang['user_added_success_no_pass']='Нового користувача %s успішно додано';
+$hesklang['email_tag_requester']='Замовник (Від)';
+$hesklang['email_tag_requester_name']='Ім\'я замовника (Від)';
+$hesklang['email_tag_requester_first_name']='Ім\'я замовника';
+$hesklang['email_tag_requester_email']='Електронна адреса замовника (Від)';
+$hesklang['email_tag_followers']='Підписники (Cc)';
+$hesklang['email_tag_follower_names']='Імена підписників (Cc)';
+$hesklang['email_tag_follower_emails']='Електронні адреси підписників (Cc)';
+$hesklang['barcode']='Штрихкод';
+$hesklang['barcode_use']='Показувати штрихкод на надрукованих запитах';
+$hesklang['barcode_staff_only']='Приховати штрихкод від клієнтів';
+$hesklang['barcode_type']='Тип штрихкоду';
+$hesklang['barcode_format']='Формат';
+$hesklang['barcode_width']='Ширина';
+$hesklang['barcode_height']='Висота';
+$hesklang['barcode_color']='Колір';
+$hesklang['barcode_bg']='Тло';
+$hesklang['copy_link']='Скопіювати посилання на запит';
+$hesklang['copy_link_title']='Скопіювати публічне посилання на цей запит';
+$hesklang['copy_link_exp']='Скопійоване посилання дозволяє клієнту перейти напряму до цього запиту';
+$hesklang['copy_value']='Скопіювати значення';
+$hesklang['download_class']='Ця функція потребує класу ZipArchive. Попросіть хостинг-провайдера скомпілювати PHP із підтримкою zip.';
+$hesklang['download_all']='Завантажити все';
+$hesklang['download_prep']='Підготовка до завантаження...';
+$hesklang['download_tma']='Занадто багато вкладень';
+$hesklang['download_nva']='Немає чинних вкладень';
+$hesklang['download_ntd']='Нічого завантажувати';
+$hesklang['resolved_at']='Вирішено';
+$hesklang['disable_GSSAPI']='Вимкнути автентифікатор GSSAPI (обхід помилки Kerberos)';
+$hesklang['ex_history']='Додати журнал історії запиту у файл експорту';
+$hesklang['sm_location']='Розташування'; // Location (page) of a service message
+$hesklang['loc_sm']='Показувати це сервісне повідомлення на:';
+$hesklang['loc_all']='На всіх сторінках клієнта';
+$hesklang['loc_norec']='(не рекомендується)';
+$hesklang['loc_home']='Головна сторінка служби підтримки';
+$hesklang['loc_selected']='На вибраних сторінках';
+$hesklang['loc_selerr']='Виберіть принаймні одну сторінку для показу повідомлення';
+$hesklang['loc_t_cat']='Надсилання запиту – вибір категорії';
+$hesklang['loc_t_add']='Надсилання запиту – форма надсилання';
+$hesklang['loc_t_ok']='Надсилання запиту – підтвердження';
+$hesklang['loc_t_view']='Перегляд запиту';
+$hesklang['loc_t_form']='Перегляд форми запиту';
+$hesklang['loc_kb_main']='Головна сторінка бази знань';
+$hesklang['loc_kb_sub']='Сторінки підкатегорій бази знань';
+$hesklang['loc_kb_art']='Статті бази знань';
+$hesklang['loc_login']='Сторінка входу клієнта';
+$hesklang['loc_register']='Сторінка реєстрації клієнта';
+$hesklang['loc_register_ok']='Реєстрацію користувача успішно завершено';
+$hesklang['loc_acc']='Сторінка користувача &quot;Мої запити&quot;';
+$hesklang['loc_profile']='Сторінка користувача &quot;Профіль&quot;';
+$hesklang['sending_show']='Показувати сповіщення &quot;Надсилання&quot;';
+$hesklang['sending_wait']='Надсилання, зачекайте...';
+$hesklang['e_c_email']='Введіть правильну електронну адресу для перегляду цього запиту';
+$hesklang['only_verified_cc']='Підписники без підтвердженого облікового запису будуть проігноровані.';
+$hesklang['followers_removed']='Ці електронні адреси вилучено із запиту, оскільки облікові записи не підтверджено:';
+$hesklang['novace']='Не знайдено жодних зареєстрованих і підтверджених облікових записів з цією електронною адресою.';
+$hesklang['max_recipients']='Максимальна кількість одержувачів';
+$hesklang['max_recipients2']='в одному листі';
+$hesklang['admin_js']='JavaScript адміністратора';
+$hesklang['admin_js2']='Завантажити додатковий файл JavaScript для панелі адміністратора';
+$hesklang['cf_limit_all']='Досягнуто межі власних полів, створення нових недоступне.';
+$hesklang['remind_assigned']='Нагадати призначеному співробітнику';
+$hesklang['remind_sent']='Нагадування електронною поштою призначеному співробітнику надіслано';
+$hesklang['thist23']='<li class="smaller">%s | нагадування надіслано %s користувачем %s</li>';
+$hesklang['ql_bookmarks']='Закладки';
+$hesklang['bookmark']='Моя закладка';
+$hesklang['bookmarks_add']='Додати до закладок';
+$hesklang['bookmarks_added']='Цей запит додано до ваших закладок';
+$hesklang['bookmarks_remove']='Видалити з закладок';
+$hesklang['bookmarks_removed']='Цей запит вилучено з ваших закладок';
+$hesklang['genl_not_copied']='Помилка: копіювання до буфера обміну не підтримується на цьому пристрої/у цьому браузері.';
+$hesklang['profile_duplicate_email']='Користувач із електронною адресою <b>%s</b> вже існує.'; // %s: new email
+$hesklang['seq_id_numeric']='Пошук за номером запиту має містити лише цифри';
+$hesklang['confirm_new_pass']='Підтвердьте новий пароль';
+$hesklang['piping_notify_rejected_customers1']='Листи з відмовою клієнтам';
+$hesklang['piping_notify_rejected_customers2']='Надсилати клієнту лист про відхилення його запиту';
+$hesklang['piping_notify_rejected_customers3']='Інтервал між листами про відхилення';
+$hesklang['register_url']='URL реєстрації';
+$hesklang['email_subject']='Тема листа';
+
+// Added in version 3.6.0
+$hesklang['collaborator_added']='[#%%TRACK_ID%%] Співпраця над запитом: %%SUBJECT%%';
+$hesklang['collaborator_staff_reply']='[#%%TRACK_ID%%] Персонал відповів на: %%SUBJECT%%';
+$hesklang['collaborator_note']='[#%%TRACK_ID%%] Примітка, додана до: %%SUBJECT%%';
+$hesklang['collaborator_overdue']='[#%%TRACK_ID%%] Запит прострочений: %%SUBJECT%%';
+$hesklang['collaborator_resolved']='[#%%TRACK_ID%%] Запит вирішений: %%SUBJECT%%';
+$hesklang['satisfaction']['ignore']='Кінцева дата розсилки листів з опитуванням:'; // do not send emails to tickets resolved before cutoff date
+$hesklang['satisfaction']['ignore_before']='Не надсилати листи щодо запитів, вирішених більше ніж'; // ... more than [X days] ago
+$hesklang['satisfaction']['ignore_after']='тому (має бути більший період ніж "%s")'; // ... more than [X days] ago
+$hesklang['satisfaction']['wrong_cutoff']='Період кінцевої дати має бути довшим, ніж затримка надсилання листа з опитуванням';
+$hesklang['available_language']='Доступні мови';
+$hesklang['click_to_show_available_language']='Натисніть, щоб переглянути доступні мови';
+$hesklang['install_lan']='Встановити';
+$hesklang['remove_lan']='Видалити';
+$hesklang['title_lan']='Назва';
+$hesklang['description_lan']='Опис';
+$hesklang['completed_lan']='Завершено';
+$hesklang['no_language_availble']='Немає доступних мов';
+$hesklang['success_install_lan_txt']='мову успішно додано';
+$hesklang['error_install_lan_txt']='мову не додано';
+$hesklang['success_remove_lan_txt']='мову успішно вилучено';
+$hesklang['error_remove_lan_txt']='мову не вилучено';
+$hesklang['remove_default_language_error']='Мова за замовчуванням має залишатися активною і не може бути вилучена';
+$hesklang['click_for_manual_step']='Натисніть для ручної інсталяції';
+$hesklang['upgrade_lan']='Оновити';
+$hesklang['success_upgrade_lan_txt']='мову успішно оновлено';
+$hesklang['error_upgrade_lan_txt']='мову не оновлено';
+$hesklang['please_wait']='Будь ласка, зачекайте...';
+$hesklang['add_a_note']='Додати нотатку';
+$hesklang['add_a_reply']='Додати відповідь';
+$hesklang['customer_id']='ID клієнта';
+$hesklang['deleting_customer_tickets']='Запити, створені клієнтом: <b>%1$s</b><br>Що робити з цими запитами?'; // %1$s = number of tickets
+$hesklang['deleting_customer_follower']='Запити, де клієнт у копії: <b>%1$s</b><br>У цих запитах клієнт перестане бути копією; запити залишаться без змін.'; // %1$s = number of tickets
+$hesklang['deleting_customer_delete_tickets2']='Назавжди видалити запити';
+$hesklang['deleting_customer_anonymize_tickets2']='Анонімізувати запити (прибрати повідомлення і особисті дані)';
+$hesklang['deleting_customer_retain_tickets2']='Зберегти запити (залишити всі дані)';
+$hesklang['for_staff']='для персоналу служби підтримки'; // Setting enabled: "for help desk staff"
+$hesklang['for_customers']='для клієнтів'; // Setting enabled: "for customers"
+$hesklang['imap_mailbox_txt']='Поштова скринька IMAP';
+$hesklang['file_attachment_options']='Параметри вкладень у листах';
+$hesklang['link_to_attachments_in_emails']='Додавати посилання на вкладення у листах';
+$hesklang['add_attachments_directly_to_emails']='Прикріплювати файли прямо до листів';
+$hesklang['directly_attach_file_smaller_than']='Прикріплювати лише файли розміром менше';
+$hesklang['directly_attach_file_of_any_size']='Прикріплювати файли будь-якого розміру';
+$hesklang['directly_attach_only_first_x_attachments']='Прикріплювати лише перші';
+$hesklang['directly_attach_all_attachments']='Прикріплювати всі вкладення';
+$hesklang['directly_attach_size']='Розмір файлу';
+$hesklang['directly_attach_no_of_files']='Кількість файлів';
+$hesklang['notice_about_directly_attach_files']='Прикріплення багатьох або великих файлів до листів може спричинити затримку при з’єднанні зі SMTP-сервером';
+$hesklang['fatt_2']='Додаткові файли, прикріплені до цього повідомлення:';
+$hesklang['no_collaborators']='Немає';
+$hesklang['collaborate']='Співпрацювати над цим запитом';
+$hesklang['collaborators']='Співвиконавці';
+$hesklang['ql_cbm']='Співвиконавець';
+$hesklang['collaborating']='Тепер ви співпрацюєте над цим запитом';
+$hesklang['not_collaborating']='Ви більше не співпрацюєте над цим запитом';
+$hesklang['add_collaborator']='Додати співвиконавця';
+$hesklang['user_collaborator_added']='Користувача додано як співвиконавця цього запиту';
+$hesklang['remove_collaborator']='Видалити співвиконавця';
+$hesklang['staff_name']='Ім\'я співробітника';
+$hesklang['user_collaborator_removed']='Користувача вилучено зі співвиконавців цього запиту';
+$hesklang['desc_collaborator_added']='(Співробітник) Ви співпрацюєте над новим запитом';
+$hesklang['desc_collaborator_staff_reply']='(Співробітник) Співробітник відповів на запит зі співвиконавцями';
+$hesklang['desc_collaborator_note']='(Співробітник) Додана нотатка до запиту зі співвиконавцями';
+$hesklang['desc_collaborator_resolved']='(Співробітник) Запит зі співвиконавцями вирішено';
+$hesklang['desc_collaborator_overdue']='(Співробітник) Запит зі співвиконавцями прострочено';
+$hesklang['notify_collaborator_added']='Мене додано як співвиконавця запиту';
+$hesklang['notify_collaborator_customer_reply']='Клієнт відповів на запит зі співвиконавцями';
+$hesklang['notify_collaborator_staff_reply']='Співробітник відповів на запит зі співвиконавцями';
+$hesklang['notify_collaborator_note']='Співробітник додав нотатку до запиту зі співвиконавцями';
+$hesklang['notify_collaborator_resolved']='Співробітник вирішив запит зі співвиконавцями';
+$hesklang['notify_collaborator_overdue']='Запит зі співвиконавцями прострочено';
+$hesklang['recurring_tickets']['tab']='Періодичні запити'; // Menu link
+$hesklang['recurring_tickets']['page_title']='Періодичні запити'; // Page H2 title
+$hesklang['recurring_tickets']['intro']='Автоматизуйте рутинну роботу: дозвольте Hesk створювати регулярні запити саме тоді, коли вам потрібно.';
+$hesklang['recurring_tickets']['active_rules']='Активні правила';
+$hesklang['recurring_tickets']['new']='Нове правило періодичного запиту';
+$hesklang['recurring_tickets']['no_rules']='У вас немає правил періодичних запитів. Створіть його, натиснувши кнопку &quot;Нове правило періодичного запиту&quot; вище.';
+$hesklang['recurring_tickets']['title']='Назва правила';
+$hesklang['recurring_tickets']['titlet']='Описова назва, наприклад: Перепризначити запити без відповіді протягом доби';
+$hesklang['recurring_tickets']['default_title']='Правило від %1$s'; // Default rule title; %1$s = user name
+$hesklang['recurring_tickets']['trigger']='Умова спрацювання';
+$hesklang['recurring_tickets']['trigt']='Встановіть умову, яка запускатиме це правило.';
+$hesklang['recurring_tickets']['hits']='Спрацювання'; // How many times a rule has been triggered
+$hesklang['recurring_tickets']['step1']='Час створення'; // Title of step 1 when creating/editing a rule
+$hesklang['recurring_tickets']['step2']='Загальні налаштування'; // Title of step 2 when creating/editing a rule
+$hesklang['recurring_tickets']['step3']='Користувацькі поля'; // Title of step 3 when creating/editing a rule
+$hesklang['recurring_tickets']['step4']='Зміст'; // Title of step 4 when creating/editing a rule
+$hesklang['recurring_tickets']['delete']='Видалити це правило?';
+$hesklang['recurring_tickets']['edit']='Редагування правила періодичного запиту ID %1$s'; // %1$s = rule ID number
+$hesklang['recurring_tickets']['within']='Протягом:';
+$hesklang['recurring_tickets']['minutes']='хвилин';
+$hesklang['recurring_tickets']['hours']='годин';
+$hesklang['recurring_tickets']['days']='днів';
+$hesklang['recurring_tickets']['weeks']='тижнів';
+$hesklang['recurring_tickets']['months']='місяців';
+$hesklang['recurring_tickets']['years']='років';
+$hesklang['recurring_tickets']['setpri']='Встановити пріоритет:';
+$hesklang['recurring_tickets']['setsta']='Встановити статус:';
+$hesklang['recurring_tickets']['assto']='Призначити запит:';
+$hesklang['recurring_tickets']['asm']='Іншому співробітнику';
+$hesklang['recurring_tickets']['notify']='Сповіщати співробітників...';
+$hesklang['recurring_tickets']['ato']='Застосувати до:';
+$hesklang['recurring_tickets']['save']='Зберегти правило';
+$hesklang['recurring_tickets']['e_tt']='Час має бути між 1 та 10000';
+$hesklang['recurring_tickets']['nocat']='Виберіть щонайменше одну категорію';
+$hesklang['recurring_tickets']['nouser']='Виберіть щонайменше одного користувача';
+$hesklang['recurring_tickets']['nostatus']='Виберіть щонайменше один статус';
+$hesklang['recurring_tickets']['nocata']='%1$s не має доступу до цих категорій:'; // %1$s = user name
+$hesklang['recurring_tickets']['rule_added']='Нове правило створено';
+$hesklang['recurring_tickets']['mdf']='Налаштування правила збережено';
+$hesklang['recurring_tickets']['e_id']='Правило з таким ID не знайдено';
+$hesklang['recurring_tickets']['deleted']='Вибране правило видалено';
+$hesklang['recurring_tickets']['log_title']='Правило #%1$s (%2$s)'; // Used in ticket history log. %1$s = rule ID, %2$s = rule title
+$hesklang['recurring_tickets']['active']='Активне'; // Is the rule active (live)?
+$hesklang['recurring_tickets']['activate']='Активувати це правило (почати використовувати)';
+$hesklang['recurring_tickets']['activated']='Вибране правило активовано'; // %1$s = rule log title
+$hesklang['recurring_tickets']['deactivate']='Деактивувати це правило (припинити використовувати)';
+$hesklang['recurring_tickets']['deactivated']='Вибране правило деактивовано'; // %1$s = rule log title
+$hesklang['recurring_tickets']['no_active']='Немає активних правил періодичних запитів';
+$hesklang['recurring_tickets']['tools']='Інструменти';
+$hesklang['recurring_tickets']['tbef']='Перш ніж правило почне працювати, його потрібно активувати, поставивши галочку у стовпці &quot;АКТИВНО&quot;.<br><br><strong>Активні правила обробляються кожні %2$s хвилин.</strong>'; // %1$s = replaced by icon, %2$s = number of minutes, usually 5 or more
+$hesklang['recurring_tickets']['r']='[ПРАВИЛО]';
+$hesklang['recurring_tickets']['r2']='[ПРАВИЛО] Правило #%s';
+$hesklang['recurring_tickets']['r3']='Правило #%s';
+$hesklang['recurring_tickets']['i']='[ІНФО]';
+$hesklang['recurring_tickets']['matched']='Кількість запитів, уже створених сьогодні: %1$s'; // %1$s = number of tickets
+$hesklang['recurring_tickets']['reset']='Скинути це правило';
+$hesklang['recurring_tickets']['reset2']='Ви дійсно бажаєте скинути це правило?<br><br>Лічильник спрацювань стане 0 і будь-які запити, вже створені сьогодні, можуть бути створені знову при наступному запуску cron.';
+$hesklang['recurring_tickets']['reset3']='Вибране правило скинуто';
+$hesklang['recurring_tickets']['test']='Симулювати це правило';
+$hesklang['recurring_tickets']['testa']='Симулювати всі правила';
+$hesklang['recurring_tickets']['testaa']='Симулювати всі активні правила';
+$hesklang['recurring_tickets']['testr']='Результати симуляції';
+$hesklang['recurring_tickets']['rsim']='Повторити симуляцію';
+$hesklang['recurring_tickets']['sim']='РЕЖИМ СИМУЛЯЦІЇ, без змін у базі даних';
+$hesklang['recurring_tickets']['sic']='СИМУЛЯЦІЮ ЗАВЕРШЕНО';
+$hesklang['recurring_tickets']['rrule_type_required']='Будь ласка, виберіть коректний тригер періодичного правила.';
+$hesklang['recurring_tickets']['rrule_string_required']='Будь ласка, виберіть усі необхідні параметри тригера.';
+$hesklang['recurring_tickets']['rrule_invalid_interval']='Введіть значення інтервалу 1 або більше для "Кожні".';
+$hesklang['recurring_tickets']['disable_note']='*Якщо після створення правила були змінені критичні налаштування Hesk, правило буде вимкнено при наступній спробі запуску і потребує редагування для проходження нової перевірки.';
+$hesklang['recurring_tickets']['thist1']='<li class="smaller">%1$s | створено правилом періодичних запитів "%2$s"</li>'; // Used in ticket history log. %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist2']='<li class="smaller">%1$s | призначено %2$s правилом періодичних запитів "%3$s"</li>'; // %1$s = date,  %2$s = assignee, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist3']='<li class="smaller">%1$s | автоматично закрито правилом періодичних запитів "%2$s"</li>'; // %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist9']='<li class="smaller">%1$s | статус змінено на %2$s правилом періодичних запитів "%3$s"</li>'; // %1$s = date, %2$s new status, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist10']='<li class="smaller">%1$s | автоматично призначено %2$s правилом періодичних запитів "%3$s"</li>'; // %1$s = date, %2$s = new owner, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['rule_was_disabled']='Правило було вимкнено через помилки перевірки. Детальніше див. нижче.';
+$hesklang['recurring_tickets']['errors_title']='Одне або кілька ваших правил спричинили помилки під час запуску і були вимкнені.';
+$hesklang['recurring_tickets']['rule_errors']='<hr>Помилки правила #%s:';
+$hesklang['recurring_tickets']['create_customers']='Немає наявних клієнтів - створіть їх <a href="%s" target="_blank">тут</a>.';
+$hesklang['recurring_tickets']['exec_dates']='Дати виконання правила';
+$hesklang['recurring_tickets']['show_exec_dates']='[Показати поточні дати виконання правила]';
+$hesklang['recurring_tickets']['no_exec_dates']='Виберіть коректні параметри тригера правила, щоб побачити дати виконання.';
+$hesklang['recurring_tickets']['invalid_disabled']='некоректні налаштування правила — правило вимкнено.';
+$hesklang['recurring_tickets']['next_occ']='Наступні %s спрацювання правила:';
+$hesklang['recurring_tickets']['occ_on']='на %s';
+$hesklang['recurring_tickets']['not_firing_today']='сьогодні не потребує спрацювання.';
+$hesklang['recurring_tickets']['rules_fulfilled']='періодичні правила виконані - запит створено сьогодні!';
+$hesklang['recurring_tickets']['validation_failed']='перевірка не пройдена - правило вимкнено. Деталі нижче:';
+$hesklang['recurring_tickets']['validation_error']='Помилка перевірки:';
+$hesklang['recurring_tickets']['processed']='оброблено.';
+$hesklang['recurring_tickets']['created_ticket']='створено запит id: %1$s, трекінг: %2$s';
+$hesklang['recurring_tickets']['due_date_note']='відносно дати створення запиту';
+$hesklang['priorities']='Пріоритети';
+$hesklang['priority_intro']='Використовуйте цей інструмент для керування пріоритетами запитів вашої служби підтримки';
+$hesklang['new_priority']='Новий пріоритет';
+$hesklang['edit_priority']='Редагувати пріоритет';
+$hesklang['priority_title']='Назва';
+$hesklang['can_customers_select_it']='Чи можуть клієнти вибрати цей пріоритет?';
+$hesklang['selected_by_customer']='Доступний для клієнтів';
+$hesklang['err_priority']='Введіть назву пріоритету';
+$hesklang['priority_added']='Новий пріоритет додано';
+$hesklang['priority_e_id']='Невірний ID пріоритету';
+$hesklang['priority_mdf']='Пріоритет збережено';
+$hesklang['priority_deleted']='Пріоритет видалено';
+$hesklang['priority_not_found']='Цей пріоритет не існує';
+$hesklang['priority_not_empty']='Цей пріоритет не можна видалити, оскільки існують запити з цим пріоритетом';
+$hesklang['click_to_enable_drag_drop']='Натисніть, щоб увімкнути перетягування рядка, потім перетягніть його вгору або вниз для зміни порядку.';
+$hesklang['confirm_delete_priority']='Ви впевнені, що хочете видалити цей пріоритет?';
+$hesklang['reordered_message']='Порядок пріоритетів збережено.';
+$hesklang['list_tkt_priority']='Переглянути всі запити з цим пріоритетом';
+$hesklang['deletion_priority_restricted']='Цей пріоритет є спеціальним і не може бути видалений';
+$hesklang['priority_limit']='Ви не можете створити нові пріоритети';
+$hesklang['skip_to_main_content']='Перейти до основного вмісту';
+$hesklang['opens_dialog']='Відкриває діалог';
+$hesklang['create_a_ticket']='Створити запит';
+$hesklang['toggle_navigation']='Перемкнути навігацію';
+$hesklang['add_a_ticket_reply']='Додати відповідь на запит';
+$hesklang['linked_tickets']='Пов\'язані запити';
+$hesklang['no_linked_tickets']='Немає пов\'язаних запитів';
+$hesklang['link_ticket']='Пов\'язати запит';
+$hesklang['can_link_tickets_e']='Ви не маєте прав пов\'язувати/відв\'язувати цей запит';
+$hesklang['link_ticket_success']='Запит успішно пов\'язано';
+$hesklang['link_ticket_required_error']='Щоб пов\'язати запит, введіть коректний код відстеження';
+$hesklang['link_ticket_itself_error']='Запит не може бути пов\'язаний сам із собою. Введіть інший код відстеження';
+$hesklang['already_linked_error']='Запит уже пов\'язаний';
+$hesklang['unlink_success']='Запит успішно відв\'язано';
+$hesklang['unlink_error']='Пов\'язаного запису не існує';
+$hesklang['link_history']='<li class="smaller">%s | запит %s пов\'язаний користувачем %s</li>';
+$hesklang['unlink_history']='<li class="smaller">%s | запит %s відв\'язаний користувачем %s</li>';
+$hesklang['can_link_tickets']='Може пов\'язувати запит';
+$hesklang['link_a_ticket']='Пов\'язати запит';
+$hesklang['mfa_curl']='Неможливо згенерувати QR-код для сканування, оскільки підтримка <strong>cURL</strong> на вашому сервері вимкнена.';
+$hesklang['require_xml']='Для Rich Text (HTML) повідомлень необхідно увімкнути PHP-XML. Попросіть свого хостинг-провайдера увімкнути XML для PHP.';
+$hesklang['thist24']='<li class="smaller">%1$s | %2$s додано як співвиконавця користувачем %3$s</li>';
+$hesklang['thist25']='<li class="smaller">%1$s | %2$s вилучено зі співвиконавців користувачем %3$s</li>';
+$hesklang['recurring_tickets']['intro2']='Ідеально для профілактичних робіт, щомісячних перевірок доступу, регулярних зв\'язків з клієнтами та іншого.';
+$hesklang['recurring_tickets']['feat1']='<strong>Налаштуйте графік і забудьте.</strong> Щодня, щопонеділка, щороку в березні, 15 числа кожного місяця або в будь-яку іншу дату';
+$hesklang['recurring_tickets']['feat2']='<strong>Поступають заповненими і призначеними.</strong> Виберіть категорію, пріоритет, агента та до 100 значень користувацьких полів';
+$hesklang['recurring_tickets']['feat3']='<strong>Попередній перегляд і симуляція.</strong> Перегляньте всі запити, які Hesk створить, перш ніж активувати правило, щоб не було сюрпризів.';
+$hesklang['unlink_btn']='Відв\'язати';
 
 // DO NOT CHANGE BELOW
 if (!defined('IN_SCRIPT')) die('PHP syntax OK!');

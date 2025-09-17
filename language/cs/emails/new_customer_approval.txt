@@ -1,0 +1,14 @@
+Dobrý den,
+
+Nové zákaznické účty čekají na schválení zaměstnancem.
+
+Počet čekajících schválení: %%NUM%%
+
+Zde můžete schvalovat nebo zamítat registrace zákaznických účtů:
+%%VERIFICATION_URL%%
+
+
+S pozdravem,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

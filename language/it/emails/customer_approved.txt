@@ -1,0 +1,11 @@
+Gentile %%NAME%%,
+
+La registrazione del tuo account è stata approvata.
+
+Ora puoi accedere utilizzando il nome utente e la password che hai usato durante la creazione del tuo account:
+%%CUSTOMER_LOGIN_URL%%
+
+Cordiali saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

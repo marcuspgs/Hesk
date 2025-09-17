@@ -1,0 +1,14 @@
+Olá,
+
+Você está colaborando em um novo ticket de suporte.
+
+Assunto do ticket: %%SUBJECT%%
+ID de rastreamento: %%TRACK_ID%%
+
+Você pode gerenciar este ticket aqui:
+%%TRACK_URL%%
+
+Atenciosamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

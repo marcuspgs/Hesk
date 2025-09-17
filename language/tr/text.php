@@ -3,7 +3,7 @@
 *
 * Language file for Help Desk Software HESK (https://www.hesk.com)
 * Language: Türkçe (Turkish)
-* Version: 3.4.x
+* Version: 3.6.x
 *
 * ==> CONTRIBUTORS
 *
@@ -1465,7 +1465,6 @@ $hesklang['d_custom']='Özel Biçim';
 $hesklang['d_ci']='YALNIZCA BİLGİLİ KULLANICILAR : Geçerli bir PHP tarih biçimi, PHP kılavuzuna bakın.';
 $hesklang['cf_noe']='<i>%s</i> içine geçerli bir e-posta adresi girin';
 $hesklang['cf_noem']='<i>%s</i> içine bir veya daha fazla geçerli e-posta adresi girin';
-$hesklang['cf_limit']='50 Aktif Özel Durum kaydınız var, yenisini oluşturamazsınız.';
 $hesklang['can_resolve']='Talepleri Çözebilme';
 $hesklang['can_change_own_cat']='Talep kategorisini değiştirme (izin verilenleri)';
 $hesklang['can_submit_any_cat']='Herhangi bir kategoriye talep gönderebilir';
@@ -2128,6 +2127,472 @@ $hesklang['can_due_date']='Sona Erme Tarih Belirleyebilme İzni'; // Permission 
 $hesklang['can_due_date_e']='Sona Erme Tarihlerini belirleme izniniz yok';
 
 // Added in version 3.5.0
+$hesklang['customer_verify_registration']='Kaydınızı Doğrulayın';
+$hesklang['customer_verify_new_email']='Yeni E-posta Adresinizi Doğrulayın';
+$hesklang['customer_reset_password']='Yardım masası şifrenizi sıfırlayın';
+$hesklang['customer_approved']='Hesap Onaylandı';
+$hesklang['customer_rejected']='Hesap Reddedildi';
+$hesklang['email_rejected']='Destek Talepleri göndermek için hesap gereklidir';
+$hesklang['require_curl']='Bu özelliğin kullanılabilmesi için sunucunuzda PHP Ayarlarından <strong>cURL</strong> desteğinin etkinleştirilmesi gerekir. Lütfen web sağlayıcınızdan PHP için cURL\'yi etkinleştirmesini isteyin.';
+$hesklang['customer_accounts_heading']='Müşteri Hesapları';
+$hesklang['customer_accounts']='Müşteri hesapları';
+$hesklang['customer_accounts_off']='<strong>Devre Dışı</strong>';
+$hesklang['customer_accounts_allowed']='<strong>Etkin - İsteğe bağlı</strong> (müşteriler kayıt olmadan veya oturum açmadan destek talebi gönderebilirler)';
+$hesklang['customer_accounts_required_to_submit']='<strong>Etkin - Talepler için gerekli</strong> (sadece oturum açmış müşteriler destek talebi gönderebilir)';
+$hesklang['customer_accounts_required']='<strong>Etkin - Erişim için gerekli</strong> (sadece oturum açmış müşteriler yardım masasına ve bilgi bankasına erişebilir)';
+$hesklang['customer_accounts_reg']='Hesap kaydı';
+$hesklang['customer_accounts_reg_customer']='Müşteriler hesap kaydedebilir';
+$hesklang['customer_accounts_reg_approve']='Müşteriler hesap kaydedebilir, personel yeni kayıtları onaylamalıdır';
+$hesklang['customer_accounts_reg_staff']='Müşteri hesaplarını yalnızca personel kaydedebilir';
+$hesklang['customer_accounts_allow_email_changes']='Müşterilerin e-posta adreslerini değiştirmelerine izin verin';
+$hesklang['customer_accounts_allow_email_resends']='Müşterilerin yeni doğrulama e-postası talep edebilmelerine kadar geçen süre';
+$hesklang['customer_login']='Giriş yap';
+$hesklang['customer_logout']='Çıkış yap';
+$hesklang['customer_register']='Kayıt ol';
+$hesklang['customer_accounts_disabled']='Müşteri girişleri ve kayıt olma devre dışı bırakıldı.';
+$hesklang['customer_accounts_registration_disabled']='Müşteri kayıt olma devre dışı bırakıldı.';
+$hesklang['customer_forgot_password']='Parolanızı mı unuttunuz?';
+$hesklang['customer_email']='E-posta Adresi';
+$hesklang['customer_accounts_email_banned']='Bu yardım masasını kullanmanız yasaklandı.';
+$hesklang['customer_registration_successful']='Kaydolma Başarılı!';
+$hesklang['customer_registration_email_exists_no_reset_link']='%s e-posta adresine sahip bir hesap zaten mevcut.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists']='E-posta adresi %s olan bir hesap zaten mevcut. <a href="login.php">Bunun yerine giriş yapmak ister misiniz</a>?'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_email_verification']='E-posta adresi %s olan bir hesap zaten mevcut ve e-posta doğrulaması bekliyor.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_approval']='%s e-posta adresine sahip bir hesap zaten mevcut ve personel onayı bekliyor.'; // %s - Entered email address
+$hesklang['customer_registration_check_your_email']='E-postanızı Kontrol Edin!';
+$hesklang['customer_registration_check_your_email_content']='Giriş yapabilmeniz için e-posta adresinizi doğrulamanız gerekir.<br><br>Birkaç dakika içinde gönderdiğimiz mesajı almazsanız, lütfen Junk, Bulk veya Spam klasörlerinizi kontrol edin. Gelecekte yazışmalarımızı almada sorun yaşamamak için mesajı <b>SPAM Değil</b> olarak işaretleyin.';
+$hesklang['customer_login_not_verified']='Giriş yapabilmeniz için öncelikle e-posta adresinizi doğrulamanız gerekmektedir.';
+$hesklang['customer_login_not_verified2']='Bizden doğrulama e-postası almadıysanız, lütfen Junk, Bulk veya Spam klasörlerinizi kontrol edin. Gelecekte yazışmalarımızı almada sorun yaşamamak için mesajı <b>SPAM Değil</b> olarak işaretleyin.';
+$hesklang['customer_login_resend_verification_email']='Doğrulama e-postasını yeniden gönder';
+$hesklang['customer_login_resend_verification_email_none']='Gönderilecek bekleyen e-posta doğrulaması bulunmamaktadır.';
+$hesklang['customer_login_resend_verification_email_too_early']='Şu anda yeni bir doğrulama e-postası talep edemezsiniz, lütfen daha sonra tekrar deneyin.';
+$hesklang['customer_login_not_approved']='Giriş yapabilmeniz için bir personel üyesinin hesabınızı onaylaması gerekir. Onaylandıktan sonra e-posta yoluyla bilgilendirileceksiniz.'; // %s - Resend email notification link
+$hesklang['customer_registration_verify_header']='Kaydı Doğrula';
+$hesklang['customer_registration_verify_success']='E-postanız doğrulandı ve artık aşağıdaki formu kullanarak giriş yapabilirsiniz.';
+$hesklang['customer_registration_verify_approval_needed']='E-posta adresiniz doğrulandı. Ancak, giriş yapabilmeniz için bir personel üyesinin hesabınızı onaylaması gerekir. Onaylandıktan sonra, e-posta yoluyla bilgilendirileceksiniz.';
+$hesklang['customer_registration_verify_failure']='E-posta adresiniz doğrulanamadı. Bağlantı daha önce kullanılmış veya süresi dolmuş.';
+$hesklang['emails_to_customers']='&raquo; Müşterilere gönderilen e-postalar';
+$hesklang['emails_to_staff']='&raquo; Personele gönderilen e-postalar';
+$hesklang['emails_to_everyone']='&raquo; Personele veya müşterilere gönderilen e-postalar';
+$hesklang['new_customer_approval']='Onay bekleyen müşteri hesaplarınız var'; // Email subject
+$hesklang['desc_new_customer_approval']='(Personel) Müşteri hesapları onay bekliyor';
+$hesklang['n_cust_app']='Bekleyen müşteri onayları var'; // Notify me when...
+$hesklang['et_num_customers']='Bekleyen onay sayısı';
+$hesklang['et_link_customers']='Müşterileri Yönet sayfasına bağlantı';
+$hesklang['et_link_verify']='Doğrulama bağlantısı';
+$hesklang['et_cust_login']='Müşteri giriş URL\'si';
+$hesklang['submit_ticket_customer_email_exists']='Bu e-posta adresine sahip bir müşteri zaten var. Lütfen bir talep göndermek için <a href="login.php?email=%s">giriş yapın</a>.'; // %s - User's email
+$hesklang['customer_login_email_required']='Lütfen geçerli bir e-posta adresi giriniz.';
+$hesklang['customer_login_password_required']='Lütfen şifrenizi giriniz.';
+$hesklang['customer_login_remember_just_email']='Sadece e-posta adresimi hatırla';
+$hesklang['customer_login_remember_email']='E-posta adresimi hatırla';
+$hesklang['customer_wrong_user']='E-posta adresiniz %s tarafımızda kayıtlı değil.<br><br><a href="register.php">Bir hesap oluşturmak</a> istiyor musunuz?'; // %s - Entered email address
+$hesklang['customer_wrong_pass']='E-posta adresiniz ve şifreniz kayıtlarımızla eşleşmiyor.<br><br><a href="login.php?submittedForgot=1">Şifrenizi sıfırlamak</a> ister misiniz?';
+$hesklang['customer_must_be_logged_in_to_view']='Devam etmek için lütfen giriş yapın.';
+$hesklang['customer_register_here']='Eğer bizde bir hesabınız yoksa <a href="register.php">buradan</a> kayıt olabilirsiniz.';
+$hesklang['create_account']='Bir hesap oluşturun';
+$hesklang['customer_my_tickets_heading']='Taleplerim';
+$hesklang['customer_my_tickets_description']='Önceki tüm taleplerinizi görüntüleyin';
+$hesklang['customer_my_tickets_search_for_tickets']='Talep Ara';
+$hesklang['customer_password_reset_successful']='Yeni şifreniz kaydedildi. Artık giriş yapabilirsiniz.';
+$hesklang['customer_profile']='Profil';
+$hesklang['customer_edit_profile']='Profili Düzenle';
+$hesklang['customer_edit_pass']='Şifreyi Düzenle';
+$hesklang['customer_edit_pass_same']='Yeni şifreniz mevcut şifrenizle aynı olmamalıdır.';
+$hesklang['customer_change_email']='E-Posta Adresini Değiştir';
+$hesklang['customer_change_email_banned']='Girdiğiniz e-posta adresi yasaklanmıştır.';
+$hesklang['customer_change_email_pending']='E-posta adresinizi şu şekilde değiştirmeniz için güncel bir istek var: <b>%s</b><br><br>Bu adrese bir e-posta mesajı gönderdik. Lütfen değişikliği onaylamak için e-posta mesajının içindeki bağlantıya tıklayın.'; // %s - new email
+$hesklang['customer_change_resend']='<a href="profile.php?action=email-resend">Onay e-postasını tekrar gönder</a>';
+$hesklang['customer_change_email_submitted']='Yeni e-posta adresinizi doğrulamak için lütfen <b>%s</b> adresine gönderilen doğrulama bağlantısına tıklayın.'; // %s - new email
+$hesklang['customer_change_email_verify_success']='Yeni e-posta adresiniz doğrulandı ve profiliniz güncellendi.';
+$hesklang['customer_change_email_disabled']='E-posta adresinizi güncelleme özelliği devre dışı bırakıldı. E-posta adresinizi değiştirmek isterseniz bizimle iletişime geçin.';
+$hesklang['customer_profile_saved']='Profiliniz kaydedildi.';
+$hesklang['customers']='Müşteriler';
+$hesklang['customers_intro']='Müşteri hesapları, müşterilerin tüm taleplerini tek bir yerde görüntülemelerine olanak tanır.';
+$hesklang['sure_remove_customer']='Bu müşteriyi silmek istediğinizden emin misiniz?';
+$hesklang['sure_remove_customer_additional_note']='Bir müşteriyi silme işlemi kesindir. Bir kez silindiğinde bilgiler geri kurtarılamaz!';
+$hesklang['new_customer']='Yeni Müşteri';
+$hesklang['new_follower']='Yeni Takipçi';
+$hesklang['add_customer']='+ Müşteri Ekle'; // Appears on Customer Dropdown, stickied at the bottom
+$hesklang['add_follower']='+ Takipçi Ekle'; // Appears on Followers Dropdown, stickied at the bottom
+$hesklang['new_customer_prompt']='Sağlanan müşteri henüz mevcut değil. Bu müşteriyi oluşturmak istiyorsanız "Kaydet"e tıklayın.';
+$hesklang['followers']='Takipçiler';
+$hesklang['no_customers']='Şu anda veritabanında müşteri bulunmamaktadır.';
+$hesklang['no_customers_disabled']='Destek talebi gönderen müşterileri burada görmeye başlayacaksınız.';
+$hesklang['no_customers_enabled']='Müşteriler kayıt olduklarında veya destek talebi gönderdiklerinde onları burada görmeye başlayacaksınız.';
+$hesklang['no_customers_enabled2']='Alternatif olarak, bu mesajın üstündeki butonlar müşteri hesaplarını manuel olarak oluşturmanıza veya mevcut müşterileri yardım masasına aktarmanıza olanak tanır.';
+$hesklang['import_customers']='Müşterileri İçe Aktar';
+$hesklang['import_customers_tip']='Birden fazla müşteriyi aynı anda içe aktarmak için CSV dosyasını kullanın.';
+$hesklang['customer_not_found']='Talep için müşteri bulunamadı!';
+$hesklang['search_by_name_or_email']='İsme veya e-postaya göre ara...';
+$hesklang['search_by_pattern']='Desene göre ara...';
+$hesklang['is_searchable']='Aranabilir';
+$hesklang['custom_is_searchable']='Aranabilir';
+$hesklang['yes_via_autocomplete']='EVET (otomatik tamamlama ile ara)';
+$hesklang['customer_required']='Bir müşteri seçmelisiniz';
+$hesklang['customer_email_exists']='Bu e-posta adresine sahip bir müşteri zaten var.';
+$hesklang['customer_name_with_no_email_exists']='Bu isimde ve e-posta adresi olmayan bir müşteri zaten mevcut.';
+$hesklang['an_error_occurred_validating_email']='Girilen e-posta adresini doğrulamaya çalışırken bir hata oluştu.';
+$hesklang['customer_count_x_more']='+%s devamı'; // %s = Number of additional customers
+$hesklang['customer_account_registered']='Kayıtlı';
+$hesklang['customer_account_verified']='Doğrulandı';
+$hesklang['customer_account_verified_help']='Müşterilerin hesaplarına giriş yapabilmeleri için öncelikle e-posta adreslerine gönderilen aktivasyon bağlantısı aracılığıyla hesaplarını doğrulamaları gerekmektedir.';
+$hesklang['customer_account_setting_password_will_verify_user']='Bu müşteri için bir parola belirlemek, hesabının otomatik olarak doğrulanmasını sağlayacaktır.';
+$hesklang['deleting_customer_with_tickets']='Bu müşterinin, kendisiyle ilişkili başka müşteriler de bulunan %1$s talebi <b>(%2$s açık)</b> var.<br>Bu taleplerle ne yapılmalı?'; // %1$s = total tickets, %2$s = open tickets
+$hesklang['customer_resend_verification_email_needed']='Doğrulama e-postasını yeniden göndermek için geçerli bir e-posta adresine ihtiyaç var.';
+$hesklang['customer_resend_verification_email_not_found']='Bu e-posta adresiyle herhangi bir hesap bulunmuyor veya hesap zaten doğrulanmış.';
+$hesklang['customer_resend_verification_email_sent']='E-posta adresinize bir doğrulama mesajı gönderildi.<br><br>Birkaç dakika içinde gönderilen mesajı almazsanız, lütfen Junk, Bulk veya Spam klasörlerinizi kontrol edin. Gelecekteki yazışmalarımızı almada sorun yaşamamak için mesajı <b>SPAM Değil</b> olarak işaretleyin.';
+$hesklang['customer_permission_denied']='Müşterileri değiştirme izniniz yok.';
+$hesklang['customer_manage_approvals']='Onay bekleyen müşteri hesapları: <b>%s</b>'; // %s = number of customers
+$hesklang['customer_manage_approve']='Müşteriyi onayla';
+$hesklang['customer_manage_bulk_approve']='Seçili Müşterileri Onayla';
+$hesklang['customer_manage_bulk_approve_complete']='Müşteriler onayladı: %s'; // %s = number of customers
+$hesklang['customer_manage_reject']='Müşteriyi Reddet';
+$hesklang['customer_manage_bulk_reject']='Seçili Müşterileri Reddet';
+$hesklang['customer_manage_bulk_reject_complete']='Reddedilmiş Müşteriler: %s'; // %s = number of customers
+$hesklang['customer_manage_delete']='Müşteriyi sil';
+$hesklang['customer_manage_bulk_delete']='Seçili Müşterileri Sil';
+$hesklang['customer_manage_bulk_delete_complete']='Silinen müşteriler: %s'; // %s = number of customers
+$hesklang['customer_manage_edit']='Müşteri Düzenle';
+$hesklang['customer_manage_verification_email_sent']='Doğrulama e-postası %s adresine gönderildi'; // %s = customer's email
+$hesklang['can_man_customers']='Müşterileri Yönet';
+$hesklang['can_view_customers']='Tüm müşterileri görüntüle (ancak yönetemezsin)';
+$hesklang['import_customer_select_file']='Dosya Seç';
+$hesklang['import_customer_step1_instructions']='Müşterileri içe aktarmak için bir CSV (Virgülle Ayrılmış Değerler) dosyası hazırlayın.';
+$hesklang['import_customer_step1_note']='CSV Dosyanızı Seçin';
+$hesklang['import_customer_step1_separator']='CSV dosyamdaki sütunlar şu şekilde ayrılmıştır:';
+$hesklang['import_customer_sample']='&raquo; Örnek CSV dosyaları';
+$hesklang['import_customer_sample_1']='Sütunları virgülle ayrılmış ABD tarzı CSV dosyası ,';
+$hesklang['import_customer_sample_2']='Sütunları ayrılmış AB tarzı CSV dosyası ;';
+$hesklang['import_customer_upload_requirements_1']='CSV dosyanız en azından bir ad veya e-posta adresi sütunu içermelidir. Parola sütunu isteğe bağlıdır.';
+$hesklang['import_customer_upload_requirements_2']='Dosyanızın ilk satırı sütun başlıklarını içermelidir.';
+$hesklang['import_customer_upload_requirements_3']='Dosyanız UTF-8 olarak kodlanmış olmalıdır.';
+$hesklang['import_customer_select_columns']='Sütunları Seç';
+$hesklang['import_customer_upload_customers']='Müşterileri Yükle';
+$hesklang['import_customer_column_name']='Ad Sütunu';
+$hesklang['import_customer_column_email']='E-Posta Sütunu';
+$hesklang['import_customer_column_pass']='Şifre Sütunu';
+$hesklang['import_customer_step2_note']='CSV dosyanızdan açılır menülerden doğru sütun adını seçin ve ardından "İleri"ye tıklayın.';
+$hesklang['import_customer_name_or_email_required']='İsim veya e-posta adresi gereklidir';
+$hesklang['import_customer_step3_note']='Müşterileriniz içeri aktarılıyor. Bu sayfadan ayrılmayın!';
+$hesklang['import_customer_step3_pending']='Bekleyen';
+$hesklang['import_customer_step3_successful_imports']='Başarılı İçe Aktarmalar';
+$hesklang['import_customer_step3_failed_imports']='Başarısız İçe Aktarmalar';
+$hesklang['import_customer_step3_progress']='İşlemdekiler';
+$hesklang['import_customer_step3_complete_some_failed']='İçe aktarma işlemi tamamlandı, ancak <b>%s</b> müşteri içe aktarmayı başaramadı. Daha fazla bilgi için aşağıdaki tabloyu kontrol edin.'; // %s == number of failed imports
+$hesklang['import_customer_step3_complete']='İçe Aktarma işlemi tamamlandı!';
+$hesklang['import_customer_step3_importing']='İçe Aktarılıyor';
+$hesklang['staff_deleted']='[Personel Silindi]';
+$hesklang['customer_account_approved']='Müşteri kaydı onaylandı';
+$hesklang['customer_account_rejected']='Müşteri kaydı reddedildi';
+$hesklang['customer_account_deleted']='Müşteri kaydı silindi';
+$hesklang['ticket_followers']='Talep takipçileri';
+$hesklang['ticket_followers2']='Taleplerin birden fazla müşteriye sahip olmasına izin verin';
+$hesklang['add_cc']='Cc Ekle';
+$hesklang['cc']='Cc';
+$hesklang['cc_help']='Her e-postayı virgülle ayırın.';
+$hesklang['search_customers']='Müşteri Arama';
+$hesklang['page_size']='Sayfa Boyutu';
+$hesklang['customers_on_pages']='Müşteri sayısı: %d | Sayfa sayısı: %d'; // First %d is replaced with number of customers, second %d with number of pages
+$hesklang['desc_customer_reset_password']='(Müşteri) Şifrenizi sıfırlayın';
+$hesklang['desc_customer_verify_registration']='(Müşteri) Kaydınızı doğrulayın';
+$hesklang['desc_customer_verify_new_email']='(Müşteri) Yeni e-postanızı doğrulayın';
+$hesklang['desc_customer_approved']='(Müşteri) Hesap onaylandı';
+$hesklang['desc_customer_rejected']='(Müşteri) Hesap reddedildi';
+$hesklang['desc_email_rejected_can_self_register']='(Müşteri) E-posta yoluyla gönderilen talep reddedildi; müşteri kendi kendine kayıt yaptırabilir';
+$hesklang['desc_email_rejected_cannot_self_register']='(Müşteri) E-posta yoluyla gönderilen talep reddedildi; müşteri kendi kendine kayıt olamaz';
+$hesklang['user_added_success_no_pass']='Yeni kullanıcı %s başarıyla eklendi';
+$hesklang['email_tag_requester']='Talep eden (Kimden)';
+$hesklang['email_tag_requester_name']='Talep Eden (Kimden) Adı';
+$hesklang['email_tag_requester_first_name']='Talep Eden (Kimden) İlk Adı';
+$hesklang['email_tag_requester_email']='Talep Eden (Kimden) E-posta';
+$hesklang['email_tag_followers']='Takipçiler (Cc)';
+$hesklang['email_tag_follower_names']='Takipçi (Cc) Adları';
+$hesklang['email_tag_follower_emails']='Takipçi (Cc) E-postaları';
+$hesklang['barcode']='Barkod';
+$hesklang['barcode_use']='Basılı taleplerde barkod gösterimi';
+$hesklang['barcode_staff_only']='Barkodu müşterilerden gizle';
+$hesklang['barcode_type']='Barkod türü';
+$hesklang['barcode_format']='Biçim';
+$hesklang['barcode_width']='Genişlik';
+$hesklang['barcode_height']='Yükseklik';
+$hesklang['barcode_color']='Renk';
+$hesklang['barcode_bg']='Arka plan';
+$hesklang['copy_link']='Talep bağlantısını kopyala';
+$hesklang['copy_link_title']='Bu talebe ait genel bağlantıyı kopyala';
+$hesklang['copy_link_exp']='Kopyalanan bağlantı, müşterinin bu talebi görüntülemesi için doğrudan bağlantıdır';
+$hesklang['copy_value']='Bu değeri kopyala';
+$hesklang['download_class']='Bu fonksiyon ZipArchive sınıfını gerektirir. Sunucu Destek Ekibinizden PHP Zip desteğini açmasını isteyin.';
+$hesklang['download_all']='Tümünü indir';
+$hesklang['download_prep']='İndirme hazırlanıyor...';
+$hesklang['download_tma']='Çok fazla ek var';
+$hesklang['download_nva']='Geçerli ek yok';
+$hesklang['download_ntd']='İndirilecek bir şey yok';
+$hesklang['resolved_at']='Çözüldü';
+$hesklang['disable_GSSAPI']='GSSAPI kimlik doğrulayıcısını devre dışı bırak (Kerberos hatası geçici çözümü)';
+$hesklang['ex_history']='Talep geçmişi günlüğünü dışa aktarmaya dahil et';
+$hesklang['sm_location']='Konum'; // Location (page) of a service message
+$hesklang['loc_sm']='Bu servis mesajını şurada göster:';
+$hesklang['loc_all']='Her müşteri sayfası';
+$hesklang['loc_norec']='(önerilmez)';
+$hesklang['loc_home']='Yardım Masası Anasayfası';
+$hesklang['loc_selected']='Seçili sayfalarda';
+$hesklang['loc_selerr']='Mesajın gösterileceği en az bir sayfa seçin';
+$hesklang['loc_t_cat']='Bir talep gönderin - bir kategori seçin';
+$hesklang['loc_t_add']='Bir talep gönderin - bir talep formu gönderin';
+$hesklang['loc_t_ok']='Bir talep gönderin - talep onayı';
+$hesklang['loc_t_view']='Bir talep görüntüle';
+$hesklang['loc_t_form']='Bir talep formunu görüntüle';
+$hesklang['loc_kb_main']='Bilgi Bankası Anasayfası';
+$hesklang['loc_kb_sub']='Bilgi Bankası Alt Kategori Sayfaları';
+$hesklang['loc_kb_art']='Bilgi Bankası Makaleleri';
+$hesklang['loc_login']='Müşteri giriş sayfası';
+$hesklang['loc_register']='Müşteri kayıt sayfası';
+$hesklang['loc_register_ok']='Müşteri kaydı başarılı';
+$hesklang['loc_acc']='Müşteri &quot;Taleplerim&quot; Sayfası';
+$hesklang['loc_profile']='Müşteri &quot;Profil&quot; Sayfası';
+$hesklang['sending_show']='&quot;Gönderiliyor&quot; bildirimini göster';
+$hesklang['sending_wait']='Gönderiliyor, lütfen bekleyin...';
+$hesklang['e_c_email']='Bu talebi görüntülemek için doğru e-posta adresini girin';
+$hesklang['only_verified_cc']='Doğrulanmış hesabı olmayan takipçiler dikkate alınmayacaktır.';
+$hesklang['followers_removed']='Bu e-posta adresleri doğrulanmış bir hesaba sahip olmadıkları için talepten kaldırıldı:';
+$hesklang['novace']='Bu e-posta adresiyle kayıtlı ve doğrulanmış bir hesap bulamadık.';
+$hesklang['max_recipients']='Azami Alıcı Sayısı';
+$hesklang['max_recipients2']='tek bir e-postada';
+$hesklang['admin_js']='Yönetici JS';
+$hesklang['admin_js2']='Yönetici paneli için ekstra özel bir Javascript dosyası yükleyin';
+$hesklang['cf_limit_all']='Özel alan limitini doldurdunuz ve yeni özel alanlar oluşturamazsınız.';
+$hesklang['remind_assigned']='Atanmış personele hatırlat';
+$hesklang['remind_sent']='Atanmış personele e-posta hatırlatıcısı gönderildi';
+$hesklang['thist23']='<li class="smaller">%s | %s tarafından %s\'e gönderilen hatırlatma</li>';
+$hesklang['ql_bookmarks']='Favoriler';
+$hesklang['bookmark']='Favorilerim';
+$hesklang['bookmarks_add']='Favorilerime Ekle';
+$hesklang['bookmarks_added']='Bu talep favorilerinize eklendi';
+$hesklang['bookmarks_remove']='Favorilerimden Kaldır';
+$hesklang['bookmarks_removed']='Bu talep favorilerinizden kaldırıldı';
+$hesklang['genl_not_copied']='Hata: Bu cihazda/tarayıcıda panoya kopyalama desteklenmiyor.';
+$hesklang['profile_duplicate_email']='<b>%s</b> e-posta adresine sahip kullanıcı zaten var.'; // %s: new email
+$hesklang['seq_id_numeric']='Talep numarası araması yalnızca sayılardan oluşmalıdır';
+$hesklang['confirm_new_pass']='Yeni şifreyi onayla';
+$hesklang['piping_notify_rejected_customers1']='Müşteri reddi e-postaları';
+$hesklang['piping_notify_rejected_customers2']='Müşterilerinizin talepleri reddedildiğinde onlara bir ret e-postası gönderin';
+$hesklang['piping_notify_rejected_customers3']='Reddedilme e-postaları arasındaki süre';
+$hesklang['register_url']='Kayıt URL Adresi';
+$hesklang['email_subject']='E-posta konusu';
+
+// Added in version 3.6.0
+$hesklang['collaborator_added']='[#%%TRACK_ID%%] Talep üzerinde işbirliği yapılıyor : %%SUBJECT%%';
+$hesklang['collaborator_staff_reply']='[#%%TRACK_ID%%] Personel şu soruya yanıt verdi : %%SUBJECT%%';
+$hesklang['collaborator_note']='[#%%TRACK_ID%%] Not Eklendi : %%SUBJECT%%';
+$hesklang['collaborator_overdue']='[#%%TRACK_ID%%] Talep Gecikti : %%SUBJECT%%';
+$hesklang['collaborator_resolved']='[#%%TRACK_ID%%] Talep Çözüldü : %%SUBJECT%%';
+$hesklang['satisfaction']['ignore']='Takip e-postası son gönderim tarihi :'; // do not send emails to tickets resolved before cutoff date
+$hesklang['satisfaction']['ignore_before']='Çözülen taleplere e-posta göndermeyin'; // ... more than [X days] ago
+$hesklang['satisfaction']['ignore_after']='önce ("%s" den daha uzun bir zaman aralığı olmalı)'; // ... more than [X days] ago
+$hesklang['satisfaction']['wrong_cutoff']='E-posta son gönderim tarihi, takip eden e-posta gecikmesinden daha uzun olmalıdır';
+$hesklang['available_language']='Mevcut Diller';
+$hesklang['click_to_show_available_language']='Mevcut dilleri göstermek için tıklayın';
+$hesklang['install_lan']='Yükle';
+$hesklang['remove_lan']='Kaldır';
+$hesklang['title_lan']='Başlık';
+$hesklang['description_lan']='Açıklama';
+$hesklang['completed_lan']='Tamamlanma';
+$hesklang['no_language_availble']='Hiçbir dil mevcut değil';
+$hesklang['success_install_lan_txt']='dil başarıyla eklendi';
+$hesklang['error_install_lan_txt']='dil eklenemedi';
+$hesklang['success_remove_lan_txt']='dil başarıyla kaldırıldı';
+$hesklang['error_remove_lan_txt']='dil kaldırılamadı';
+$hesklang['remove_default_language_error']='Varsayılan olarak seçilen dil etkin kalmalı ve kaldırılamaz';
+$hesklang['click_for_manual_step']='Manuel kurulum için tıklayın';
+$hesklang['upgrade_lan']='Güncelle';
+$hesklang['success_upgrade_lan_txt']='dil başarıyla Güncellendi';
+$hesklang['error_upgrade_lan_txt']='dil Güncellenemedi';
+$hesklang['please_wait']='Lütfen bekleyin...';
+$hesklang['add_a_note']='Bir not ekle';
+$hesklang['add_a_reply']='Bir cevap ekle';
+$hesklang['customer_id']='Müşteri ID';
+$hesklang['deleting_customer_tickets']='Müşteri tarafından açılan talepler : <b>%1$s</b><br>Bu taleplerle ne yapmalıyız?'; // %1$s = number of tickets
+$hesklang['deleting_customer_follower']='Müşterinin kopyalandığı talepler : <b>%1$s</b><br>Bunlar takipçi olarak bu müşteriyi kaybedecekler; talepler değişmeden kalacak.'; // %1$s = number of tickets
+$hesklang['deleting_customer_delete_tickets2']='Talepleri kalıcı olarak sil';
+$hesklang['deleting_customer_anonymize_tickets2']='Talepleri kimliksizleştirin (mesajları ve kişisel verileri kaldırın)';
+$hesklang['deleting_customer_retain_tickets2']='Talepleri saklayın (tüm verileri olduğu gibi bırakın)';
+$hesklang['for_staff']='yardım masası personeli için'; // Setting enabled: "for help desk staff"
+$hesklang['for_customers']='müşteriler için'; // Setting enabled: "for customers"
+$hesklang['imap_mailbox_txt']='IMAP Posta Kutusu';
+$hesklang['file_attachment_options']='E-Posta Eki Seçenekleri';
+$hesklang['link_to_attachments_in_emails']='E-postalardaki eklere bağlantı';
+$hesklang['add_attachments_directly_to_emails']='E-postalara doğrudan ekler ekleyin';
+$hesklang['directly_attach_file_smaller_than']='Yalnızca şu boyuttan daha küçük dosyaları doğrudan ekleyin';
+$hesklang['directly_attach_file_of_any_size']='Herhangi bir boyuttaki dosyayı doğrudan ekleyin';
+$hesklang['directly_attach_only_first_x_attachments']='Sadece ilk önce doğrudan ekle';
+$hesklang['directly_attach_all_attachments']='Tüm ekleri doğrudan ekleyin';
+$hesklang['directly_attach_size']='Ek boyutu';
+$hesklang['directly_attach_no_of_files']='Dosya sayısı';
+$hesklang['notice_about_directly_attach_files']='E-postalara çok sayıda veya büyük dosya eklemek, SMTP sunucunuzla iletişim kurarken gecikmelere neden olabilir';
+$hesklang['fatt_2']='Bu mesaja eklenen ek dosyalar:';
+$hesklang['no_collaborators']='Hiçbiri';
+$hesklang['collaborate']='Bu talep üzerinde işbirliği yapın';
+$hesklang['collaborators']='İşbirlikçiler';
+$hesklang['ql_cbm']='İşbirlikçi';
+$hesklang['collaborating']='Şu anda bu talep üzerinde işbirliği yapıyorsunuz';
+$hesklang['not_collaborating']='Artık bu talep üzerinde işbirliği yapmıyorsunuz';
+$hesklang['add_collaborator']='Bir işbirlikçi ekleyin';
+$hesklang['user_collaborator_added']='Kullanıcı bu talebe işbirlikçi olarak eklendi';
+$hesklang['remove_collaborator']='İşbirlikçiyi kaldır';
+$hesklang['staff_name']='Personel adı';
+$hesklang['user_collaborator_removed']='Kullanıcı bu talepteki işbirliğinden kaldırıldı';
+$hesklang['desc_collaborator_added']='(Personel) Yeni bir talep üzerinde işbirliği yapıyorsunuz';
+$hesklang['desc_collaborator_staff_reply']='(Personel) Bir personel, ortak bir talebe yanıt verdi';
+$hesklang['desc_collaborator_note']='(Personel) Ortak bir talebe yeni not eklendi';
+$hesklang['desc_collaborator_resolved']='(Personel) Ortak bir talep çözüldü';
+$hesklang['desc_collaborator_overdue']='(Personel) Ortak bir talebin süresi doldu';
+$hesklang['notify_collaborator_added']='Bir talepte ortak görevli olarak eklendim';
+$hesklang['notify_collaborator_customer_reply']='Müşteri, ortak bir talebe yanıt verir';
+$hesklang['notify_collaborator_staff_reply']='Personel, ortak bir talebe yanıt verir';
+$hesklang['notify_collaborator_note']='Personel, ortak bir talebe not ekler';
+$hesklang['notify_collaborator_resolved']='Personel, ortak bir talebi çözer';
+$hesklang['notify_collaborator_overdue']='Ortak talep gecikti';
+$hesklang['recurring_tickets']['tab']='Tekrarlayan Talepler'; // Menu link
+$hesklang['recurring_tickets']['page_title']='Tekrarlayan Talepler'; // Page H2 title
+$hesklang['recurring_tickets']['intro']='Yoğun işleri otomatikleştirin; Hesk\'in tam da ihtiyacınız olduğunda sizin için rutin talepleri oluşturmasına izin verin.';
+$hesklang['recurring_tickets']['active_rules']='Aktif kurallar';
+$hesklang['recurring_tickets']['new']='Yeni tekrarlayan talep kuralı';
+$hesklang['recurring_tickets']['no_rules']='Tekrarlayan talep kurallarınız bulunmuyor. Yukarıdaki &quot;Yeni tekrarlayan talep kuralı&quot; butonuna tıklayarak bir tane oluşturun.';
+$hesklang['recurring_tickets']['title']='Kural başlığı';
+$hesklang['recurring_tickets']['titlet']='Örneğin, açıklayıcı bir başlık: Bir gün içinde yanıtlanmayan talepleri yeniden atayın';
+$hesklang['recurring_tickets']['default_title']='%1$s Kuralı'; // Default rule title; %1$s = user name
+$hesklang['recurring_tickets']['trigger']='Kural tetikleyicisi';
+$hesklang['recurring_tickets']['trigt']='Bu kuralı tetikleyecek (çalıştıracak) koşulu ayarlayın.';
+$hesklang['recurring_tickets']['hits']='Tetikleme Sayısı'; // How many times a rule has been triggered
+$hesklang['recurring_tickets']['step1']='Oluşturma Zamanı'; // Title of step 1 when creating/editing a rule
+$hesklang['recurring_tickets']['step2']='Genel Ayarlar'; // Title of step 2 when creating/editing a rule
+$hesklang['recurring_tickets']['step3']='Özel Alanlar'; // Title of step 3 when creating/editing a rule
+$hesklang['recurring_tickets']['step4']='İçerik'; // Title of step 4 when creating/editing a rule
+$hesklang['recurring_tickets']['delete']='Bu kuralı silmek istiyor musunuz?';
+$hesklang['recurring_tickets']['edit']='Tekrarlayan talep kuralı kimliği %1$s düzenleniyor'; // %1$s = rule ID number
+$hesklang['recurring_tickets']['within']='İçinde:';
+$hesklang['recurring_tickets']['minutes']='dakika';
+$hesklang['recurring_tickets']['hours']='saat';
+$hesklang['recurring_tickets']['days']='gün';
+$hesklang['recurring_tickets']['weeks']='hafta';
+$hesklang['recurring_tickets']['months']='ay';
+$hesklang['recurring_tickets']['years']='yıl';
+$hesklang['recurring_tickets']['setpri']='Önceliği Ayarlayın:';
+$hesklang['recurring_tickets']['setsta']='Durumu Ayarlayın:';
+$hesklang['recurring_tickets']['assto']='Talebi Atayın:';
+$hesklang['recurring_tickets']['asm']='Başka bir personel üyesi';
+$hesklang['recurring_tickets']['notify']='Personeli bilgilendirin...';
+$hesklang['recurring_tickets']['ato']='Uygula :';
+$hesklang['recurring_tickets']['save']='Kuralı kaydet';
+$hesklang['recurring_tickets']['e_tt']='Zaman 1 ile 10000 arasında olmalıdır';
+$hesklang['recurring_tickets']['nocat']='En az bir kategori seçin';
+$hesklang['recurring_tickets']['nouser']='En az bir kullanıcı seçin';
+$hesklang['recurring_tickets']['nostatus']='En az bir durum seçin';
+$hesklang['recurring_tickets']['nocata']='%1$s şu kategorilere erişim yetkisine sahip değil:'; // %1$s = user name
+$hesklang['recurring_tickets']['rule_added']='Yeni kural oluşturuldu';
+$hesklang['recurring_tickets']['mdf']='Kural ayarları kaydedildi';
+$hesklang['recurring_tickets']['e_id']='Bu ID kimliğine sahip kural bulunamadı';
+$hesklang['recurring_tickets']['deleted']='Seçilen kural silindi';
+$hesklang['recurring_tickets']['log_title']='Kural #%1$s (%2$s)'; // Used in ticket history log. %1$s = rule ID, %2$s = rule title
+$hesklang['recurring_tickets']['active']='Aktif'; // Is the rule active (live)?
+$hesklang['recurring_tickets']['activate']='Bu kuralı etkinleştirin (kullanmaya başlayın)';
+$hesklang['recurring_tickets']['activated']='Seçilen kural etkinleştirildi'; // %1$s = rule log title
+$hesklang['recurring_tickets']['deactivate']='Bu kuralı devre dışı bırakın (kullanmayı bırakın)';
+$hesklang['recurring_tickets']['deactivated']='Seçilen kural devre dışı bırakıldı'; // %1$s = rule log title
+$hesklang['recurring_tickets']['no_active']='Aktif tekrarlayan bilet kuralı yok';
+$hesklang['recurring_tickets']['tools']='Araçlar';
+$hesklang['recurring_tickets']['tbef']='Bir kural yayınlanmadan önce, &quot;AKTİF&quot; sütunundaki onay kutusunu tıklayıp etkinleştirmeniz gerekir.<br><br>
+                               <strong>Aktif kurallar her %2$s dakikada bir işlenir</strong>.'; // %1$s = replaced by icon, %2$s = number of minutes, usually 5 or more
+$hesklang['recurring_tickets']['r']='[KURAL]';
+$hesklang['recurring_tickets']['r2']='[KURAL] Kural #%s';
+$hesklang['recurring_tickets']['r3']='Kural #%s';
+$hesklang['recurring_tickets']['i']='[BİLGİ]';
+$hesklang['recurring_tickets']['matched']='Bugün oluşturulan talep sayısı: %1$s'; // %1$s = number of tickets
+$hesklang['recurring_tickets']['reset']='Bu kuralı sıfırla';
+$hesklang['recurring_tickets']['reset2']='Bu kuralı sıfırlamak istediğinizden emin misiniz?<br><br>Kural isabetleri 0\'a gidecek ve bugün bunun için oluşturulmuş biletler bir sonraki cron çalıştırmasında yeniden oluşturulabilir.';
+$hesklang['recurring_tickets']['reset3']='Seçilen kural sıfırlandı';
+$hesklang['recurring_tickets']['test']='Bu kuralı simüle edin';
+$hesklang['recurring_tickets']['testa']='Tüm kuralları simüle edin';
+$hesklang['recurring_tickets']['testaa']='Tüm etkin kuralları simüle et';
+$hesklang['recurring_tickets']['testr']='Simülasyon sonuçları';
+$hesklang['recurring_tickets']['rsim']='Simülasyonu Tekrarla';
+$hesklang['recurring_tickets']['sim']='SİMÜLASYON MODU, veritabanında herhangi bir değişiklik yok';
+$hesklang['recurring_tickets']['sic']='SİMÜLASYON TAMAMLANDI';
+$hesklang['recurring_tickets']['rrule_type_required']='Lütfen geçerli bir tekrarlayan kural tetikleyicisi seçin.';
+$hesklang['recurring_tickets']['rrule_string_required']='Lütfen gerekli tüm tekrarlayan kural tetikleyici seçeneklerini seçin.';
+$hesklang['recurring_tickets']['rrule_invalid_interval']='Lütfen "Herbiri" için 1 veya daha büyük bir aralık değeri girin.';
+$hesklang['recurring_tickets']['disable_note']='*Bir kural oluşturulduktan sonra herhangi bir kritik hesk ayarı değiştirilirse, bir sonraki çalıştırma girişiminde devre dışı bırakılacak ve yeni doğrulama gereksinimlerini karşılamak için düzenlenmesi gerekecektir.';
+$hesklang['recurring_tickets']['thist1']='<li class="smaller">%1$s | tarihinde, "%2$s adlı Tekrarlayan Talep Kuralı tarafından eklendi."</li>'; // Used in ticket history log. %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist2']='<li class="smaller">%1$s | tarihinde, "%3$s" Tekrarlayan Talepler Kuralı tarafından %2$s kullanıcısına atandı.</li>'; // %1$s = date,  %2$s = assignee, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist3']='<li class="smaller">%1$s | tarihinde, Tekrarlayan Talepler Kuralı "%2$s" tarafından otomatik olarak kapatıldı.</li>'; // %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist9']='<li class="smaller">%1$s | tarihinde, "%3$s" Tekrarlayan Talepler Kuralı tarafından durumu %2$s olarak değiştirildi.</li>'; // %1$s = date, %2$s new status, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist10']='<li class="smaller">%1$s | tarihinde, "%3$s" Tekrarlayan Talepler Kuralı tarafından %2$s durumuna otomatik olarak atandı.</li>'; // %1$s = date, %2$s = new owner, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['rule_was_disabled']='Doğrulama hataları nedeniyle kural devre dışı bırakıldı. Ayrıntılar için aşağıya bakın.';
+$hesklang['recurring_tickets']['errors_title']='Kurallarınızdan biri veya birkaçı çalıştırılmaya çalışıldığında hatalar oluştu ve devre dışı bırakıldı.';
+$hesklang['recurring_tickets']['rule_errors']='<hr>Kural #%s hataları:';
+$hesklang['recurring_tickets']['create_customers']='Mevcut müşteri bulunmamaktadır - lütfen <a href="%s" target="_blank">buradan</a> oluşturun.';
+$hesklang['recurring_tickets']['exec_dates']='Kural çalıştırılma tarihleri';
+$hesklang['recurring_tickets']['show_exec_dates']='[Mevcut kural çalıştırılma tarihlerini göster]';
+$hesklang['recurring_tickets']['no_exec_dates']='Çalıştırılma tarihlerini görmek için lütfen geçerli kural tetikleyicilerini seçin.';
+$hesklang['recurring_tickets']['invalid_disabled']='geçersiz Rrule ayarları - kural devre dışı bırakıldı.';
+$hesklang['recurring_tickets']['next_occ']='Sonraki %s kural oluşumu:';
+$hesklang['recurring_tickets']['occ_on']=' %s';
+$hesklang['recurring_tickets']['not_firing_today']='bugün tetiklenmesi gerekmiyor.';
+$hesklang['recurring_tickets']['rules_fulfilled']='tekrarlayan kurallar yerine getirildi - talep bugün oluşturuldu!';
+$hesklang['recurring_tickets']['validation_failed']='Doğrulama başarısız oldu - kural devre dışı bırakıldı. Ayrıntılar aşağıda:';
+$hesklang['recurring_tickets']['validation_error']='Doğrulama hatası:';
+$hesklang['recurring_tickets']['processed']='işlenmiş.';
+$hesklang['recurring_tickets']['created_ticket']='oluşturulan talep no: %1$s, takip kodu: %2$s';
+$hesklang['recurring_tickets']['due_date_note']='talep oluşturma tarihine göre';
+$hesklang['priorities']='Öncelikler';
+$hesklang['priority_intro']='Yardım masanız için talep önceliklerini yönetmek amacıyla bu aracı kullanın';
+$hesklang['new_priority']='Yeni Öncelik';
+$hesklang['edit_priority']='Öncelik Düzenle';
+$hesklang['priority_title']='Başlık';
+$hesklang['can_customers_select_it']='Müşteriler bu önceliği seçebilir mi?';
+$hesklang['selected_by_customer']='Müşteriler tarafından seçilebilir';
+$hesklang['err_priority']='Öncelik başlığını girin';
+$hesklang['priority_added']='Yeni bir öncelik eklendi';
+$hesklang['priority_e_id']='Geçersiz öncelik ID no';
+$hesklang['priority_mdf']='Öncelik kaydedildi';
+$hesklang['priority_deleted']='Öncelik silindi';
+$hesklang['priority_not_found']='Bu öncelik mevcut değil';
+$hesklang['priority_not_empty']='Bu öncelik silinemez çünkü bu önceliğe sahip olan talepler mevcut';
+$hesklang['click_to_enable_drag_drop']='Satır için sürükle-bırak özelliğini etkinleştirmek üzere tıklayın, ardından öncelikleri yeniden düzenlemek için satırı yukarı veya aşağı sürükleyin.';
+$hesklang['confirm_delete_priority']='Bu önceliği silmek istediğinizden emin misiniz?';
+$hesklang['reordered_message']='Öncelik listenizin sıralaması kaydedildi.';
+$hesklang['list_tkt_priority']='Tüm talepleri bu önceliğe göre listele';
+$hesklang['deletion_priority_restricted']='Bu özel bir önceliktir ve silinemez';
+$hesklang['priority_limit']='Yeni öncelikler oluşturamazsınız';
+$hesklang['skip_to_main_content']='Ana İçeriğe Geç';
+$hesklang['opens_dialog']='Bir iletişim kutusu açar';
+$hesklang['create_a_ticket']='Bir talep oluşturun';
+$hesklang['toggle_navigation']='Gezinmeyi değiştir';
+$hesklang['add_a_ticket_reply']='Bir talep yanıtı ekleyin';
+$hesklang['linked_tickets']='Bağlantılı Talepler';
+$hesklang['no_linked_tickets']='Talep bağlantı içermiyor';
+$hesklang['link_ticket']='Talebi Bağla';
+$hesklang['can_link_tickets_e']='Bu talebi bağlamaya/bağlantısını kaldırmaya yetkili değilsiniz';
+$hesklang['link_ticket_success']='Talep başarıyla bağlandı';
+$hesklang['link_ticket_required_error']='Bir talebi bağlamak için lütfen geçerli bir Takip Kimliği (ID) sağlayın';
+$hesklang['link_ticket_itself_error']='Bir talep kendisine bağlanamaz. Lütfen farklı bir Takip Kimliği (ID) girin.';
+$hesklang['already_linked_error']='Talep zaten bağlandı';
+$hesklang['unlink_success']='Talep bağlantısı başarıyla kaldırıldı';
+$hesklang['unlink_error']='Bağlantılı kayıt yok';
+$hesklang['link_history']='<li class="smaller">%s | %s talebi %s tarafından bağlandı</li>';
+$hesklang['unlink_history']='<li class="smaller">%s | %s talebin bağlantısı %s tarafından kaldırıldı</li>';
+$hesklang['can_link_tickets']='Talebi bağlayabilir miyim?';
+$hesklang['link_a_ticket']='Bir talep bağla';
+$hesklang['mfa_curl']='Sunucunuzda <strong>cURL</strong> desteği etkin olmadığından taranacak bir QR görüntüsü oluşturulamıyor.';
+$hesklang['require_xml']='Zengin Metin (HTML) mesajları için PHP-XML etkinleştirilmelidir. Lütfen web barındırıcınızdan PHP için XML özelliğini etkinleştirmesini isteyin.';
+$hesklang['thist24']='<li class="smaller">%1$s | %2$s, %3$s tarafından işbirlikçi olarak eklendi</li>';
+$hesklang['thist25']='<li class="smaller">%1$s | %2$s, %3$s tarafından işbirlikçi olarak kaldırıldı</li>';
+$hesklang['recurring_tickets']['intro2']='Önleyici bakım işleri, aylık erişim incelemeleri, tekrarlayan müşteri kontrolleri ve daha fazlası için mükemmeldir.';
+$hesklang['recurring_tickets']['feat1']='<strong>Zamanlamaları ayarlayın ve unutun.</strong> Her gün, her Pazartesi, her Mart, her ayın 15i veya gelecekteki herhangi bir tarih';
+$hesklang['recurring_tickets']['feat2']='<strong>Önceden doldurulmuş ve atanmış olarak ulaşın.</strong> Kategori, öncelik, aracı ve 100e kadar özel alan değeri seçin';
+$hesklang['recurring_tickets']['feat3']='<strong>Tarihleri önizleyin ve Simüle edin.</strong> Hesk\'in bir kuralı etkinleştirmeden önce oluşturacağı her talebi görün, böylece sürprizlerle karşılaşmazsınız.';
+$hesklang['unlink_btn']='Bağlantıyı kaldır';
 
 // DO NOT CHANGE BELOW
 if (!defined('IN_SCRIPT')) die('PHP syntax OK!');

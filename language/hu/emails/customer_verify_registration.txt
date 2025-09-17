@@ -1,0 +1,10 @@
+Kedves %%NAME%%,
+
+Köszönjük, hogy létrehoztál egy fiókot. Kattintson az alábbi linkre fiókja aktiválásához:
+
+%%VERIFICATION_URL%%
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

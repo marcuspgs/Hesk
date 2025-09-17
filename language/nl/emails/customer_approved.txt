@@ -1,0 +1,11 @@
+Beste %%NAME%%,
+
+Je account registratie is goedgekeurd.
+
+je kunt nu inloggen met je gebruikersnaam en wachtwoord dat je hebt opgegeven bij je registratie:
+%%CUSTOMER_LOGIN_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

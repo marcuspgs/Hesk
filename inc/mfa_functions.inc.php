@@ -22,14 +22,17 @@ function generate_mfa_code() {
     return str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
 }
 
-function hash_and_store_mfa_verification_code($user_id, $verification_code) {
+function hash_and_store_mfa_verification_code($user_id, $verification_code, $user_type = 'STAFF') {
     global $hesk_settings;
 
-    $hashed_verification_code = hesk_Pass2Hash($verification_code);
+    $hashed_verification_code = hesk_password_hash($verification_code);
 
     // Allow 20 minutes to verify ("INTERVAL 20 MINUTE" is **very** intuitive...)
-    hesk_dbQuery("INSERT INTO `" . hesk_dbEscape($hesk_settings['db_pfix']) . "mfa_verification_tokens` (`user_id`, `verification_token`, `expires_at`)
-                    VALUES (" . intval($user_id) . ", '" . hesk_dbEscape($hashed_verification_code) . "', NOW() + INTERVAL 20 MINUTE)");
+    hesk_dbQuery("INSERT INTO `" . hesk_dbEscape($hesk_settings['db_pfix']) . "mfa_verification_tokens` (`user_id`, `verification_token`, `expires_at`, `user_type`)
+                    VALUES (" . intval($user_id) . ", 
+                        '" . hesk_dbEscape($hashed_verification_code) . "', 
+                        NOW() + INTERVAL 20 MINUTE, 
+                        '".hesk_dbEscape($user_type)."')");
 }
 
 function send_mfa_email($name, $email, $verification_code) {
@@ -57,14 +60,12 @@ function send_mfa_email($name, $email, $verification_code) {
     list($msg, $html_msg) = hesk_replace_email_tag('%%VERIFICATION_CODE%%', $verification_code, $msg, $html_msg);
 
     // Send email
-    return hesk_mail($email, str_replace('%%VERIFICATION_CODE%%', $verification_code, $hesklang['mfa_verification']), $msg, $html_msg);
+    return hesk_mail($email, [], str_replace('%%VERIFICATION_CODE%%', $verification_code, $hesklang['mfa_verification']), $msg, $html_msg);
 }
 
 // Note: Deletes all verification codes upon successful validation
-function is_mfa_email_code_valid($user_id, $verification_code) {
+function is_mfa_email_code_valid($user_id, $verification_code, $user_type = 'STAFF') {
     global $hesk_settings;
-
-    $hashed_verification_code = hesk_Pass2Hash($verification_code);
 
     //-- Purge any verification codes that are expired
     hesk_dbQuery("DELETE FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "mfa_verification_tokens` 
@@ -78,27 +79,32 @@ function is_mfa_email_code_valid($user_id, $verification_code) {
             continue;
         }
 
-        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `id` = ".intval($row['id']));
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` 
+            WHERE `id` = ".intval($row['id'])."
+            AND `user_type` = '".hesk_dbEscape($user_type)."'");
     }
 
-    //-- Check if our verification code is still there
-    $res = hesk_dbQuery("SELECT 1 FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "mfa_verification_tokens` 
+    //-- Grab remaining verification codes and see if one matches
+    $res = hesk_dbQuery("SELECT `verification_token` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "mfa_verification_tokens` 
             WHERE `user_id` = " . intval($user_id) . " 
-            AND `verification_token` = '" . hesk_dbEscape($hashed_verification_code) . "'");
+            AND `user_type` = '" . hesk_dbEscape($user_type) . "'");
 
-    if (hesk_dbNumRows($res) === 1) {
-        delete_mfa_codes($user_id);
-        return true;
+    while ($row = hesk_dbFetchAssoc($res)) {
+        if (hesk_password_verify($verification_code, $row['verification_token'])) {
+            delete_mfa_codes($user_id, $user_type);
+            return true;
+        }
     }
 
     return false;
 }
 
-function delete_mfa_codes($user_id) {
+function delete_mfa_codes($user_id, $user_type = 'STAFF') {
     global $hesk_settings;
 
     hesk_dbQuery("DELETE FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "mfa_verification_tokens`
-                WHERE `user_id` = " . intval($user_id));
+                WHERE `user_id` = " . intval($user_id) . "
+                    AND `user_type` = '".hesk_dbEscape($user_type)."'");
 }
 // endregion
 
@@ -109,7 +115,7 @@ function build_tfa_instance() {
     return new TwoFactorAuth($hesk_settings['hesk_title']);
 }
 
-function is_mfa_app_code_valid($user_id, $verification_code, $secret = null) {
+function is_mfa_app_code_valid($user_id, $verification_code, $secret = null, $user_type = 'STAFF') {
     global $hesk_settings, $hesklang;
 
     $tfa = build_tfa_instance();
@@ -121,7 +127,8 @@ function is_mfa_app_code_valid($user_id, $verification_code, $secret = null) {
     }
 
     if ($secret === null) {
-        $res = hesk_dbQuery("SELECT `mfa_secret` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `id` = " . intval($user_id));
+        $table = $user_type === 'STAFF' ? 'users' : 'customers';
+        $res = hesk_dbQuery("SELECT `mfa_secret` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . $table."` WHERE `id` = " . intval($user_id));
         $row = hesk_dbFetchAssoc($res);
         $secret = $row['mfa_secret'];
     }
@@ -131,11 +138,11 @@ function is_mfa_app_code_valid($user_id, $verification_code, $secret = null) {
 // endregion
 
 // region Backup Codes
-function generate_and_store_mfa_backup_codes($user_id, $delete_old_codes = true) {
+function generate_and_store_mfa_backup_codes($user_id, $delete_old_codes = true, $user_type = 'STAFF') {
     global $hesk_settings;
 
     if ($delete_old_codes) {
-        delete_mfa_backup_codes($user_id);
+        delete_mfa_backup_codes($user_id, $user_type);
     }
 
     $codes = array();
@@ -146,7 +153,7 @@ function generate_and_store_mfa_backup_codes($user_id, $delete_old_codes = true)
             if (!in_array($code, $codes)) {
                 $codes[] = $code;
                 $unique_code_generated = true;
-                store_backup_code($user_id, $code);
+                store_backup_code($user_id, $code, $user_type);
             }
         } while (!$unique_code_generated);
     }
@@ -164,38 +171,42 @@ function generate_backup_code() {
     return $code;
 }
 
-function store_backup_code($user_id, $code) {
+function store_backup_code($user_id, $code, $user_type = 'STAFF') {
     global $hesk_settings;
 
     $hashed_code = hesk_password_hash($code);
 
-    hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` (`user_id`, `code`)
-        VALUES (".intval($user_id).", '".hesk_dbEscape($hashed_code)."')");
+    hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` (`user_id`, `code`, `user_type`)
+        VALUES (".intval($user_id).", '".hesk_dbEscape($hashed_code)."', '".hesk_dbEscape($user_type)."')");
 }
 
-function delete_mfa_backup_codes($user_id) {
-    global $hesk_settings;
-
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` WHERE `user_id` = ".intval($user_id));
-}
-
-function delete_mfa_backup_code($user_id, $hashed_code) {
+function delete_mfa_backup_codes($user_id, $user_type = 'STAFF') {
     global $hesk_settings;
 
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` 
-        WHERE `user_id` = ".intval($user_id)." AND `code` = '".hesk_dbEscape($hashed_code)."'");
+        WHERE `user_id` = ".intval($user_id).
+            " AND `user_type` = '".hesk_dbEscape($user_type)."'");
 }
 
-function verify_mfa_backup_code($user_id, $code) {
+function delete_mfa_backup_code($user_id, $hashed_code, $user_type = 'STAFF') {
+    global $hesk_settings;
+
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` 
+        WHERE `user_id` = ".intval($user_id)." AND `code` = '".hesk_dbEscape($hashed_code)."' AND `user_type` = '".hesk_dbEscape($user_type)."'");
+}
+
+function verify_mfa_backup_code($user_id, $code, $user_type = 'STAFF') {
     global $hesk_settings;
 
     // Allow spaces, dashes, etc... in the backup code for easier printout
     $code = preg_replace('/[^0-9a-f]/', '', strtolower($code));
 
-    $res = hesk_dbQuery("SELECT `code` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` WHERE `user_id` = ".intval($user_id));
+    $res = hesk_dbQuery("SELECT `code` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` 
+        WHERE `user_id` = ".intval($user_id)." 
+            AND `user_type` = '".hesk_dbEscape($user_type)."'");
     while ($row = hesk_dbFetchAssoc($res)) {
         if (hesk_password_verify($code, $row['code'])) {
-            delete_mfa_backup_code($user_id, $row['code']);
+            delete_mfa_backup_code($user_id, $row['code'], $user_type);
             return true;
         }
     }

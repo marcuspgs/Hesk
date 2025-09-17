@@ -1,0 +1,14 @@
+Witaj,
+
+Pracownik %%NAME%% właśnie odpowiedział na zgłoszenie do pomocy technicznej.
+
+Temat zgłoszenia: %%SUBJECT%%
+Identyfikator śledzenia: %%TRACK_ID%%
+
+Możesz zarządzać tym zgłoszeniem tutaj:
+%%TRACK_URL%%
+
+Pozdrawiam,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

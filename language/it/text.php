@@ -3,7 +3,7 @@
 *
 * Language file for Help Desk Software HESK (https://www.hesk.com)
 * Language: Italiano (Italian)
-* Version: 3.4.x
+* Version: 3.6.x
 *
 * ==> CONTRIBUTORS
 *
@@ -1467,7 +1467,6 @@ $hesklang['d_custom']='Formato personalizzato';
 $hesklang['d_ci']='SOLO PER UTENTI ESPERTI:  per inserire un formato di data PHP compatibile, consultare il relativo manuale';
 $hesklang['cf_noe']='Inserire un indirizzo di email valido in <i>%s</i>';
 $hesklang['cf_noem']='Inserire uno o più indirizzi di email validi in <i>%s</i>';
-$hesklang['cf_limit']='Vi sono già 50 campi personalizzati attivi: non è possibile crearne altri!';
 $hesklang['can_resolve']='Risoluzione di ticket';
 $hesklang['can_change_own_cat']='Spostamento di ticket in un tipo di categoria consentito';
 $hesklang['can_submit_any_cat']='Creazione di ticket per qualsiasi tipo di categoria';
@@ -2129,6 +2128,472 @@ $hesklang['can_due_date']='Puoi impostare la data di scadenza'; // Permission to
 $hesklang['can_due_date_e']='Non sei autorizzato a impostare le date di scadenza';
 
 // Added in version 3.5.0
+$hesklang['customer_verify_registration']='Verifica la tua registrazione';
+$hesklang['customer_verify_new_email']='Verifica il tuo nuovo indirizzo email';
+$hesklang['customer_reset_password']='Reimposta la password del tuo help desk';
+$hesklang['customer_approved']='Account approvato';
+$hesklang['customer_rejected']='Account rifiutato';
+$hesklang['email_rejected']='Account richiesto per inviare ticket di supporto';
+$hesklang['require_curl']='Questa funzionalità richiede il supporto <strong>cURL</strong> per PHP abilitato sul tuo server. Chiedi al tuo provider di abilitare cURL per PHP.';
+$hesklang['customer_accounts_heading']='Account clienti';
+$hesklang['customer_accounts']='Account clienti';
+$hesklang['customer_accounts_off']='<strong>Disabilitati</strong>';
+$hesklang['customer_accounts_allowed']='<strong>Abilitati - Opzionali</strong> (i clienti possono inviare ticket di supporto senza registrarsi o accedere)';
+$hesklang['customer_accounts_required_to_submit']='<strong>Abilitati - Richiesti per i ticket</strong> (solo i clienti registrati possono inviare ticket di supporto)';
+$hesklang['customer_accounts_required']='<strong>Abilitati - Richiesti per accedere</strong> (solo i clienti registrati possono accedere all’help desk e alla knowledgebase)';
+$hesklang['customer_accounts_reg']='Registrazione account';
+$hesklang['customer_accounts_reg_customer']='I clienti possono registrare account';
+$hesklang['customer_accounts_reg_approve']='I clienti possono registrare account, lo staff deve approvare le nuove registrazioni';
+$hesklang['customer_accounts_reg_staff']='Solo lo staff può registrare account clienti';
+$hesklang['customer_accounts_allow_email_changes']='Permetti ai clienti di cambiare il loro indirizzo email';
+$hesklang['customer_accounts_allow_email_resends']='Tempo prima che i clienti possano richiedere una nuova email di verifica';
+$hesklang['customer_login']='Accedi';
+$hesklang['customer_logout']='Esci';
+$hesklang['customer_register']='Registrati';
+$hesklang['customer_accounts_disabled']='Accessi e registrazioni clienti disabilitati.';
+$hesklang['customer_accounts_registration_disabled']='Registrazioni clienti disabilitate.';
+$hesklang['customer_forgot_password']='Password dimenticata?';
+$hesklang['customer_email']='Indirizzo email';
+$hesklang['customer_accounts_email_banned']='Sei stato bannato dall’utilizzo di questo help desk.';
+$hesklang['customer_registration_successful']='Registrazione completata con successo!';
+$hesklang['customer_registration_email_exists_no_reset_link']='Esiste già un account con l’email %s.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists']='Esiste già un account con l’email %s. <a href="login.php">Vuoi accedere invece</a>?'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_email_verification']='Esiste già un account con l’email %s in attesa di verifica email.'; // %s - Entered email address
+$hesklang['customer_registration_email_exists_pending_approval']='Esiste già un account con l’email %s in attesa di approvazione da parte dello staff.'; // %s - Entered email address
+$hesklang['customer_registration_check_your_email']='Controlla la tua email!';
+$hesklang['customer_registration_check_your_email_content']='Devi verificare il tuo indirizzo email prima di poter accedere.<br><br>Se non ricevi l’email entro pochi minuti, controlla le cartelle Junk, Bulk o Spam. Contrassegna il messaggio come <b>Non SPAM</b> per evitare problemi nel ricevere la nostra corrispondenza in futuro.';
+$hesklang['customer_login_not_verified']='Devi verificare il tuo indirizzo email prima di poter accedere.';
+$hesklang['customer_login_not_verified2']='Se non hai ricevuto l’email di verifica da parte nostra, controlla le cartelle Junk, Bulk o Spam. Contrassegna il messaggio come <b>Non SPAM</b> per evitare problemi nel ricevere la nostra corrispondenza in futuro.';
+$hesklang['customer_login_resend_verification_email']='Reinvia email di verifica';
+$hesklang['customer_login_resend_verification_email_none']='Non ci sono verifiche email in sospeso da inviare.';
+$hesklang['customer_login_resend_verification_email_too_early']='Non puoi richiedere una nuova email di verifica in questo momento, riprova più tardi.';
+$hesklang['customer_login_not_approved']='Un membro dello staff deve approvare il tuo account prima di poter accedere. Una volta approvato, sarai notificato via email.'; // %s - Resend email notification link
+$hesklang['customer_registration_verify_header']='Verifica registrazione';
+$hesklang['customer_registration_verify_success']='La tua email è stata verificata e ora puoi accedere utilizzando il modulo sottostante.';
+$hesklang['customer_registration_verify_approval_needed']='La tua email è stata verificata. Tuttavia, un membro dello staff deve approvare il tuo account prima di poter accedere. Una volta approvato, sarai notificato via email.';
+$hesklang['customer_registration_verify_failure']='La tua email non può essere verificata. Il link è già stato utilizzato o è scaduto.';
+$hesklang['emails_to_customers']='&raquo; Email inviate ai clienti';
+$hesklang['emails_to_staff']='&raquo; Email inviate allo staff';
+$hesklang['emails_to_everyone']='&raquo; Email inviate allo staff o ai clienti';
+$hesklang['new_customer_approval']='Hai account clienti in attesa di approvazione'; // Email subject
+$hesklang['desc_new_customer_approval']='(Staff) Account clienti in attesa di approvazione';
+$hesklang['n_cust_app']='Ci sono approvazioni clienti in sospeso'; // Notify me when...
+$hesklang['et_num_customers']='Numero di approvazioni in sospeso';
+$hesklang['et_link_customers']='Link alla pagina Gestisci clienti';
+$hesklang['et_link_verify']='Link di verifica';
+$hesklang['et_cust_login']='URL di accesso cliente';
+$hesklang['submit_ticket_customer_email_exists']='Esiste già un cliente con questa email. Per favore <a href="login.php?email=%s">accedi</a> per inviare un ticket.'; // %s - User's email
+$hesklang['customer_login_email_required']='Per favore inserisci un indirizzo email valido.';
+$hesklang['customer_login_password_required']='Per favore inserisci la tua password.';
+$hesklang['customer_login_remember_just_email']='Ricorda solo la mia email';
+$hesklang['customer_login_remember_email']='Ricorda la mia email';
+$hesklang['customer_wrong_user']='Il tuo indirizzo email %s non è registrato presso di noi.<br><br>Vuoi <a href="register.php">creare un account</a>?'; // %s - Entered email address
+$hesklang['customer_wrong_pass']='Il tuo indirizzo email e la password non corrispondono ai nostri record.<br><br>Vuoi <a href="login.php?submittedForgot=1">reimpostare la tua password</a>?';
+$hesklang['customer_must_be_logged_in_to_view']='Per favore accedi per continuare.';
+$hesklang['customer_register_here']='Se non hai un account con noi, puoi <a href="register.php">registrarti qui</a>.';
+$hesklang['create_account']='Crea un account';
+$hesklang['customer_my_tickets_heading']='I miei ticket';
+$hesklang['customer_my_tickets_description']='Visualizza tutti i tuoi ticket precedenti';
+$hesklang['customer_my_tickets_search_for_tickets']='Cerca ticket';
+$hesklang['customer_password_reset_successful']='La tua nuova password è stata salvata. Ora puoi accedere.';
+$hesklang['customer_profile']='Profilo';
+$hesklang['customer_edit_profile']='Modifica profilo';
+$hesklang['customer_edit_pass']='Modifica password';
+$hesklang['customer_edit_pass_same']='La tua nuova password non deve essere uguale a quella attuale.';
+$hesklang['customer_change_email']='Cambia email';
+$hesklang['customer_change_email_banned']='L’email inserita è bannata.';
+$hesklang['customer_change_email_pending']='C’è una richiesta in corso per cambiare il tuo indirizzo email in: <b>%s</b><br><br>Abbiamo inviato un’email a questo indirizzo. Per favore clicca sul link all’interno dell’email per confermare il cambiamento.'; // %s - new email
+$hesklang['customer_change_resend']='<a href="profile.php?action=email-resend">Reinvia email di conferma</a>';
+$hesklang['customer_change_email_submitted']='Per favore clicca sul link di verifica che è stato inviato a <b>%s</b> per verificare la tua nuova email.'; // %s - new email
+$hesklang['customer_change_email_verify_success']='Il tuo nuovo indirizzo email è stato verificato e il tuo profilo aggiornato.';
+$hesklang['customer_change_email_disabled']='La possibilità di aggiornare la tua email è disabilitata. Contattaci se desideri cambiare il tuo indirizzo email.';
+$hesklang['customer_profile_saved']='Il tuo profilo è stato salvato.';
+$hesklang['customers']='Clienti';
+$hesklang['customers_intro']='Gli account clienti permettono ai clienti di visualizzare tutti i loro ticket in un’unica posizione centrale.';
+$hesklang['sure_remove_customer']='Sei sicuro di voler rimuovere questo cliente?';
+$hesklang['sure_remove_customer_additional_note']='Eliminare un cliente è definitivo. Una volta eliminato, non può essere recuperato!';
+$hesklang['new_customer']='Nuovo cliente';
+$hesklang['new_follower']='Nuovo follower';
+$hesklang['add_customer']='+ Aggiungi cliente'; // Appears on Customer Dropdown, stickied at the bottom
+$hesklang['add_follower']='+ Aggiungi follower'; // Appears on Followers Dropdown, stickied at the bottom
+$hesklang['new_customer_prompt']='Il cliente fornito non esiste ancora. Clicca su "Salva" se desideri creare questo cliente.';
+$hesklang['followers']='Follower';
+$hesklang['no_customers']='Attualmente non ci sono clienti nel database.';
+$hesklang['no_customers_disabled']='Inizierai a vedere i clienti qui quando invieranno ticket di supporto.';
+$hesklang['no_customers_enabled']='Inizierai a vedere i clienti qui quando si registreranno o invieranno ticket di supporto.';
+$hesklang['no_customers_enabled2']='In alternativa, i pulsanti sopra questo messaggio ti permettono di creare manualmente account clienti o importare clienti esistenti nell’help desk.';
+$hesklang['import_customers']='Importa clienti';
+$hesklang['import_customers_tip']='Usa un file CSV per importare più clienti contemporaneamente.';
+$hesklang['customer_not_found']='Cliente non trovato per il ticket!';
+$hesklang['search_by_name_or_email']='Cerca per nome o email...';
+$hesklang['search_by_pattern']='Cerca per modello...';
+$hesklang['is_searchable']='Ricercabile';
+$hesklang['custom_is_searchable']='Ricercabile';
+$hesklang['yes_via_autocomplete']='SÌ (cerca tramite autocompletamento)';
+$hesklang['customer_required']='Devi selezionare un cliente';
+$hesklang['customer_email_exists']='Esiste già un cliente con questa email.';
+$hesklang['customer_name_with_no_email_exists']='Esiste già un cliente con questo nome e senza email.';
+$hesklang['an_error_occurred_validating_email']='Si è verificato un errore durante il tentativo di verificare l’indirizzo email inserito.';
+$hesklang['customer_count_x_more']='+%s in più'; // %s = Number of additional customers
+$hesklang['customer_account_registered']='Registrato';
+$hesklang['customer_account_verified']='Verificato';
+$hesklang['customer_account_verified_help']='I clienti devono verificare il loro account tramite un link di attivazione inviato al loro indirizzo email prima di poter accedere al loro account.';
+$hesklang['customer_account_setting_password_will_verify_user']='Impostare una password per questo cliente verificherà automaticamente il loro account.';
+$hesklang['deleting_customer_with_tickets']='Questo cliente ha %1$s ticket <b>(%2$s aperti)</b> che hanno anche altri clienti associati a loro.<br>Cosa dovrebbe essere fatto con questi ticket?'; // %1$s = total tickets, %2$s = open tickets
+$hesklang['customer_resend_verification_email_needed']='È necessario un indirizzo email valido per reinviare un’email di verifica.';
+$hesklang['customer_resend_verification_email_not_found']='Non esiste alcun account con questo indirizzo email, o l’account è già stato verificato.';
+$hesklang['customer_resend_verification_email_sent']='Un’email di verifica è stata inviata al tuo indirizzo email.<br><br>Se non la ricevi entro pochi minuti, controlla le cartelle Junk, Bulk o Spam. Contrassegna il messaggio come <b>Non SPAM</b> per evitare problemi nel ricevere la nostra corrispondenza in futuro.';
+$hesklang['customer_permission_denied']='Non hai il permesso di modificare i clienti.';
+$hesklang['customer_manage_approvals']='Account clienti in attesa di approvazione: <b>%s</b>'; // %s = number of customers
+$hesklang['customer_manage_approve']='Approva cliente';
+$hesklang['customer_manage_bulk_approve']='Approva clienti selezionati';
+$hesklang['customer_manage_bulk_approve_complete']='Clienti approvati: %s'; // %s = number of customers
+$hesklang['customer_manage_reject']='Rifiuta cliente';
+$hesklang['customer_manage_bulk_reject']='Rifiuta clienti selezionati';
+$hesklang['customer_manage_bulk_reject_complete']='Clienti rifiutati: %s'; // %s = number of customers
+$hesklang['customer_manage_delete']='Elimina cliente';
+$hesklang['customer_manage_bulk_delete']='Elimina clienti selezionati';
+$hesklang['customer_manage_bulk_delete_complete']='Clienti eliminati: %s'; // %s = number of customers
+$hesklang['customer_manage_edit']='Modifica cliente';
+$hesklang['customer_manage_verification_email_sent']='Email di verifica inviata a %s'; // %s = customer's email
+$hesklang['can_man_customers']='Gestisci clienti';
+$hesklang['can_view_customers']='Visualizza tutti i clienti (ma non gestirli)';
+$hesklang['import_customer_select_file']='Seleziona file';
+$hesklang['import_customer_step1_instructions']='Per importare i clienti, prepara un file CSV (Comma-Separated Values).';
+$hesklang['import_customer_step1_note']='Seleziona il tuo file CSV';
+$hesklang['import_customer_step1_separator']='Le colonne nel mio file CSV sono separate da';
+$hesklang['import_customer_sample']='&raquo; File CSV di esempio';
+$hesklang['import_customer_sample_1']='File CSV in stile USA con colonne separate da ,';
+$hesklang['import_customer_sample_2']='File CSV in stile UE con colonne separate da ;';
+$hesklang['import_customer_upload_requirements_1']='Il tuo file CSV deve includere almeno una colonna nome o una colonna indirizzo email. La colonna password è opzionale.';
+$hesklang['import_customer_upload_requirements_2']='La prima riga del tuo file deve contenere le intestazioni delle colonne.';
+$hesklang['import_customer_upload_requirements_3']='Il tuo file deve essere codificato in UTF-8.';
+$hesklang['import_customer_select_columns']='Seleziona colonne';
+$hesklang['import_customer_upload_customers']='Carica clienti';
+$hesklang['import_customer_column_name']='Colonna nome';
+$hesklang['import_customer_column_email']='Colonna email';
+$hesklang['import_customer_column_pass']='Colonna password';
+$hesklang['import_customer_step2_note']='Seleziona il nome della colonna corretto dal tuo file CSV nei menu a tendina, quindi clicca su "Avanti".';
+$hesklang['import_customer_name_or_email_required']='Nome o email è richiesto';
+$hesklang['import_customer_step3_note']='I tuoi clienti stanno venendo importati. Non lasciare questa pagina!';
+$hesklang['import_customer_step3_pending']='In sospeso';
+$hesklang['import_customer_step3_successful_imports']='Importazioni riuscite';
+$hesklang['import_customer_step3_failed_imports']='Importazioni fallite';
+$hesklang['import_customer_step3_progress']='Progresso';
+$hesklang['import_customer_step3_complete_some_failed']='Il processo di importazione è completo, tuttavia <b>%s</b> clienti non sono riusciti a essere importati. Controlla la tabella sottostante per maggiori informazioni.'; // %s == number of failed imports
+$hesklang['import_customer_step3_complete']='Il processo di importazione è completo!';
+$hesklang['import_customer_step3_importing']='Importazione in corso';
+$hesklang['staff_deleted']='[Staff eliminato]';
+$hesklang['customer_account_approved']='Registrazione cliente approvata';
+$hesklang['customer_account_rejected']='Registrazione cliente rifiutata';
+$hesklang['customer_account_deleted']='Registrazione cliente eliminata';
+$hesklang['ticket_followers']='Follower del ticket';
+$hesklang['ticket_followers2']='Permetti ai ticket di avere più clienti';
+$hesklang['add_cc']='Aggiungi Cc';
+$hesklang['cc']='Cc';
+$hesklang['cc_help']='Separa ogni email con una virgola.';
+$hesklang['search_customers']='Cerca clienti';
+$hesklang['page_size']='Dimensione pagina';
+$hesklang['customers_on_pages']='Numero di clienti: %d | Numero di pagine: %d'; // First %d is replaced with number of customers, second %d with number of pages
+$hesklang['desc_customer_reset_password']='(Cliente) Reimposta la tua password';
+$hesklang['desc_customer_verify_registration']='(Cliente) Verifica la tua registrazione';
+$hesklang['desc_customer_verify_new_email']='(Cliente) Verifica la tua nuova email';
+$hesklang['desc_customer_approved']='(Cliente) Account approvato';
+$hesklang['desc_customer_rejected']='(Cliente) Account rifiutato';
+$hesklang['desc_email_rejected_can_self_register']='(Cliente) Ticket via email rifiutato; il cliente può registrarsi autonomamente';
+$hesklang['desc_email_rejected_cannot_self_register']='(Cliente) Ticket via email rifiutato; il cliente non può registrarsi autonomamente';
+$hesklang['user_added_success_no_pass']='Il nuovo utente %s è stato aggiunto con successo';
+$hesklang['email_tag_requester']='Richiedente (Da)';
+$hesklang['email_tag_requester_name']='Nome del richiedente (Da)';
+$hesklang['email_tag_requester_first_name']='Nome del richiedente (Da)';
+$hesklang['email_tag_requester_email']='Email del richiedente (Da)';
+$hesklang['email_tag_followers']='Follower (Cc)';
+$hesklang['email_tag_follower_names']='Nomi dei follower (Cc)';
+$hesklang['email_tag_follower_emails']='Email dei follower (Cc)';
+$hesklang['barcode']='Codice a barre';
+$hesklang['barcode_use']='Mostra un codice a barre sui ticket stampati';
+$hesklang['barcode_staff_only']='Nascondi il codice a barre ai clienti';
+$hesklang['barcode_type']='Tipo di codice a barre';
+$hesklang['barcode_format']='Formato';
+$hesklang['barcode_width']='Larghezza';
+$hesklang['barcode_height']='Altezza';
+$hesklang['barcode_color']='Colore';
+$hesklang['barcode_bg']='Sfondo';
+$hesklang['copy_link']='Copia link del ticket';
+$hesklang['copy_link_title']='Copia il link pubblico a questo ticket';
+$hesklang['copy_link_exp']='Il link copiato è il link diretto per il cliente per visualizzare questo ticket';
+$hesklang['copy_value']='Copia questo valore';
+$hesklang['download_class']='Questa funzione richiede la classe ZipArchive. Chiedi al tuo provider di compilare PHP con il supporto zip.';
+$hesklang['download_all']='Scarica tutto';
+$hesklang['download_prep']='Preparazione del download...';
+$hesklang['download_tma']='Troppi allegati';
+$hesklang['download_nva']='Nessun allegato valido';
+$hesklang['download_ntd']='Niente da scaricare';
+$hesklang['resolved_at']='Risolto il';
+$hesklang['disable_GSSAPI']='Disabilita l’autenticatore GSSAPI (soluzione per errore Kerberos)';
+$hesklang['ex_history']='Includi il registro della cronologia del ticket nell’esportazione';
+$hesklang['sm_location']='Posizione'; // Location (page) of a service message
+$hesklang['loc_sm']='Mostra questo messaggio di servizio su:';
+$hesklang['loc_all']='Ogni pagina cliente';
+$hesklang['loc_norec']='(non raccomandato)';
+$hesklang['loc_home']='Homepage dell’help desk';
+$hesklang['loc_selected']='Su pagine selezionate';
+$hesklang['loc_selerr']='Seleziona almeno una pagina su cui mostrare il messaggio';
+$hesklang['loc_t_cat']='Invia un ticket - seleziona una categoria';
+$hesklang['loc_t_add']='Invia un ticket - invia un modulo di ticket';
+$hesklang['loc_t_ok']='Invia un ticket - conferma del ticket';
+$hesklang['loc_t_view']='Visualizza un ticket';
+$hesklang['loc_t_form']='Visualizza un modulo di ticket';
+$hesklang['loc_kb_main']='Homepage della knowledgebase';
+$hesklang['loc_kb_sub']='Pagine delle sottocategorie della knowledgebase';
+$hesklang['loc_kb_art']='Articoli della knowledgebase';
+$hesklang['loc_login']='Pagina di accesso cliente';
+$hesklang['loc_register']='Pagina di registrazione cliente';
+$hesklang['loc_register_ok']='Registrazione cliente avvenuta con successo';
+$hesklang['loc_acc']='Pagina "I miei ticket" del cliente';
+$hesklang['loc_profile']='Pagina "Profilo" del cliente';
+$hesklang['sending_show']='Mostra notifica "Invio in corso"';
+$hesklang['sending_wait']='Invio in corso, per favore attendi...';
+$hesklang['e_c_email']='Inserisci l’indirizzo email corretto per visualizzare questo ticket';
+$hesklang['only_verified_cc']='I follower senza un account verificato saranno ignorati.';
+$hesklang['followers_removed']='Questi indirizzi email sono stati rimossi dal ticket perché non hanno un account verificato:';
+$hesklang['novace']='Non abbiamo trovato alcun account registrato e verificato con questo indirizzo email.';
+$hesklang['max_recipients']='Massimo destinatari';
+$hesklang['max_recipients2']='in una singola email';
+$hesklang['admin_js']='Admin JS';
+$hesklang['admin_js2']='Carica un file Javascript personalizzato extra per il pannello di amministrazione';
+$hesklang['cf_limit_all']='Hai raggiunto il limite dei campi personalizzati e non puoi creare nuovi campi personalizzati.';
+$hesklang['remind_assigned']='Ricorda allo staff assegnato';
+$hesklang['remind_sent']='Promemoria email inviato al membro dello staff assegnato';
+$hesklang['thist23']='<li class="smaller">%s | promemoria inviato a %s da %s</li>';
+$hesklang['ql_bookmarks']='Segnalibri';
+$hesklang['bookmark']='Il mio segnalibro';
+$hesklang['bookmarks_add']='Aggiungi ai segnalibri';
+$hesklang['bookmarks_added']='Questo ticket è stato aggiunto ai tuoi segnalibri';
+$hesklang['bookmarks_remove']='Rimuovi dai segnalibri';
+$hesklang['bookmarks_removed']='Questo ticket è stato rimosso dai tuoi segnalibri';
+$hesklang['genl_not_copied']='Errore: Copia negli appunti non supportata su questo dispositivo/browser.';
+$hesklang['profile_duplicate_email']='Esiste già un utente con l’email <b>%s</b>.'; // %s: new email
+$hesklang['seq_id_numeric']='La ricerca del numero del ticket deve contenere solo numeri';
+$hesklang['confirm_new_pass']='Conferma nuova password';
+$hesklang['piping_notify_rejected_customers1']='Email di rifiuto cliente';
+$hesklang['piping_notify_rejected_customers2']='Invia un’email di rifiuto ai clienti quando il loro ticket viene rifiutato';
+$hesklang['piping_notify_rejected_customers3']='Tempo tra le email di rifiuto';
+$hesklang['register_url']='URL di registrazione';
+$hesklang['email_subject']='Oggetto dell’email';
+
+// Added in version 3.6.0
+$hesklang['collaborator_added']='[#%%TRACK_ID%%] Collaborazione sul ticket: %%SUBJECT%%';
+$hesklang['collaborator_staff_reply']='[#%%TRACK_ID%%] Il personale ha risposto a: %%SUBJECT%%';
+$hesklang['collaborator_note']='[#%%TRACK_ID%%] Nota aggiunta a: %%SUBJECT%%';
+$hesklang['collaborator_overdue']='[#%%TRACK_ID%%] Ticket in ritardo: %%SUBJECT%%';
+$hesklang['collaborator_resolved']='[#%%TRACK_ID%%] Ticket risolto: %%SUBJECT%%';
+$hesklang['satisfaction']['ignore']='Scadenza per l’invio dell’email di follow-up:'; // do not send emails to tickets resolved before cutoff date
+$hesklang['satisfaction']['ignore_before']='Non inviare email ai ticket risolti da più di'; // ... more than [X days] ago
+$hesklang['satisfaction']['ignore_after']='fa (deve essere un periodo più lungo di "%s")'; // ... more than [X days] ago
+$hesklang['satisfaction']['wrong_cutoff']='Il periodo della scadenza per l’email deve essere più lungo del ritardo dell’email di follow-up';
+$hesklang['available_language']='Lingue disponibili';
+$hesklang['click_to_show_available_language']='Clicca per mostrare le lingue disponibili';
+$hesklang['install_lan']='Installa';
+$hesklang['remove_lan']='Rimuovi';
+$hesklang['title_lan']='Titolo';
+$hesklang['description_lan']='Descrizione';
+$hesklang['completed_lan']='Completato';
+$hesklang['no_language_availble']='Nessuna lingua disponibile';
+$hesklang['success_install_lan_txt']='la lingua è stata aggiunta con successo';
+$hesklang['error_install_lan_txt']='la lingua non è stata aggiunta';
+$hesklang['success_remove_lan_txt']='la lingua è stata rimossa con successo';
+$hesklang['error_remove_lan_txt']='la lingua non è stata rimossa';
+$hesklang['remove_default_language_error']='La lingua predefinita deve rimanere attiva e non può essere rimossa';
+$hesklang['click_for_manual_step']='Clicca per l’installazione manuale';
+$hesklang['upgrade_lan']='Aggiorna';
+$hesklang['success_upgrade_lan_txt']='la lingua è stata aggiornata con successo';
+$hesklang['error_upgrade_lan_txt']='la lingua non è stata aggiornata';
+$hesklang['please_wait']='Attendere prego...';
+$hesklang['add_a_note']='Aggiungi una nota';
+$hesklang['add_a_reply']='Aggiungi una risposta';
+$hesklang['customer_id']='ID cliente';
+$hesklang['deleting_customer_tickets']='Ticket aperti dal cliente: <b>%1$s</b><br>Come vogliamo gestire questi ticket?'; // %1$s = number of tickets
+$hesklang['deleting_customer_follower']='Ticket con il cliente in copia: <b>%1$s</b><br>Il cliente non seguirà più questi ticket, ma i ticket resteranno invariati'; // %1$s = number of tickets
+$hesklang['deleting_customer_delete_tickets2']='Elimina definitivamente i ticket';
+$hesklang['deleting_customer_anonymize_tickets2']='Anonimizza i ticket (rimuovi messaggi e dati personali)';
+$hesklang['deleting_customer_retain_tickets2']='Mantieni i ticket (lascia intatti tutti i dati)';
+$hesklang['for_staff']='per il personale del help desk'; // Setting enabled: "for help desk staff"
+$hesklang['for_customers']='per i clienti'; // Setting enabled: "for customers"
+$hesklang['imap_mailbox_txt']='Casella di posta IMAP';
+$hesklang['file_attachment_options']='Opzioni per gli allegati email';
+$hesklang['link_to_attachments_in_emails']='Collegamento agli allegati nelle email';
+$hesklang['add_attachments_directly_to_emails']='Aggiungi allegati direttamente alle email';
+$hesklang['directly_attach_file_smaller_than']='Allega direttamente solo file più piccoli di';
+$hesklang['directly_attach_file_of_any_size']='Allega direttamente file di qualsiasi dimensione';
+$hesklang['directly_attach_only_first_x_attachments']='Allega direttamente solo i primi';
+$hesklang['directly_attach_all_attachments']='Allega direttamente tutti gli allegati';
+$hesklang['directly_attach_size']='Dimensione allegato';
+$hesklang['directly_attach_no_of_files']='Numero di file';
+$hesklang['notice_about_directly_attach_files']='Allegare molti file o file pesanti alle email potrebbe causare ritardi nella comunicazione con il server SMTP';
+$hesklang['fatt_2']='File aggiuntivi allegati a questo messaggio:';
+$hesklang['no_collaborators']='Nessuno';
+$hesklang['collaborate']='Collabora a questo ticket';
+$hesklang['collaborators']='Collaboratori';
+$hesklang['ql_cbm']='Collaborazioni';
+$hesklang['collaborating']='Stai ora collaborando a questo ticket';
+$hesklang['not_collaborating']='Non stai più collaborando a questo ticket';
+$hesklang['add_collaborator']='Aggiungi un collaboratore';
+$hesklang['user_collaborator_added']='Utente aggiunto come collaboratore per questo ticket';
+$hesklang['remove_collaborator']='Rimuovi collaboratore';
+$hesklang['staff_name']='Nome del personale';
+$hesklang['user_collaborator_removed']='Utente rimosso come collaboratore da questo ticket';
+$hesklang['desc_collaborator_added']='(Personale) Stai collaborando a un nuovo ticket';
+$hesklang['desc_collaborator_staff_reply']='(Personale) Un membro del personale ha risposto a un ticket collaborato';
+$hesklang['desc_collaborator_note']='(Personale) Nuova nota aggiunta a un ticket collaborato';
+$hesklang['desc_collaborator_resolved']='(Personale) Un ticket collaborato è stato risolto';
+$hesklang['desc_collaborator_overdue']='(Personale) Un ticket collaborato è scaduto';
+$hesklang['notify_collaborator_added']='Sono stato aggiunto come collaboratore al ticket';
+$hesklang['notify_collaborator_customer_reply']='Il cliente risponde a un ticket in collaborazione';
+$hesklang['notify_collaborator_staff_reply']='Il personale risponde a un ticket in collaborazione';
+$hesklang['notify_collaborator_note']='Il personale aggiunge una nota a un ticket in collaborazione';
+$hesklang['notify_collaborator_resolved']='Il personale risolve un ticket in collaborazione';
+$hesklang['notify_collaborator_overdue']='Il ticket in collaborazione è scaduto';
+$hesklang['recurring_tickets']['tab']='Ticket ricorrenti'; // Menu link
+$hesklang['recurring_tickets']['page_title']='Ticket ricorrenti'; // Page H2 title
+$hesklang['recurring_tickets']['intro']='Automatizza il lavoro noioso; lascia che Hesk apra ticket di routine per te, esattamente quando ne hai bisogno.';
+$hesklang['recurring_tickets']['active_rules']='Regole attive';
+$hesklang['recurring_tickets']['new']='Nuova regola per ticket ricorrenti';
+$hesklang['recurring_tickets']['no_rules']='Non hai regole per ticket ricorrenti. Creane una facendo clic sul pulsante &quot;Nuova regola per ticket ricorrenti&quot; qui sopra.';
+$hesklang['recurring_tickets']['title']='Titolo della regola';
+$hesklang['recurring_tickets']['titlet']='Un titolo descrittivo, ad esempio: Riassegna ticket non risposti entro un giorno';
+$hesklang['recurring_tickets']['default_title']='Regola di %1$s'; // Default rule title; %1$s = user name
+$hesklang['recurring_tickets']['trigger']='Attivatore della regola';
+$hesklang['recurring_tickets']['trigt']='Imposta la condizione che attiverà (eseguirà) questa regola.';
+$hesklang['recurring_tickets']['hits']='Occorrenze'; // How many times a rule has been triggered
+$hesklang['recurring_tickets']['step1']='Tempo di creazione'; // Title of step 1 when creating/editing a rule
+$hesklang['recurring_tickets']['step2']='Impostazioni generali'; // Title of step 2 when creating/editing a rule
+$hesklang['recurring_tickets']['step3']='Campi personalizzati'; // Title of step 3 when creating/editing a rule
+$hesklang['recurring_tickets']['step4']='Contenuto'; // Title of step 4 when creating/editing a rule
+$hesklang['recurring_tickets']['delete']='Eliminare questa regola?';
+$hesklang['recurring_tickets']['edit']='Modifica regola per ticket ricorrenti con ID %1$s'; // %1$s = rule ID number
+$hesklang['recurring_tickets']['within']='Entro:';
+$hesklang['recurring_tickets']['minutes']='minuti';
+$hesklang['recurring_tickets']['hours']='ore';
+$hesklang['recurring_tickets']['days']='giorni';
+$hesklang['recurring_tickets']['weeks']='settimane';
+$hesklang['recurring_tickets']['months']='mesi';
+$hesklang['recurring_tickets']['years']='anni';
+$hesklang['recurring_tickets']['setpri']='Imposta priorità su:';
+$hesklang['recurring_tickets']['setsta']='Imposta stato su:';
+$hesklang['recurring_tickets']['assto']='Assegna ticket a:';
+$hesklang['recurring_tickets']['asm']='Un altro membro del personale';
+$hesklang['recurring_tickets']['notify']='Notifica ai membri del personale...';
+$hesklang['recurring_tickets']['ato']='Applica a:';
+$hesklang['recurring_tickets']['save']='Salva regola';
+$hesklang['recurring_tickets']['e_tt']='Il tempo deve essere compreso tra 1 e 10000';
+$hesklang['recurring_tickets']['nocat']='Seleziona almeno una categoria';
+$hesklang['recurring_tickets']['nouser']='Seleziona almeno un utente';
+$hesklang['recurring_tickets']['nostatus']='Seleziona almeno uno stato';
+$hesklang['recurring_tickets']['nocata']='%1$s non ha accesso a queste categorie:'; // %1$s = user name
+$hesklang['recurring_tickets']['rule_added']='È stata creata una nuova regola';
+$hesklang['recurring_tickets']['mdf']='Le impostazioni della regola sono state salvate';
+$hesklang['recurring_tickets']['e_id']='Nessuna regola con questo ID trovata';
+$hesklang['recurring_tickets']['deleted']='La regola selezionata è stata eliminata';
+$hesklang['recurring_tickets']['log_title']='Regola #%1$s (%2$s)'; // Used in ticket history log. %1$s = rule ID, %2$s = rule title
+$hesklang['recurring_tickets']['active']='Attivazione'; // Is the rule active (live)?
+$hesklang['recurring_tickets']['activate']='Attiva questa regola (inizia a usarla)';
+$hesklang['recurring_tickets']['activated']='La regola selezionata è stata attivata'; // %1$s = rule log title
+$hesklang['recurring_tickets']['deactivate']='Disattiva questa regola (smetti di usarla)';
+$hesklang['recurring_tickets']['deactivated']='La regola selezionata è stata disattivata'; // %1$s = rule log title
+$hesklang['recurring_tickets']['no_active']='Nessuna regola per ticket ricorrenti attiva';
+$hesklang['recurring_tickets']['tools']='Strumenti';
+$hesklang['recurring_tickets']['tbef']='Prima che una regola possa essere utilizzata, devi attivarla facendo clic sulla casella di controllo nella colonna &quot;ATTIVA&quot;.<br><br>
+                               <strong>Le regole attive vengono elaborate ogni %2$s minuti.</strong>.'; // %1$s = replaced by icon, %2$s = number of minutes, usually 5 or more
+$hesklang['recurring_tickets']['r']='[REGOLA]';
+$hesklang['recurring_tickets']['r2']='[REGOLA] Regola #%s';
+$hesklang['recurring_tickets']['r3']='Regola #%s';
+$hesklang['recurring_tickets']['i']='[INFO]';
+$hesklang['recurring_tickets']['matched']='Numero di ticket già creati oggi: %1$s'; // %1$s = number of tickets
+$hesklang['recurring_tickets']['reset']='Ripristina questa regola';
+$hesklang['recurring_tickets']['reset2']='Sei sicuro di voler ripristinare questa regola?<br><br>Il contatore verrà azzerato e i ticket già generati per essa oggi potrebbero essere rigenerati al prossimo avvio di cron.';
+$hesklang['recurring_tickets']['reset3']='La regola selezionata è stata ripristinata';
+$hesklang['recurring_tickets']['test']='Simula questa regola';
+$hesklang['recurring_tickets']['testa']='Simula tutte le regole';
+$hesklang['recurring_tickets']['testaa']='Simula tutte le regole attive';
+$hesklang['recurring_tickets']['testr']='Risultati della simulazione';
+$hesklang['recurring_tickets']['rsim']='Ripeti simulazione';
+$hesklang['recurring_tickets']['sim']='MODALITÀ SIMULAZIONE, nessuna modifica al database';
+$hesklang['recurring_tickets']['sic']='SIMULAZIONE COMPLETATA';
+$hesklang['recurring_tickets']['rrule_type_required']='Seleziona un trigger valido per la regola ricorrente.';
+$hesklang['recurring_tickets']['rrule_string_required']='Seleziona tutte le opzioni richieste per il trigger della regola ricorrente.';
+$hesklang['recurring_tickets']['rrule_invalid_interval']='Inserisci un valore di intervallo di 1 o superiore per la voce "Ogni".';
+$hesklang['recurring_tickets']['disable_note']='*Se vengono modificate impostazioni critiche di hesk dopo la creazione di una regola, questa verrà disabilitata al prossimo tentativo di esecuzione e dovrà essere modificata per superare i nuovi requisiti di validazione.';
+$hesklang['recurring_tickets']['thist1']='<li class="smaller">%1$s | inviato dalla regola "Ticket Ricorrenti" "%2$s"</li>'; // Used in ticket history log. %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist2']='<li class="smaller">%1$s | assegnato a %2$s dalla regola "Ticket Ricorrenti" "%3$s"</li>'; // %1$s = date,  %2$s = assignee, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist3']='<li class="smaller">%1$s | chiuso automaticamente dalla regola "Ticket Ricorrenti" "%2$s"</li>'; // %1$s = date, %2$s = rule log title (above)
+$hesklang['recurring_tickets']['thist9']='<li class="smaller">%1$s | stato cambiato in %2$s dalla regola "Ticket Ricorrenti" "%3$s"</li>'; // %1$s = date, %2$s new status, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['thist10']='<li class="smaller">%1$s | assegnato automaticamente a %2$s dalla regola "Ticket Ricorrenti" "%3$s"</li>'; // %1$s = date, %2$s = new owner, %3$s = rule log title (above)
+$hesklang['recurring_tickets']['rule_was_disabled']='La regola è stata disabilitata a causa di errori di validazione. Controlla in seguito per i dettagli.';
+$hesklang['recurring_tickets']['errors_title']='Una o più delle tue regole hanno generato errori in esecuzione e sono state disabilitate.';
+$hesklang['recurring_tickets']['rule_errors']='<hr>Errore nella regola #%s:';
+$hesklang['recurring_tickets']['create_customers']='Non ci sono clienti inseriti - puoi creali <a href="%s" target="_blank">qui</a>.';
+$hesklang['recurring_tickets']['exec_dates']='Date di esecuzione della regola';
+$hesklang['recurring_tickets']['show_exec_dates']='[Mostra le attuali date di esecuzione della regola]';
+$hesklang['recurring_tickets']['no_exec_dates']='Seleziona trigger valido per vedere le date di esecuzione.';
+$hesklang['recurring_tickets']['invalid_disabled']='Impostazioni non valide - regola disabilitata.';
+$hesklang['recurring_tickets']['next_occ']='Prossime %s occorrenze della regola:';
+$hesklang['recurring_tickets']['occ_on']='il %s';
+$hesklang['recurring_tickets']['not_firing_today']='non è necessario attivarlo oggi.';
+$hesklang['recurring_tickets']['rules_fulfilled']='Regole ricorrenti eseguite con successo – ticket creato oggi!';
+$hesklang['recurring_tickets']['validation_failed']='validazione fallita - regola disabilitata. Dettagli di seguito:';
+$hesklang['recurring_tickets']['validation_error']='Errore di validazione:';
+$hesklang['recurring_tickets']['processed']='Eseguito.';
+$hesklang['recurring_tickets']['created_ticket']='ticket creato con id: %1$s, trackid: %2$s';
+$hesklang['recurring_tickets']['due_date_note']='rispetto alla data di creazione del ticket';
+$hesklang['priorities']='Priorità';
+$hesklang['priority_intro']='Usa questo strumento per gestire le priorità dei ticket per il tuo help desk';
+$hesklang['new_priority']='Nuova priorità';
+$hesklang['edit_priority']='Modifica priorità';
+$hesklang['priority_title']='Titolo';
+$hesklang['can_customers_select_it']='I clienti possono selezionare questa priorità?';
+$hesklang['selected_by_customer']='Selezionabile dai clienti';
+$hesklang['err_priority']='Inserisci il titolo della priorità';
+$hesklang['priority_added']='È stata aggiunta una nuova priorità';
+$hesklang['priority_e_id']='ID priorità non valido';
+$hesklang['priority_mdf']='La priorità è stata salvata';
+$hesklang['priority_deleted']='Priorità eliminata';
+$hesklang['priority_not_found']='Questa priorità non esiste';
+$hesklang['priority_not_empty']='Questa priorità non può essere eliminata perché esistono ticket con questa priorità';
+$hesklang['click_to_enable_drag_drop']='Clicca per abilitare il trascinamento, quindi trascina la riga su o giù per riordinare le priorità.';
+$hesklang['confirm_delete_priority']='Sei sicuro di voler eliminare questa priorità?';
+$hesklang['reordered_message']='L’ordine della tua lista di priorità è stato salvato.';
+$hesklang['list_tkt_priority']='Elenca tutti i ticket con questa priorità';
+$hesklang['deletion_priority_restricted']='Questa è una priorità speciale e non può essere eliminata';
+$hesklang['priority_limit']='Non puoi creare nuove priorità';
+$hesklang['skip_to_main_content']='Salta al contenuto principale';
+$hesklang['opens_dialog']='Apre un dialogo';
+$hesklang['create_a_ticket']='Crea un ticket';
+$hesklang['toggle_navigation']='Attiva/disattiva navigazione';
+$hesklang['add_a_ticket_reply']='Aggiungi una risposta al ticket';
+$hesklang['linked_tickets']='Ticket collegati';
+$hesklang['no_linked_tickets']='Nessun ticket collegato';
+$hesklang['link_ticket']='Collega ticket';
+$hesklang['can_link_tickets_e']='Non sei autorizzato a collegare/scollegare questo ticket';
+$hesklang['link_ticket_success']='Il ticket è stato collegato con successo';
+$hesklang['link_ticket_required_error']='Per collegare un ticket, fornisci un ID valido';
+$hesklang['link_ticket_itself_error']='Un ticket non può essere collegato a se stesso. Inserisci un ID diverso';
+$hesklang['already_linked_error']='Il ticket è già collegato';
+$hesklang['unlink_success']='Il ticket è stato scollegato con successo';
+$hesklang['unlink_error']='Nessun record collegato esistente';
+$hesklang['link_history']='<li class="smaller">%s | %s ticket collegato da %s</li>';
+$hesklang['unlink_history']='<li class="smaller">%s | %s ticket scollegato da %s</li>';
+$hesklang['can_link_tickets']='Può collegare il ticket';
+$hesklang['link_a_ticket']='Collega un ticket';
+$hesklang['mfa_curl']='Impossibile generare un’immagine QR da scansionare perché il supporto <strong>cURL</strong> non è abilitato sul tuo server.';
+$hesklang['require_xml']='PHP-XML deve essere abilitato per i messaggi in Rich Text (HTML). Chiedi al tuo provider di hosting di abilitare XML per PHP.';
+$hesklang['thist24']='<li class="smaller">%1$s | %2$s aggiunto come collaboratore da %3$s</li>';
+$hesklang['thist25']='<li class="smaller">%1$s | %2$s rimosso come collaboratore da %3$s</li>';
+$hesklang['recurring_tickets']['intro2']='Perfetto per lavori di manutenzione preventiva, revisioni mensili degli accessi, controlli ricorrenti dei clienti e altro ancora.';
+$hesklang['recurring_tickets']['feat1']='<strong>Imposta e dimentica.</strong> Quotidiano, ogni lunedì, ogni mese, il 15 di ogni mese o qualsiasi data futura';
+$hesklang['recurring_tickets']['feat2']='<strong>Arriva pre-compilato e assegnato.</strong> Scegli categoria, priorità, agente e fino a 100 valori di campi personalizzati';
+$hesklang['recurring_tickets']['feat3']='<strong>Anteprima date e simulazione.</strong> Vedi ogni ticket che Hesk genererà prima di attivare una regola, così non ci saranno sorprese.';
+$hesklang['unlink_btn']='Scollega';
 
 // DO NOT CHANGE BELOW
 if (!defined('IN_SCRIPT')) die('PHP syntax OK!');

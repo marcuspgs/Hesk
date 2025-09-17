@@ -1,0 +1,17 @@
+Vážený(á) %%NAME%%,
+
+Vaše registrace účtu byla schválena.
+
+Nyní se můžete níže přihlásit pomocí uživatelského jména a hesla, které jste použili při vytváření účtu:
+%%CUSTOMER_LOGIN_URL%%
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

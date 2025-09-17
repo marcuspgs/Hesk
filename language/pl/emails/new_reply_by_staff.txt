@@ -1,0 +1,13 @@
+Witaj %%NAME%%,
+
+Właśnie odpowiedzieliśmy na Twoje zgłoszenie "%%SUBJECT%%" oraz zmieniliśmy jego status na: %%STATUS%%
+
+Aby przeczytać wiadomość, przesłać odpowiedź i wyświetlić szczegóły, odwiedź stronę:
+%%TRACK_URL%%
+
+Jeżeli powyższy link nie działa, spróbuj proszę skopiować go i wkleić do paska adresu swojej przeglądarki internetowej.
+
+Pozdrawiamy,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -15,8 +15,7 @@
 <tr>
 <td width="50%" style="text-align:left;vertical-align:top">
  <ul class="nobullets">
- <li>Version: 3.4.3 from 8th April 2023</li>
- <li>Developed by: Klemen Stirn, Mike Koch</li>
+ <li>Version: 3.6.0 from 11th June 2025</li>
  <li><a href="https://www.hesk.com">Help Desk Software HESK</a></li>
  <li><a href="https://www.phpjunkyard.com">Free PHP Scripts</a></li>
  </ul>
@@ -33,6 +32,120 @@
 </table>
 
 <h2>HESK 3 CHANGELOG</h2>
+
+<p><b>Changes in 3.6.0</b> - 11th June 2025<br />
+- [<a href="https://www.hesk.com/get/hesk3-recurring">CLOUD ONLY</a>] Recurring tickets: automatically create predefined tickets<br />
+- multiple staff on a ticket; tickets can now have one owner and multiple collaborators<br />
+- linked tickets; you can link several tickets together to easier track tickets related to the same issue<br />
+- create custom ticket priorities, manage built-in priorities<br />
+- file attachments can be added directly to emails instead of linked to<br />
+- you can now select the desired IMAP mailbox when fetching emails using IMAP<br />
+- auto-install additional language packs if the server permissions allow it<br />
+- improved ADA Compliance, thanks to Sam Shelby of AlumniOnline Web Services LLC (<a href="https://www.alumnionlineservices.com/">www</a>)<br />
+- allow MFA Authenticator App registration with cURL disabled (manual code entry)<br />
+- MFA can now be forced for help desk staff and/or customers<br />
+- remind users that XML is required for Rich text (HTML) ticket replies<br />
+- staff that cannot manage categories can now at least view them<br />
+- choose what to do with tickets when deleting a customer<br />
+- simplified favicon to a single favicon.ico file<br />
+- fix: disable ticket submission when files are being uploaded<br />
+- fix: bulk delete customer registrations not working correctly<br />
+- fix: detect Nginx HTTP_X_FORWARDED_PROTO https<br />
+- fix: missing include in public-side fatal error messages<br />
+- fix: spaces in custom drop-down values prevent correct value select<br />
+- fix: customer email address matching should be case-insensitive when piping<br />
+- fix: public KB articles and categories within a private parent category should be private<br />
+- fix: cached SQL queries could cause different results order between pages<br />
+- fix: u_name and u_email not cleared when anonymizing tickets<br />
+- fix: Javascript error when "Time worked" is disabled<br />
+- updated TinyMCE to 7.9.1</p></p>
+
+<p><b>Changes in 3.5.3</b> - 8th March 2025<br />
+- fix: improper customer handling when emails are not required<br />
+- fix: time worked not updated when submitting notes in a special case<br />
+- fix: passing null instead of a string to some functions is depreciated<br />
+- updated TinyMCE to 7.7.1 for better mobile performance</p>
+
+<p><b>Changes in 3.5.2</b> - 12th January 2025<br />
+- you can now copy the customer email and IP address when viewing details from admin ticket<br />
+- when submitting a ticket from admin panel, the category assign settings are now used to select default owner<br />
+- added ticket subject tag for use in canned responses<br />
+- provide a way for customers to change their preferred default language<br />
+- fix: query searches by customer in replies can take a long time<br />
+- fix: SQL error when retrieving existing ticket IDs in MySQL strict mode<br />
+- fix: the "View all customers (but not manage them)" permission not showing customers<br />
+- fix: suppress admin panel submit a ticket PHP notices when Debug mode is activated<br />
+- fix: very long email IDs can be truncated when inserted into the database<br />
+- fix: allow additional characters in MySQL password<br />
+- fix: customer emails sent in default, not selected language<br />
+- fix: customer auto-login not working correctly in a specific case<br />
+- fix: preserve selected language when closing the email template edit modal<br />
+- fix: customer not always logged out automatically after password change</p>
+
+<p><b>Changes in 3.5.1</b> - 15th November 2024<br />
+- fix: cannot delete customers from the database when customer accounts are disabled<br />
+- fix: link to the wrong download_attachment.php file in customer emails<br />
+- fix: "Submit as" button not working with Ticket Formatting set to Rich Text</p>
+
+<p><b>Changes in 3.5.0</b> - 4th November 2024<br />
+- Hesk now supports customer accounts; they can be disabled, optional or required<br />
+- service messages can now be displayed on multiple customer-side pages<br />
+- a barcode (C128, C39, QR code ...) can be added when printing tickets<br />
+- when submitting a ticket or a reply, Hesk can now show a &quot;Submitting, please wait&quot; message<br />
+- display an error on the OAuth Providers page if cURL is not available<br />
+- copy/generate a public link to a ticket from the admin panel<br />
+- rich text editors now have anchor plugin enabled<br />
+- number of available custom fields doubled to 100<br />
+- staff can now bookmark tickets; you only see your own bookmarks<br />
+- staff can send a ticket email reminder to the assigned staff member<br />
+- added a &quot;Download all&quot; link to ticket attachments<br />
+- added IMAP option to disable GSSAPI authenticator (Kerberos error work-around)<br />
+- added a limit to the number of email recipients in a single email<br />
+- added closed at and ticket URL to ticket exports<br />
+- added option to include ticket history log in ticket exports<br />
+- added an easy way to load an extra custom Javascript file to Hesk admin<br />
+- when saving a KB article, show the article again rather than the category article list<br />
+- if a KB category has no articles, Hesk will search for articles to preview in sub-categories<br />
+- changed default unknown email extension from *.msg to *.eml to avoid issues with Outlook's MSG format<br />
+- add do_not_suggest=1 to disable suggesting KB articles when passing parameters to the submit a ticket form<br/>
+- the &quot;Require email to view a ticket&quot; setting will now consider tickets with no emails<br />
+- fix: do not log the staff IP address as the client IP address when submitting a ticket from the admin panel<br />
+- fix: incorrect &quot;last updated&quot; timestamp shown in emails when customers reply to a ticket<br />
+- fix: third-party modified staff signature not updated until new login<br />
+- fix: auto-assign not working if turned off from category but selected by staff<br />
+- fix: OAuth providers can send an error along with status<br />
+- fix: settings help files do not link to the correct language if a non-default is selected<br />
+- fix: SQL error with too long default URL user variable</p>
+
+<p><b>Changes in 3.4.6</b> - 11th August 2024<br />
+- security: fixed a reflected XSS, reported by TETS (<a href="https://theeminence.org/">www</a>)<br />
+- fix: invalid value in tickets sub-pages links</p>
+
+<p><b>Changes in 3.4.5</b> - 9th March 2024<br />
+- fix: required custom field errors from category-specific fields when editing a ticket<br />
+- fix: file attachments not working on PHP 8.3+ when Debug mode is ON</p>
+
+<p><b>Changes in 3.4.4</b> - 3rd March 2024<br />
+- added "status-" selectors to the list of tickets table to make customization by status easier<br />
+- fix: list of tickets should have links HTML formatted in HTML emails<br />
+- fix: when changing a ticket category, category-specific custom fields should not be cleared of data<br />
+- fix: when printing a ticket, print also the sequential ID if enabled<br />
+- fix: possible duplicate custom field ID generated<br />
+- fix: use rename instead of copy to move temporary attachments<br />
+- fix: don't load the users page without the edit or view users permission<br />
+- fix: Uncaught TypeError when submitting a note with disabled attachments<br />
+- fix: allow Dynamic Properties in secimg class to avoid PHP 8.2/PHP 9 depreciation errors<br />
+- fix: private KB sub-category shows no articles if only private articles are inside<br />
+- fix: when parsing emails, check if attachments have attachments<br />
+- fix: when detecting first name, valid short first names are ignored<br />
+- fix: undefined $hesklang in an OAuth function<br />
+- fix: allow blob images in TinyMCE<br />
+- fix: reply drafts not deleted on slower requests<br />
+- fix: in grouped ticket lists, apply select all check marks on the selected grouping only<br />
+- fix: wrong status displayed of a resolved ticket to staff who cannot resolve tickets<br />
+- fix: time worked not updated when submitting notes in some cases<br />
+- fix: IMAP not respecting custom port setting<br />
+- updated third-party libraries</p>
 
 <p><b>Changes in 3.4.3</b> - 8th April 2023<br />
 - updates for PHP 8.2 depreciated functionality<br />
@@ -945,7 +1058,7 @@
 
 <p>&nbsp;</p>
 
-<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2023. All rights reserved.<br />
+<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2025. All rights reserved.<br />
 &reg; HESK is a registered trademark of Klemen Stirn.</p>
 
 </div>

@@ -1,0 +1,7 @@
+<p>Beste %%NAME%%,</p>
+<p>We nemen contact met je op over je recente ticket met als onderwerp <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Om ons te helpen mensen beter van dienst te zijn, lezen we graag je ervaring met onze dienstverlening.</p>
+<p>Laat ons weten hoe gemakkelijk het was om je vraag via ons beantwoord te krijgen door <a href="%%SURVEY_URL%%">deel te nemen aan een kort gebruikersonderzoek</a>.</p>
+<p>We stellen je feedback op prijs. Wanneer we in de toekomst weer iets voor je kunnen doen, aarzel dan niet om opnieuw contact met ons op te nemen.</p>
+<p>Bij voorbaat dank voor je medewerking.</p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

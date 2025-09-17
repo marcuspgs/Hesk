@@ -38,6 +38,9 @@ if (strlen($delete) && preg_match('/^hesk_export_[0-9_\-]+$/', $delete))
 // Load custom fields
 require_once(HESK_PATH . 'inc/custom_fields.inc.php');
 
+// Load priorities
+require_once(HESK_PATH . 'inc/priorities.inc.php');
+
 // Load statuses
 require_once(HESK_PATH . 'inc/statuses.inc.php');
 
@@ -231,7 +234,14 @@ else
 unset($tmp);
 
 // Start SQL statement for selecting tickets
-$sql = "SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE ";
+$sql = "SELECT `tickets`.*, `requester`.`name` AS `name` 
+    FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
+    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
+        ON `tickets`.`id` = `ticket_to_customer`.`ticket_id`
+        AND `ticket_to_customer`.`customer_type` = 'REQUESTER'
+    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `requester`
+        ON `ticket_to_customer`.`customer_id` = `requester`.`id` 
+    WHERE ";
 
 // Some default settings
 $archive = array(1=>0,2=>0);
@@ -294,13 +304,7 @@ if ( $tmp < count($hesk_settings['statuses']) )
 }
 
 // --> TICKET PRIORITY
-$possible_priority = array(
-0 => 'CRITICAL',
-1 => 'HIGH',
-2 => 'MEDIUM',
-3 => 'LOW',
-);
-
+$possible_priority = hesk_possible_priorities();
 $priority = $possible_priority;
 
 foreach ($priority as $k => $v)
@@ -351,7 +355,7 @@ while ($row=hesk_dbFetchAssoc($res2))
 if (isset($_GET['w']))
 {
     require_once(HESK_PATH . 'inc/export_functions.inc.php');
-    list($success_msg, $tickets_exported) = hesk_export_to_XML($sql);
+    list($success_msg, $tickets_exported) = hesk_export_to_XML($sql, false, $history);
 }
 
 /* Print header */
@@ -474,22 +478,9 @@ if (isset($success_msg))
         </section>
         <section class="reports__checkbox">
             <h3><?php echo $hesklang['priority']; ?></h3>
-            <div class="checkbox-custom">
-                <input type="checkbox" name="p0" id="p0" value="1" <?php if (isset($priority[0])) {echo 'checked';} ?>>
-                <label for="p0"><span class="priority0"><?php echo $hesklang['critical']; ?></span></label>
-            </div>
-            <div class="checkbox-custom">
-                <input type="checkbox" name="p1" id="p1" value="1" <?php if (isset($priority[1])) {echo 'checked';} ?>>
-                <label for="p1"><span class="priority1"><?php echo $hesklang['high']; ?></span></label>
-            </div>
-            <div class="checkbox-custom">
-                <input type="checkbox" name="p2" id="p2" value="1" <?php if (isset($priority[2])) {echo 'checked';} ?>>
-                <label for="p2"><span class="priority2"><?php echo $hesklang['medium']; ?></span></label>
-            </div>
-            <div class="checkbox-custom">
-                <input type="checkbox" name="p3" id="p3" value="1" <?php if (isset($priority[3])) {echo 'checked';} ?>>
-                <label for="p3"><span class="priority3"><?php echo $hesklang['low']; ?></span></label>
-            </div>
+            <?php
+                hesk_get_priority_checkboxes($priority);
+            ?>
         </section>
         <section class="reports__checkbox">
             <h3><?php echo $hesklang['assigned_to']; ?></h3>
@@ -572,6 +563,13 @@ if (isset($success_msg))
                     <input type="radio" name="asc" id="asc_0" value="0" <?php if (!$asc) {echo 'checked';} ?>>
                     <label for="asc_0"><?php echo $hesklang['descending']; ?></label>
                 </div>
+            </div>
+        </section>
+        <section class="reports__checkbox">
+            <h3><?php echo $hesklang['opt']; ?></h3>
+            <div class="checkbox-custom">
+                <input type="checkbox" name="history" id="history" value="1" <?php if ($history) echo 'checked'; ?>>
+                <label for="history"><?php echo $hesklang['ex_history']; ?></label>
             </div>
         </section>
         <div class="reports__export">

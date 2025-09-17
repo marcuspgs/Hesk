@@ -1,0 +1,11 @@
+Sehr geerte(r) %%NAME%%,
+
+Wir konnten Ihre E-Mail "%%SUBJECT%%" nicht bearbeiten, weil Sie kein Konto bei uns haben.
+
+Um Support-Tickets per E-Mail zu übermitteln, registrieren Sie sich bitte zunächst unter:
+%%CUSTOMER_REGISTER_URL%%
+
+Mit freundlichen Grüßen
+
+%%SITE_TITLE%%
+%%SITE_URL%%

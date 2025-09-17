@@ -1,0 +1,12 @@
+Beste %%NAME%%,
+
+Deze e-mail bevat een lijst van support aanvragen die met jouw e-mailadres zijn aangemaakt.
+
+Aantal gevonden aanvragen: %%NUM%%
+
+%%LIST_TICKETS%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

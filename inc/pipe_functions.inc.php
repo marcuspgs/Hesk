@@ -21,6 +21,7 @@ require(HESK_PATH . 'inc/posting_functions.inc.php');
 require(HESK_PATH . 'inc/mail/rfc822_addresses.php');
 require(HESK_PATH . 'inc/mail/mime_parser.php');
 require(HESK_PATH . 'inc/mail/email_parser.php');
+require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 /*** FUNCTIONS ***/
 
@@ -126,11 +127,31 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
         return hesk_cleanExit('Looks like a returned email');
     }
 
+    // Get email ID and Reply to ID
+    $tmpvar['email_id'] = isset($results['Message-ID']) ? preg_replace('[^a-zA-Z0-9!#$%&\'*+/=?^_`{|}~-]', '', $results['Message-ID']) : '';
+    $tmpvar['email_reply_to'] = isset($results['In-Reply-To']) ? preg_replace('[^a-zA-Z0-9!#$%&\'*+/=?^_`{|}~-]', '', $results['In-Reply-To']) : '';
+
 	// Check for email loops
 	if (($reason = hesk_isEmailLoop($tmpvar['email'], $message_hash)) !== false)
 	{
 		return hesk_cleanExit($reason);
 	}
+
+    //-- Retrieve (or create) customer
+    if ($hesk_settings['customer_accounts'] === 0 || ($hesk_settings['customer_accounts'] === 1 && $hesk_settings['customer_accounts_required'] === 0)) {
+        $tmpvar['customer_id'] = hesk_get_or_create_customer($tmpvar['name'], $tmpvar['email']);
+    } else {
+        // Only allow existing customers to email their tickets/replies
+        $tmpvar['customer_id'] = hesk_get_customer_id_by_email($tmpvar['email'], true);
+        if ($tmpvar['customer_id'] === null) {
+            if ($hesk_settings['pipe_customer_rejection_notification']) {
+                hesk_notifyRejectedCustomer($tmpvar);
+            }
+
+            $reason = "Could not find customer with email '{$tmpvar['email']}' and helpdesk settings require an account to be created prior to sending tickets via e-mail.";
+            return hesk_cleanExit($reason);
+        }
+    }
 
 	// OK, everything seems OK. Now determine if this is a reply to a ticket or a new ticket
     $tmpvar['trackid'] = '';
@@ -151,7 +172,10 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 			$ticket = hesk_dbFetchAssoc($res);
 
 	        // Do email addresses match?
-	        if ( strpos( strtolower($ticket['email']), strtolower($tmpvar['email']) ) === false )
+            $customers = hesk_get_customers_for_ticket($ticket['id']);
+            $customer_emails = array_map(function($customer) {return strtolower($customer['email']);}, $customers);
+
+            if (!in_array(strtolower($tmpvar['email']), $customer_emails))
 	        {
 	        	$tmpvar['trackid'] = '';
 	        }
@@ -248,6 +272,7 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 	{
 		// Set last replier name to customer name
 		$ticket['lastreplier'] = ($tmpvar['name'] == $hesklang['pde']) ? $tmpvar['email'] : $tmpvar['name'];;
+        $ticket['customer_id'] = hesk_get_or_create_customer($tmpvar['name'], $tmpvar['email']);
 
 		// If staff hasn't replied yet, keep ticket status "New", otherwise set it to "Waiting reply from staff"
 		$ticket['status'] = $ticket['status'] ? 1 : 0;
@@ -259,19 +284,23 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 		hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` SET `read` = '1' WHERE `replyto` = '".intval($ticket['id'])."' AND `staffid` != '0' ");
 
 		// Insert reply into database
-		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`message_html`,`dt`,`attachments`) VALUES ('".intval($ticket['id'])."','".hesk_dbEscape($ticket['lastreplier'])."','".hesk_dbEscape($tmpvar['message'])."','".hesk_dbEscape($tmpvar['message'])."',NOW(),'".hesk_dbEscape($tmpvar['attachments'])."')");
+		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`customer_id`,`message`,`message_html`,`dt`,`attachments`,`eid`) VALUES ('".intval($ticket['id'])."','".intval($ticket['customer_id'])."','".hesk_dbEscape($tmpvar['message'])."','".hesk_dbEscape($tmpvar['message'])."',NOW(),'".hesk_dbEscape($tmpvar['attachments'])."', " . (!empty($tmpvar['email_id']) ? "'" . hesk_dbEscape($tmpvar['email_id']) . "'" : "NULL") . ")");
 
 		// --> Prepare reply message
+        $customers = hesk_get_customers_for_ticket($ticket['id']);
+        $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
+        $customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
 
 		// 1. Generate the array with ticket info that can be used in emails
 		$info = array(
-		'email'			=> $ticket['email'],
+		'email'			=> implode(';', $customer_emails),
 		'category'		=> $ticket['category'],
 		'priority'		=> $ticket['priority'],
 		'owner'			=> $ticket['owner'],
+        'collaborators' => hesk_getTicketsCollaboratorIDs($ticket['id']),
 		'trackid'		=> $ticket['trackid'],
 		'status'		=> $ticket['status'],
-		'name'			=> $ticket['name'],
+		'name'			=> implode(',', $customer_names),
 		'lastreplier'	=> $ticket['lastreplier'],
 		'subject'		=> $ticket['subject'],
 		'message'		=> stripslashes($tmpvar['message']),
@@ -301,16 +330,18 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 			$ticket[$k] = $v['use'] ? hesk_msgToPlain($ticket[$k], 1) : '';
 		}
 
-		// --> If ticket is assigned just notify the owner
-		if ($ticket['owner'])
-		{
-			hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my');
-		}
-		// --> No owner assigned, find and notify appropriate staff
-		else
-		{
-			hesk_notifyStaff('new_reply_by_customer',"`notify_reply_unassigned`='1'");
-		}
+        // --> If ticket is assigned, notify the owner plus collaborators
+        if ($ticket['owner']) {
+            hesk_notifyAssignedStaff(false, 'new_reply_by_customer', 'notify_reply_my', 'notify_collaborator_customer_reply');
+        }
+        // --> No owner assigned, find and notify appropriate staff, including collaborators
+        elseif ($ticket['collaborators']) {
+            hesk_notifyStaff('new_reply_by_customer',"`notify_reply_unassigned`='1' OR (`notify_collaborator_customer_reply`='1' AND `id` IN (',', ".implode($ticket['collaborators'])."))");
+        }
+        // --> No owner assigned, find and notify appropriate staff, no collaborators
+        else {
+            hesk_notifyStaff('new_reply_by_customer',"`notify_reply_unassigned`='1'");
+        }
 
 		return $ticket['trackid'];
 
@@ -374,6 +405,9 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
     }
 
 	// Insert ticket to database
+    $tmpvar['follower_ids'] = [];
+
+    // Create ticket
 	$ticket = hesk_newTicket($tmpvar);
 
 	// Notify the customer
@@ -603,3 +637,38 @@ function hesk_cleanExit($exit_reason = null)
 	// Return NULL
 	return NULL;
 } // END hesk_cleanExit()
+
+function hesk_notifyRejectedCustomer($email_info) {
+    global $hesk_settings;
+
+    $send_failure_email_rs = hesk_dbQuery("SELECT `id`, 
+                    CASE
+                        WHEN (`timestamp` + INTERVAL ".intval($hesk_settings['pipe_customer_rejection_email_cooldown_hours'])." HOUR) < NOW() THEN 1
+                        ELSE 0 
+                    END AS `should_send_email` 
+                FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."pipe_rejections` 
+                WHERE `email` = '".hesk_dbEscape($email_info['email'])."'");
+    $send_failure_email = hesk_dbFetchAssoc($send_failure_email_rs);
+    if ($send_failure_email === null || $send_failure_email['should_send_email']) {
+        $possible_spam = false;
+        if ($hesk_settings['notify_skip_spam']) {
+            foreach ($hesk_settings['notify_spam_tags'] as $tag) {
+                if ( strpos($email_info['subject'], $tag) !== false ) {
+                    $possible_spam = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$possible_spam) {
+            $rejection_template = $hesk_settings['customer_accounts_customer_self_register'] === 1 ?
+                'email_rejected_can_self_register' :
+                'email_rejected_cannot_self_register';
+            hesk_sendCustomerTicket2EmailFailure($email_info, $rejection_template);
+            if ($send_failure_email !== null) {
+                hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."pipe_rejections` WHERE `id` = ".intval($send_failure_email['id']));
+            }
+            hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."pipe_rejections` (`timestamp`,`email`) VALUES (NOW(), '".hesk_dbEscape($email_info['email'])."')");
+        }
+    }
+}

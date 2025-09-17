@@ -1,0 +1,5 @@
+<p>Benvolgut %%NAME%%,</p>
+<p>Malauradament, el registre del vostre compte ha estat rebutjat.</p>
+<p>Si creieu que això s'ha fet per error, proveu de registrar-vos de nou.</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

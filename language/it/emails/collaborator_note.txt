@@ -1,0 +1,16 @@
+Ciao,
+
+Una nuova nota è stata aggiunta al ticket con oggetto "%%SUBJECT%%" a cui stai collaborando.
+
+Nota aggiunta da %%NAME%%:
+
+%%MESSAGE%%
+
+Puoi gestire questo ticket da qui: 
+%%TRACK_URL%%
+
+
+Cordialmente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

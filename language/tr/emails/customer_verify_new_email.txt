@@ -1,0 +1,11 @@
+Sayın %%NAME%%,
+
+E-Posta Adresinizi değiştirmek istediğinize dair yeni bir talep aldık.
+
+Bu değişikliği onaylamak için lütfen aşağıdaki bağlantıya tıklayın (1 saat içinde sona erer):
+%%VERIFICATION_URL%%
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

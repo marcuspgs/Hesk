@@ -1,0 +1,13 @@
+<p>Γεια σας,</p>
+<p>Ένα ticket υποστήριξης έχει κλιμακωθεί από τον κανόνα %%ESCALATED_BY_RULE%%:</p>
+<p> </p>
+<p>Θέμα: %%SUBJECT%%</p>
+<p>Κατηγορία: %%CATEGORY%%</p>
+<p>Προτεραιότητα: %%PRIORITY%%</p>
+<p>Κατάσταση: %%STATUS%%</p>
+<p>Ανατέθηκε σε: %%OWNER%%</p>
+<p>Αριθμός παρακολούθησης: %%TRACK_ID%%</p>
+<p> </p>
+<p>Μπορείτε να δείτε αυτό το ticket εδώ:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Με εκτίμηση,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

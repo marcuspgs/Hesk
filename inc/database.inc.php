@@ -44,18 +44,9 @@ function hesk_dbSetNames()
 
 function hesk_dbFormatEmail($email, $field = 'email')
 {
-	global $hesk_settings;
+	$email = hesk_dbLike($email);
 
-	$email = hesk_dbLike($email);    
-
-	if ($hesk_settings['multi_eml'])
-	{
-		return " (`".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email)."' OR `".hesk_dbEscape($field)."` LIKE '%,".hesk_dbEscape($email)."' OR `".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email).",%' OR `".hesk_dbEscape($field)."` LIKE '%,".hesk_dbEscape($email).",%') ";
-	}
-	else
-	{
-		return " `".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email)."' ";
-	}
+    return " `".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email)."' ";
 
 } // END hesk_dbFormatEmail()
 

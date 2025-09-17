@@ -28,50 +28,55 @@ hesk_isLoggedIn();
 
 /* Check permissions for this feature */
 $can_man_users = hesk_checkPermission('can_man_users', false);
-$can_view_users = hesk_checkPermission('can_view_users', false);
 
 // This is a sensitive page, double-check user authentication
 if ($can_man_users) {
+    $can_view_users = true;
     hesk_check_user_elevation('manage_users.php');
+} else {
+    $can_view_users = hesk_checkPermission('can_view_users');
 }
 
 /* Possible user features */
 $hesk_settings['features'] = array(
-'can_view_tickets',		/* User can read tickets */
-'can_reply_tickets',	/* User can reply to tickets */
-'can_del_tickets',		/* User can delete tickets */
-'can_edit_tickets',		/* User can edit tickets */
-'can_merge_tickets',	/* User can merge tickets */
-'can_resolve',			/* User can resolve tickets */
-'can_submit_any_cat',	/* User can submit a ticket to any category/department */
-'can_del_notes',		/* User can delete ticket notes posted by other staff members */
-'can_change_cat',		/* User can move ticket to any category/department */
-'can_change_own_cat',	/* User can move ticket to a category/department he/she has access to */
+'can_view_tickets',     /* User can read tickets */
+'can_reply_tickets',    /* User can reply to tickets */
+'can_del_tickets',      /* User can delete tickets */
+'can_edit_tickets',     /* User can edit tickets */
+'can_merge_tickets',    /* User can merge tickets */
+'can_resolve',          /* User can resolve tickets */
+'can_submit_any_cat',   /* User can submit a ticket to any category/department */
+'can_del_notes',        /* User can delete ticket notes posted by other staff members */
+'can_change_cat',       /* User can move ticket to any category/department */
+'can_change_own_cat',   /* User can move ticket to a category/department he/she has access to */
 'can_due_date',         /* User can set and modify due date */
-'can_man_kb',			/* User can manage knowledgebase articles and categories */
-'can_man_users',		/* User can create and edit staff accounts */
-'can_view_users',		/* User can view staff accounts, but not create or edit them */
-'can_man_cat',			/* User can manage categories/departments */
-'can_man_canned',		/* User can manage canned responses */
-'can_man_ticket_tpl',	/* User can manage ticket templates */
-'can_man_settings',		/* User can manage help desk settings */
-'can_add_archive',		/* User can mark tickets as "Tagged" */
-'can_assign_self',		/* User can assign tickets to himself/herself */
-'can_assign_others',	/* User can assign tickets to other staff members */
-'can_view_unassigned',	/* User can view unassigned tickets */
-'can_view_ass_others',	/* User can view tickets that are assigned to other staff */
+'can_man_kb',           /* User can manage knowledgebase articles and categories */
+'can_man_users',        /* User can create and edit staff accounts */
+'can_view_users',       /* User can view staff accounts, but not create or edit them */
+'can_man_cat',          /* User can manage categories/departments */
+'can_man_canned',       /* User can manage canned responses */
+'can_man_ticket_tpl',   /* User can manage ticket templates */
+'can_man_settings',     /* User can manage help desk settings */
+'can_add_archive',      /* User can mark tickets as "Tagged" */
+'can_assign_self',      /* User can assign tickets to himself/herself */
+'can_assign_others',    /* User can assign tickets to other staff members */
+'can_view_unassigned',  /* User can view unassigned tickets */
+'can_view_ass_others',  /* User can view tickets that are assigned to other staff */
 'can_view_ass_by',      /* User can view tickets he/she assigned to others */
-'can_run_reports',		/* User can run reports and see statistics (only allowed categories and self) */
+'can_run_reports',      /* User can run reports and see statistics (only allowed categories and self) */
 'can_run_reports_full', /* User can run reports and see statistics (unrestricted) */
-'can_export',			/* User can export own tickets to Excel */
-'can_view_online',		/* User can view what staff members are currently online */
-'can_ban_emails',		/* User can ban email addresses */
-'can_unban_emails',		/* User can delete email address bans. Also enables "can_ban_emails" */
-'can_ban_ips',			/* User can ban IP addresses */
-'can_unban_ips',		/* User can delete IP bans. Also enables "can_ban_ips" */
-'can_privacy',  		/* User can use privacy tools (Anonymize tickets) */
-'can_service_msg',		/* User can manage service messages shown in customer interface */
-'can_email_tpl',		/* User can manage email templates */
+'can_export',           /* User can export own tickets to Excel */
+'can_view_online',      /* User can view what staff members are currently online */
+'can_ban_emails',       /* User can ban email addresses */
+'can_unban_emails',     /* User can delete email address bans. Also enables "can_ban_emails" */
+'can_ban_ips',          /* User can ban IP addresses */
+'can_unban_ips',        /* User can delete IP bans. Also enables "can_ban_ips" */
+'can_privacy',          /* User can use privacy tools (Anonymize tickets) */
+'can_service_msg',      /* User can manage service messages shown in customer interface */
+'can_email_tpl',        /* User can manage email templates */
+'can_man_customers',    /* User can create and edit customer accounts */
+'can_view_customers',   /* User can view customer accounts, but not create or edit them */
+'can_link_tickets',     /* User can not linked ticket*/
 );
 
 /* Set default values */
@@ -112,6 +117,13 @@ $default_userdata = array(
 	'notify_assigned' => 1,
 	'notify_note' => 1,
 	'notify_pm' => 1,
+	'notify_customer_approval' => 1,
+	'notify_collaborator_added' => 1,
+	'notify_collaborator_customer_reply' => 1,
+	'notify_collaborator_staff_reply' => 0,
+	'notify_collaborator_note' => 1,
+	'notify_collaborator_resolved' => 0,
+	'notify_collaborator_overdue' => 1,
 );
 
 /* A list of all categories */
@@ -180,14 +192,15 @@ else
 {
 
 /* If one came from the Edit page make sure we reset user values */
-
 if (isset($_SESSION['save_userdata']))
 {
 	$_SESSION['userdata'] = $default_userdata;
+    $_SESSION['use_sort_vars'] = true;
     unset($_SESSION['save_userdata']);
 }
 if (isset($_SESSION['edit_userdata']))
 {
+    $_SESSION['use_sort_vars'] = true;
 	$_SESSION['userdata'] = $default_userdata;
     unset($_SESSION['edit_userdata']);
 }
@@ -197,9 +210,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
-?>
 
-<?php
 /* This will handle error, success and notice messages */
 if (!hesk_SESSION(array('userdata', 'errors'))) {
     hesk_handle_messages();
@@ -254,6 +265,19 @@ if (hesk_dbNumRows($res) > 0)
     //hesk_show_notice($hesklang['uue'] . '<br><br>' . implode('<br>', array_keys($emails)));
     hesk_show_notice($hesklang['uue']);
 }
+
+    if (!isset($_SESSION['use_sort_vars']) && isset($_SESSION['sort_vars'])) {
+        unset($_SESSION['sort_vars']);
+    }
+    $saved_search = hesk_SESSION_array('sort_vars');
+    $sort_column = isset($saved_search['sort_column']) ? $saved_search['sort_column'] : hesk_REQUEST('sort_column');
+    $sort_direction = isset($saved_search['sort_direction']) ? $saved_search['sort_direction'] : hesk_REQUEST('sort_direction');
+
+    // Now set the variables in the session for later
+    $_SESSION['sort_vars'] = [
+        'sort_column' => $sort_column,
+        'sort_direction' => $sort_direction
+    ];
 ?>
 <div class="main__content team">
     <section class="team__head">
@@ -279,8 +303,22 @@ if (hesk_dbNumRows($res) > 0)
             <table id="default-table" class="table sindu-table">
                 <thead>
                 <tr>
-                    <th><?php echo $hesklang['name']; ?></th>
-                    <th><?php echo $hesklang['email']; ?></th>
+                    <th class="sindu-handle <?php echo $sort_column === 'name' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <a href="<?php echo build_sort_url($sort_column, 'name', $sort_direction); ?>">
+                            <div class="sort">
+                                <span><?php echo $hesklang['name']; ?></span>
+                                <i class="handle"></i>
+                            </div>
+                        </a>
+                    </th>
+                    <th class="sindu-handle <?php echo $sort_column === 'email' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <a href="<?php echo build_sort_url($sort_column, 'email', $sort_direction); ?>">
+                            <div class="sort">
+                                <span><?php echo $hesklang['email']; ?></span>
+                                <i class="handle"></i>
+                            </div>
+                        </a>
+                    </th>
                     <th><?php echo $hesklang['username']; ?></th>
                     <th><?php echo $hesklang['role']; ?></th>
                     <?php
@@ -324,13 +362,19 @@ if (hesk_dbNumRows($res) > 0)
                         $tickets_per_user[$row['owner']]['closed'] += $row['cnt'];
                     }
                 }
-                $res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `name` ASC');
+
+                $query_sort_column = 'name';
+                if ($sort_column !== null && in_array($sort_column, ['name', 'email'])) {
+                    $query_sort_column = $sort_column;
+                }
+                $query_sort_direction = $sort_direction === 'ASC' ? 'ASC' : 'DESC';
+                $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `{$query_sort_column}` {$query_sort_direction}");
 
                 $cannot_manage = array();
 
                 while ($myuser = hesk_dbFetchAssoc($res)) {
 
-                    $can_manage_this_user = compare_user_permissions($myuser['id'], $myuser['isadmin'], explode(',', $myuser['categories']) , explode(',', $myuser['heskprivileges']));
+                    $can_manage_this_user = !$can_man_users ? false : compare_user_permissions($myuser['id'], $myuser['isadmin'], explode(',', $myuser['categories']) , explode(',', $myuser['heskprivileges']));
                     $can_view_this_user = ($can_manage_this_user || $can_view_users) ? true : false;
 
                     if (!$can_view_this_user) {
@@ -405,7 +449,7 @@ if (hesk_dbNumRows($res) > 0)
                                 </div>';
                         }
 
-                        $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                             $modal_body,
                             'manage_users.php?a=remove&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0));
                         $remove_code = '
@@ -487,7 +531,7 @@ EOC;
                     $mfa_enrollment = intval($myuser['mfa_enrollment']);
                     $mfa_status = $hesklang['mfa_method_none'];
                     $mfa_reset = '';
-                    $modal_id = hesk_generate_delete_modal($hesklang['mfa_reset_to_default'],
+                    $modal_id = hesk_generate_old_delete_modal($hesklang['mfa_reset_to_default'],
                         $hesklang['mfa_reset_confirm'],
                         'manage_users.php?a=resetmfa&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0),
                         $hesklang['mfa_reset_yes']);
@@ -568,6 +612,7 @@ EOC;
 </div>
 <?php
 endif;
+unset($_SESSION['use_sort_vars']);
 
 require_once(HESK_PATH . 'inc/footer.inc.php');
 exit();
@@ -697,10 +742,7 @@ function edit_user()
             </h3>
             <?php
             if (hesk_SESSION(array('userdata', 'errors'))) {
-                /* This will handle error, success and notice messages */
-                echo '<div style="margin: -24px -24px 10px -16px;">';
                 hesk_handle_messages();
-                echo '</div>';
             }
             ?>
             <form name="form1" method="post" action="manage_users.php" class="form <?php echo hesk_SESSION(array('userdata','errors')) ? 'invalid' : ''; ?>">
@@ -742,7 +784,9 @@ function new_user()
 	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($myuser['user'])."' LIMIT 1");
 	if (hesk_dbNumRows($result) != 0)
 	{
-        hesk_process_messages($hesklang['duplicate_user'],'manage_users.php');
+        $_SESSION['userdata']['errors'] = array('user');
+        $hesk_error_buffer = $hesklang['rfm'].'<br /><br /><ul>'.$hesklang['duplicate_user'].'</ul>';
+        hesk_process_messages($hesk_error_buffer,'manage_users.php');
 	}
 
     /* Admins will have access to all features and categories */
@@ -776,7 +820,14 @@ function new_user()
 	`notify_reply_my`,
 	`notify_assigned`,
 	`notify_pm`,
-	`notify_note`
+	`notify_note`,
+	`notify_customer_approval`,
+	`notify_collaborator_added`,
+	`notify_collaborator_customer_reply`,
+	`notify_collaborator_staff_reply`,
+	`notify_collaborator_note`,
+	`notify_collaborator_resolved`,
+	`notify_collaborator_overdue`
 	) VALUES (
 	'".hesk_dbEscape($myuser['user'])."',
 	'".hesk_dbEscape($myuser['pass'])."',
@@ -801,7 +852,14 @@ function new_user()
 	'".($myuser['notify_reply_my'])."' ,
 	'".($myuser['notify_assigned'])."' ,
 	'".($myuser['notify_pm'])."',
-	'".($myuser['notify_note'])."'
+	'".($myuser['notify_note'])."',
+	'".($myuser['notify_customer_approval'])."',
+	'".($myuser['notify_collaborator_added'])."',
+	'".($myuser['notify_collaborator_customer_reply'])."',
+	'".($myuser['notify_collaborator_staff_reply'])."',
+	'".($myuser['notify_collaborator_note'])."',
+	'".($myuser['notify_collaborator_resolved'])."',
+	'".($myuser['notify_collaborator_overdue'])."'
 	)" );
 
     $_SESSION['seluser'] = hesk_dbInsertID();
@@ -848,7 +906,9 @@ function update_user()
         /* Duplicate? */
         if ($tmp['id'] != $myuser['id'])
         {
-        	hesk_process_messages($hesklang['duplicate_user'],$_SERVER['PHP_SELF']);
+            $_SESSION['userdata']['errors'] = array('user');
+            $hesk_error_buffer = $hesklang['rfm'].'<br /><br /><ul>'.$hesklang['duplicate_user'].'</ul>';
+            hesk_process_messages($hesk_error_buffer,$_SERVER['PHP_SELF']);
         }
 
 		/* Do we have permission to edit this user? */
@@ -899,7 +959,14 @@ function update_user()
 	`notify_reply_my`='".($myuser['notify_reply_my'])."' ,
 	`notify_assigned`='".($myuser['notify_assigned'])."' ,
 	`notify_pm`='".($myuser['notify_pm'])."',
-	`notify_note`='".($myuser['notify_note'])."'
+	`notify_note`='".($myuser['notify_note'])."',
+    `notify_customer_approval`='".($myuser['notify_customer_approval'])."',
+    `notify_collaborator_added`='".($myuser['notify_collaborator_added'])."',
+    `notify_collaborator_customer_reply`='".($myuser['notify_collaborator_customer_reply'])."',
+    `notify_collaborator_staff_reply`='".($myuser['notify_collaborator_staff_reply'])."',
+    `notify_collaborator_note`='".($myuser['notify_collaborator_note'])."',
+    `notify_collaborator_resolved`='".($myuser['notify_collaborator_resolved'])."',
+    `notify_collaborator_overdue`='".($myuser['notify_collaborator_overdue'])."'
     WHERE `id`='".intval($myuser['id'])."'");
 
     unset($_SESSION['save_userdata']);
@@ -1082,6 +1149,13 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
     $myuser['notify_assigned']			    = empty($_POST['notify_assigned']) ? 0 : 1;
     $myuser['notify_note']				    = empty($_POST['notify_note']) ? 0 : 1;
     $myuser['notify_pm']				    = empty($_POST['notify_pm']) ? 0 : 1;
+    $myuser['notify_customer_approval']     = empty($_POST['notify_customer_approval']) ? 0 : 1;
+    $myuser['notify_collaborator_added']          = empty($_POST['notify_collaborator_added']) ? 0 : 1;
+    $myuser['notify_collaborator_customer_reply'] = empty($_POST['notify_collaborator_customer_reply']) ? 0 : 1;
+    $myuser['notify_collaborator_staff_reply']    = empty($_POST['notify_collaborator_staff_reply']) ? 0 : 1;
+    $myuser['notify_collaborator_note']           = empty($_POST['notify_collaborator_note']) ? 0 : 1;
+    $myuser['notify_collaborator_resolved']       = empty($_POST['notify_collaborator_resolved']) ? 0 : 1;
+    $myuser['notify_collaborator_overdue']        = empty($_POST['notify_collaborator_overdue']) ? 0 : 1;
 
     /* Save entered info in session so we don't lose it in case of errors */
 	$_SESSION['userdata'] = $myuser;
@@ -1164,7 +1238,10 @@ function remove()
 
     // Clear users' authentication and MFA tokens
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` WHERE `user_id` = {$myuser}");
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$myuser}");
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens` WHERE `user_id` = {$myuser} AND `user_type` = 'STAFF'");
+
+    // Clear users' bookmarks
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."bookmarks` WHERE `user_id` = {$myuser}");
 
 	// Refresh autoassign configs to ensure their ID is gone
     hesk_updateAutoassignConfigs();
@@ -1237,5 +1314,12 @@ function reset_mfa() {
     delete_mfa_codes($myuser);
 
     hesk_process_messages($hesklang['mfa_reset'], './manage_users.php', 'SUCCESS');
+}
+
+function build_sort_url($current_sort_field, $sort_field, $current_sort_direction) {
+    $target_sort_direction = $current_sort_direction === 'ASC' && $sort_field === $current_sort_field ? 'DESC' : 'ASC';
+    $encoded_field = urlencode($sort_field);
+
+    return "manage_users.php?sort_column={$encoded_field}&sort_direction={$target_sort_direction}";
 }
 ?>

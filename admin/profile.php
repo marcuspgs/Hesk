@@ -30,6 +30,7 @@ hesk_isLoggedIn();
 $can_view_tickets = hesk_checkPermission('can_view_tickets',0);
 $can_reply_tickets = hesk_checkPermission('can_reply_tickets',0);
 $can_view_unassigned = hesk_checkPermission('can_view_unassigned',0);
+$can_man_customers = hesk_checkPermission('can_man_customers',0);
 
 /* Update profile? */
 if ( ! empty($_POST['action']))
@@ -124,9 +125,15 @@ if (defined('WARN_PASSWORD'))
                 <h3><?php echo $hesklang['mfa']; ?></h3>
                 <div class="info--mail">
                     <?php if ($_SESSION['new']['mfa_enrollment'] === '0') { ?>
+                        <?php if ($hesk_settings['require_mfa']): ?>
+                        <div class="text-success">
+                            <?php echo sprintf($hesklang['mfa_enabled'], $hesklang['mfa_method_email']); ?>
+                        </div>
+                        <?php else: ?>
                         <div class="text-danger">
                             <?php echo $hesklang['mfa_disabled']; ?>
                         </div>
+                        <?php endif; ?>
                     <?php } elseif ($_SESSION['new']['mfa_enrollment'] === '1') { ?>
                         <div class="text-success">
                             <?php echo sprintf($hesklang['mfa_enabled'], $hesklang['mfa_method_email']); ?>
@@ -269,7 +276,7 @@ if (defined('WARN_PASSWORD'))
                            onkeyup="hesk_checkPassword(this.value, 'progressBar2')">
                 </div>
                 <div class="form-group">
-                    <label for="pass_new2"><?php echo $hesklang['confirm_pass']; ?></label>
+                    <label for="pass_new2"><?php echo $hesklang['confirm_new_pass']; ?></label>
                     <input type="password" id="pass_new2" name="pass_new2" autocomplete="off" class="form-control <?php echo in_array('new2', $errors) ? 'isError' : ''; ?>"
                            value="<?php echo isset($_SESSION[$session_array]['pass_new2']) ? $_SESSION[$session_array]['pass_new2'] : ''; ?>">
                 </div>
@@ -380,7 +387,7 @@ function update_password() {
 
 
 function update_profile() {
-	global $hesk_settings, $hesklang, $can_view_unassigned;
+	global $hesk_settings, $hesklang, $can_view_unassigned, $can_man_customers;
 
 	/* A security check */
 	hesk_token_check('POST');
@@ -399,7 +406,15 @@ function update_profile() {
 	if (!$_SESSION['new']['email']) {
         $hesk_error_buffer .= '<li>' . $hesklang['enter_valid_email'] . '</li>';
         $errors[] = 'email';
+    } else {
+        // Make sure that the new email isn't already used by another user
+        $email_used_rs = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` = '".hesk_dbEscape($_SESSION['new']['email'])."' AND `id`!=".intval($_SESSION['id'])." LIMIT 1");
+        if (hesk_dbNumRows($email_used_rs) > 0) {
+            $hesk_error_buffer .= '<li>' . sprintf($hesklang['profile_duplicate_email'], $_SESSION['new']['email']) . '</li>';
+            $errors[] = 'email';
+        }
     }
+
 	$_SESSION['new']['signature'] = hesk_input( hesk_POST('signature') );
 
 	/* Signature */
@@ -470,6 +485,13 @@ function update_profile() {
     $_SESSION['new']['notify_assigned']			    = empty($_POST['notify_assigned']) ? 0 : 1;
     $_SESSION['new']['notify_note'] 				= empty($_POST['notify_note']) ? 0 : 1;
     $_SESSION['new']['notify_pm']	    			= empty($_POST['notify_pm']) ? 0 : 1;
+    $_SESSION['new']['notify_customer_approval']    = empty($_POST['notify_customer_approval']) || ! $can_man_customers ? 0 : 1;
+    $_SESSION['new']['notify_collaborator_added']          = empty($_POST['notify_collaborator_added']) ? 0 : 1;
+    $_SESSION['new']['notify_collaborator_customer_reply'] = empty($_POST['notify_collaborator_customer_reply']) ? 0 : 1;
+    $_SESSION['new']['notify_collaborator_staff_reply']    = empty($_POST['notify_collaborator_staff_reply']) ? 0 : 1;
+    $_SESSION['new']['notify_collaborator_note']           = empty($_POST['notify_collaborator_note']) ? 0 : 1;
+    $_SESSION['new']['notify_collaborator_resolved']       = empty($_POST['notify_collaborator_resolved']) ? 0 : 1;
+    $_SESSION['new']['notify_collaborator_overdue']        = empty($_POST['notify_collaborator_overdue']) ? 0 : 1;
 
     /* Any errors? */
     if (strlen($hesk_error_buffer))
@@ -504,7 +526,14 @@ function update_profile() {
 		`notify_reply_my`='".($_SESSION['new']['notify_reply_my'])."' ,
 		`notify_assigned`='".($_SESSION['new']['notify_assigned'])."' ,
 		`notify_pm`='".($_SESSION['new']['notify_pm'])."',
-		`notify_note`='".($_SESSION['new']['notify_note'])."'
+		`notify_note`='".($_SESSION['new']['notify_note'])."',
+        `notify_customer_approval`='".($_SESSION['new']['notify_customer_approval'])."',
+        `notify_collaborator_added`='".($_SESSION['new']['notify_collaborator_added'])."',
+        `notify_collaborator_customer_reply`='".($_SESSION['new']['notify_collaborator_customer_reply'])."',
+        `notify_collaborator_staff_reply`='".($_SESSION['new']['notify_collaborator_staff_reply'])."',
+        `notify_collaborator_note`='".($_SESSION['new']['notify_collaborator_note'])."',
+        `notify_collaborator_resolved`='".($_SESSION['new']['notify_collaborator_resolved'])."',
+        `notify_collaborator_overdue`='".($_SESSION['new']['notify_collaborator_overdue'])."'
 		WHERE `id`='".intval($_SESSION['id'])."'"
 		);
 

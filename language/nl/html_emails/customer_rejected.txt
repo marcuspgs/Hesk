@@ -1,0 +1,5 @@
+<p>Beste %%NAME%%,</p>
+<p>Je registratie is afgekeurd.</p>
+<p>Als dit volgens jou niet correct is, registreer je dan nogmaals.</p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

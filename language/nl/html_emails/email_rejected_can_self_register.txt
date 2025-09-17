@@ -1,0 +1,5 @@
+<p>Beste %%NAME%%,</p>
+<p>We kunnen je email met onderwerp "%%SUBJECT%%" niet in behandeling nemen omdat je (nog) geen account bij ons hebt.</p>
+<p>Om support tickets te kunnen opsturen moet je eerst registreren op: <a href="%%CUSTOMER_REGISTER_URL%%">%%CUSTOMER_REGISTER_URL%%</a></p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -1,0 +1,17 @@
+Vážený(á) %%NAME%%,
+
+Děkujeme za vytvoření účtu. Kliknutím na odkaz níže aktivujte svůj účet:
+
+%%VERIFICATION_URL%%
+
+
+***
+Neodpovídejte prosím na tento email, schránka není monitorována.
+
+S pozdravem,
+
+Tým podpory
+
+
+%%SITE_TITLE%%
+%%SITE_URL%%

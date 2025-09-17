@@ -1,0 +1,14 @@
+Olá,
+
+Um ticket no qual você colabora foi resolvido. Detalhes do ticket:
+
+Assunto do ticket: %%SUBJECT%%
+ID de rastreamento: %%TRACK_ID%%
+
+Você pode gerenciar este ticket aqui:
+%%TRACK_URL%%
+
+Atenciosamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

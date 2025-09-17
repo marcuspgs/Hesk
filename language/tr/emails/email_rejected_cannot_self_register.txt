@@ -1,0 +1,10 @@
+Sayın %%NAME%%,
+
+"%%SUBJECT%%" konulu e-postanızı işleme koyamadık, çünkü sistemimizde bir hesabınız bulunmuyor.
+
+Bu Yardım Masası yalnızca kayıtlı kullanıcılara açıktır.
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

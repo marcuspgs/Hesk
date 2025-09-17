@@ -1,0 +1,7 @@
+<p>Hola,</p>
+<p>El membre del personal %%NAME%% acaba de respondre a un tiquet de suport.</p>
+<p>Assumpte del tiquet: %%SUBJECT%%</p>
+<p>ID de seguiment: %%TRACK_ID%%</p>
+<p>Pots gestionar aquest tiquet aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Salutacions,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

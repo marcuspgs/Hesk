@@ -1,0 +1,11 @@
+Estimado %%NAME%%:
+
+Hemos recibido una solicitud para cambiar su dirección de correo electrónico.
+
+Para confirmar este cambio, haga clic en el siguiente enlace (caduca en 1 hora):
+%%VERIFICATION_URL%%
+
+Atentamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

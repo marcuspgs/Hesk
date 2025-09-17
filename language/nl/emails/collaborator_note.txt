@@ -1,0 +1,15 @@
+Hallo,
+
+Er is een nieuwe notitie toegevoegd aan het ticket "%%SUBJECT%%" waar je aan meewerkt.
+
+Notitie van %%NAME%%:
+
+%%MESSAGE%%
+
+Je kunt dit ticket hier beheren:
+%%TRACK_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,10 @@
+Chère/cher %%NAME%%,
+
+Malheureusement, votre inscription a été rejetée.
+
+Si vous pensez que cela a été fait par erreur, veuillez essayer de vous inscrire à nouveau.
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

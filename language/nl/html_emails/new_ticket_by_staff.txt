@@ -1,0 +1,8 @@
+<p>Hallo %%NAME%%,</p>
+<p>Je supportaanvraag "%%SUBJECT%%" is door ons ontvangen. Wij zullen je aanvraag zo spoedig mogelijk in behandeling nemen.</p>
+<p>De Ticket ID: %%TRACK_ID%%</p>
+<p>Je kunt via deze link de status van je aanvraag volgen:</p>
+<p><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Je ontvangt een e-mail van ons zodra we hebben gereageerd op je vraag.</p>
+<p><br />Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

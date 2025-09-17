@@ -1,0 +1,7 @@
+<p>Hallo,</p>
+<p>Er is een nieuw ticket aan je toegewezen. Ticketdetails:</p>
+<p>Ticketonderwerp: %%SUBJECT%%</p>
+<p>Ticket ID: %%TRACK_ID%%</p>
+<p>Je kunt dit ticket hier beheren:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Met vriendelijke groet,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

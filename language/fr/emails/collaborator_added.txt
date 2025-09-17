@@ -1,0 +1,15 @@
+Bonjour,
+
+Vous collaborez désormais sur un nouveau ticket de support.
+
+Sujet du ticket : %%SUBJECT%%
+ID de suivi : %%TRACK_ID%%
+
+Vous pouvez gérer ce ticket ici :
+%%TRACK_URL%%
+
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

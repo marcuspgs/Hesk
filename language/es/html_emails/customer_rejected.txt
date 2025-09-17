@@ -1,0 +1,5 @@
+<p>Estimado %%NAME%%:</p>
+<p>Lamentablemente, el registro de su cuenta ha sido rechazado.</p>
+<p>Si cree que esto se debe a un error, intente registrarse nuevamente.</p>
+<p>Atentamente,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

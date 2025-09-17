@@ -1,0 +1,10 @@
+Beste %%NAME%%,
+
+We kunnen je email met onderwerp "%%SUBJECT%%" niet in behandeling nemen omdat je (nog) geen account bij ons hebt.
+
+Onze helpdesk is alleen voor geregistreerde gebruikers.
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

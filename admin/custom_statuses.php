@@ -143,7 +143,7 @@ if ($reached_status_limit && $action !== 'edit_status') {
                         <td><a class="tooltip" href="show_tickets.php?<?php echo 's'.$tmp_id.'=1'; ?>&amp;s_my=1&amp;s_ot=1&amp;s_un=1" alt="<?php echo $hesklang['list_tkt_status']; ?>" title="<?php echo $hesklang['list_tkt_status']; ?>"><?php echo $status['tickets']; ?></a></td>
                         <td><?php echo $status['can_customers_change']; ?></td>
                         <td class="nowrap buttons">
-                            <?php $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
+                            <?php $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
                                 $hesklang['confirm_delete_status'],
                                 'custom_statuses.php?a=remove_status&amp;id='. $tmp_id .'&amp;token='. hesk_token_echo(0)); ?>
                             <p>

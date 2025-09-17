@@ -1,0 +1,11 @@
+Beste %%NAME%%,
+
+We kunnen je email met onderwerp "%%SUBJECT%%" niet in behandeling nemen omdat je (nog) geen account bij ons hebt.
+
+Om support tickets te kunnen opsturen moet je eerst registreren op: 
+%%CUSTOMER_REGISTER_URL%%
+
+Met vriendelijke groet,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

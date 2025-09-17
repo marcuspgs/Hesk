@@ -1,0 +1,16 @@
+Üdvözöljük!
+
+Új megjegyzés került a(z) "%%SUBJECT%%" jegyhez, amelyen közreműködsz.
+
+Megjegyzés szerzője: %%NAME%%:
+
+%%MESSAGE%%
+
+Itt tudja kezelni a hibajegyet:
+%%TRACK_URL%%
+
+
+Üdvözlettel,
+
+%%SITE_TITLE%%
+%%SITE_URL%%
