@@ -107,7 +107,22 @@ if ($reached_status_limit && $action !== 'edit_status') {
                 // Number of tickets per status
                 $tickets_all = array();
 
-                $res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `status` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` GROUP BY `status`');
+                if ($_SESSION['isadmin']) {
+                    $res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `status` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` GROUP BY `status`');
+                } else {
+                    $res = hesk_dbQuery("SELECT COUNT(*) AS `cnt`, `status`
+                                        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `ticket`
+                                        LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `w` ON (`ticket`.`id` = `w`.`ticket_id` AND `w`.`user_id` = ".intval($_SESSION['id']).")
+                                        WHERE
+                                        (
+                                            `w`.`user_id`=".intval($_SESSION['id'])."
+                                            OR
+                                            (".hesk_myOwnership().")
+                                        )
+                                        AND ".hesk_myCategories()."
+                                        GROUP BY `status`");
+                }
+
                 while ($tmp = hesk_dbFetchAssoc($res)) {
                     $tickets_all[$tmp['status']] = $tmp['cnt'];
                 }

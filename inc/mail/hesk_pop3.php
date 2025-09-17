@@ -185,8 +185,6 @@ if(($error=$pop3->Open())=="")
                         $time_limit = 3600;
                     }
 
-                    $time_limit = 3600;
-
                     set_time_limit($time_limit);
                     echo $hesk_settings['debug_mode'] ? "<pre>Time limit set to {$time_limit} seconds.</pre>\n" : '';
                 }

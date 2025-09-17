@@ -658,36 +658,49 @@ function hesk_myOwnership($consider_collaborators = false)
     $can_view_ass_others = hesk_checkPermission('can_view_ass_others',0);
     $can_view_ass_by     = hesk_checkPermission('can_view_ass_by', 0);
 
-    // Can see all assigned and unassigned tickets
-    if ($can_view_unassigned && $can_view_ass_others)
-    {
+    // Can view all tickets, regrdless of ownership
+    if ($can_view_unassigned == 1 && $can_view_ass_others == 1) {
         return '1';
     }
 
+    $sql_ownership = '';
+
+    // Can view assigned to me + unassigned
+    if ($can_view_unassigned == 1 && $can_view_ass_others == 0 && $can_view_ass_by == 0) {
+        $sql_ownership .= " `owner` IN ('0', '" . intval($_SESSION['id']) . "') ";
+    }
+
+    // Can view assigned to me + unassigned + tickets I assigned to others
+    elseif ($can_view_unassigned == 1 && $can_view_ass_others == 0 && $can_view_ass_by == 1) {
+        $sql_ownership .= " (`owner` IN ('0', '" . intval($_SESSION['id']) . "') OR `assignedby` = " . intval($_SESSION['id']) . ") ";
+    }
+
+    // Can view assigned to me + assigned to others
+    elseif ($can_view_unassigned == 0 && $can_view_ass_others == 1) {
+        $sql_ownership .= " `owner` != 0 ";
+    }
+
+    // Can view assigned to me + tickets I assigned to others
+    elseif ($can_view_unassigned == 0 && $can_view_ass_others == 0 && $can_view_ass_by == 1) {
+        $sql_ownership .= " (`owner` = " . intval($_SESSION['id']) . " OR `assignedby` = " . intval($_SESSION['id']) . ") ";
+    }
+
+    // Can only view assigned to me
+    elseif ($can_view_unassigned == 0 && $can_view_ass_others == 0 && $can_view_ass_by == 0) {
+        $sql_ownership .= " `owner` = " . intval($_SESSION['id']) . " ";
+    }
+
+    // Must be an internal error
+    else {
+        die('Invalid view attempt (1)');
+    }
+
+    // Add a collaborator check for certain use cases
     if ($consider_collaborators) {
-        return " ( `w`.`user_id`=7 OR ( (`owner` IN ('0', '" . intval($_SESSION['id']) . "') OR `assignedby` = " . intval($_SESSION['id']) . ") ) ) ";
+        return " ($sql_ownership OR `w`.`user_id`= " . intval($_SESSION['id']) . ") ";
+    } else {
+        return $sql_ownership;
     }
-
-    // Can see my tickets, unassigned and tickets I assigned to others
-    if ($can_view_unassigned && $can_view_ass_by)
-    {
-        return " (`owner` IN ('0', '" . intval($_SESSION['id']) . "') OR `assignedby` = " . intval($_SESSION['id']) . ") ";
-    }
-
-    // Can see unassigned
-    if ($can_view_unassigned)
-    {
-        return " `owner` IN ('0', '" . intval($_SESSION['id']) . "') ";
-    }
-
-    // Can see my tickets and assigned to others
-    if ($can_view_ass_others)
-    {
-        return " `owner` != 0 ";
-    }
-
-    // Can see my tickets and tickets I assigned to others
-    return " (`owner` = " . intval($_SESSION['id']) . " OR `assignedby` = " . intval($_SESSION['id']) . ") ";
 
 } // END hesk_myOwnership()
 

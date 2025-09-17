@@ -187,7 +187,7 @@ if (!hesk_SESSION('error')) {
                             <span class="category-name"><?php echo $mycat['name']; ?></span>
                         </td>
                         <?php
-                            echo '<td class="td-flex">' . hesk_get_admin_ticket_priority_for_list($mycat['priority']) . '&nbsp;</td>';
+                            echo '<td><div class="td-flex">' . hesk_get_admin_ticket_priority_for_list($mycat['priority']) . '&nbsp;</div></td>';
                         ?>
                         <td>
                             <?php

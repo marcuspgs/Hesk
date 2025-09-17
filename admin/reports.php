@@ -424,7 +424,7 @@ function hesk_ticketsByCategory()
     }
 
 	/* SQL query for category stats */
-	$res = hesk_dbQuery("SELECT `category`, COUNT(*) AS `num_tickets`, ".($hesk_settings['time_worked'] ? "SUM( TIME_TO_SEC(`time_worked`) ) AS `seconds_worked`," : '')." SUM(`replies`) AS `all_replies`, SUM(staffreplies) AS `staff_replies` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE {$hesk_settings['dt_sql']} " . ( $can_run_reports_full ? "" : " AND `t1`.`owner` = '" . intval($_SESSION['id']) . "'" ) . " GROUP BY `category`");
+	$res = hesk_dbQuery("SELECT `category`, COUNT(*) AS `num_tickets`, ".($hesk_settings['time_worked'] ? "SUM( TIME_TO_SEC(`time_worked`) ) AS `seconds_worked`," : '')." SUM(`replies`) AS `all_replies`, SUM(staffreplies) AS `staff_replies` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE {$hesk_settings['dt_sql']} " . ( $can_run_reports_full ? "" : " AND `owner` = '" . intval($_SESSION['id']) . "'" ) . " GROUP BY `category`");
 
 	/* Update ticket values */
 	while ($row = hesk_dbFetchAssoc($res))
@@ -648,6 +648,15 @@ function hesk_ticketsByUser()
 	else
 	{
 		$admins[$_SESSION['id']] = $_SESSION['name'];
+
+        $tickets[$_SESSION['id']] = array(
+            'asstickets' => 0,
+            'resolved' => 0,
+            'tickets' => 0,
+            'replies' => 0,
+            'worked' => '',
+            'openedby' => 0,
+        );
 
         // -> get list of tickets
 		$res = hesk_dbQuery("SELECT COUNT(*) AS `cnt`".($hesk_settings['time_worked'] ? ", SUM( TIME_TO_SEC(`time_worked`) ) AS `seconds_worked`" : '')." FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `owner` = '" . intval($_SESSION['id']) . "' AND {$hesk_settings['dt_sql']}");

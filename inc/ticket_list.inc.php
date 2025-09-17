@@ -162,7 +162,27 @@ elseif ($is_quick_link == 'all')
 else
 {
     $is_quick_link = false;
-    $total = $totals['filtered']['all'];
+
+    // Can view unassigned, but selected only Assigned to me + Assigned to others
+    if ($can_view_unassigned && $s_my[1] == 1 && $s_ot[1] == 1 && $s_un[1] == 0) {
+        $totals['filtered']['show'] = $totals['filtered']['all'] - $totals['filtered']['unassigned'];
+    }
+
+    // Can view tickets assigned to others, but selected only Assigned to me + Unassigned
+    elseif (($can_view_ass_others || $can_view_ass_by) && $s_my[1] == 1 && $s_ot[1] == 0 && $s_un[1] = 1) {
+        $totals['filtered']['show'] = $totals['filtered']['assigned_to_me'] + $totals['filtered']['unassigned'];
+    }
+
+    // Unassigned + Assigned to others
+    elseif ($s_my[1] == 0 && $s_ot[1] == 1 && $s_un[1] = 1) {
+        $totals['filtered']['show'] = $totals['filtered']['all'] - $totals['filtered']['assigned_to_me'];
+    }
+
+    if (isset($totals['filtered']['show'])) {
+        $total = $totals['filtered']['show'];
+    } else {
+        $total = $totals['filtered']['all'];
+    }
 }
 
 if (true)
@@ -297,7 +317,7 @@ if (true)
         $hesklang['confirm']);
 
     // Are some open tickets hidden?
-    if ($href != 'find_tickets.php' && $totals['filtered']['open'] != $totals['open'])
+    if ($href != 'find_tickets.php' && ($totals['filtered']['open'] != $totals['open'] || (isset($totals['filtered']['show']) && $totals['filtered']['show'] != $totals['open'])))
     {
         hesk_show_info($hesklang['not_aos'], ' ', false, 'no-padding-top');
     }
@@ -312,13 +332,16 @@ if (true)
             if ($href == 'find_tickets.php') {
                 echo $hesklang['tickets_found'];
             }
-            elseif ($totals['filtered']['open'] == $totals['open'] && $totals['filtered']['open'] == $totals['filtered']['all']) {
+            elseif (
+                $totals['filtered']['open'] == $totals['open'] &&
+                $totals['filtered']['open'] == $totals['filtered']['all'] &&
+                ( ! isset($totals['filtered']['show']) || $totals['filtered']['show'] == $totals['open'])) {
                 echo $hesklang['open_tickets'];
             }
             else {
                 echo $hesklang['ql_fit'];
             }
-            ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['all']; ?></span></a>
+            ?></span> <span class="filters__btn-value"><?php echo (isset($totals['filtered']['show']) ? $totals['filtered']['show'] : $totals['filtered']['all']); ?></span></a>
             <a href="<?php echo $href . '?' . $query_for_quick_links . '&amp;ql=my'; ?>" class="btn btn-transparent <?php if ($is_quick_link == 'my') echo 'is-bold is-selected'; ?>"><span><?php echo $hesklang['ql_a2m']; ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['assigned_to_me']; ?></span></a>
             <a href="<?php echo $href . '?' . $query_for_quick_links . '&amp;ql=cbm'; ?>" class="btn btn-transparent <?php if ($is_quick_link == 'cbm') echo 'is-bold is-selected'; ?>"><span><?php echo $hesklang['ql_cbm']; ?></span> <span class="filters__btn-value"><?php echo $totals['filtered']['collaborator']; ?></span></a>
             <?php if ($can_view_ass_others || $can_view_ass_by): ?>
@@ -587,7 +610,7 @@ if (true)
 		}
 
 		// End ticket row
-        echo '<td class="td-flex">' . hesk_get_admin_ticket_priority_for_list($ticket['priority']) . '&nbsp;</td>';
+        echo '<td><div class="td-flex">' . hesk_get_admin_ticket_priority_for_list($ticket['priority']) . '&nbsp;</div></td>';
 
 	} // End while
 

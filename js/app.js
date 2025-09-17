@@ -1,4 +1,50 @@
 /*eslint-disable */
+
+/* Due to some problems on mobile/tap devices, we have to resort to using regular event listeners,
+however it means that on any such cases we have to re-register any dynamically added datepickers ourselves,
+which we can do via calling this initDatePickerEvents() */
+function initDatePickerEvents() {
+    /* // Removed this, as it's causing potential issues/Weird edge cases on tap devices.
+    // Left here for future reference, as ideally it should be handled this way, just needs some fine tuning to resolve some mobile edge cases
+    // Adjusted by Andraz to use delegated event listeners so they work on dynamically added elements 8I.e. adding datepickers with JS on selection
+    $(document).on('pointerdown', '.param.calendar button', function (e) {
+        $(this).addClass('active');
+        $(this).parent()
+            .find('.datepicker')
+            .data("datepicker")
+            .show();
+
+    });
+    $(document).on('click', '.param.calendar .close', function (e) {
+        $(this).parent().parent()
+            .find('.calendar--button')
+            .find('.datepicker')
+            .data("datepicker")
+            .clear();
+        $(this).parent().parent().find('.calendar--value').fadeOut(150, function () {
+            $(this).find('span').text('');
+        })
+    });*/
+
+    $('.param.calendar button').click(function (e) {
+        $(this).addClass('active');
+        $(this).parent()
+            .find('.datepicker')
+            .data("datepicker")
+            .show();
+    });
+    $('.param.calendar .close').click(function (e) {
+        $(this).parent().parent()
+            .find('.calendar--button')
+            .find('.datepicker')
+            .data("datepicker")
+            .clear();
+        $(this).parent().parent().find('.calendar--value').fadeOut(150, function () {
+            $(this).find('span').text('');
+        })
+    });
+}
+
 $(document).ready(function () {
 
     var toggleMenu = localStorage.getItem('main_menu') ? localStorage.getItem('main_menu') : 'open';
@@ -1117,24 +1163,9 @@ $(document).ready(function () {
         });
     } /* End if datepicker */
 
-    // Adjusted by Andraz to use delegated event listeners so they work on dynamically added elements 8I.e. adding datepickers with JS on selection
-    $(document).on('click', '.param.calendar button', function (e) {
-        $(this).addClass('active');
-        $(this).parent()
-            .find('.datepicker')
-            .data("datepicker")
-            .show();
-    });
-    $(document).on('click', '.param.calendar .close', function (e) {
-        $(this).parent().parent()
-            .find('.calendar--button')
-            .find('.datepicker')
-            .data("datepicker")
-            .clear();
-        $(this).parent().parent().find('.calendar--value').fadeOut(150, function () {
-            $(this).find('span').text('');
-        })
-    });
+    initDatePickerEvents();
+
+
     $('.right-bar.ticket-create .step-1 .cayrgory-list li').click(function (e) {
         $('.right-bar.ticket-create .right-bar__body').attr('data-step', 2);
     });

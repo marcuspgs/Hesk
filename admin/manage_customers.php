@@ -32,7 +32,7 @@ hesk_isLoggedIn();
 $can_man_customers = hesk_checkPermission('can_man_customers', false);
 $can_edit_tickets = hesk_checkPermission('can_edit_tickets', false);
 $can_view_customers = hesk_checkPermission('can_view_customers', false);
-if ($can_man_customers || (!$hesk_settings['customer_accounts'] && $can_edit_tickets)) {
+if ($can_man_customers || (!$hesk_settings['customer_accounts'] && $can_edit_tickets && ! empty(hesk_REQUEST('a')))) {
     $elevation_target = !isset($_GET['track']) ?
         'manage_customers.php' :
         'manage_customers.php?a=edit&track='.hesk_cleanID().'&id='.hesk_GET('id');
@@ -85,7 +85,9 @@ if ( $action = hesk_REQUEST('a') )
         else 							 {hesk_error($hesklang['invalid_action']);}
     } else {
         // When customer accounts disabled, we can only edit customers here
-        hesk_checkPermission('can_edit_tickets');
+        if ( ! $can_man_customers) {
+            hesk_checkPermission('can_edit_tickets');
+        }
         if ($action === 'edit') {edit_user();}
         elseif ( defined('HESK_DEMO') )  {hesk_process_messages($hesklang['ddemo'], 'manage_customers.php', 'NOTICE');}
         elseif ($action == 'save')       {update_user();}

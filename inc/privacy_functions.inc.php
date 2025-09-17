@@ -114,5 +114,8 @@ function hesk_anonymizeTicket($id, $trackingID = null, $have_ticket = false)
 	// Delete ticket reply drafts
 	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."reply_drafts` WHERE `ticket`=".intval($ticket['id']));
 
+    // Delete linked ticket associations
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."linked_tickets` WHERE `ticket_id1`='".intval($ticket['id'])."' OR `ticket_id2`='".intval($ticket['id'])."'");
+
     return true;
 } // END hesk_anonymizeTicket()

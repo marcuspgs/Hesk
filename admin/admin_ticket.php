@@ -1005,11 +1005,6 @@ function getLinkedTickets($customers , $ticket){
     $res = hesk_dbQuery("SELECT `id`, `trackid`, `status`, `subject` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` `tickets`
         WHERE ".$where_in."".hesk_myCategories()."
             AND ".hesk_myOwnership()."
-            AND EXISTS (
-                SELECT 1
-                FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer`
-                WHERE `ticket_id` = `tickets`.`id`
-            )
         ORDER BY `lastchange` DESC
         LIMIT " . ($show_linked_tickets+1));
     $result["linked_num"] = hesk_dbNumRows($res);
@@ -1135,12 +1130,14 @@ function getTicketHistory($history_pieces){
                 <?php echo $ticket['subject']; ?>
             </h3>
             <div class="note__link">
+                <?php if ($can_reply): ?>
                 <a href="#reply-form" title="<?php echo $hesklang['add_a_reply']; ?>" style="margin-right: 15px;">
                     <svg class="icon icon-edit-ticket">
                         <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-edit-ticket"></use>
                     </svg>&nbsp;&nbsp;
                     <?php echo $hesklang['add_a_reply']; ?>
                 </a>
+                <?php endif; ?>
                 <a href="javascript:" title="<?php echo $hesklang['add_a_note']; ?>" onclick="hesk_toggleLayerDisplay('notesDivTop'); $('#notemsg').focus();">
                     <svg class="icon icon-note">
                         <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-note"></use>
@@ -2000,95 +1997,97 @@ function getTicketHistory($history_pieces){
             ?>
 
             <!-- Ticket collaborators -->
-            <div class="row">
-                <div class="title">
-                    <label for="select_owner">
-                        <?php echo $hesklang['collaborators']; ?>:
-                    </label>
-                </div>
+            <?php
+            // Get existing ticket collaborators
+            $collaborators = array();
+            $res_w = hesk_dbQuery("SELECT `u`.`id`,`u`.`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `w` LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `u` ON `w`.`user_id` = `u`.`id` WHERE `w`.`ticket_id`=".intval($ticket['id']));
+            while ($collaborator = hesk_dbFetchAssoc($res_w)) {
+                $collaborators[] = $collaborator;
+            }
 
-                <?php
-                $collaborators = array();
-                $res_w = hesk_dbQuery("SELECT `u`.`id`,`u`.`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `w` LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `u` ON `w`.`user_id` = `u`.`id` WHERE `w`.`ticket_id`=".intval($ticket['id']));
-                while ($collaborator = hesk_dbFetchAssoc($res_w)) {
-                    $collaborators[] = $collaborator;
+            // Get list of users who can be added as a collaborator on this ticket
+            $possible_new_collaborators = array();
+            foreach ($admins as $k=>$v) {
+                // If the ticket is assigned to you, you cannot be a collaborator
+                if ($k == $ticket['owner']) {
+                    continue;
                 }
-                ?>
 
-                <?php if ($can_assign_others): ?>
-                <form action="collaborator.php" method="post">
-                    <div class="value center out-close removable-list">
-                    <?php foreach($collaborators as $collaborator) {
-                        echo '<div class="removable-list-item">
-                                <span>' . $collaborator['name'] . '</span>                                    
-                                <a href="collaborator.php?track='.$trackingID.'&amp;user='.intval($collaborator['id']).'&amp;token='.hesk_token_echo(0).'&amp;collaborator=0">                                    
-                                    <i class="close">
-                                        <svg class="icon icon-close">
-                                          <use xlink:href="'. HESK_PATH.'img/sprite.svg#icon-close"></use>
-                                        </svg>
-                                    </i>
-                                </a>
-                            </div>';
-                    }
+                // Remove people who are already collaborators
+                if (hesk_isTicketCollaborator($ticket['id'], $k)) {
+                    continue;
+                }
 
-                    $possible_new_collaborators = array();
-                    foreach ($admins as $k=>$v) {
-                        // If the ticket is assigned to you, you cannot be a collaborator
-                        if ($k == $ticket['owner']) {
-                            continue;
+                $possible_new_collaborators[$k] = $v;
+            }
+
+            // Only display collaborators if we have existing or possible collaborators
+            if (count($collaborators) || ($can_assign_others && count($possible_new_collaborators))): ?>
+                <div class="row">
+                    <div class="title">
+                        <label for="select_owner">
+                            <?php echo $hesklang['collaborators']; ?>:
+                        </label>
+                    </div>
+                    <?php if ($can_assign_others): ?>
+                    <form action="collaborator.php" method="post">
+                        <div class="value center out-close removable-list">
+                        <?php foreach($collaborators as $collaborator) {
+                            echo '<div class="removable-list-item">
+                                    <span>' . $collaborator['name'] . '</span>
+                                    <a href="collaborator.php?track='.$trackingID.'&amp;user='.intval($collaborator['id']).'&amp;token='.hesk_token_echo(0).'&amp;collaborator=0">
+                                        <i class="close">
+                                            <svg class="icon icon-close">
+                                              <use xlink:href="'. HESK_PATH.'img/sprite.svg#icon-close"></use>
+                                            </svg>
+                                        </i>
+                                    </a>
+                                </div>';
                         }
 
-                        // Remove people who are already collaborators
-                        if (hesk_isTicketCollaborator($ticket['id'], $k)) {
-                            continue;
-                        }
+                        if (count($possible_new_collaborators) > 0) {
+                            ?>
 
-                        $possible_new_collaborators[$k] = $v;
-                    }
-
-                    if (count($possible_new_collaborators) > 0) {
-                        ?>
-
-                            <div class="dropdown-select dropdown-fit-full-width">
-                            <select id="select_user" name="user" onchange="this.form.submit()" data-append-icon-class="icon-person">
-                                <option value=""> &gt; <?php echo $hesklang['add_collaborator']; ?> &lt; </option>
-                                <?php
-                                foreach ($possible_new_collaborators as $k=>$v) {
-                                    echo '<option value="'.$k.'">'.$v.'</option>';
-                                }
-                                ?>
-                            </select>
-                            <input type="hidden" name="collaborator" value="1">
-                            <input type="hidden" name="track" value="<?php echo $trackingID; ?>">
-                            <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
+                                <div class="dropdown-select dropdown-fit-full-width">
+                                <select id="select_user" name="user" onchange="this.form.submit()" data-append-icon-class="icon-person">
+                                    <option value=""> &gt; <?php echo $hesklang['add_collaborator']; ?> &lt; </option>
+                                    <?php
+                                    foreach ($possible_new_collaborators as $k=>$v) {
+                                        echo '<option value="'.$k.'">'.$v.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <input type="hidden" name="collaborator" value="1">
+                                <input type="hidden" name="track" value="<?php echo $trackingID; ?>">
+                                <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                    <?php
-                }
-                ?>
-                <?php else: ?>
-                <div class="value center out-close removable-list">
-                    <?php foreach($collaborators as $collaborator) {
-                        echo '<div class="removable-list-item">
-                                <span>' . $collaborator['name'] . '</span>
-                            </div>';
+                        </form>
+                        <?php
                     }
                     ?>
+                    <?php else: ?>
+                    <div class="value center out-close removable-list">
+                        <?php foreach($collaborators as $collaborator) {
+                            echo '<div class="removable-list-item">
+                                    <span>' . $collaborator['name'] . '</span>
+                                </div>';
+                        }
+                        ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Collaborate link -->
+                <?php if (empty($ticket['am_I_collaborator']) && $ticket['owner'] != $_SESSION['id']): ?>
+                <div class="row">
+                    <div class="title">&nbsp;</div>
+                    <div class="value center out-close">
+                        <?php echo '[<a class="link" href="admin_ticket.php?track='.$trackingID.'&amp;token='.hesk_token_echo(0).'&amp;collaborator=1">'.$hesklang['collaborate'].'</a>]'; ?>
+                    </div>
                 </div>
                 <?php endif; ?>
-            </div>
-
-            <!-- Collaborate link -->
-            <?php if (empty($ticket['am_I_collaborator']) && $ticket['owner'] != $_SESSION['id']): ?>
-            <div class="row">
-                <div class="title">&nbsp;</div>
-                <div class="value center out-close">
-                    <?php echo '[<a class="link" href="admin_ticket.php?track='.$trackingID.'&amp;token='.hesk_token_echo(0).'&amp;collaborator=1">'.$hesklang['collaborate'].'</a>]'; ?>
-                </div>
-            </div>
             <?php endif; ?>
-
         </section>
         <section class="params--block details accordion visible">
             <h4 class="accordion-title">
@@ -3023,7 +3022,8 @@ function hesk_printReplyForm() {
 <article class="ticket__body_block">
     <a name="reply-form"></a>
     <form method="post" class="form" action="admin_reply_ticket.php" enctype="multipart/form-data" name="form1"
-        onsubmit="force_stop();
+        onsubmit="
+        <?php if ($hesk_settings['time_worked']): ?>force_stop();<?php endif; ?>
         <?php if ($hesk_settings['staff_ticket_formatting'] != 2): ?>clearTimeout(typingTimer);<?php endif; ?>
         <?php if ($hesk_settings['submitting_wait']): ?>hesk_showLoadingMessage('recaptcha-submit');<?php endif; ?>
         return true;"
@@ -3253,7 +3253,7 @@ function hesk_printReplyForm() {
                 <div class="submit-us dropdown-select out-close" data-value="" id="submit-as-div">
                     <select onchange="
                         document.getElementById('submit_as_name').name = this.value;
-                        force_stop();
+                        <?php if ($hesk_settings['time_worked']): ?>force_stop();<?php endif; ?>
                         <?php if ($hesk_settings['staff_ticket_formatting'] != 2): ?>clearTimeout(typingTimer);<?php endif; ?>
                         <?php if ($hesk_settings['submitting_wait']): ?>hesk_showLoadingMessage('submit-as-div');<?php endif; ?>
                         this.form.submit()

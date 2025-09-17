@@ -106,7 +106,22 @@ if ($reached_priority_limit && $action !== 'edit_priority') {
                 // Number of tickets per priority
                 $tickets_all = array();
 
-                $res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `priority` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` GROUP BY `priority`');
+                if ($_SESSION['isadmin']) {
+                    $res = hesk_dbQuery('SELECT COUNT(*) AS `cnt`, `priority` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` GROUP BY `priority`');
+                } else {
+                    $res = hesk_dbQuery("SELECT COUNT(*) AS `cnt`, `priority`
+                                        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `ticket`
+                                        LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `w` ON (`ticket`.`id` = `w`.`ticket_id` AND `w`.`user_id` = ".intval($_SESSION['id']).")
+                                        WHERE
+                                        (
+                                            `w`.`user_id`=".intval($_SESSION['id'])."
+                                            OR
+                                            (".hesk_myOwnership().")
+                                        )
+                                        AND ".hesk_myCategories()."
+                                        GROUP BY `priority`");
+                }
+
                 while ($tmp = hesk_dbFetchAssoc($res)) {
                     $tickets_all[$tmp['priority']] = $tmp['cnt'];
                 }

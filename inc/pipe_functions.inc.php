@@ -42,6 +42,29 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
         return hesk_cleanExit('Banned customer email address: ' . $tmpvar['email']);
     }
 
+    $sender_lowercase = strtolower($tmpvar['email']);
+
+    // Ignore emails sent from the same email address we fetch tickets from or we will create a loop
+    // -> email sender matches Hesk's "From email"
+    if ($sender_lowercase == strtolower($hesk_settings['noreply_mail'])) {
+        return hesk_cleanExit('Email from Hesk "From email", ignoring to prevent email loops');
+    }
+
+    // -> email sender matches Hesk's "SMTP user"
+    if ($hesk_settings['smtp'] && $sender_lowercase == strtolower($hesk_settings['smtp_user'])) {
+        return hesk_cleanExit('Email from Hesk "SMTP user", ignoring to prevent email loops');
+    }
+
+    // -> email sender matches Hesk's "IMAP user"
+    if ($protocol == 2 && $sender_lowercase == strtolower($hesk_settings['imap_user'])) {
+        return hesk_cleanExit('Email from Hesk "IMAP user", ignoring to prevent email loops');
+    }
+
+    // -> email sender matches Hesk's "POP3 user"
+    if ($protocol == 1 && $sender_lowercase == strtolower($hesk_settings['pop3_user'])) {
+        return hesk_cleanExit('Email from Hesk "POP3 user", ignoring to prevent email loops');
+    }
+
 	// Process "Reply-To:" or "From:" name, convert to UTF-8, set to "[Customer]" if not set
 	if ( isset($results['reply-to'][0]['name']) && strlen($results['reply-to'][0]['name']) )
 	{

@@ -557,13 +557,33 @@ if ($ticket['owner'] && $ticket['owner'] == intval($_SESSION['id']))
     <b>' . (isset($autoassign_owner) ? $hesklang['taasy'] : $hesklang['tasy']) . '</b>';
 }
 
-// Show the ticket or just the success message
-if ($show)
-{
-	hesk_process_messages($hesklang['new_ticket_submitted'],'admin_ticket.php?track=' . $ticket['trackid'] . '&Refresh=' . mt_rand(10000,99999), 'SUCCESS');
+// Show the ticket or just a success message
+
+// --> Cannot view tickets, go back to the new_ticket.php page
+if ( ! hesk_checkPermission('can_view_tickets',0)) {
+    hesk_process_messages($hesklang['new_ticket_submitted'], 'new_ticket.php', 'SUCCESS');
 }
-else
-{
-    $link = hesk_checkPermission('can_view_tickets',0) ? '<a href="admin_ticket.php?track=' . $ticket['trackid'] . '&Refresh=' . mt_rand(10000,99999) . '">' . $hesklang['view_ticket'] . '</a>' : '';
-    hesk_process_messages($hesklang['new_ticket_submitted'].'. ' . $link, 'new_ticket.php', 'SUCCESS');
+
+// --> Unassigned ticket with no view permission, go back to the new_ticket.php page
+if ($ticket['owner'] == 0 && ! hesk_checkPermission('can_view_unassigned',0)) {
+    hesk_process_messages($hesklang['new_ticket_submitted'], 'new_ticket.php', 'SUCCESS');
 }
+
+// --> Ticket assigned to someone else automatically which I cannot view
+if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id'] && isset($autoassign_owner) && ! hesk_checkPermission('can_view_ass_others', 0) ) {
+    hesk_process_messages($hesklang['new_ticket_submitted'], 'new_ticket.php', 'SUCCESS');
+}
+
+// --> Ticket assigned to someone else by me, but I don't have permission to view tickets I assign to others
+if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id'] && ! isset($autoassign_owner) && ! hesk_checkPermission('can_view_ass_others', 0) && ! hesk_checkPermission('can_view_ass_by', 0) ) {
+    hesk_process_messages($hesklang['new_ticket_submitted'], 'new_ticket.php', 'SUCCESS');
+}
+
+// --> Show the ticket
+if ($show) {
+    hesk_process_messages($hesklang['new_ticket_submitted'],'admin_ticket.php?track=' . $ticket['trackid'] . '&Refresh=' . mt_rand(10000,99999), 'SUCCESS');
+}
+
+// --> No matches, show a success message with a link to the ticket
+hesk_process_messages($hesklang['new_ticket_submitted'].'. <a href="admin_ticket.php?track=' . $ticket['trackid'] . '&Refresh=' . mt_rand(10000,99999) . '">' . $hesklang['view_ticket'] . '</a>', 'new_ticket.php', 'SUCCESS');
+

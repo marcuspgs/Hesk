@@ -234,8 +234,9 @@ else
 unset($tmp);
 
 // Start SQL statement for selecting tickets
-$sql = "SELECT `tickets`.*, `requester`.`name` AS `name` 
+$sql = "SELECT `tickets`.*, `requester`.`name` AS `name`
     FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
+    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `w` ON (`tickets`.`id` = `w`.`ticket_id` AND `w`.`user_id` = ".intval($_SESSION['id']).")
     LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
         ON `tickets`.`id` = `ticket_to_customer`.`ticket_id`
         AND `ticket_to_customer`.`customer_type` = 'REQUESTER'

@@ -27,7 +27,6 @@ hesk_isLoggedIn();
 /* Check permissions for this feature */
 hesk_checkPermission('can_view_tickets');
 hesk_checkPermission('can_reply_tickets');
-hesk_checkPermission('can_edit_tickets');
 hesk_checkPermission('can_resolve');
 
 /* A security check */

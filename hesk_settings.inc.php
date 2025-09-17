@@ -1,5 +1,5 @@
 <?php
-// Settings file for HESK 3.6.1
+// Settings file for HESK 3.6.2
 
 // ==> GENERAL
 
@@ -91,7 +91,7 @@ $hesk_settings['customer_accounts_allow_email_changes']=1;
 $hesk_settings['customer_accounts_verify_email_cooldown']=15;
 
 // --> SPAM Prevention
-$hesk_settings['secimg_use']=0;
+$hesk_settings['secimg_use']=1;
 $hesk_settings['secimg_sum']='TMBQL7BN73';
 $hesk_settings['recaptcha_use']=0;
 $hesk_settings['recaptcha_public_key']='';
@@ -262,7 +262,7 @@ $hesk_settings['check_updates']=1;
 #############################
 #     DO NOT EDIT BELOW     #
 #############################
-$hesk_settings['hesk_version']='3.6.1';
+$hesk_settings['hesk_version']='3.6.2';
 if ($hesk_settings['debug_mode'])
 {
     error_reporting(E_ALL);
