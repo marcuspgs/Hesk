@@ -150,7 +150,7 @@ function hesk_fetch_access_token($provider_id) {
 }
 
 function hesk_retrieve_new_access_token($provider_id, $refresh_token) {
-    global $hesk_settings, $hesklang;
+    global $hesk_settings;
 
     $provider_rs = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."oauth_providers` WHERE `id` = ".intval($provider_id));
     $provider = hesk_dbFetchAssoc($provider_rs);

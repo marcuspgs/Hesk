@@ -1,0 +1,20 @@
+Cher %%NAME%%,
+
+Votre ticket d'assistance "%%SUBJECT%%" a été soumis.
+
+Nous répondons à tous les tickets dans les plus brefs délais, sous 24 à 48 heures. Si nous prévoyons que votre ticket prendra plus de temps, nous vous tiendrons au courant en vous envoyant un e-mail.
+
+Identifiant de suivi des tickets: %%TRACK_ID%%
+
+Vous pouvez voir le statut de votre ticket ici:
+%%TRACK_URL%%
+
+Vous recevrez une notification par e-mail lorsque notre personnel répondra à votre ticket.
+
+Ceci est un message généré automatiquement envoyé par nos serveurs. 
+Ne répondez pas à cet email car nous ne recevrions pas votre réponse.
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

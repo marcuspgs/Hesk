@@ -50,8 +50,8 @@ if (hesk_GET('duedate_option') === '') {
 }
 
 $duedate_input = hesk_GET('duedate_specific_date');
-$duedate_amount_value = intval(hesk_GET('duedate_amount_value'));
-$duedate_amount_unit = hesk_restricted_GET('duedate_amount_unit', ['day', 'week'], 'day');
+$duedate_amount_value = hesk_GET('duedate_amount_value');
+$duedate_amount_unit = hesk_GET('duedate_amount_unit', 'day');
 
 /* Can view tickets that are unassigned or assigned to others? */
 $can_view_ass_others = hesk_checkPermission('can_view_ass_others',0);
@@ -276,11 +276,11 @@ $more2 = empty($_GET['more2']) ? 0 : 1;
                                         </svg>
                                     </button>
                                     <input name="duedate_specific_date" id="duedate_specific_date"
-                                        <?php if ($duedate_input) {echo 'value="'.hesk_htmlspecialchars($duedate_input).'"';} ?>
+                                        <?php if ($duedate_input) {echo 'value="'.$duedate_input.'"';} ?>
                                            type="text" class="datepicker">
                                 </div>
                                 <div class="calendar--value" <?php echo ($duedate_input ? 'style="display: block"' : ''); ?>>
-                                    <span><?php echo hesk_htmlspecialchars($duedate_input); ?></span>
+                                    <span><?php echo $duedate_input; ?></span>
                                     <i class="close">
                                         <svg class="icon icon-close">
                                             <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
@@ -437,6 +437,14 @@ $("#toggleAllShow").click(function(event) {
     <form action="find_tickets.php" method="get" name="findby" id="findby" class="show_tickets form">
         <div class="search-option">
             <div class="search-name">
+                <?php echo $hesklang['s_for']; ?>
+            </div>
+            <div class="search-options">
+                <input class="form-control" type="text" name="q" <?php if (isset($q)) {echo 'value="'.$q.'"';} ?>>
+            </div>
+        </div>
+        <div class="search-option">
+            <div class="search-name">
                 <?php echo $hesklang['s_in']; ?>
             </div>
             <div class="search-options">
@@ -468,14 +476,6 @@ $("#toggleAllShow").click(function(event) {
                     <option value="notes" <?php if ($what=='notes') {echo 'selected="selected"';} ?> ><?php echo $hesklang['notes']; ?></option>
                     <option value="ip" <?php if ($what=='ip') {echo 'selected="selected"';} ?> ><?php echo $hesklang['IP_addr']; ?></option>
                 </select>
-            </div>
-        </div>    
-        <div class="search-option">
-            <div class="search-name">
-                <?php echo $hesklang['s_for']; ?>
-            </div>
-            <div class="search-options">
-                <input class="form-control" type="text" name="q" <?php if (isset($q)) {echo 'value="'.$q.'"';} ?>>
             </div>
         </div>
         <div id="topSubmit2" style="display:<?php echo $more2 ? 'none' : 'block' ; ?>">

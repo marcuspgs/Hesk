@@ -1,0 +1,9 @@
+<p>Bonjour,</p>
+<p>Un nouveau ticket d'assistance a été soumis.</p>
+<p>Détails du ticket :</p>
+<p>Objet du ticket : %%SUBJECT%%</p>
+<p>ID de suivi : %%TRACK_ID%%</p>
+<p>Tu peux gérer ce ticket ici :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Cordialement,</p>
+<p>%%SITE_TITLE%%</p>
+<p><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -80,12 +80,6 @@ class HeskIMAP {
      */
     public $readOnly = false;
 
-    /**
-     * Disable GSSAPI - a workaround for Kerberos error
-     * @var boolean
-     */
-    public $disableGSSAPI = false;
-
     // Resource storage
     private $imap;
 
@@ -151,17 +145,11 @@ class HeskIMAP {
             imap_timeout(IMAP_WRITETIMEOUT, $this->responseTimeout);
             imap_timeout(IMAP_CLOSETIMEOUT, $this->responseTimeout);
 
-            if ($this->disableGSSAPI) {
-                $options = array('DISABLE_AUTHENTICATOR' => 'GSSAPI');
-            } else {
-                $options = array();
-            }
-
             // Connect to IMAP
             if ($this->readOnly) {
-                $this->imap = @imap_open($this->mailbox, $this->username, $this->password, OP_READONLY, 0, $options);
+                $this->imap = @imap_open($this->mailbox, $this->username, $this->password, OP_READONLY);
             } else {
-                $this->imap = @imap_open($this->mailbox, $this->username, $this->password, 0, 0, $options);
+                $this->imap = @imap_open($this->mailbox, $this->username, $this->password);
             }
 
             return $this->imap;

@@ -17,7 +17,6 @@ define('HESK_PATH','./');
 require(HESK_PATH . 'hesk_settings.inc.php');
 define('TEMPLATE_PATH', HESK_PATH . "theme/{$hesk_settings['site_theme']}/");
 require(HESK_PATH . 'inc/common.inc.php');
-require(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 // Are we in maintenance mode?
 hesk_check_maintenance();
@@ -25,24 +24,18 @@ hesk_check_maintenance();
 // Are we in "Knowledgebase only" mode?
 hesk_check_kb_only();
 
-// Connect to the database and start a session
-hesk_load_database_functions();
-hesk_dbConnect();
-hesk_session_start('CUSTOMER');
-
-// Do we require logged-in customers to view the help desk?
-hesk_isCustomerLoggedIn($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required'] == 2);
-
 // What should we do?
 $action = hesk_REQUEST('a');
 
 switch ($action)
 {
 	case 'add':
+		hesk_session_start();
         print_add_ticket();
 	    break;
 
 	case 'forgot_tid':
+		hesk_session_start();
         forgot_tid();
 	    break;
 
@@ -56,7 +49,7 @@ exit();
 /*** START FUNCTIONS ***/
 
 
-function print_select_category($customerUserContext)
+function print_select_category($number_of_categories)
 {
 	global $hesk_settings, $hesklang;
 
@@ -72,13 +65,7 @@ function print_select_category($customerUserContext)
     /* This will handle error, success and notice messages */
     $messages = hesk_get_messages();
 
-	$hesk_settings['render_template'](TEMPLATE_PATH . 'customer/create-ticket/category-select.php', [
-        'messages' => $messages,
-        'serviceMessages' => hesk_get_service_messages('t-cat'),
-        'accountRequired' => $hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required'],
-        'customerLoggedIn' => $customerUserContext !== null,
-        'customerUserContext' => $customerUserContext
-    ]);
+	$hesk_settings['render_template'](TEMPLATE_PATH . 'customer/create-ticket/category-select.php', array('messages' => $messages));
 
 	return true;
 } // END print_select_category()
@@ -87,6 +74,10 @@ function print_select_category($customerUserContext)
 function print_add_ticket()
 {
 	global $hesk_settings, $hesklang;
+
+	// Connect to the database
+	hesk_load_database_functions();
+	hesk_dbConnect();
 
 	// Load custom fields
 	require_once(HESK_PATH . 'inc/custom_fields.inc.php');
@@ -97,24 +88,19 @@ function print_add_ticket()
 	// Auto-focus first empty or error field
 	define('AUTOFOCUS', true);
 
-    $customerUserContext = hesk_isCustomerLoggedIn($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required']);
-
 	// Pre-populate fields
 	// Customer name
-	if (isset($_REQUEST['name'])) {
+	if ( isset($_REQUEST['name']) )
+	{
 		$_SESSION['c_name'] = $_REQUEST['name'];
 	}
 
 	// Customer email address
-	if (isset($_REQUEST['email'])) {
+	if ( isset($_REQUEST['email']) )
+	{
 		$_SESSION['c_email']  = $_REQUEST['email'];
 		$_SESSION['c_email2'] = $_REQUEST['email'];
 	}
-
-    // Followers / CC
-    if (isset($_REQUEST['cc'])) {
-        $_SESSION['c_followers'] = $_REQUEST['cc'];
-    }
 
 	// Priority
 	if ( isset($_REQUEST['priority']) )
@@ -202,7 +188,7 @@ function print_add_ticket()
 		// Force the customer to select a category?
 		if (! isset($hesk_settings['categories'][$category]) )
 		{
-			return print_select_category($customerUserContext);
+			return print_select_category($number_of_categories);
 		}
 	}
 
@@ -377,14 +363,10 @@ function print_add_ticket()
 	        'categoryId' => $category,
 	        'categoryName' => $hesk_settings['categories'][$category],
             'messages' => $messages,
-            'serviceMessages' => hesk_get_service_messages('t-add'),
             'visibleCustomFieldsBeforeMessage' => $visible_custom_fields_before_message,
             'visibleCustomFieldsAfterMessage' => $visible_custom_fields_after_message,
             'customFieldsBeforeMessage' => $custom_fields_before_message,
-            'customFieldsAfterMessage' => $custom_fields_after_message,
-            'accountRequired' => $hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required'],
-            'customerLoggedIn' => $customerUserContext !== null,
-            'customerUserContext' => $customerUserContext
+            'customFieldsAfterMessage' => $custom_fields_after_message
     ));
 
     hesk_cleanSessionVars('iserror');
@@ -397,6 +379,10 @@ function print_add_ticket()
 function print_start()
 {
 	global $hesk_settings, $hesklang;
+
+    // Connect to database
+    hesk_load_database_functions();
+    hesk_dbConnect();
 
     // Include KB functionality only if we have any public articles
 
@@ -415,34 +401,17 @@ function print_start()
     }
 
     // Service Messages
-    $service_messages = hesk_get_service_messages('home');
-
-    // If a customer is logged in, provide the user context for the navbar.
-    if ($hesk_settings['customer_accounts'] === 0) {
-        $user_context = null;
-        $customer_logged_in = false;
-    } else {
-        $user_context = hesk_isCustomerLoggedIn(false);
-        $customer_logged_in = $user_context !== null;
+    $res = hesk_dbQuery('SELECT `title`, `message`, `style` FROM `'.hesk_dbEscape($hesk_settings['db_pfix'])."service_messages` WHERE `type`='0' AND (`language` IS NULL OR `language` LIKE '".hesk_dbEscape($hesk_settings['language'])."') ORDER BY `order` ASC");
+    $service_messages = array();
+    while ($sm=hesk_dbFetchAssoc($res))
+    {
+        $service_messages[] = $sm;
     }
 
-    $messages = hesk_get_messages();
-
-
     $hesk_settings['render_template'](TEMPLATE_PATH . 'customer/index.php', array(
-        //region Deprecated variables -- other pages use camelCase variable names, but not the index page for whatever reason.
-        //     keeping this around though so that custom templates don't instantly break on update.
         'top_articles' => $top_articles,
         'latest_articles' => $latest_articles,
-        'service_messages' => $service_messages,
-        //endregion
-        'topArticles' => $top_articles,
-        'latestArticles' => $latest_articles,
-        'serviceMessages' => $service_messages,
-        'messages' => $messages,
-        'accountRequired' => $hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required'],
-        'customerLoggedIn' => $customer_logged_in,
-        'customerUserContext' => $user_context
+        'service_messages' => $service_messages
     ));
 } // End print_start()
 
@@ -494,7 +463,7 @@ function forgot_tid()
                 $sc = new PJ_SecurityImage($hesk_settings['secimg_sum']);
                 if ( isset($_SESSION['checksum']) && $sc->checkCode($mysecnum, $_SESSION['checksum']) )
                 {
-                    unset($_SESSION['checksum']);
+                    // OK
                 }
                 else
                 {
@@ -516,14 +485,7 @@ function forgot_tid()
 	hesk_dbConnect();
 
     // Get tickets from the database
-	$res = hesk_dbQuery('SELECT DISTINCT `tickets`.`trackid`, `tickets`.`subject`, `tickets`.`status`, `tickets`.`lastchange`, `customers`.`name`
-        FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` AS `tickets` FORCE KEY (`statuses`) 
-	    INNER JOIN `'.hesk_dbEscape($hesk_settings['db_pfix']).'ticket_to_customer` AS `ticket_to_customer`
-	        ON `tickets`.`id` = `ticket_to_customer`.`ticket_id`
-	    INNER JOIN `'.hesk_dbEscape($hesk_settings['db_pfix']).'customers` AS `customers`
-	        ON `ticket_to_customer`.`customer_id` = `customers`.`id`
-	    WHERE ' . ($hesk_settings['open_only'] ? "`status` <> '3' AND " : '') . ' ' . hesk_dbFormatEmail($email) . ' 
-	    ORDER BY `tickets`.`status` ASC, `tickets`.`lastchange` DESC ');
+	$res = hesk_dbQuery('SELECT * FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` FORCE KEY (`statuses`) WHERE ' . ($hesk_settings['open_only'] ? "`status` <> '3' AND " : '') . ' ' . hesk_dbFormatEmail($email) . ' ORDER BY `status` ASC, `lastchange` DESC ');
 
 	$num = hesk_dbNumRows($res);
 	if ($num < 1)
@@ -539,7 +501,6 @@ function forgot_tid()
 	}
 
 	$tid_list = '';
-    $tid_list_html = '';
 	$name = '';
 
     $email_param = $hesk_settings['email_view_ticket'] ? '&e='.rawurlencode($email) : '';
@@ -547,26 +508,19 @@ function forgot_tid()
 	while ($my_ticket=hesk_dbFetchAssoc($res))
 	{
 		$name = $name ? $name : hesk_msgToPlain($my_ticket['name'], 1, 0);
-        $tid_list .= "
-        $hesklang[trackID]: "	. $my_ticket['trackid'] . "
-        $hesklang[subject]: "	. hesk_msgToPlain($my_ticket['subject'], 1, 0) . "
-        $hesklang[status]: "	. hesk_get_status_name($my_ticket['status']) . "
-        $hesk_settings[hesk_url]/ticket.php?track={$my_ticket['trackid']}{$email_param} " . "
-        ";
-
-        $tid_list_html .= "
-        $hesklang[trackID]: "   . $my_ticket['trackid'] . "
-        $hesklang[subject]: "   . hesk_msgToPlain($my_ticket['subject'], 1, 0) . "
-        $hesklang[status]: "    . hesk_get_status_name($my_ticket['status']) . "
-        <a href=\"$hesk_settings[hesk_url]/ticket.php?track={$my_ticket['trackid']}" . str_replace('&e=', '&amp;e=', $email_param) . "\">{$hesklang['view_ticket']}</a>
-        ";
+$tid_list .= "
+$hesklang[trackID]: "	. $my_ticket['trackid'] . "
+$hesklang[subject]: "	. hesk_msgToPlain($my_ticket['subject'], 1, 0) . "
+$hesklang[status]: "	. hesk_get_status_name($my_ticket['status']) . "
+$hesk_settings[hesk_url]/ticket.php?track={$my_ticket['trackid']}{$email_param} " . "
+";
 	}
 
 	/* Get e-mail message for customer */
 	list($msg, $html_msg) = hesk_getEmailMessage('forgot_ticket_id','',0,0,1);
     list($msg, $html_msg) = hesk_replace_email_tag('%%NAME%%', $name, $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%NUM%%', $num, $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%LIST_TICKETS%%', $tid_list, $msg, $html_msg, true, $tid_list_html);
+    list($msg, $html_msg) = hesk_replace_email_tag('%%LIST_TICKETS%%', $tid_list, $msg, $html_msg, true);
     list($msg, $html_msg) = hesk_replace_email_tag('%%SITE_TITLE%%',	hesk_msgToPlain($hesk_settings['site_title'], 1),	$msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%FIRST_NAME%%', hesk_full_name_to_first_name($name), $msg, $html_msg);
@@ -574,7 +528,7 @@ function forgot_tid()
     $subject = hesk_getEmailSubject('forgot_ticket_id');
 
 	/* Send e-mail */
-	hesk_mail($email, [], $subject, $msg, $html_msg);
+	hesk_mail($email, $subject, $msg, $html_msg);
 
 	/* Show success message */
 	$tmp  = '<b>'.$hesklang['tid_sent'].'!</b>';

@@ -1,0 +1,13 @@
+<p>Ciao,</p>
+<p>Un ticket di supporto è stato inoltrato da %%ESCALATED_BY_RULE%%:</p>
+<p> </p>
+<p>Oggetto: %%SUBJECT%%</p>
+<p>Categoria: %%CATEGORY%%</p>
+<p>Priorità: %%PRIORITY%%</p>
+<p>Stato: %%STATUS%%</p>
+<p>Assegnato a: %%OWNER%%</p>
+<p>ID di tracciamento: %%TRACK_ID%%</p>
+<p> </p>
+<p>Puoi vedere il ticket qui:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Grazie,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

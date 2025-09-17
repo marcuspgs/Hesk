@@ -297,7 +297,7 @@ if (!hesk_SESSION('error')) {
                                     }
                                     $modal_body .= '</select>';
                                 }
-                                $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
+                                $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
                                     $modal_body,
                                     'manage_categories.php?a=remove&catid='. $mycat['id'] .'&token='. hesk_token_echo(0).'&targetCategory=1');
                                 ?>
@@ -323,7 +323,6 @@ if (!hesk_SESSION('error')) {
             <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
         </svg>
     </i>
-    <div class="notification--title error-title"><?php echo $hesklang['genl_not_copied']; ?></div>
     <div class="notification--title"><?php echo $hesklang['genl']; ?></div>
     <div class="notification--text"><?php echo $hesklang['genl2']; ?></div>
 </div>

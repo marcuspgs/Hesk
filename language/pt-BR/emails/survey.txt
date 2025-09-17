@@ -1,0 +1,13 @@
+Prezado(a) %%NAME%%,
+
+Estamos entrando em contato em relação ao seu ticket recente "%%SUBJECT%%". Para nos ajudar a atendê-lo(a) melhor, adoraríamos saber sobre sua experiência com nossa equipe de suporte.
+
+Por favor, informe-nos quão fácil foi resolver seu problema:
+%%SURVEY_URL%%
+
+Agradecemos seu feedback. E, como sempre, se houver mais algo que possamos fazer por você no futuro, não hesite em entrar em contato novamente.
+
+Atenciosamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

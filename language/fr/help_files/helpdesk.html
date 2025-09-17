@@ -1,0 +1,820 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+<title>Aide interactive pour les paramètres Hesk</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="help_style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- next: 87 -->
+
+<h3>Aide interactive pour les paramètres Hesk</h3>
+
+<p>&nbsp;</p>
+
+<span class="section">&raquo; Paramètres du service d'assistance</span>
+
+<a name="6"></a><p class="title">Titre du service d'assistance</p>
+<p>Intitulé de votre service d'assistance, par exemple &quot;Service d'assistance de mon entreprise&quot;</p>
+
+<a name="7"></a><p class="title">URL Hesk</p>
+<p>URL du dossier où votre Hesk sera installé. N'ajoutez PAS de / à la fin de l'URL!<br />
+<span class="correct">CORRECT :</span> http://www.example.com/helpdesk<br />
+<span class="wrong">FAUX :</span> http://www.example.com/helpdesk/ (ne terminez pas l'URL par un / )</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="61"></a><p class="title">Dossier d'administration</p>
+<p>Nom du dossier où se trouvent les fichiers d'administration.</p>
+
+<p>Le dossier doit exister dans le dossier HESK principal. Sur la plupart des systèmes, les noms sont sensibles à la casse.</p>
+
+<p>Caractères autorisés (les autres seront supprimés) : a-z A-Z 0-9 _ -</p>
+
+<p>Par défaut : <i>admin</i></p>
+
+<a name="62"></a><p class="title">Dossier des pièces jointes</p>
+<p>Nom du dossier dans lequel les pièces jointes seront stockées.</p>
+
+<p>Le dossier doit exister dans le dossier HESK principal et être accessible en écriture par PHP. Sur la plupart des systèmes, les noms sont sensibles à la casse.</p>
+
+<p>Caractères autorisés (les autres seront supprimés) : a-z A-Z 0-9 _ -</p>
+
+<p>Par défaut : <i>pièces jointes</i></p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="77"></a><p class="title">Dossier cache</p>
+<p>Nom du dossier où le cache et les fichiers temporaires seront stockés.</p>
+
+<p>Le dossier doit exister dans le dossier HESK principal et être accessible en écriture par PHP. Sur la plupart des systèmes, les noms sont sensibles à la casse.</p>
+
+<p>Caractères autorisés (les autres seront supprimés) : a-z A-Z 0-9 _ -</p>
+
+<p>Par défaut : <i>cache</i></p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="10"></a><p class="title">Annonces par page</p>
+<p>Le nombre par défaut de tickets répertoriés par page dans le panneau d'administration. N'utilisez que des chiffres.</p>
+
+<a name="11"></a><p class="title">Taille de la police d'impression</p>
+<p>Taille de la police sur les pages "Version imprimable" des tickets d'assistance</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="15"></a><p class="title">Fermeture automatique des tickets</p>
+<p>Si un ticket n'a aucune activité <i>du client</i> pendant X jours, il se ferme automatiquement. Réglez sur 0 pour désactiver la fermeture automatique.</p>
+
+<a name="58"></a><p class="title">Ouverture maximale</p>
+<p>Un nombre maximum de tickets ouverts qu'un client peut avoir. Lorsque cette limite est atteinte, le client ne pourra plus soumettre de nouveaux tickets
+jusqu'à ce que ceux qui existent soient résolus. Affecte uniquement les tickets soumis via le formulaire en ligne.</p>
+
+<p>Régler sur <b>0</b> pour désactiver la limitation du nombre maximal de tickets ouverts.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="84"></a><p class="title">Afficher comme "dû bientôt"</p>
+
+<p>Définissez le nombre de jours avant la date d'échéance pendant lesquels un ticket apparaîtra comme "Dû bientôt" dans la liste des tickets.</p>
+
+<p>Peut être défini sur une valeur comprise entre 1 et 999 jours. Paramètre par défaut : 7 jours.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<a name="59"></a><p class="title">Répondre à la commande</p>
+<p>Choisissez si vous souhaitez que les réponses les plus récentes apparaissent en haut ou en bas de la page du ticket.</p>
+
+<a name="60"></a><p class="title">Formulaire de réponse</p>
+<p>Choisissez si vous souhaitez que le formulaire Ajouter une réponse apparaisse en haut ou en bas de la page du ticket.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="78"></a><p class="title">Masquer les réponses aux tickets</p>
+
+<p>Lors de l'affichage d'un ticket avec de nombreuses réponses, Hesk peut masquer les anciennes réponses et afficher uniquement les plus récentes.</p>
+
+<p>Cela permet aux membres du personnel d'afficher les dernières réponses à un ticket sans avoir à faire défiler les nombreuses anciennes.</p>
+
+<p>Le personnel peut afficher les réponses masquées à tout moment en cliquant sur le lien "Afficher les réponses précédentes".</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="79"></a><p class="title">Limiter la largeur du ticket</p>
+
+<p>La largeur maximale souhaitée de la partie texte d'un ticket (message et réponses).</p>
+
+<p>Sélectionnez soit pleine largeur (le texte s'étendra sur toute la largeur disponible de l'écran) soit la largeur maximale du contenu en pixels.</p>
+
+<p>La longueur de la ligne est un facteur important pour une lisibilité confortable, surtout si vous vous attendez à une lecture prolongée.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="44"></a><p class="title">Autoriser la connexion automatique</p>
+<p>Si défini sur OUI, le personnel aura la possibilité de se connecter automatiquement à son compte chaque fois qu'il ouvrira le panneau d'administration HESK à partir de son ordinateur.
+S'il est désactivé, HESK ne pourra mémoriser que les noms d'utilisateur, pas les mots de passe.</p>
+
+<a name="51"></a><p class="title">Attribuer automatiquement les tickets</p>
+<p>Les tickets seront automatiquement attribués à un membre du personnel lors de leur soumission.</p>
+
+<p>Plusieurs facteurs sont pris en compte lors de l'attribution automatique des tickets, tels que la catégorie de ticket
+et le nombre de tickets attribués actuellement ouverts.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="73"></a><p class="title">E-mail requis</p>
+
+<p>Exigez-vous que les clients saisissent leur adresse e-mail lorsqu'ils soumettent un ticket?</p>
+
+<p>
+OFF = ne nécessite pas d'adresse e-mail<br />
+ON = nécessite une adresse e-mail<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="70"></a><p class="title">Requérir le propriétaire</p>
+<p>Si cette option est activée, les tickets devront être attribués avant que le personnel puisse y répondre.</p>
+
+<p>Cela permet d'éviter que plusieurs membres du personnel travaillent sur le même ticket par erreur, car cela les oblige
+de s'attribuer le ticket avant de commencer à travailler dessus.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="72"></a><p class="title">Objet obligatoire</p>
+
+<p>Les clients peuvent entrer un sujet de ticket ou celui-ci peut être généré automatiquement.</p>
+
+<p>
+OFF = ne nécessite pas de sujet de ticket<br />
+ON = nécessite un sujet de ticket<br />
+Masquer dans le formulaire client = masquer le champ de formulaire "Objet" du côté client*
+</p>
+
+<p>* les clients pourront toujours voir le sujet généré automatiquement</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="74"></a><p class="title">Exiger un message</p>
+
+<p>Exigez-vous que les clients écrivent un message lorsqu'ils soumettent un nouveau ticket d'assistance?</p>
+
+<p>
+OFF = ne nécessite pas de message<br />
+ON = message requis<br />
+Masquer dans le formulaire client = masquer le champ de formulaire "Message" du côté client
+</p>
+
+<p>* si un membre du personnel modifie un ticket et rédige un message, les clients pourront le voir</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="67"></a><p class="title">Résolution client</p>
+<p>Choisissez si les clients peuvent marquer les tickets comme résolus.</p>
+
+<p>Si désactivé, le ticket ne pourra être résolu que par le personnel et automatiquement en cas d'inactivité.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="16"></a><p class="title">Rouvrir les tickets</p>
+<p>Réglé sur ON pour permettre aux clients de rouvrir un ticket une fois qu'il a été fermé. Lorsqu'il est défini sur OFF une fois fermé, le client devra ouvrir un nouveau ticket.</p>
+
+<a name="17"></a><p class="title">Note de réponse</p>
+<p>Si cette option est activée, les clients pourront marquer les réponses du personnel comme <i>Utiles</i> ou <i>Inutiles</i>. Ces commentaires des clients seront utilisés pour évaluer le personnel.</p>
+
+<a name="45"></a><p class="title">Priorité client</p>
+<p>Si cette option est activée, les clients pourront définir la priorité/l'urgence de leurs tickets, allant de Faible à Élevé. S'il est défini sur OFF, tous les tickets seront soumis avec la priorité par défaut (faible) et seul le personnel pourra changer le niveau de priorité pour un niveau supérieur.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="49"></a><p class="title">Identifiants séquentiels</p>
+<p>Si activé, tous les tickets afficheront également un numéro d'identification séquentiel. Cela devrait permettre
+une communication client-personnel plus facile à propos d'un ticket (en disant <i>ticket ID 45</i> plutôt
+que <i>ID de billet GHS-G5E-A6T8</i>). Cependant, seulement
+le personnel pourra voir les billets par numéros séquentiels.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="66"></a><p class="title">Temps travaillé</p>
+<p>Suivez le temps passé à travailler sur un ticket.</p>
+
+<p>Lorsqu'il est activé, le formulaire de réponse du ticket d'administration affichera un compteur de temps pour suivre le temps passé à travailler sur le ticket.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="68"></a><p class="title">Avis de SPAM</p>
+<p>Lorsque le client soumet un nouveau ticket, le message de réussite inclura un avis indiquant
+le client doit vérifier dans le dossier SPAM si l'e-mail de confirmation n'arrive pas.</p>
+
+<p>L'avis ne s'affichera pas en mode désactivé OU si l'option <i>Avertir le client lorsque : il soumet un nouveau ticket d'assistance</i> est désactivée.</p>
+
+<p>Le message d'avertissement peut être notifié dans le <a href="https://www.hesk.com/knowledgebase/index.php?article=34" target="_blank">fichier de langue HESK</a>. </p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="14"></a><p class="title">Répertorier les noms d'utilisateur</p>
+<p>Si défini sur ON, les noms d'utilisateur du personnel seront répertoriés dans une zone de sélection sur la page de connexion de l'administrateur et ils n'auront qu'à saisir leur mot de passe. Paramètre recommandé : OFF (le personnel devra saisir
+à la fois leur nom d'utilisateur et leur mot de passe pour se connecter)</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="12"></a><p class="title">Mode débogage</p>
+<p> Active/désactive le mode de débogage. En utilisation normale, le mode de débogage doit être désactivé. Allumez uniquement si vous rencontrez des problèmes et que Hesk ne fonctionne pas correctement. N'oubliez pas de le désactiver lorsque Hesk fonctionne à nouveau normalement.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="63"></a><p class="title">Liens courts</p>
+<p>Si cette option est activée, les liens de sites Web de plus de 70 caractères seront raccourcis pour l'affichage.</p>
+
+<p>Par exemple, un lien comme celui-ci :<br />
+http://www.some-long-example.com/sub-folder/another-folder/and-yet-another/this-is-some-long-file-name.html?this_is_a_long_query=and_this_is_a_long_value</p>
+
+<p>S'afficherait comme :<br />
+http://www.some-long-example.com/sub-folder/another-fol ... long_value</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="65"></a><p class="title">- - Cliquez pour sélectionner - -</p>
+<p>Si coché, "- - Cliquez pour sélectionner --" sera la sélection par défaut
+pour la catégorie de billet et/ou la priorité lors de la soumission d'un nouveau billet.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="71"></a><p class="title">Limite de sélection de catégorie</p>
+<p>Utilisé lors de la soumission de nouveaux tickets.</p>
+
+<p>Si le nombre de catégories de service d'assistance (services) est inférieur ou égal à ce paramètre,
+la catégorie de billet sera sélectionnée en cliquant sur un lien.</p>
+
+<p>Si le nombre de catégories est supérieur à cette limite, une boîte de sélection déroulante sera utilisée à la place pour
+sélectionnez une catégorie de billets.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="80"></a><p class="title">Formatage des tickets</p>
+<p>Définit le type d'éditeur lors de la création/modification des tickets.</p>
+
+<p>
+    Texte brut = Texte brut (par défaut)<br />
+    Texte enrichi (HTML) = Autorise le texte enrichi (gras, listes, etc.) via un éditeur WYSIWYG
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="13"></a><p class="title">Utiliser une image anti-SPAM</p>
+<p>Active l'utilisation de l'image de sécurité anti-SPAM (captcha).</p>
+
+<table border="0">
+<tr>
+<td valign="top"><i>Value</i></td>
+<td><i>Meaning</i></td>
+</tr>
+<tr>
+<td valign="top" style="white-space:nowrap;"><b>À L'ARRÊT</b></td>
+<td>images anti-SPAM désactivées</td>
+</tr>
+<tr>
+<td valign="top" style="white-space:nowrap;"><b>ON - Clients</b> &nbsp;</td>
+<td>only customers will be required to solve the image</td>
+</tr>
+<tr>
+<td valign="top" style="white-space:nowrap;"><b>ON - All</b></td>
+<td>le client et le personnel devront le résoudre</td>
+</tr>
+</table>
+
+&nbsp;
+
+<table border="0">
+<tr>
+<td colspan="2"><i>Type d'image</i></td>
+</tr>
+<tr>
+<td valign="top" style="white-space:nowrap;"><b>Image simplifiée</b> &nbsp;</td>
+<td>une image très basique générée par PHP (librairie GD nécessaire)<br /><span class="wrong">Une simple image n'est pas efficace contre les robots avancés,
+pensez plutôt à utiliser des questions anti-SPAM ou ReCaptcha!</span></td>
+</tr>
+<tr>
+<td valign="top" style="white-space:nowrap;"><b>ReCaptcha</b> &nbsp;</td>
+<td>utiliser un service gratuit de Google (<a href="https://www.google.com/recaptcha" target="_blank">nécessite une inscription</a>)</td>
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="64"></a><p class="title">ReCaptcha</p>
+<p>ReCaptcha est un service anti-bot gratuit de Google.</p>
+
+<p>Pour utiliser ReCaptcha, vous devez :</p>
+
+<ol>
+<li><a href="https://www.google.com/recaptcha" target="_blank">S'inscrire à ReCaptcha</a></li>
+<li>Cliquez sur <b>Obtenir reCAPTCHA</b></li>
+<li>Entrez les détails de votre site Web dans le formulaire <b>Enregistrer un nouveau site</b></li>
+<li>Copiez la <b>clé du site</b> dans les paramètres HESK</li>
+<li>Copiez la <b>clé secrète</b> dans les paramètres HESK</li>
+<li>Enregistrer les paramètres HESK</li>
+<li>Essayez de soumettre un nouveau ticket via l'interface client pour vérifier que reCAPTCHA fonctionne correctement.</li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="42"></a><p class="title">Utiliser une question anti-SPAM</p>
+<p>Active/désactive l'utilisation de la question de sécurité anti-SPAM. C'est un moyen très simple mais assez efficace de lutter contre les spammeurs
+(pas s'ils décident de cibler spécifiquement votre site Web, mais cela devrait bloquer tous les
+robots spammeurs parcourant le Web).
+L'idée est de créer une question <b>unique</b> à laquelle seuls les humains peuvent répondre. Tu peux
+utiliser le code HTML dans la question. Les réponses ne sont pas sensibles à la casse. Quelques exemples :</p>
+
+<table border="0">
+<tr>
+<td><b>-&gt; Question</b></td>
+<td><b>-&gt; Réponse</b></td>
+</tr>
+<tr>
+<td>De quelle couleur est l'eau?</td>
+<td>Bleu</td>
+</tr>
+<tr>
+<td>Quel est le prochain chiffre après quatre ? (n'utilisez que des chiffres)</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Tapez le code d'accès <b>ABCDE</b> ici :</td>
+<td>ABCDE</td>
+</tr>
+<tr>
+<td>Code d'accès : (trouvez-le en bas de notre <a href="#" onclick="Javascript:return false">page de liens</a>)</td>
+<td>Quelque code</td>
+</tr>
+</table>
+
+<p>Attention! <b>NE PAS</b> utiliser ces exemples, utilisez une question unique qui ne sera utilisée que sur votre site!</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="47"></a><p class="title">Limite de tentatives de connexion et durée d'interdiction (minutes)</p>
+<p>Cette fonctionnalité limite les attaques par force brute pour se connecter à HESK ou afficher les tickets.</p>
+
+<p>Après la <i>limite des tentatives de connexion</i> du nombre de tentatives infructueuses pour afficher un ticket ou se connecter à HESK, l'adresse IP sera interdite pendant <i>durée d'interdiction (minutes)</i>.</p>
+
+<p>Pour désactiver la limitation des tentatives de connexion infructueuses, définissez la valeur sur <b>0</b> (NON recommandé!).</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="81"></a><p class="title">Limite d'inondation (secondes)</p>
+<p>Cette fonctionnalité permet d'éviter de soumettre trop de réponses aux tickets (inondation de réponses accidentelle ou malveillante).</p>
+
+<p>Défini sur le nombre minimum de secondes qui doivent s'écouler entre deux réponses au ticket de la même personne.</p>
+
+<p>Pour désactiver cette fonctionnalité, définissez la valeur sur <b>0</b>.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="69"></a><p class="title">Réinitialisation du mot de passe</p>
+<p>Si cette option est activée, les utilisateurs pourront réinitialiser leur mot de passe oublié par e-mail.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="46"></a><p class="title">Voir les billets</p>
+<p>Si cette option est activée (cochée), les clients devront saisir à la fois leur adresse e-mail et leur ID de suivi de ticket pour afficher le contenu d'un ticket.
+Si désactivé, seule la saisie de l'ID de suivi des tickets suffira.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="76"></a><p class="title">Cadres</p>
+<p>Activer pour empêcher le chargement de HESK dans des cadres sur des sites Web tiers. Cela permet de lutter contre les tentatives de "clickjacking".</p>
+
+<p>Lorsqu'il est activé, HESK enverra un en-tête HTTP <b>X-Frame-Options : SAMEORIGIN</b> au navigateur.</p>
+
+<p>Si vous souhaitez afficher HESK dans un cadre sur un site Web sous un nom de domaine différent de celui sous lequel HESK est installé, désactivez cette fonctionnalité.</p>
+
+<p>Dans le cas ci-dessus, vous devrez peut-être également définir le paramètre <b>Cookies</b> sur <b>Aucun</b> et utiliser les connexions <b>https://</b>!</p >
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="82"></a><p class="title">Cookies</p>
+
+<!-- ne traduisez pas les valeurs à l'intérieur de <b> </b> dans cette section -->
+
+<p>Ce paramètre contrôle la <b>SameSite</b> attribut des cookies HTTP. Pour une explication détaillée, veuillez consulter <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite" rel="nofollow">cet article</ a>.</p>
+
+<p>Bref:</p>
+
+<p><b>Strict</b> - les cookies ne seront envoyés qu'aux demandes sous votre nom de domaine. Suivre un lien e-mail, par exemple, peut vous obliger à vous reconnecter.</p>
+<p><b>Lax</b> - valeur Hesk par défaut. Les cookies ne sont pas envoyés sur des sous-requêtes intersites normales (par exemple, pour charger des images ou des cadres dans un site tiers), mais sont envoyés lorsqu'un utilisateur navigue vers le site d'origine (c'est-à-dire lorsqu'il suit un lien).</p>
+<p><b>None</b> - cookies sera envoyé à toute demande, mais uniquement sous un lien (<b>https://</b>) . Utilisez ce paramètre si vous affichez Hesk dans un cadre sur un domaine tiers.</p>
+
+<p>Si vous souhaitez afficher HESK dans un cadre sur un site Web sous un nom de domaine différent de celui sous lequel HESK est installé, définissez-le sur <b>None</b> et utilisez une connexion <b>https://</b>.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="75"></a><p class="title">SSL</p>
+<p>Vous pouvez forcer HESK à utiliser des connexions sécurisées (https au lieu de http).</p>
+
+<p>Pour gérer ce paramètre, ouvrez d'abord manuellement le fichier <b>admin_settings_help_desk.php</b> dans votre navigateur en utilisant https://, par exemple :</p>
+
+<p>https://example.com/hesk/admin/admin_settings_help_desk.php</p>
+
+<p>Cela permet de s'assurer que SSL est correctement configuré et fonctionne sur le serveur avant de configurer HESK pour le forcer.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="83"></a><p class="title">Clé d'accès URL</p>
+<p>Utilisez la clé d'accès URL pour empêcher l'accès Web non autorisé à vos fichiers cron Hesk, tels que:<br>
+- /inc/mail/hesk_imap.php,<br>
+- /inc/mail/hesk_pop3.php,<br>
+- /cron/email_overdue_tickets.php, etc.<br>
+</p>
+
+<p>Lorsqu'une clé d'accès est définie et que quelqu'un souhaite accéder à l'un de ces fichiers via une adresse URL (navigateur Web), il devra spécifier la clé correcte en ajoutant <b>?key=XXXXXXXX</b> à la Adresse URL. Exemple :</p>
+
+<p>https://example.com/hesk/inc/mail/hesk_imap.php<b>?key=<span class="correct">XXXXXXXX</span></b></p>
+
+<p>Votre clé d'accès doit être une chaîne aléatoire d'au moins 20 caractères. Les caractères de clé d'accès valides sont: a-z A-Z 0-9 _ . -</b>
+
+<p>La clé d'accès n'est pas utilisée lorsque les fichiers cron sont accessibles via l'interface de ligne de commande, uniquement lorsqu'ils sont servis via http(s).</p>
+
+<p>Si vous laissez la clé d'accès à l'URL vide, elle ne sera pas requise/utilisée.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="85"></a><p class="title">Authentification multifacteur (MFA)</p>
+<p>Utilisez l'authentification multifacteur pour obliger les utilisateurs à s'authentifier avec leur mot de passe ainsi qu'une méthode d'authentification secondaire.</p>
+
+<p>- L'activation de "Require Multi-Factor Authentication" <b>activera</b> l'authentification MFA pour les utilisateurs nouveaux et existants.</p>
+<p>- La désactivation de "Require Multi-Factor Authentication" <b>ne désactivera pas</b> MFA pour les utilisateurs existants ; cela n'affectera que les nouveaux utilisateurs.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="86"></a><p class="title">Durée de la zone sécurisée</p>
+<p>Spécifie pendant combien de temps les utilisateurs sont autorisés à accéder aux zones qui nécessitent une vérification de sécurité avant de devoir saisir à nouveau leur jeton/mot de passe MFA.</p>
+<p>Cette minuterie est réinitialisée lorsqu'un utilisateur se déconnecte.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<span class="section">&raquo; Pièces jointes</span>
+
+<a name="37"></a><p class="title">Utiliser des pièces jointes</p>
+<p>Sélectionnez OUI pour activer les pièces jointes. Si cette option est activée, les clients et le personnel d'assistance auront la possibilité de joindre des fichiers aux tickets d'assistance.</p>
+<p><b>REMARQUE:</b> Si et comment les pièces jointes fonctionneront en fonction des paramètres de votre serveur, veuillez consulter le fichier readme.html pour connaître les considérations et les éventuelles limitations des pièces jointes sur votre serveur.</p>
+
+<a name="38"></a><p class="title">Nombre par publication</p>
+<p>Nombre de pièces jointes autorisées par publication. La plage optimale est d'environ 1 à 4. Ce paramètre n'est disponible que si "Utiliser les pièces jointes" est défini sur OUI.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+
+<a name="39"></a><p class="title">Taille de fichier maximale</p>
+<p>Taille maximale des fichiers joints. Notez que la taille maximale du fichier de téléchargement est limitée par les paramètres de votre serveur, veuillez vous référer à readme.html pour plus d'informations sur les limites de pièces jointes. Ce paramètre n'est disponible que si "Utiliser les pièces jointes" est défini sur OUI.</p>
+
+<a name="40"></a><p class="title">Types de fichiers autorisés</p>
+<p>Extensions de fichier autorisées pour joindre des fichiers. Pour ajouter d'autres extensions, utilisez le même formatage <b>.ext</b> et séparez-les par une virgule. Ce paramètre n'est disponible que si "Utiliser les pièces jointes" est défini sur OUI.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

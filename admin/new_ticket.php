@@ -65,15 +65,14 @@ foreach ($hesk_settings['custom_fields'] as $k=>$v) {
 }
 
 // Customer name
-$predefined_name = '';
-$predefined_email = '';
 if (isset($_REQUEST['name'])) {
-	$predefined_name = $_REQUEST['name'];
+	$_SESSION['as_name'] = $_REQUEST['name'];
 }
 
 // Customer email address
 if (isset($_REQUEST['email'])) {
-	$predefined_email = $_REQUEST['email'];
+	$_SESSION['as_email']  = $_REQUEST['email'];
+	$_SESSION['as_email2'] = $_REQUEST['email'];
 }
 
 // Category ID
@@ -159,20 +158,16 @@ $hesk_settings['categories'] = array();
 
 if (hesk_checkPermission('can_submit_any_cat', 0))
 {
-    $res = hesk_dbQuery("SELECT `id`, `name`, `priority`, `autoassign` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
+    $res = hesk_dbQuery("SELECT `id`, `name`, `priority` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `cat_order` ASC");
 }
 else
 {
-    $res = hesk_dbQuery("SELECT `id`, `name`, `priority`, `autoassign` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE ".hesk_myCategories('id')." ORDER BY `cat_order` ASC");
+    $res = hesk_dbQuery("SELECT `id`, `name`, `priority` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE ".hesk_myCategories('id')." ORDER BY `cat_order` ASC");
 }
 
 while ($row=hesk_dbFetchAssoc($res))
 {
-	$hesk_settings['categories'][$row['id']] = array(
-        'name' => $row['name'],
-        'priority' => $row['priority'],
-        'autoassign' => $row['autoassign']
-    );
+	$hesk_settings['categories'][$row['id']] = array('name' => $row['name'], 'priority' => $row['priority']);
 }
 
 $number_of_categories = count($hesk_settings['categories']);
@@ -233,22 +228,6 @@ if ( ! isset($_SESSION['as_status']))
 {
     $_SESSION['as_status'] = 0;
 }
-
-$show_create_modal = false;
-$existing_customer_id = hesk_SESSION('as_customer_id', null);
-//-- If name/email provided, prefill it or display a modal
-if ($predefined_name !== '') {
-    // If email is blank, always show the modal
-    if ($predefined_email !== '') {
-        require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
-        $existing_customer_id = hesk_get_or_create_customer($predefined_name, $predefined_email, false);
-    }
-
-    if ($existing_customer_id === null) {
-        $show_create_modal = true;
-    }
-}
-
 ?>
 <div class="main__content categories ticket-create">
     <div class="table-wrap">
@@ -288,227 +267,28 @@ if ($predefined_name !== '') {
                 });
                 </script>
             </div>
-            <?php endif;
-
-            $session_customers = [];
-            $session_followers = [];
-            // Load in customers if validation failed
-            if ($existing_customer_id !== null) {
-                $sanitized_id = intval($existing_customer_id);
-                $customer_sql = "SELECT `id`,`name`,`email` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
-                    WHERE `id` = {$sanitized_id}";
-                $existing_customers_rs = hesk_dbQuery($customer_sql);
-                while ($row = hesk_dbFetchAssoc($existing_customers_rs)) {
-                    $session_customers[] = $row;
-                }
-            }
-
-            // Load in followers if validation failed
-            if (isset($_SESSION['as_follower_ids']) && count($_SESSION['as_follower_ids']) > 0) {
-                $sanitized_ids = array_map(function($id) { return intval($id); }, $_SESSION['as_follower_ids']);
-                $ids = implode(',', $sanitized_ids);
-                $follower_sql = "SELECT `id`,`name`,`email` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
-                    WHERE `id` IN ({$ids})";
-                $existing_followers_rs = hesk_dbQuery($follower_sql);
-                while ($row = hesk_dbFetchAssoc($existing_followers_rs)) {
-                    $session_followers[] = $row;
-                }
-            }
-            ?>
+            <?php endif; ?>
 
             <div class="form-group">
-                <label for="create_customer_input">
-                    <?php echo $hesklang['customer']; ?> <span class="important">*</span><a href="javascript:" id="new-customer-link" data-modal="[data-modal-id='create-customer']">[<?php echo $hesklang['new_customer']; ?>]</a>
+                <label for="create_name">
+                    <?php echo $hesklang['name']; ?>: <span class="important">*</span>
                 </label>
-                <select name="customer_id"
-                        id="create_customer_input"
-                        class="read-write"
-                        placeholder="<?php echo hesk_addslashes($hesklang['search_by_name_or_email']); ?>">
-                    <?php foreach ($session_customers as $row) { ?>
-                        <option value="<?php echo $row['id']; ?>" selected><?php echo $row['email'] ? "{$row['name']} &lt;{$row['email']}&gt;" : $row['name']; ?></option>
-                    <?php } ?>
-                </select>
-                <script>
-                    var createUserEventHandler = function(userType = 'customer', event, extraData) {
-                        /*
-                        Generalized handling of creating new customers or followers.
-                        1) By default clear the input fields before showing the modal,
-                        but allow passing specific values to event and pre-fill the input fields (i.e. from Add Customer/Follower click from dropdown)
-                        */
-                        let nameValue = '';
-                        let emailValue = '';
-                        if (extraData) {
-                            if (typeof extraData.nameValue !== 'undefined' && typeof extraData.nameValue === 'string') {
-                                nameValue = extraData.nameValue;
-                            }
-                            if (typeof extraData.emailValue !== 'undefined' && typeof extraData.emailValue === 'string') {
-                                emailValue = extraData.emailValue;
-                            }
-                        }
-                        $('[data-modal-id="create-customer"] input[name="name"]').val(nameValue);
-                        $('[data-modal-id="create-customer"] input[name="email"]').val(emailValue);
-
-                        // 2.) Update any titles and other related meta data
-                        let createCustomerTitle = '<?php echo hesk_makeJsString($hesklang['new_customer']); ?>';
-                        let customerType = 'CUSTOMER';
-                        if (userType === 'customer') {
-                            $('#new-customer-prompt').css('display', 'none');
-                        } else if (userType === 'follower') {
-                            createCustomerTitle = '<?php echo hesk_makeJsString($hesklang['new_follower']); ?>';
-                            customerType = 'FOLLOWER';
-                        }
-                        $('#create-customer-title').text(createCustomerTitle);
-                        $('[data-modal-id="create-customer"] input[name="customer_type"]').val(customerType);
-
-                        if (extraData) {
-                            // If extra data was passed also run validation checks - but only if anything is actually entered,
-                            // otherwise it looks weird if errors shows up when user didn't enter anything yet.
-                            if (nameValue !== '') {
-                                $('#create_name').keyup();
-                            }
-                            if (emailValue!== '') {
-                                $('#email').keyup();
-                            }
-                        }
-                        // We also want to clear any unnecessary errors on empty fields, as it feels weird to leave them from previous modal opens.
-                        updateValidation(nameValue === '', emailValue === '');
-                    };
-
-                    $('#new-customer-link').click(function(event, extraData = null) {
-                        createUserEventHandler('customer', event, extraData);
-                    });
-
-                    <?php if ($show_create_modal): ?>
-                    $(document).ready(function() {
-                        $('[data-modal-id="create-customer"] input[name="name"]').val('<?php echo hesk_makeJsString($predefined_name); ?>');
-                        $('[data-modal-id="create-customer"] input[name="email"]').val('<?php echo hesk_makeJsString($predefined_email); ?>');
-                        $('[data-modal-id="create-customer"]').css('display', 'block');
-                        $('#create_name').keyup();
-                        $('#email').keyup();
-                    });
-                    <?php endif; ?>
-
-                    let $createCustomerInput = $('#create_customer_input');
-                    <?php
-                    // Don't pre-select a customer if there wasn't one in the session
-                    if ($existing_customer_id === null): ?>
-                    $createCustomerInput.val(-1);
-                    <?php endif; ?>
-                    hesk_loadNoResultsSelectizePlugin('<?php echo hesk_jsString($hesklang['no_results_found']); ?>');
-                    var plugins = ['no_results'];
-                    var createCustomerSelectize = $createCustomerInput.selectize({
-                        valueField: 'id',
-                        labelField: 'displayName',
-                        searchField: ['name','email'],
-                        copyClassesToDropdown: true,
-                        preload: true,
-                        options: [],
-                        loadThrottle: 300,
-                        persist: false,
-                        plugins: plugins,
-                        load: function(query, callback) {
-                            $.ajax({
-                                url: 'ajax/search_customers.php?query=' + query,
-                                dataType: 'json',
-                                success: function(data) {
-                                    callback(data);
-                                }
-                            });
-                        },
-
-                        /* Using deconstruct (requires EMCA6, but it's required in a bunch of other code already, so shouldn't be an issue)
-                        here to add a bunch of general functionality needed for the custom "Add Entry",
-                        And passing only the necessary custom behaviour for this specific dropdown.
-                        */
-                        ...hesk_selectizeAddCustomAddEntryToDropdown(
-                            {
-                                newEntryTextPrefix: '<?php echo hesk_jsString($hesklang['add_customer']); ?>',
-                                onAddEntryClickedFunction: function(selectizeInstance, selectizeSearchValue) {
-                                    // populate the customer input field with the selected search value (either name or email)
-                                    let nameValue = selectizeSearchValue;
-                                    let emailValue = '';
-                                    if (selectizeSearchValue.indexOf('@') > -1) {
-                                        // if there's an @ part of search string, we simply assume it's an email
-                                        nameValue = '';
-                                        emailValue = selectizeSearchValue;
-                                    }
-
-                                    // simply reuse what new-customer-link already does for adding a new customer.
-                                    $('#new-customer-link').trigger('click', { nameValue: nameValue, emailValue: emailValue });
-                                }
-                            }
-                        )
-                    });
-                </script>
+                <input type="text" id="create_name" name="name" class="form-control <?php if (in_array('name',$_SESSION['iserror'])) {echo 'isError';} ?>" maxlength="50" value="<?php if (isset($_SESSION['as_name'])) {echo stripslashes(hesk_input($_SESSION['as_name']));} ?>">
             </div>
-            <?php if ($hesk_settings['multi_eml']): ?>
             <div class="form-group">
-                <label for="followers_input">
-                    <?php echo $hesklang['followers']; ?><a href="javascript:" id="new-follower-link" data-modal="[data-modal-id='create-customer']">[<?php echo $hesklang['new_follower']; ?>]</a>
+                <label for="email">
+                    <?php echo $hesklang['email'] . ':' . ($hesk_settings['require_email'] ? ' <span class="important">*</span>' : '') ; ?>
                 </label>
-                <select name="follower_id[]"
-                        multiple
-                        id="followers_input"
-                        class="read-write"
-                        placeholder="<?php echo hesk_addslashes($hesklang['search_by_name_or_email']); ?>">
-                    <?php foreach ($session_followers as $row) { ?>
-                        <option value="<?php echo $row['id']; ?>" selected><?php echo $row['email'] ? "{$row['name']} &lt;{$row['email']}&gt;" : $row['name']; ?></option>
-                    <?php } ?>
-                </select>
-                <script>
-                    $('#new-follower-link').click(function(event, extraData = null) {
-                        createUserEventHandler('follower', event, extraData);
-                    });
-                    var plugins = ['no_results'<?php echo $hesk_settings['multi_eml'] ? ",'remove_button'" : ''; ?>];
-                    var createFollowerSelectize = $('#followers_input').selectize({
-                        valueField: 'id',
-                        labelField: 'displayName',
-                        searchField: ['name','email'],
-                        copyClassesToDropdown: true,
-                        preload: true,
-                        options: [],
-                        loadThrottle: 300,
-                        persist: false,
-                        plugins: plugins,
-                        load: function(query, callback) {
-                            $.ajax({
-                                url: 'ajax/search_customers.php?query=' + query,
-                                dataType: 'json',
-                                success: function(data) {
-                                    callback(data);
-                                }
-                            });
-                        },
-
-                        /* Using deconstruct (requires EMCA6, but it's required in a bunch of other code already, so shouldn't be an issue)
-                        here to add a bunch of general functionality needed for the custom "Add Entry",
-                        And passing only the necessary custom behaviour for this specific dropdown.
-                        */
-                        ...hesk_selectizeAddCustomAddEntryToDropdown(
-                            {
-                                newEntryTextPrefix: '<?php echo hesk_jsString($hesklang['add_follower']); ?>',
-                                onAddEntryClickedFunction: function(selectizeInstance, selectizeSearchValue) {
-                                    // populate the follower input field with the selected search value (either name or email)
-                                    let nameValue = selectizeSearchValue;
-                                    let emailValue = '';
-                                    if (selectizeSearchValue.indexOf('@') > -1) {
-                                        // if there's an @ part of search string, we simply assume it's an email
-                                        nameValue = '';
-                                        emailValue = selectizeSearchValue;
-                                    }
-
-                                    // simply reuse what new-follower-link already does for adding a new customer.
-                                    $('#new-follower-link').trigger('click', { nameValue: nameValue, emailValue: emailValue });
-                                }
-                            }
-                        )
-                    });
-                </script>
+                <input type="<?php echo ($hesk_settings['multi_eml'] ? 'text' : 'email'); ?>"
+                       class="form-control <?php if (in_array('email',$_SESSION['iserror'])) {echo 'isError';} elseif (in_array('email',$_SESSION['isnotice'])) {echo 'isNotice';} ?>"
+                       name="email" id="email" maxlength="1000"
+                       value="<?php if (isset($_SESSION['as_email'])) {echo stripslashes(hesk_input($_SESSION['as_email']));} ?>"
+                    <?php if($hesk_settings['detect_typos']) { echo ' onblur="Javascript:hesk_suggestEmail(\'email\', \'email_suggestions\', 1, 1)"'; } ?>>
             </div>
-            <?php endif;?>
+            <div id="email_suggestions"></div>
             <div class="form-group">
                 <label class="priority <?php if (in_array('priority',$_SESSION['iserror'])) {echo 'isErrorStr';} ?>"><?php echo $hesklang['priority']; ?>: <?php if ($hesk_settings['select_pri']) {echo '<span class="important">*</span>';} ?></label>
-                <div class="dropdown-select out-close priority">
+                <div class="dropdown-select center out-close priority">
                     <select name="priority">
                         <?php
                         // Show the "Click to select"?
@@ -526,7 +306,7 @@ if ($predefined_name !== '') {
             </div>
             <div class="form-group ts" id="ticket-status-div">
                 <label><?php echo $hesklang['status']; ?>:</label>
-                <div class="dropdown-select out-close">
+                <div class="dropdown-select center out-close">
                     <select id="status-select" name="status" onchange="hesk_update_status_color(this.value)">
                         <?php echo hesk_get_status_select('', hesk_checkPermission('can_resolve', 0), $_SESSION['as_status']); ?>
                     </select>
@@ -605,27 +385,12 @@ if ($predefined_name !== '') {
                         /* Select drop-down box */
                         case 'select':
 
-                            $extra_classes = '';
-                            $selectize_config = '';
-                            $extra_attributes = '';
-                            if (!empty($v['value']['is_searchable'])) {
-                                $extra_classes .= "read-write";
-                                $extra_attributes = ' placeholder="'.hesk_addslashes($hesklang['search_by_pattern']).'"';
-                                $selectize_config = '{
-                                        valueField: "id",
-                                        labelField: "displayName",
-                                        searchField: ["displayName"],
-                                        create: false,
-                                        copyClassesToDropdown: true,
-                                        plugins: ["no_results"],
-                                    }';
-                            }
-                            $cls = in_array($k,$_SESSION['iserror']) ? ' class="isError ' . $extra_classes . '" ' : ' class="' . $extra_classes .'" ';
+                            $cls = in_array($k,$_SESSION['iserror']) ? ' class="isError" ' : '';
 
                             echo '
                                 <div class="form-group">
                                     <label for="edit_">'.$v['name:'].' '.$v['req'].'</label>
-                                        <select name="'.$k.'" id="'.$k.'" '.$cls.$extra_attributes.'>';
+                                        <select name="'.$k.'" id="'.$k.'" '.$cls.'>';
                             // Show "Click to select"?
                             if ( ! empty($v['value']['show_select']))
                             {
@@ -649,7 +414,7 @@ if ($predefined_name !== '') {
                             echo '</select>
                                 </div>
                                 <script>
-                                    $(\'#'.$k.'\').selectize(' . $selectize_config . ');
+                                    $(\'#'.$k.'\').selectize();
                                 </script>
                                 ';
                             break;
@@ -884,7 +649,7 @@ if ($predefined_name !== '') {
                 </div>
                 <div class="form-group">
                     <label><?php echo $hesklang['select_ticket_tpl']; ?>:</label>
-                    <div class="dropdown-select out-close">
+                    <div class="dropdown-select center out-close">
                         <select name="saved_replies" onchange="setMessage(this.value)">
                             <option value="0"> - <?php echo $hesklang['select_empty']; ?> - </option>
                             <?php echo $can_options; ?>
@@ -988,28 +753,12 @@ if ($predefined_name !== '') {
                         /* Select drop-down box */
                         case 'select':
 
-                            $extra_classes = '';
-                            $selectize_config = '';
-                            $extra_attributes = '';
-                            if (!empty($v['value']['is_searchable'])) {
-                                $extra_classes .= "read-write";
-                                $extra_attributes = ' placeholder="'.hesk_addslashes($hesklang['search_by_pattern']).'"';
-                                $selectize_config = '{
-                                    valueField: "id",
-                                    labelField: "displayName",
-                                    searchField: ["displayName"],
-                                    create: false,
-                                    copyClassesToDropdown: true,
-                                    plugins: ["no_results"],
-                                }';
-                            }
-
-                            $cls = in_array($k,$_SESSION['iserror']) ? ' class="isError ' . $extra_classes . '" ' : ' class="' . $extra_classes .'" ';
+                            $cls = in_array($k,$_SESSION['iserror']) ? ' class="isError" ' : '';
 
                             echo '
                                 <div class="form-group">
                                     <label for="edit_">'.$v['name:'].' '.$v['req'].'</label>
-                                        <select name="'.$k.'" id="'.$k.'" '.$cls.$extra_attributes.'">';
+                                        <select name="'.$k.'" id="'.$k.'" '.$cls.'>';
                             // Show "Click to select"?
                             if ( ! empty($v['value']['show_select']))
                             {
@@ -1033,7 +782,7 @@ if ($predefined_name !== '') {
                             echo '</select>
                                 </div>
                                 <script>
-                                    $(\'#'.$k.'\').selectize(' . $selectize_config . ');
+                                    $(\'#'.$k.'\').selectize();
                                 </script>
                                 ';
                             break;
@@ -1262,8 +1011,7 @@ if ($predefined_name !== '') {
 
                             if ($hesk_settings['autoassign'])
                             {
-                                $select = ( ! isset($_SESSION['as_owner']) && ! empty($hesk_settings['categories'][$category]['autoassign']) ) ? 'selected="selected"' : '';
-                                echo '<option value="-2" '.$select.'> &gt; ' . $hesklang['aass'] . ' &lt; </option>';
+                                echo '<option value="-2"> &gt; ' . $hesklang['aass'] . ' &lt; </option>';
                             }
 
                             $owner = isset($_SESSION['as_owner']) ? intval($_SESSION['as_owner']) : 0;
@@ -1305,9 +1053,9 @@ if ($predefined_name !== '') {
 
             <?php if ( defined('HESK_DEMO') ): ?>
                  <?php hesk_show_notice(sprintf($hesklang['antdemo'], 'https://www.hesk.com/demo/index.php?a=add')); ?>
-                <button class="btn btn-full" id="recaptcha-submit"><?php echo $hesklang['sub_ticket']; ?></button>
+                <button class="btn btn-full"><?php echo $hesklang['sub_ticket']; ?></button>
             <?php else: ?>
-                <button type="submit" class="btn btn-full" id="recaptcha-submit"><?php echo $hesklang['sub_ticket']; ?></button>
+                <button type="submit" class="btn btn-full"><?php echo $hesklang['sub_ticket']; ?></button>
             <?php endif; ?>
             <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
             <input type="hidden" name="category" value="<?php echo $category; ?>">
@@ -1317,229 +1065,6 @@ if ($predefined_name !== '') {
         <p>&nbsp;</p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-    </div>
-</div>
-<div class="modal" data-modal-id="create-customer">
-    <div class="modal__body" style="white-space: normal; <?php if ($hesk_settings['limit_width']) echo 'max-width:'.$hesk_settings['limit_width'].'px'; ?>">
-        <i class="modal__close" data-action="cancel">
-            <svg class="icon icon-close">
-                <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
-            </svg>
-        </i>
-        <h3 id="create-customer-title"><?php echo $hesklang['new_customer']; ?></h3>
-        <div class="modal__description">
-            <div id="new-customer-prompt" style="display: <?php echo $show_create_modal ? 'block' : 'none'; ?>">
-                <?php echo $hesklang['new_customer_prompt']; ?>
-            </div>
-            <div class="form">
-                <div class="form-group">
-                    <label for="create_name">
-                        <?php echo $hesklang['name']; ?>: <span class="important">*</span>
-                    </label>
-                    <input type="text" id="create_name" name="name" class="form-control" maxlength="50">
-                    <div class="form-control__error"></div>
-                </div>
-                <div class="form-group">
-                    <label for="email">
-                        <?php echo $hesklang['email'] . ':' . ($hesk_settings['require_email'] ? ' <span class="important">*</span>' : '') ; ?>
-                    </label>
-                    <input type="email"
-                           class="form-control"
-                           name="email" id="email" maxlength="1000">
-                    <div class="form-control__error"></div>
-                </div>
-                <div id="email_suggestions"></div>
-            </div>
-        </div>
-        <div class="modal__buttons">
-            <input type="hidden" name="customer_type" value="CUSTOMER">
-            <button class="btn btn-border" ripple="ripple" data-action="cancel"><?php echo $hesklang['cancel']; ?></button>
-            <a data-confirm-button href="#" class="btn btn-full text-white disabled" ripple="ripple" style="width: 152px; height: 40px;"><?php echo $hesklang['save']; ?></a>
-        </div>
-        <script>
-            var $name = $('#create_name');
-            var $email = $('#email');
-            var $saveButton = $("[data-modal-id='create-customer']").find('a[data-confirm-button]');
-            var nameValid = false;
-            var emailValid = false;
-            var emailFailureReason = '';
-
-            $name.keyup(function() {
-                let nameIsEmpty = ($name.val().trim() === '');
-                nameValid = !nameIsEmpty;
-                if (nameIsEmpty) {
-                    nameValid = false;
-                } else {
-                    nameValid = true;
-                }
-                let emailIsEmpty = ($email.val().trim() === '');
-                <?php if (!$hesk_settings['require_email']): ?>
-                emailValid = true;
-                <?php endif; ?>
-
-                /* If other/email field is empty, ignore always showing its error,
-                UNLESS it was already shown (user interacted with that field since opening the modal)
-                */
-                let clearEmailError = (!$email.parent().hasClass('error') && emailIsEmpty)
-                updateValidation(false, clearEmailError);
-            });
-            var debouncedEmailCheck = hesk_debounce(function() {
-                /* If other/name field is empty, ignore always showing its error,
-                UNLESS it was already shown (user interacted with that field since opening the modal)
-                */
-                let nameIsEmpty = ($name.val().trim() === '');
-                let emailIsEmpty = ($email.val().trim() === '');
-                let clearNameError = (!$name.parent().hasClass('error') && nameIsEmpty);
-
-                // If email is not required, and the email field is empty, we can just skip ajax validation for email.
-                // Otherwise, we always want to run ajax validation to maintain consistent UX.
-                <?php if (!$hesk_settings['require_email']): ?>
-                if (emailIsEmpty) {
-                    emailValid = true;
-                    updateValidation(clearNameError, false);
-                    return true;
-                }
-                <?php endif; ?>
-
-                //-- Disable save button initially until email check is complete
-                emailValid = false;
-                updateValidation(clearNameError, false);
-                if (emailIsEmpty) {
-                    emailFailureReason = '<?php echo hesk_makeJsString($hesklang['this_field_is_required']); ?>';
-                    updateValidation(clearNameError, false);
-                    return;
-                }
-
-                $.ajax({
-                    url: 'ajax/check_email.php',
-                    type: 'GET',
-                    data: {
-                        email: $email.val()
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        if (!data.emailValid) {
-                            emailValid = false;
-                            emailFailureReason = '<?php echo hesk_makeJsString($hesklang['enter_valid_email']); ?>';
-                        } else if (!data.emailAvailable) {
-                            emailValid = false;
-                            emailFailureReason = '<?php echo hesk_makeJsString($hesklang['customer_email_exists']); ?>';
-                        } else {
-                            emailValid = true;
-                            emailFailureReason = '';
-
-                            <?php if ($hesk_settings['detect_typos']): ?>
-                            hesk_suggestEmail('email', 'email_suggestions', 1, 1);
-                            <?php endif; ?>
-                        }
-                        updateValidation(clearNameError, false);
-                    },
-                    error: function(err) {
-                        console.error(err);
-                        emailValid = false;
-                        emailFailureReason = '<?php echo hesk_makeJsString($hesklang['an_error_occurred_validating_email']); ?>';
-                        updateValidation(clearNameError, false);
-                    }
-                });
-            }, 300);
-            $email.keyup(debouncedEmailCheck);
-            $saveButton.click(function() {
-                // Make sure our fields are valid
-                $name.keyup();
-                $email.keyup();
-
-                if (!nameValid || !emailValid) {
-                    //-- Fix validation state messages
-                    updateValidation();
-                    return;
-                }
-
-                $.ajax({
-                    url: 'ajax/create_customer.php',
-                    type: 'POST',
-                    data: {
-                        name: $name.val(),
-                        email: $email.val()
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        <?php if ($hesk_settings['multi_eml']): ?>
-                            var selectize = $('input[name="customer_type"]').val() === 'CUSTOMER' ?
-                                createCustomerSelectize :
-                                createFollowerSelectize;
-
-                            createCustomerSelectize[0].selectize.addOption(data);
-                            createFollowerSelectize[0].selectize.addOption(data);
-                        <?php else: ?>
-                            var selectize = createCustomerSelectize;
-                            createCustomerSelectize[0].selectize.addOption(data);
-                        <?php endif; ?>
-
-                        if (typeof selectize[0].selectize.getValue() === 'string') {
-                            selectize[0].selectize.setValue(data.id);
-                        } else {
-                            var currentCustomers = selectize[0].selectize.getValue();
-                            currentCustomers.push(data.id);
-                            selectize[0].selectize.setValue(currentCustomers);
-                        }
-                        $name.val('');
-                        $email.val('');
-                        $('[data-modal-id="create-customer"]').find('[data-action="cancel"]').click();
-                    },
-                    error: function(err) {
-                        emailValid = false;
-                        emailFailureReason = JSON.parse(err.responseText).message;
-                        updateValidation();
-                    }
-                });
-            });
-
-            function updateValidation(forceClearNameError = false, forceClearEmailError = false) {
-                var anyFailure = false;
-                /*
-                There are situations where we might delibarately clear errors for clearer user experience, even if inputs are empty on modal open,
-                BUT at same time keeping other validation/disabled buttons as they are.
-                 */
-                let clearNameError = forceClearNameError || nameValid;
-                if (!nameValid) {
-                    anyFailure = true;
-                    if (!forceClearNameError) {
-                        $name.parent().addClass('error');
-                        $name.parent().find('.form-control__error').text('<?php echo hesk_makeJsString($hesklang['this_field_is_required']); ?>');
-                    }
-                }
-                if (clearNameError) {
-                    $name.parent().removeClass('error');
-                    $name.parent().find('.form-control__error').text('');
-                }
-
-                let clearEmailError = forceClearEmailError || emailValid;
-                if (!emailValid) {
-                    anyFailure = true;
-                    
-                    if (!forceClearEmailError && emailFailureReason !== '') {
-                        $email.parent().addClass('error');
-                        $email.parent().find('.form-control__error').text(emailFailureReason);
-                    }
-                }
-                if (clearEmailError) {
-                    $email.parent().removeClass('error');
-                    $email.parent().find('.form-control__error').text('');
-                }
-
-                if (anyFailure) {
-                    $saveButton.addClass('disabled');
-                } else {
-                    $saveButton.removeClass('disabled');
-                }
-            }
-        </script>
-    </div>
-</div>
-<div id="loading-overlay" class="loading-overlay">
-    <div id="loading-message" class="loading-message">
-        <div class="spinner"></div>
-        <p><?php echo $hesklang['sending_wait']; ?></p>
     </div>
 </div>
 <?php
@@ -1645,8 +1170,6 @@ function hesk_new_ticket_reset_data()
         return true;
     }
 
-    hesk_cleanSessionVars('as_customer_id');
-    hesk_cleanSessionVars('as_follower_ids');
     hesk_cleanSessionVars('as_name');
     hesk_cleanSessionVars('as_email');
     hesk_cleanSessionVars('as_category');

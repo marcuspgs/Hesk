@@ -1,0 +1,5 @@
+<p>Hi %%NAME%%,</p>
+<p>以下があなたの多要素認証の検証コードです。このコードの有効期限は20分です。</p>
+<p><strong>%%VERIFICATION_CODE%%</strong></p>
+<p>よろしくお願いします。</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

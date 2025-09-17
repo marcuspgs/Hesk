@@ -46,6 +46,7 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                         <a href="admin_main.php" class="listitem__caption">
                             <?php echo $hesklang['tickets']; ?>
                         </a>
+                        <?php //<span class="badge listitem__notification">109</span> ?>
                     </div>
                 </li>
                 <?php if (hesk_checkPermission('can_man_canned',0) &&
@@ -175,93 +176,23 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                 </li>
                 <?php } ?>
                 <li class="separator"></li>
-                <?php if ($hesk_settings['customer_accounts'] > 0 &&
-                    (hesk_checkPermission('can_man_users',0) || hesk_checkPermission('can_view_users',0)) &&
-                    (hesk_checkPermission('can_man_customers',0) || hesk_checkPermission('can_view_customers',0))):
-                    $pages = array('manage_users', 'manage_customers', 'import_customers');
-                    $open_menu = in_array($calling_script, $pages) ? 'current submenu-is-opened' : '';
-                ?>
-                    <li class="listitem submenu <?php echo $open_menu; ?>">
-                        <div class="listitem__icon">
-                            <a href="#">
-                                <svg class="icon icon-team">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-team"></use>
-                                </svg>
-                            </a>
-                        </div>
-                        <div class="separator"></div>
-                        <div class="listitem__menu">
-                            <?php
-                            $show_badge = 0;
-                            if ((hesk_checkPermission('can_man_customers', 0) || hesk_checkPermission('can_man_customers', 0)) && $hesk_settings['customer_accounts_admin_approvals']) {
-                                $pending_customers = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
-                                        WHERE `verified` = 2");
-                                $show_badge = hesk_dbNumRows($pending_customers);
-                            }
-                            ?>
-                            <a href="#" class="listitem__caption">
-                                <?php
-                                echo $hesklang['menu_users'];
-                                if ($show_badge): ?>
-                                    <span class="admin-nav-badge"><?php echo $show_badge; ?></span>
-                                <?php endif; ?>
-                            </a>
-                            <ul class="submenu__list">
-                                <li class="submenu__listitem <?php if ($calling_script === 'manage_users') { ?>current<?php } ?>">
-                                    <a href="manage_users.php">
-                                        <?php echo $hesklang['team']; ?>
-                                    </a>
-                                </li>
-                                <li class="submenu__listitem <?php if (in_array($calling_script, ['manage_customers','import_customers'])) { ?>current<?php } ?>">
-                                    <a href="manage_customers.php">
-                                        <?php
-                                        echo $hesklang['customers'];
-
-                                        if ($show_badge > 0):
-                                        ?>
-                                        <span class="admin-nav-badge"><?php echo $show_badge; ?></span>
-                                        <?php endif; ?>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                <?php else: ?>
-                    <?php if (hesk_checkPermission('can_man_users',0) || hesk_checkPermission('can_view_users',0)) { ?>
-                    <li class="listitem <?php if (in_array($calling_script, ['manage_users'])) { ?>current<?php } ?>">
-                        <div class="listitem__icon">
-                            <a href="manage_users.php">
-                                <svg class="icon icon-team">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-team"></use>
-                                </svg>
-                            </a>
-                        </div>
-                        <div class="listitem__menu">
-                            <a href="manage_users.php" class="listitem__caption">
-                                <?php echo $hesklang['team']; ?>
-                            </a>
-                        </div>
-                    </li>
-                    <?php
-                    }
-                    if (hesk_checkPermission('can_man_customers',0) || hesk_checkPermission('can_view_customers',0)) { ?>
-                        <li class="listitem <?php if (in_array($calling_script, ['manage_customers','import_customers'])) { ?>current<?php } ?>">
-                            <div class="listitem__icon">
-                                <a href="manage_customers.php">
-                                    <svg class="icon icon-team">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-team"></use>
-                                    </svg>
-                                </a>
-                            </div>
-                            <div class="listitem__menu">
-                                <a href="manage_customers.php" class="listitem__caption">
-                                    <?php echo $hesklang['customers']; ?>
-                                </a>
-                            </div>
-                        </li>
-                        <?php
-                    }
-                endif;
+                <?php if (hesk_checkPermission('can_man_users',0) || hesk_checkPermission('can_view_users',0)) { ?>
+                <li class="listitem <?php if ($calling_script === 'manage_users') { ?>current<?php } ?>">
+                    <div class="listitem__icon">
+                        <a href="manage_users.php">
+                            <svg class="icon icon-team">
+                                <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-team"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="listitem__menu">
+                        <a href="manage_users.php" class="listitem__caption">
+                            <?php echo $hesklang['team']; ?>
+                        </a>
+                    </div>
+                </li>
+                <?php
+                }
 
                 //Reports
                 if (hesk_checkPermission('can_run_reports',0)) {

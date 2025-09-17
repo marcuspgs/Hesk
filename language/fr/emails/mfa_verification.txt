@@ -1,0 +1,10 @@
+Bonjour %%NAME%%,
+
+Vous trouverez ci-dessous votre code de vérification d'authentification multifacteur. Ce code expire dans 20 minutes.
+
+%%VERIFICATION_CODE%%
+
+Merci,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

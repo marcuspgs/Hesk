@@ -231,14 +231,7 @@ else
 unset($tmp);
 
 // Start SQL statement for selecting tickets
-$sql = "SELECT `tickets`.*, `requester`.`name` AS `name` 
-    FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
-    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
-        ON `tickets`.`id` = `ticket_to_customer`.`ticket_id`
-        AND `ticket_to_customer`.`customer_type` = 'REQUESTER'
-    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `requester`
-        ON `ticket_to_customer`.`customer_id` = `requester`.`id` 
-    WHERE ";
+$sql = "SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE ";
 
 // Some default settings
 $archive = array(1=>0,2=>0);
@@ -358,7 +351,7 @@ while ($row=hesk_dbFetchAssoc($res2))
 if (isset($_GET['w']))
 {
     require_once(HESK_PATH . 'inc/export_functions.inc.php');
-    list($success_msg, $tickets_exported) = hesk_export_to_XML($sql, false, $history);
+    list($success_msg, $tickets_exported) = hesk_export_to_XML($sql);
 }
 
 /* Print header */
@@ -579,13 +572,6 @@ if (isset($success_msg))
                     <input type="radio" name="asc" id="asc_0" value="0" <?php if (!$asc) {echo 'checked';} ?>>
                     <label for="asc_0"><?php echo $hesklang['descending']; ?></label>
                 </div>
-            </div>
-        </section>
-        <section class="reports__checkbox">
-            <h3><?php echo $hesklang['opt']; ?></h3>
-            <div class="checkbox-custom">
-                <input type="checkbox" name="history" id="history" value="1" <?php if ($history) echo 'checked'; ?>>
-                <label for="history"><?php echo $hesklang['ex_history']; ?></label>
             </div>
         </section>
         <div class="reports__export">

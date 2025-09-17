@@ -35,25 +35,6 @@ if (isset($_SESSION['preview_sm']))
     define('STYLE_CODE',1);
 }
 
-// Valid service message locations (pages)
-$hesk_settings['sm_locations'] = array(
-    'ALL' => $hesklang['loc_all'],
-    'home' => $hesklang['loc_home'],
-    't-cat' => $hesklang['loc_t_cat'],
-    't-add' => $hesklang['loc_t_add'],
-    't-ok' => $hesklang['loc_t_ok'],
-    't-view' => $hesklang['loc_t_view'],
-    't-form' => $hesklang['loc_t_form'],
-    'kb-main' => $hesklang['loc_kb_main'],
-    'kb-sub' => $hesklang['loc_kb_sub'],
-    'kb-art' => $hesklang['loc_kb_art'],
-    'c-login' => $hesklang['loc_login'],
-    'c-register' => $hesklang['loc_register'],
-    'c-ok' => $hesklang['loc_register_ok'],
-    'c-main' => $hesklang['loc_acc'],
-    'c-profile' => $hesklang['loc_profile'],
-);
-
 // Do we need to show the language options?
 $hesk_settings['show_language'] = (count($hesk_settings['languages']) > 1);
 
@@ -119,14 +100,13 @@ $num = hesk_dbNumRows($res);
                     ?>
                     <th><?php echo $hesklang['sm_author']; ?></th>
                     <th><?php echo $hesklang['sm_type']; ?></th>
-                    <th><?php echo $hesklang['sm_location']; ?></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php if ($num < 1): ?>
                 <tr>
-                    <td colspan="<?php echo $hesk_settings['show_language'] ? 7 : 6; ?>">
+                    <td colspan="<?php echo $hesk_settings['show_language'] ? 6 : 5; ?>">
                         <?php echo $hesklang['no_sm']; ?>
                     </td>
                 </tr>
@@ -169,16 +149,6 @@ $num = hesk_dbNumRows($res);
                         }
 
                         $type = $sm['type'] ? $hesklang['sm_draft']: $hesklang['sm_published'];
-                        if (empty($sm['location'])) {
-                            $locations = array('home');
-                        } else {
-                            $locations = explode(',', $sm['location']);
-                        }
-
-                        $location = '';
-                        foreach ($locations as $loc) {
-                            $location .= $hesk_settings['sm_locations'][$loc] . "<br>";
-                        }
                         ?>
                         <tr <?php echo $table_row; ?>>
                             <td><?php echo $sm['title']; ?></td>
@@ -197,9 +167,8 @@ $num = hesk_dbNumRows($res);
                             ?>
                             <td><?php echo (isset($admins[$sm['author']]) ? $admins[$sm['author']] : $hesklang['e_udel']); ?></td>
                             <td><?php echo $type; ?></td>
-                            <td><?php echo $location; ?></td>
                             <td class="nowrap buttons">
-                                <?php $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
+                                <?php $modal_id = hesk_generate_delete_modal($hesklang['confirm_deletion'],
                                     $hesklang['del_sm'],
                                     'service_messages.php?a=remove_sm&amp;id='. $sm['id'] .'&amp;token='. hesk_token_echo(0)); ?>
                                 <p>
@@ -287,7 +256,7 @@ if ($hesk_settings['kb_wysiwyg'])
     hesk_tinymce_init('#content');
 }
 ?>
-<div class="right-bar service-message-create create-custom-field" <?php if ($action === 'edit_sm' || isset($_SESSION['preview_sm']) || hesk_SESSION(array('new_sm','errors'))) {echo 'style="display: block"';} ?>>
+<div class="right-bar service-message-create" <?php if ($action === 'edit_sm' || isset($_SESSION['preview_sm']) || hesk_SESSION(array('new_sm','errors'))) {echo 'style="display: block"';} ?>>
     <div class="right-bar__body form" data-step="1">
         <h3 class="">
             <a href="<?php echo $action === 'edit_sm' || isset($_SESSION['preview_sm']) ? 'service_messages.php' : 'javascript:' ?>">
@@ -402,44 +371,6 @@ if ($hesk_settings['kb_wysiwyg'])
                         </div>
                     </section>
                     <?php endif; ?>
-                    <h4><?php echo $hesklang['loc_sm']; ?></h4>
-                    <section class="item--section">
-                        <?php
-                        $location = hesk_SESSION(array('new_sm','location'));
-                        if ($location != 1 && $location != 2) {
-                            $location = 0;
-                        }
-                        ?>
-                        <div class="radio-custom">
-                            <input type="radio" name="location" id="location0" value="0" onchange="hesk_setRadioOptions();" <?php if ($location == 0) {echo 'checked';} ?>>
-                            <label for="location0"><?php echo $hesklang['loc_home']; ?></label>
-                        </div>
-                        <div class="radio-custom">
-                            <input type="radio" name="location" id="location1" value="1" onchange="hesk_setRadioOptions();" <?php if ($location == 1) {echo 'checked';} ?>>
-                            <label for="location1"><?php echo $hesklang['loc_all'] . ' ' . $hesklang['loc_norec']; ?></label>
-                        </div>
-                        <div class="radio-custom">
-                            <input type="radio" name="location" id="location2" value="2" onchange="hesk_setRadioOptions();" <?php if ($location == 2) {echo 'checked';} ?>>
-                            <label for="location2"><?php echo $hesklang['loc_selected']; ?></label>
-                        </div>
-                        <div id="selloc" style="display:<?php echo $location == 2 ? 'block' : 'none'; ?>">
-                            <select class="multiple form-control" name="locations[]" multiple="multiple" size="10">
-                                <?php
-                                $locations = hesk_SESSION(array('new_sm','locations'));
-                                $locations = is_array($locations) ? $locations : array();
-
-                                foreach ($hesk_settings['sm_locations'] as $loc_id => $loc_name)
-                                {
-                                    if ($loc_id == 'ALL') {
-                                        continue;
-                                    }
-                                    echo '<option value="'.$loc_id.'"'.(in_array($loc_id, $locations) ? ' selected="selected"' : '').'>'.$loc_name.'</option>';
-                                }
-                                ?>
-                            </select>
-                            <?php echo $hesklang['cf_ctrl']; ?>
-                        </div>
-                    </section>
                 </div>
             </div>
             <div class="right-bar__footer">
@@ -458,23 +389,6 @@ if ($hesk_settings['kb_wysiwyg'])
         </form>
     </div>
 </div>
-<script type="text/javascript">
-function hesk_toggleLayer(nr,setto) {
-    if (document.all)
-        document.all[nr].style.display = setto;
-    else if (document.getElementById)
-        document.getElementById(nr).style.display = setto;
-}
-
-function hesk_setRadioOptions() {
-    if(document.getElementById('location2').checked) {
-        hesk_toggleLayer('selloc', 'block');
-    } else {
-        hesk_toggleLayer('selloc', 'none');
-    }
-}
-</script>
-
 <?php
 
 if ( isset($_SESSION['new_sm']) && ! isset($_SESSION['edit_sm']) )
@@ -516,25 +430,6 @@ function save_sm()
     {
         $language = '';
     }
-
-    $location = intval(hesk_POST('location'));
-    if ($location == 2) {
-        $locations = hesk_POST_array('locations');
-        foreach ($locations as $key => $page) {
-            if ( ! isset($hesk_settings['sm_locations'][$page])) {
-                unset($locations[$key]);
-            }
-        }
-        if (count($locations) == 0) {
-            $hesk_error_buffer[] = $hesklang['loc_selerr'];
-        }
-    } elseif ($location == 1) {
-        $locations = array('ALL');
-    } else {
-        $location = 0;
-        $locations = array();
-    }
-
     $title = hesk_input( hesk_POST('title') ) or $hesk_error_buffer[] = $hesklang['sm_e_title'];
     $message = $hesk_settings['kb_wysiwyg'] ? hesk_getHTML( hesk_POST('message') ) : nl2br( hesk_input( hesk_POST('message') ) );
 
@@ -553,8 +448,6 @@ function save_sm()
 		'style' => $style,
 		'type' => $type,
         'language' => $language,
-        'location' => $location,
-        'locations' => $locations,
 		'title' => $title,
 		'message' => hesk_input( hesk_POST('message') ),
         'errors' => array('title')
@@ -582,8 +475,6 @@ function save_sm()
 		'style' => $style,
 		'type' => $type,
         'language' => $language,
-        'location' => $location,
-        'locations' => $locations,
 		'title' => $title,
         'message' => hesk_input( hesk_POST('message') ),
         'message_preview' => $message
@@ -599,7 +490,6 @@ function save_sm()
 	`title` = '".hesk_dbEscape($title)."',
 	`message` = '".hesk_dbEscape($message)."',
     `language` = ".(strlen($language) ? "'".hesk_dbEscape($language)."'" : 'NULL').",
-    `location` = ".(count($locations) ? "'".implode(',', $locations)."'" : 'NULL').",
 	`style` = '{$style}',
 	`type` = '{$type}'
 	WHERE `id`={$id}");
@@ -639,17 +529,6 @@ function edit_sm()
     }
 
     $sm['message'] = hesk_htmlspecialchars($sm['message']);
-
-    if (empty($sm['location'])) {
-        $sm['locations'] = array();
-        $sm['location'] = 0;
-    } elseif ($sm['location'] == 'ALL') {
-        $sm['locations'] = array('ALL');
-        $sm['location'] = 1;
-    } else {
-        $sm['locations'] = explode(',', $sm['location']);
-        $sm['location'] = 2;
-    }
 
     $_SESSION['smord'] = $id;
 	$_SESSION['new_sm'] = $sm;
@@ -753,25 +632,6 @@ function new_sm()
     {
         $language = '';
     }
-
-    $location = intval(hesk_POST('location'));
-    if ($location == 2) {
-        $locations = hesk_POST_array('locations');
-        foreach ($locations as $key => $page) {
-            if ( ! isset($hesk_settings['sm_locations'][$page])) {
-                unset($locations[$key]);
-            }
-        }
-        if (count($locations) == 0) {
-            $hesk_error_buffer[] = $hesklang['loc_selerr'];
-        }
-    } elseif ($location == 1) {
-        $locations = array('ALL');
-    } else {
-        $location = 0;
-        $locations = array();
-    }
-
     $title = hesk_input( hesk_POST('title') ) or $hesk_error_buffer[] = $hesklang['sm_e_title'];
     $message = $hesk_settings['kb_wysiwyg'] ? hesk_getHTML( hesk_POST('message') ) : nl2br( hesk_input( hesk_POST('message') ) );
 
@@ -787,8 +647,6 @@ function new_sm()
 		'style' => $style,
 		'type' => $type,
         'language' => $language,
-        'location' => $location,
-        'locations' => $locations,
 		'title' => $title,
 		'message' => hesk_input( hesk_POST('message') ),
         'errors' => array('title')
@@ -814,8 +672,6 @@ function new_sm()
 		'style' => $style,
 		'type' => $type,
         'language' => $language,
-        'location' => $location,
-        'locations' => $locations,
 		'title' => $title,
         'message' => hesk_input( hesk_POST('message') ),
         'message_preview' => $message
@@ -831,14 +687,13 @@ function new_sm()
 	$my_order = isset($row[0]) ? intval($row[0]) + 10 : 10;
 
     // Insert service message into database
-	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."service_messages` (`author`,`title`,`message`,`language`,`style`,`type`,`location`,`order`) VALUES (
+	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."service_messages` (`author`,`title`,`message`,`language`,`style`,`type`,`order`) VALUES (
     '".intval($_SESSION['id'])."',
     '".hesk_dbEscape($title)."',
     '".hesk_dbEscape($message)."',
     ".(strlen($language) ? "'".hesk_dbEscape($language)."'" : 'NULL').",
     '{$style}',
     '{$type}',
-    ".(count($locations) ? "'".implode(',', $locations)."'" : 'NULL').",
     '{$my_order}'
     )");
 
@@ -847,3 +702,4 @@ function new_sm()
 
 } // End new_sm()
 
+?>

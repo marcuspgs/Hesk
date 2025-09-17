@@ -44,9 +44,19 @@ function hesk_dbSetNames()
 
 function hesk_dbFormatEmail($email, $field = 'email')
 {
+	global $hesk_settings;
+
 	$email = hesk_dbLike($email);
 
-    return " `".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email)."' ";
+	if ($hesk_settings['multi_eml'])
+	{
+		return " (`".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email)."' OR `".hesk_dbEscape($field)."` LIKE '%,".hesk_dbEscape($email)."' OR `".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email).",%' OR `".hesk_dbEscape($field)."` LIKE '%,".hesk_dbEscape($email).",%') ";
+	}
+	else
+	{
+		return " `".hesk_dbEscape($field)."` LIKE '".hesk_dbEscape($email)."' ";
+	}
+
 } // END hesk_dbFormatEmail()
 
 
@@ -189,8 +199,7 @@ function hesk_dbHandleFailure($query) {
             print json_encode(array(
                 'status' => 'failure',
                 'title' => $hesklang['cant_sql'],
-                'message' => mysqli_error($hesk_db_link),
-                'query' => $query
+                'message' => mysqli_error($hesk_db_link)
             ));
         } else {
             print json_encode(array(

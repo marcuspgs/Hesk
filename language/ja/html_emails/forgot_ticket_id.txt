@@ -1,0 +1,5 @@
+<p>親愛なる %%NAME%% 様へ,</p>
+<p>このメールは、あなたのメールアドレスで送信されたサポートチケットの一覧を含んでいます。見つかったサポートチケットの数: <strong>%%NUM%%</strong></p>
+<p>%%LIST_TICKETS%%</p>
+<p>敬具,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

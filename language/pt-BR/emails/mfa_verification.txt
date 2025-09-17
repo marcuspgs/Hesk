@@ -1,0 +1,10 @@
+Olá %%NAME%%,
+
+Abaixo está o seu código de verificação para autenticação de dois fatores. Este código expira em 20 minutos.
+
+%%VERIFICATION_CODE%%
+
+Atenciosamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

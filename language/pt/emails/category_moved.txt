@@ -1,0 +1,20 @@
+Olá,
+
+Um novo TICKET foi movido para a sua categoria. Detalhes do ticket:
+
+Assunto: %%SUBJECT%%
+ID Rastreador: %%TRACK_ID%%
+
+Você pode gerir este ticket aqui:
+%%TRACK_URL%%
+
+
+*NÃO RESPONDA ESTE E-MAIL !!!*
+Esta é uma mensagem automática enviada pelo Sistema de Gestão de tickets. Não responda este e-mail, pois quem solicitou o ticket não irá receber a sua resposta.
+Para modificar as suas preferências de recebimento de e-mail vá até à administração do sistema e clique em "Perfil".
+
+Atenciosamente,
+Sistema de Gestão de Chamados.
+
+%%SITE_TITLE%%
+%%SITE_URL%%

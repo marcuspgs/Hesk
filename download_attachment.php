@@ -19,10 +19,13 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 require(HESK_PATH . 'inc/common.inc.php');
 hesk_load_database_functions();
 
-hesk_session_start('CUSTOMER');
+hesk_session_start();
 
-// Are we in maintenance mode?
-hesk_check_maintenance();
+// Are we in maintenance mode? (check customers only)
+if ( empty($_SESSION['id']) )
+{
+	hesk_check_maintenance();
+}
 
 // Knowledgebase attachments
 if ( isset($_GET['kb_att']) )
@@ -59,8 +62,17 @@ if ( isset($_GET['kb_att']) )
     // Private or draft article or category?
     if ($row['cat_type'] || $row['art_type'])
     {
-		// This is a staff-only attachment
-		hesk_error($hesklang['attpri']);
+		if ( empty($_SESSION['id']) )
+		{
+			// This is a staff-only attachment
+			hesk_error($hesklang['attpri']);
+		}
+		elseif ($row['art_type'] == 2)
+		{
+			// Need permission to manage KB to access draft attachments
+			require(HESK_PATH . 'inc/admin_functions.inc.php');
+			hesk_checkPermission('can_man_kb');
+		}
     }
 }
 
@@ -89,13 +101,16 @@ else
 	}
 
 	// Verify email address match if needed
-	hesk_verifyEmailMatch($tic_id);
+	if ( empty($_SESSION['id']) )
+    {
+    	hesk_verifyEmailMatch($tic_id);
 
-	// Only staff may download attachments to notes
-	if ($file['type'])
-	{
-		hesk_error($hesklang['perm_deny']);
-	}
+		// Only staff may download attachments to notes
+		if ($file['type'])
+		{
+        	hesk_error($hesklang['perm_deny']);
+		}
+    }
 }
 
 // Path of the file on the server
@@ -136,3 +151,4 @@ else
 }
 
 exit();
+?>

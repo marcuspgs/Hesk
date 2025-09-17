@@ -24,7 +24,6 @@ hesk_check_maintenance();
 hesk_load_database_functions();
 require(HESK_PATH . 'inc/email_functions.inc.php');
 require(HESK_PATH . 'inc/posting_functions.inc.php');
-require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 // We only allow POST requests to this file
 if ( $_SERVER['REQUEST_METHOD'] != 'POST' )
@@ -39,7 +38,7 @@ if ( empty($_POST) && ! empty($_SERVER['CONTENT_LENGTH']) )
 	hesk_error($hesklang['maxpost']);
 }
 
-hesk_session_start('CUSTOMER');
+hesk_session_start();
 
 // Prevent flooding - multiple replies within a few seconds are probably not valid
 if ($hesk_settings['flood'])
@@ -63,11 +62,7 @@ $hesk_error_buffer = array();
 $trackingID  = hesk_cleanID('orig_track') or die($hesklang['int_error'].': No orig_track');
 
 // Email required to view ticket?
-if (hesk_isCustomerLoggedIn(false)) {
-    $my_email = $_SESSION['customer']['email'];
-} else {
-    $my_email = hesk_getCustomerEmail();
-}
+$my_email = hesk_getCustomerEmail();
 
 // Setup required session vars
 $_SESSION['t_track'] = $trackingID;
@@ -165,17 +160,15 @@ if (hesk_dbNumRows($res) == 1)
 }
 
 /* Get details about the original ticket */
-$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `ticket` WHERE `trackid`='{$trackingID}' LIMIT 1");
+$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `trackid`='{$trackingID}' LIMIT 1");
 if (hesk_dbNumRows($res) != 1)
 {
 	hesk_error($hesklang['ticket_not_found']);
 }
 $ticket = hesk_dbFetchAssoc($res);
-$customers = hesk_get_customers_for_ticket($ticket['id']);
-$customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
 
 /* If we require e-mail to view tickets check if it matches the one in database */
-hesk_verifyEmailMatch($trackingID, $my_email, $customer_emails);
+hesk_verifyEmailMatch($trackingID, $my_email, $ticket['email']);
 
 /* Ticket locked? */
 if ($ticket['locked'])
@@ -225,24 +218,7 @@ if (hesk_can_customer_change_status($ticket['status']))
 $res = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `lastchange`=NOW(), `status`='{$ticket['status']}', `replies`=`replies`+1, `lastreplier`='0' WHERE `id`='{$ticket['id']}'");
 
 // Insert reply into database
-$my_customer = null;
-foreach ($customers as $customer) {
-	if ($customer['email'] === $my_email) {
-		$my_customer = $customer;
-		break;
-	}
-}
-
-if (empty($my_customer)) {
-    foreach ($customers as $customer) {
-        if ($customer['customer_type'] == 'REQUESTER') {
-            $my_customer = $customer;
-            break;
-        }
-    }
-}
-
-hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`message`,`message_html`,`dt`,`attachments`, `customer_id`) VALUES ({$ticket['id']},'".hesk_dbEscape($message)."','".hesk_dbEscape($message)."',NOW(),'".hesk_dbEscape($myattachments)."', ".intval($my_customer['id']).")");
+hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`name`,`message`,`message_html`,`dt`,`attachments`) VALUES ({$ticket['id']},'".hesk_dbEscape(addslashes($ticket['name']))."','".hesk_dbEscape($message)."','".hesk_dbEscape($message)."',NOW(),'".hesk_dbEscape($myattachments)."')");
 
 
 /*** Need to notify any staff? ***/
@@ -250,27 +226,23 @@ hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` 
 // --> Prepare reply message
 
 // 1. Generate the array with ticket info that can be used in emails
-$combined_emails = implode(';', $customer_emails);
-$customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
-$combined_names = implode(',', $customer_names);
-
 $info = array(
-'email'			=> $combined_emails,
+'email'			=> $ticket['email'],
 'category'		=> $ticket['category'],
 'priority'		=> $ticket['priority'],
 'owner'			=> $ticket['owner'],
 'trackid'		=> $ticket['trackid'],
 'status'		=> $ticket['status'],
-'name'			=> $combined_names,
+'name'			=> $ticket['name'],
 'subject'		=> $ticket['subject'],
 'message'		=> stripslashes($message),
 'attachments'	=> $myattachments,
 'dt'			=> hesk_date($ticket['dt'], true),
-'lastchange'	=> hesk_date(),
+'lastchange'	=> hesk_date($ticket['lastchange'], true),
 'due_date'      => hesk_format_due_date($ticket['due_date']),
 'id'			=> $ticket['id'],
 'time_worked'   => $ticket['time_worked'],
-'last_reply_by' => $my_customer['name'],
+'last_reply_by' => $ticket['name'],
 );
 
 // 2. Add custom fields to the array
@@ -303,3 +275,4 @@ hesk_cleanSessionVars('r_attachments');
 /* Show the ticket and the success message */
 hesk_process_messages($hesklang['reply_submitted_success'],'ticket.php','SUCCESS');
 exit();
+?>

@@ -1,19 +1,17 @@
 <?php
-// Settings file for HESK 3.5.2
+// Settings file for HESK 3.4.3
 
 // ==> GENERAL
 
 // --> General settings
 $hesk_settings['site_title']='Website';
-$hesk_settings['site_url']='https://www.example.com';
+$hesk_settings['site_url']='http://www.example.com';
 $hesk_settings['hesk_title']='Help Desk';
-$hesk_settings['hesk_url']='https://www.example.com/helpdesk';
+$hesk_settings['hesk_url']='http://www.example.com/helpdesk';
 $hesk_settings['webmaster_mail']='support@example.com';
 $hesk_settings['site_theme']='hesk3';
 $hesk_settings['admin_css']=0;
 $hesk_settings['admin_css_url']='https://www.example.com/hesk-style.css';
-$hesk_settings['admin_js']=0;
-$hesk_settings['admin_js_url']='https://www.example.com/hesk-script.js';
 
 // --> Language settings
 $hesk_settings['can_sel_lang']=0;
@@ -63,32 +61,10 @@ $hesk_settings['spam_notice']=1;
 $hesk_settings['list_users']=0;
 $hesk_settings['debug_mode']=1;
 $hesk_settings['short_link']=0;
-$hesk_settings['submitting_wait']=1;
 $hesk_settings['select_cat']=0;
 $hesk_settings['select_pri']=0;
 $hesk_settings['cat_show_select']=15;
 $hesk_settings['staff_ticket_formatting']=0;
-
-// --> Barcode
-$hesk_settings['barcode']=array(
-'print' => 0,
-'staff_only' => 0,
-'type' => 'C128',
-'format' => 'svg',
-'width' => 300,
-'height' => 80,
-'color' => 'black',
-'bg' => 'white',
-);
-
-// --> Customer Accounts
-$hesk_settings['customer_accounts']=0;
-$hesk_settings['customer_accounts_required']=0;
-$hesk_settings['customer_accounts_customer_self_register']=1;
-$hesk_settings['customer_accounts_admin_approvals']=0;
-$hesk_settings['customer_autologin']=1;
-$hesk_settings['customer_accounts_allow_email_changes']=1;
-$hesk_settings['customer_accounts_verify_email_cooldown']=15;
 
 // --> SPAM Prevention
 $hesk_settings['secimg_use']=1;
@@ -148,7 +124,6 @@ $hesk_settings['kb_related']=5;
 // --> Email sending
 $hesk_settings['noreply_mail']='support@example.com';
 $hesk_settings['noreply_name']='Help Desk';
-$hesk_settings['email_max_recipients']=50;
 $hesk_settings['email_formatting']=3;
 $hesk_settings['smtp']=0;
 $hesk_settings['smtp_host_name']='mail.example.com';
@@ -171,7 +146,6 @@ $hesk_settings['imap_host_name']='mail.example.com';
 $hesk_settings['imap_host_port']=993;
 $hesk_settings['imap_enc']='ssl';
 $hesk_settings['imap_noval_cert']=0;
-$hesk_settings['imap_disable_GSSAPI']=0;
 $hesk_settings['imap_keep']=0;
 $hesk_settings['imap_user']='';
 $hesk_settings['imap_password']='';
@@ -200,9 +174,6 @@ $hesk_settings['pipe_block_returned']=1;
 $hesk_settings['pipe_block_duplicate']=1;
 $hesk_settings['loop_hits']=5;
 $hesk_settings['loop_time']=300;
-$hesk_settings['pipe_customer_rejection_notification']=1;
-$hesk_settings['pipe_customer_rejection_email_cooldown_hours']=24;
-
 
 // --> Detect email typos
 $hesk_settings['detect_typos']=1;
@@ -238,7 +209,7 @@ $hesk_settings['timezone']='UTC';
 $hesk_settings['format_time']='H:i:s';
 $hesk_settings['format_date']='Y-m-d';
 $hesk_settings['format_timestamp']='Y-m-d H:i:s';
-$hesk_settings['time_display']=1;
+$hesk_settings['time_display']='1';
 $hesk_settings['format_datepicker_js']='dd/mm/yyyy';
 $hesk_settings['format_datepicker_php']='d/m/Y';
 
@@ -255,7 +226,7 @@ $hesk_settings['check_updates']=1;
 #############################
 #     DO NOT EDIT BELOW     #
 #############################
-$hesk_settings['hesk_version']='3.5.2';
+$hesk_settings['hesk_version']='3.4.3';
 if ($hesk_settings['debug_mode'])
 {
     error_reporting(E_ALL);

@@ -25,7 +25,6 @@ require_once(HESK_PATH . 'inc/custom_fields.inc.php');
 
 // Make sure statuses are loaded
 require_once(HESK_PATH . 'inc/statuses.inc.php');
-require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 function hesk_notifyCustomer($email_template = 'new_ticket')
 {
@@ -36,62 +35,29 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
         return true;
     }
 
-    $customers = hesk_get_customers_for_ticket($ticket['id']);
-    $ticket['customers'] = $customers;
-
-    $language_to_customers = [];
-    foreach ($customers as $customer) {
-        if ($customer['email'] === null || $customer['email'] === '') {
-            continue;
-        }
-
-        // Make sure customer gets response in correct language
-        $language = HESK_DEFAULT_LANGUAGE;
-        if (isset($customer['language'])) {
-            $language = $customer['language'];
-        } elseif (isset($ticket['language'])) {
-            $language = $ticket['language'];
-        }
-
-        if (!isset($language)) {
-            $language_to_customers[$language] = [];
-        }
-        $language_to_customers[$language][] = $customer;
+    // No customer email
+    if ($ticket['email'] == '') {
+        return true;
     }
 
-    foreach ($language_to_customers as $language => $customers) {
-        hesk_setLanguage($language);
-        $subject = hesk_getEmailSubject($email_template, $ticket);
-        list($message, $html_message) = hesk_getEmailMessage($email_template, $ticket);
-
-        $customer_emails = hesk_getEmailsForCustomers($customers);
-        hesk_mail($customer_emails['requester'], $customer_emails['followers'], $subject, $message, $html_message, $ticket['trackid']);
-
-        // Reset language if needed
-        hesk_resetLanguage();
+    // Make sure customer gets response in correct language
+    if (isset($ticket['language'])) {
+        hesk_setLanguage($ticket['language']);
     }
 
+    // Format email subject and message
+    $subject = hesk_getEmailSubject($email_template, $ticket);
+    list($message, $html_message) = hesk_getEmailMessage($email_template, $ticket);
+
+    // Send e-mail
+    hesk_mail($ticket['email'], $subject, $message, $html_message, $ticket['trackid']);
+
+    // Reset language if needed
+    hesk_resetLanguage();
 
     return true;
 
 } // END hesk_notifyCustomer()
-
-function hesk_getEmailsForCustomers($customers) {
-    $requester = null;
-    $followers = [];
-    foreach ($customers as $customer) {
-        if ($customer['customer_type'] === 'REQUESTER') {
-            $requester = $customer['email'];
-        } else {
-            $followers[] = $customer['email'];
-        }
-    }
-
-    return [
-        'requester' => $requester,
-        'followers' => $followers
-    ];
-}
 
 
 function hesk_notifyAssignedStaff($autoassign_owner, $email_template, $type = 'notify_assigned')
@@ -126,7 +92,7 @@ function hesk_notifyAssignedStaff($autoassign_owner, $email_template, $type = 'n
     list($message, $html_message) = hesk_getEmailMessage($email_template, $ticket, 1);
 
     /* Send email to staff */
-    hesk_mail($autoassign_owner['email'], [], $subject, $message, $html_message);
+    hesk_mail($autoassign_owner['email'], $subject, $message, $html_message);
 
     /* Reset language to original one */
     hesk_resetLanguage();
@@ -183,7 +149,7 @@ function hesk_notifyStaff($email_template, $sql_where, $is_ticket = 1)
                 /* Send email messages in previous languages (if required) */
                 if ($current_language != 'NONE') {
                     /* Send e-mail to staff */
-                    hesk_mail(implode(',', $recipients), [], $subject, $message, $html_message);
+                    hesk_mail(implode(',', $recipients), $subject, $message, $html_message);
 
                     /* Reset list of email addresses */
                     $recipients = array();
@@ -205,7 +171,7 @@ function hesk_notifyStaff($email_template, $sql_where, $is_ticket = 1)
         }
 
         /* Send email messages to the remaining staff */
-        hesk_mail(implode(',', $recipients), [], $subject, $message, $html_message);
+        hesk_mail(implode(',', $recipients), $subject, $message, $html_message);
 
         /* Reset language to original one */
         hesk_resetLanguage();
@@ -214,86 +180,6 @@ function hesk_notifyStaff($email_template, $sql_where, $is_ticket = 1)
     return true;
 
 } // END hesk_notifyStaff()
-
-
-function hesk_notifyStaffOfPendingApprovals($num)
-{
-    global $hesk_settings, $hesklang, $ticket;
-
-    // Demo mode
-    if (defined('HESK_DEMO')) {
-        return true;
-    }
-
-    $admins = array();
-    $res = hesk_dbQuery("SELECT `email`,`language` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `notify_customer_approval` = '1' AND (`isadmin` = '1' OR `heskprivileges` LIKE '%can_man_customers%') ORDER BY `language`");
-    while ($myuser = hesk_dbFetchAssoc($res)) {
-        $admins[] = array('email' => $myuser['email'], 'language' => $myuser['language']);
-    }
-
-    if (count($admins) == 0) {
-        return true;
-    }
-
-    $email_template = 'new_customer_approval';
-    $verification_url = $hesk_settings['hesk_url'] . '/' . $hesk_settings['admin_dir'] . '/manage_customers.php';
-
-    /* Make sure each user gets email in his/her preferred language */
-    $current_language = 'NONE';
-    $recipients = array();
-
-    /* Loop through staff */
-    foreach ($admins as $admin) {
-        /* If admin language is NULL force default HESK language */
-        if (!$admin['language'] || !isset($hesk_settings['languages'][$admin['language']])) {
-            $admin['language'] = HESK_DEFAULT_LANGUAGE;
-        }
-
-        /* Generate message or add email to the list of recepients */
-        if ($admin['language'] == $current_language) {
-            /* We already have the message, just add email to the recipients list */
-            $recipients[] = $admin['email'];
-        } else {
-            /* Send email messages in previous languages (if required) */
-            if ($current_language != 'NONE') {
-                /* Send e-mail to staff */
-                hesk_mail(implode(',', $recipients), [], $subject, $message, $html_message);
-
-                /* Reset list of email addresses */
-                $recipients = array();
-            }
-
-            /* Set new language */
-            hesk_setLanguage($admin['language']);
-
-            // Format email subject and message
-            $subject = hesk_getEmailSubject($email_template, '', 0);
-            list($message, $html_message) = hesk_getEmailMessage($email_template, $admin, 0, 0, 1);
-
-            // Replace message special tags
-            list($message, $html_message) = hesk_replace_email_tag('%%SITE_TITLE%%', hesk_msgToPlain($hesk_settings['site_title'], 1, 0), $message, $html_message);
-            list($message, $html_message) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'] . ' ', $message, $html_message);
-            list($message, $html_message) = hesk_replace_email_tag('%%VERIFICATION_URL%%', $verification_url, $message, $html_message);
-            list($message, $html_message) = hesk_replace_email_tag('%%NUM%%', $num, $message, $html_message);
-
-            /* Add email to the recipients list */
-            $recipients[] = $admin['email'];
-
-            /* Remember the last processed language */
-            $current_language = $admin['language'];
-        }
-    }
-
-    /* Send email messages to the remaining staff */
-    hesk_mail(implode(',', $recipients), [], $subject, $message, $html_message);
-
-    /* Reset language to original one */
-    hesk_resetLanguage();
-
-    return true;
-
-} // END hesk_notifyStaffOfPendingApprovals()
-
 
 function hesk_sendOverdueTicketReminder($ticket, $users)
 {
@@ -321,145 +207,11 @@ function hesk_sendOverdueTicketReminder($ticket, $users)
     }
 
     if (count($emails)) {
-        hesk_mail(implode(',', $emails), [], $subject, $message, $html_message);
+        hesk_mail(implode(',', $emails), $subject, $message, $html_message);
     }
 
     return true;
 }
-
-function hesk_sendCustomerRegistrationEmail($user, $verification_token, $email_template = 'customer_verify_registration') {
-    global $hesklang, $hesk_settings;
-
-    if (defined('HESK_DEMO')) {
-        return true;
-    }
-
-    hesk_setLanguage($user['language']);
-
-    // Format email subject and message
-    $subject = hesk_getEmailSubject($email_template, '', 0);
-    list($message, $html_message) = hesk_getEmailMessage($email_template,
-        $user,
-        0,
-        0,
-        1);
-
-    // Replace message special tags
-    $verification_url = $hesk_settings['hesk_url'] . '/verify_registration.php?email='.urlencode($user['email']).'&verificationToken='.urlencode($verification_token);
-    list($message, $html_message) = hesk_replace_email_tag('%%NAME%%', hesk_full_name_to_first_name(hesk_msgToPlain($user['name'], 1, 1)), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_TITLE%%', hesk_msgToPlain($hesk_settings['site_title'], 1, 0), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'] . ' ', $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%VERIFICATION_URL%%', $verification_url, $message, $html_message);
-
-    // Send email
-    hesk_mail($user['email'], [], $subject, $message, $html_message);
-
-    // Reset language if needed
-    hesk_resetLanguage();
-}
-
-function hesk_sendCustomerRegistrationApprovedEmail($user) {
-    global $hesklang, $hesk_settings;
-
-    if (defined('HESK_DEMO')) {
-        return true;
-    }
-
-    hesk_setLanguage($user['language']);
-
-    // Format email subject and message
-    $subject = hesk_getEmailSubject('customer_approved', '', 0);
-    list($message, $html_message) = hesk_getEmailMessage('customer_approved',
-        $user,
-        0,
-        0,
-        1);
-
-    // Replace message special tags
-    list($message, $html_message) = hesk_replace_email_tag('%%NAME%%', hesk_full_name_to_first_name(hesk_msgToPlain($user['name'], 1, 1)), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_TITLE%%', hesk_msgToPlain($hesk_settings['site_title'], 1, 0), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'] . ' ', $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%CUSTOMER_LOGIN_URL%%', $hesk_settings['hesk_url'] . '/login.php', $message, $html_message);
-
-    // Send email
-    hesk_mail($user['email'], [], $subject, $message, $html_message);
-
-    // Reset language if needed
-    hesk_resetLanguage();
-}
-
-function hesk_sendCustomerRegistrationRejectedEmail($user) {
-    global $hesklang, $hesk_settings;
-
-    if (defined('HESK_DEMO')) {
-        return true;
-    }
-
-    hesk_setLanguage($user['language']);
-
-    // Format email subject and message
-    $subject = hesk_getEmailSubject('customer_rejected', '', 0);
-    list($message, $html_message) = hesk_getEmailMessage('customer_rejected',
-        $user,
-        0,
-        0,
-        1);
-
-    // Replace message special tags
-    list($message, $html_message) = hesk_replace_email_tag('%%NAME%%', hesk_full_name_to_first_name(hesk_msgToPlain($user['name'], 1, 1)), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_TITLE%%', hesk_msgToPlain($hesk_settings['site_title'], 1, 0), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'] . ' ', $message, $html_message);
-
-    // Send email
-    hesk_mail($user['email'], [], $subject, $message, $html_message);
-
-    // Reset language if needed
-    hesk_resetLanguage();
-}
-
-function hesk_sendCustomerTicket2EmailFailure($email_info, $template) {
-    global $hesklang, $hesk_settings;
-
-    if (defined('HESK_DEMO')) {
-        return true;
-    }
-
-    // Format email subject and message
-    $subject = hesk_getEmailSubject($template, '', 0);
-    list($message, $html_message) = hesk_getEmailMessage($template, null, 0, 0, 1);
-
-    // Replace message special tags
-    list($message, $html_message) = hesk_replace_email_tag('%%NAME%%', hesk_full_name_to_first_name(hesk_msgToPlain($email_info['name'], 1, 1)), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SUBJECT%%', hesk_msgToPlain($email_info['subject'], 1, 1), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%CUSTOMER_REGISTER_URL%%', $hesk_settings['hesk_url'] . '/register.php', $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_TITLE%%', hesk_msgToPlain($hesk_settings['site_title'], 1, 0), $message, $html_message);
-    list($message, $html_message) = hesk_replace_email_tag('%%SITE_URL%%', $hesk_settings['site_url'] . ' ', $message, $html_message);
-
-    // Send email
-    hesk_mail($email_info['email'], [], $subject, $message, $html_message);
-
-    // Reset language if needed
-    hesk_resetLanguage();
-}
-
-function hesk_getCustomerEmailFilenames()
-{
-    return [
-        'forgot_ticket_id',
-        'new_reply_by_staff',
-        'new_ticket',
-        'new_ticket_by_staff',
-        'ticket_closed',
-        'survey',
-        'customer_reset_password',
-        'customer_verify_registration',
-        'customer_verify_new_email',
-        'customer_approved',
-        'customer_rejected',
-        'email_rejected_can_self_register',
-        'email_rejected_cannot_self_register'
-    ];
-} // END hesk_getCustomerEmails()
 
 
 function hesk_validEmails()
@@ -484,25 +236,6 @@ function hesk_validEmails()
 
         // --> Ticket closed
         'ticket_closed' => $hesklang['ticket_closed'],
-
-        // --> Customer password reset email
-        'customer_reset_password' => $hesklang['customer_reset_password'],
-
-        // --> Customer Registration email
-        'customer_verify_registration' => $hesklang['customer_verify_registration'],
-
-        // --> Customer change email
-        'customer_verify_new_email' => $hesklang['customer_verify_new_email'],
-
-        // --> Customer registration approved
-        'customer_approved' => $hesklang['customer_approved'],
-
-        // --> Customer registration rejected
-        'customer_rejected' => $hesklang['customer_rejected'],
-
-        // --> Email-to-ticket rejection emails
-        'email_rejected_can_self_register' => $hesklang['email_rejected'],
-        'email_rejected_cannot_self_register' => $hesklang['email_rejected'],
 
         /*** Emails sent to STAFF ***/
 
@@ -530,22 +263,14 @@ function hesk_validEmails()
         // --> Overdue ticket email
         'overdue_ticket' => $hesklang['overdue_ticket'],
 
-        // --> Staff notification of escalated ticket
-        'ticket_escalated' => $hesklang['ticket_escalated'],
-
-        // --> Email notifying of new customer accounts pending approval
-        'new_customer_approval' => $hesklang['new_customer_approval'],
-
-        /*** Emails sent to STAFF or CUSTOMERS ***/
-
         // --> MFA Verification email
-        'mfa_verification' => $hesklang['mfa_verification']
+        'mfa_verification' => $hesklang['mfa_verification'],
 
     );
 } // END hesk_validEmails()
 
 
-function hesk_mail($to, $cc, $subject, $message, $html_message, $tracking_ID = null)
+function hesk_mail($to, $subject, $message, $html_message, $tracking_ID = null)
 {
     global $hesk_settings, $hesklang;
 
@@ -556,25 +281,13 @@ function hesk_mail($to, $cc, $subject, $message, $html_message, $tracking_ID = n
 
     // usleep(100);
 
-    // Let's check our recipients
-    if (empty($to)) {
-         if (empty($cc)) {
-            // No recipients at all
-            return true;
-         } else {
-            // If we don't have a To, let's use the first Cc as To; spam filters don't like empty To headers.
-            $to = array_shift($cc);
-         }
-    }
-
-    // Empty CCs?
-    if ($cc === null) {
-        $cc = [];
+    // Empty recipient?
+    if ($to == '') {
+        return true;
     }
 
     // Stop if we find anything suspicious in the headers
-    $ccstring = implode('',$cc);
-    if (preg_match("/\n|\r|\t|%0A|%0D|%08|%09/", $to . $ccstring . $subject)) {
+    if (preg_match("/\n|\r|\t|%0A|%0D|%08|%09/", $to . $subject)) {
         return false;
     }
 
@@ -593,24 +306,8 @@ function hesk_mail($to, $cc, $subject, $message, $html_message, $tracking_ID = n
     # return true;
 
     // Remove duplicate recipients
-    if ($to !== null && $to !== '') {
-        $to_arr = array_unique(explode(',', $to));
-        $to_arr = array_values($to_arr);
-    } else {
-        $to_arr = [];
-    }
-    $cc_arr = array_unique($cc);
-
-    // Check the number of email recipients
-    if ($hesk_settings['email_max_recipients']) {
-        $to_num = count($to_arr);
-        if ($to_num >= $hesk_settings['email_max_recipients']) {
-            $to_arr = array_splice($to_arr, 0, $hesk_settings['email_max_recipients']);
-            $cc_arr = [];
-        } elseif (($to_num + count($cc_arr)) > $hesk_settings['email_max_recipients']) {
-            $cc_arr = array_splice($cc_arr, 0, $hesk_settings['email_max_recipients'] - $to_num);
-        }
-    }
+    $to_arr = array_unique(explode(',', $to));
+    $to_arr = array_values($to_arr);
 
     // Start output buffering so that any errors don't break headers
     ob_start();
@@ -665,9 +362,6 @@ function hesk_mail($to, $cc, $subject, $message, $html_message, $tracking_ID = n
         $mailer->addReplyTo($hesk_settings['noreply_mail'], $hesk_settings['noreply_name']);
         foreach ($to_arr as $to) {
             $mailer->addAddress($to);
-        }
-        foreach ($cc_arr as $address) {
-            $mailer->addCC($address);
         }
         $mailer->Subject = $subject;
         $mailer->CharSet = $hesklang['ENCODING'];
@@ -876,6 +570,7 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
         return array($msg, $html_msg);
     }
 
+    // Is email required to view ticket (for customers only)?
     $hesk_settings['e_param'] = $hesk_settings['email_view_ticket'] ? '&e=' . rawurlencode($ticket['email']) : '';
 
     /* Generate the ticket URLs */
@@ -913,24 +608,7 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
     }
 
     /* Replace all special tags */
-    if (!function_exists('hesk_get_customers_for_ticket')) {
-        require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
-    }
-
-    if (!isset($ticket['customers'])) {
-        // Apparently the caller didn't get the customers for us :(
-        $ticket['customers'] = hesk_get_customers_for_ticket($ticket['id']);
-    }
-    $customer_info = hesk_getCustomersByRequesterAndFollowers($ticket['customers']);
-    $customer_info = hesk_ticketToPlain($customer_info, 1, 0);
-
-    list($msg, $html_msg) = hesk_replace_email_tag('%%REQUESTER%%', hesk_output_customer_name_and_email($customer_info['requester'], false), $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%REQUESTER_NAME%%', $customer_info['requester']['name'], $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%REQUESTER_FIRST_NAME%%', hesk_full_name_to_first_name($customer_info['requester']['name']), $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%REQUESTER_EMAIL%%', $customer_info['requester']['email'], $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%FOLLOWERS%%', hesk_emailFormatFollowers($customer_info['followers'], 'BOTH'), $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%FOLLOWER_NAMES%%', hesk_emailFormatFollowers($customer_info['followers'], 'NAMES'), $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%FOLLOWER_EMAILS%%', hesk_emailFormatFollowers($customer_info['followers'], 'EMAILS'), $msg, $html_msg);
+    list($msg, $html_msg) = hesk_replace_email_tag('%%NAME%%', $ticket['name'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%SUBJECT%%', $ticket['subject'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%TRACK_ID%%', $ticket['trackid'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%TRACK_URL%%', $trackingURL . ' ', $msg, $html_msg);
@@ -940,29 +618,17 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
     list($msg, $html_msg) = hesk_replace_email_tag('%%PRIORITY%%', $ticket['priority'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%OWNER%%', $ticket['owner'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%STATUS%%', $ticket['status'], $msg, $html_msg);
+    list($msg, $html_msg) = hesk_replace_email_tag('%%EMAIL%%', $ticket['email'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%CREATED%%', $ticket['dt'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%UPDATED%%', $ticket['lastchange'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%DUE_DATE%%', $ticket['due_date'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%ID%%', $ticket['id'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%TIME_WORKED%%', $ticket['time_worked'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%LAST_REPLY_BY%%', $ticket['last_reply_by'], $msg, $html_msg);
-
-    // These fields are deprecated, but keeping them for backwards compatibility
-    // %%NAME%% can be set to Staff name is some cases
-    if (in_array($orig_eml_file, array('new_note'))) {
-        list($msg, $html_msg) = hesk_replace_email_tag('%%NAME%%', $_SESSION['name'], $msg, $html_msg);
-    } else {
-        list($msg, $html_msg) = hesk_replace_email_tag('%%NAME%%', $customer_info['requester']['name'], $msg, $html_msg);
-    }
-    list($msg, $html_msg) = hesk_replace_email_tag('%%FIRST_NAME%%', hesk_full_name_to_first_name($customer_info['requester']['name']), $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%EMAIL%%', $customer_info['requester']['email'], $msg, $html_msg);
-
-    if (isset($ticket['ESCALATED_BY_RULE'])) {
-        list($msg, $html_msg) = hesk_replace_email_tag('%%ESCALATED_BY_RULE%%', $ticket['ESCALATED_BY_RULE'], $msg, $html_msg);
-    }
+    list($msg, $html_msg) = hesk_replace_email_tag('%%FIRST_NAME%%', hesk_full_name_to_first_name($ticket['name']), $msg, $html_msg);
 
     /* All custom fields */
-    for ($i = 1; $i <= 100; $i++) {
+    for ($i = 1; $i <= 50; $i++) {
         $k = 'custom' . $i;
 
         if (isset($hesk_settings['custom_fields'][$k])) {
@@ -989,12 +655,10 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
 
     if ($hesk_settings['attachments']['use'] && isset($ticket['attachments']) && strlen($ticket['attachments'])) {
         $att = explode(',', substr($ticket['attachments'], 0, -1));
-        $is_customer_email = in_array(basename($eml_file, '.txt'), hesk_getCustomerEmailFilenames());
         foreach ($att as $myatt) {
             list($att_id, $att_name) = explode('#', $myatt);
-            $url_path = $is_customer_email ? '' : '/admin';
-            $att_links[] = $att_name . "\n" . $hesk_settings['hesk_url'] . $url_path . '/download_attachment.php?att_id=' . $att_id . '&track=' . $ticket['trackid'] . $hesk_settings['e_param'];
-            $html_att_links[] = '<a href="'.$hesk_settings['hesk_url'] . $url_path . '/download_attachment.php?att_id=' . $att_id . '&amp;track=' . $ticket['trackid'] . str_replace('&', '&amp;', $hesk_settings['e_param']).'">'.$att_name.'</a>';
+            $att_links[] = $att_name . "\n" . $hesk_settings['hesk_url'] . '/download_attachment.php?att_id=' . $att_id . '&track=' . $ticket['trackid'] . $hesk_settings['e_param'];
+            $html_att_links[] = '<a href="'.$hesk_settings['hesk_url'] . '/download_attachment.php?att_id=' . $att_id . '&amp;track=' . $ticket['trackid'] . str_replace('&', '&amp;', $hesk_settings['e_param']).'">'.$att_name.'</a>';
         }
     }
 
@@ -1032,50 +696,7 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
 
 } // END hesk_getEmailMessage
 
-function hesk_getCustomersByRequesterAndFollowers($customers) {
-    $requester = null;
-    $followers = [];
-    foreach ($customers as $customer) {
-        if ($customer['customer_type'] === 'REQUESTER') {
-            $requester = $customer;
-        } else {
-            $followers[] = $customer;
-        }
-    }
-
-    if ( ! is_array($requester)) {
-        $requester['name'] = '';
-        $requester['email'] = '';
-    }
-
-    return [
-        'requester' => $requester,
-        'followers' => $followers
-    ];
-}
-
-function hesk_emailFormatFollowers($followers, $format) {
-    $output = [];
-    foreach ($followers as $follower) {
-        if ($format === 'BOTH') {
-            $output[] = hesk_output_customer_name_and_email($follower, false);
-        } elseif ($format === 'NAMES' && $follower['name'] !== null && $follower['name'] !== '') {
-            $output[] = $follower['name'];
-        } elseif ($format === 'EMAILS' && $follower['email'] !== null && $follower['email'] !== '') {
-            $output[] = $follower['email'];
-        }
-    }
-
-    return implode(', ', $output);
-}
-
-function hesk_replace_email_tag($tag, $value, $message, $html_message, $nl2br = false, $html_value = false) {
-    if ($html_value) {
-        return array(
-            str_replace($tag, $value, $message),
-            str_replace($tag, ($nl2br ? nl2br($html_value) : $html_value), $html_message)
-        );
-    }
+function hesk_replace_email_tag($tag, $value, $message, $html_message, $nl2br = false) {
     return array(
         str_replace($tag, $value, $message),
         str_replace($tag, ($nl2br ? nl2br(hesk_htmlspecialchars(trim($value))) : hesk_htmlspecialchars(trim($value))), $html_message)
@@ -1107,15 +728,15 @@ function hesk_PMtoMainAdmin($landmark)
     switch ($landmark) {
         case 100:
             $subject = "Congratulations on your 100th ticket!";
-            $message = "</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">You are now part of the Hesk family, and we want to serve you better!</h2>\r\n\r\n<h3>&raquo; Rate us</h3>\r\n\r\n<p>Positive ratings and reviews motivate us to continue developing Hesk. Please take a moment to:</p>\r\n\r\n<ul>\r\n<li>rate or review Hesk at <a href=\"https://www.capterra.com/p/156452/HESK/\" rel=\"nofollow\">Capterra</a></li>\r\n<li>rate or review Hesk at <a href=\"https://softaculous.com/apps/customersupport/HESK\" rel=\"nofollow\">Softaculous</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://x.com/HESKdotCOM\" rel=\"nofollow\">follow Hesk on <b>X</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume, zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n&nbsp;\r\n\r\n<h3>&raquo; Upgrade to Hesk Cloud for the ultimate experience</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>";
+            $message = "</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">You are now part of the Hesk family, and we want to serve you better!</h2>\r\n\r\n<h3>&raquo; Help us improve</h3>\r\n\r\n<p>Suggest what features we should add to Hesk by posting them <a href=\"https://hesk.uservoice.com/forums/69851-general\" target=\"_blank\">here</a>.</p>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://twitter.com/HESKdotCOM\">follow Hesk on <b>Twitter</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n{$offer_license}<h3>&raquo; Upgrade to Hesk Cloud for the ultimate experience</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>";
             break;
         case 1000:
             $subject = "We're excited about your 1,000th ticket!";
-            $message = "</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">With 1,000 support tickets under the hood, you\'ve become a Hesk Power User. Congratulations!</h2>\r\n\r\n<h3>&raquo; Rate us</h3>\r\n\r\n<p>Positive ratings and reviews motivate us to continue developing Hesk. Please take a moment to:</p>\r\n\r\n<ul>\r\n<li>rate or review Hesk at <a href=\"https://www.capterra.com/p/156452/HESK/\" rel=\"nofollow\">Capterra</a></li>\r\n<li>rate or review Hesk at <a href=\"https://softaculous.com/apps/customersupport/HESK\" rel=\"nofollow\">Softaculous</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://x.com/HESKdotCOM\" rel=\"nofollow\">follow Hesk on <b>X</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume, zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n&nbsp;\r\n\r\n<h3>&raquo; Upgrade to Hesk Cloud for the ultimate experience</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>";
+            $message = "</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">With 1,000 support tickets under the hood, you\'ve become a Hesk Power User. Congratulations!</h2>\r\n\r\n<h3>&raquo; Help us improve</h3>\r\n\r\n<p>Suggest what features we should add to Hesk by posting them <a href=\"https://hesk.uservoice.com/forums/69851-general\" target=\"_blank\">here</a>.</p>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://twitter.com/HESKdotCOM\">follow Hesk on <b>Twitter</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n{$offer_license}<h3>&raquo; Upgrade to Hesk Cloud for the ultimate experience</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>";
             break;
         case 10000:
             $subject = "Wow, you've reached 10,000 tickets!";
-            $message = "</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">You received 10,000 support tickets, outstanding! You are officially a Hesk Hero!</h2>\r\n\r\n<h3>&raquo; Rate us</h3>\r\n\r\n<p>Positive ratings and reviews motivate us to continue developing Hesk. Please take a moment to:</p>\r\n\r\n<ul>\r\n<li>rate or review Hesk at <a href=\"https://www.capterra.com/p/156452/HESK/\" rel=\"nofollow\">Capterra</a></li>\r\n<li>rate or review Hesk at <a href=\"https://softaculous.com/apps/customersupport/HESK\" rel=\"nofollow\">Softaculous</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://x.com/HESKdotCOM\" rel=\"nofollow\">follow Hesk on <b>X</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume, zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n&nbsp;\r\n\r\n<h3>&raquo; Upgrade to Hesk Cloud for the ultimate experience</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>";
+            $message = "</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">You received 10,000 support tickets, outstanding! You are officially a Hesk Hero!</h2>\r\n\r\n<h3>&raquo; Help us improve</h3>\r\n\r\n<p>Suggest what features we should add to Hesk by posting them <a href=\"https://hesk.uservoice.com/forums/69851-general\" target=\"_blank\">here</a>.</p>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://twitter.com/HESKdotCOM\">follow Hesk on <b>Twitter</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n{$offer_license}<h3>&raquo; Upgrade to Hesk Cloud for the ultimate experience</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>";
             break;
         default:
             return false;
@@ -1141,7 +762,7 @@ function hesk_PMtoMainAdmin($landmark)
     list($message, $html_message) = hesk_getEmailMessage('new_pm',$pm,1,0);
 
     // Send e-mail
-    hesk_mail($row['email'], [], $subject, $message, $html_message);
+    hesk_mail($row['email'], $subject, $message, $html_message);
 
     return true;
 

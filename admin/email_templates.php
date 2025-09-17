@@ -37,15 +37,7 @@ $emails = array_keys(hesk_validEmails());
 // Which language are we editing?
 if ($hesk_settings['can_sel_lang'])
 {
-    $hesk_settings['edit_language'] = hesk_REQUEST('edit_language');
-
-    // If user closed the edit template modal without saving; remember the language used
-    if (empty($hesk_settings['edit_language']) && ! empty($_SESSION['edit_language']))
-    {
-        $hesk_settings['edit_language'] = $_SESSION['edit_language'];
-    }
-
-    // If not a valid language, default to settings
+	$hesk_settings['edit_language'] = hesk_REQUEST('edit_language');
 	if ( ! isset($hesk_settings['languages'][$hesk_settings['edit_language']]) )
 	{
 		$hesk_settings['edit_language'] = $hesk_settings['language'];
@@ -55,7 +47,6 @@ else
 {
 	$hesk_settings['edit_language'] = $hesk_settings['language'];
 }
-hesk_cleanSessionVars('edit_language');
 
 // What should we do?
 if ( $action = hesk_REQUEST('a') )
@@ -132,21 +123,12 @@ if ($hesk_settings['email_formatting'] == 0) {
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="no-background-color">
-                    <td colspan="4"><strong><?php echo $hesklang['emails_to_customers']; ?></strong></td>
-                </tr>
                 <?php
                 $all_files = true;
                 $all_writable = true;
                 foreach ($emails as $email):
                     $plaintext_eml_file = et_file_path($email, 'plaintext');
                     $html_eml_file = et_file_path($email, 'html');
-
-                    if ($email == 'category_moved') {
-                        echo '<tr class="no-background-color"><td colspan="4"><strong>'.$hesklang['emails_to_staff'].'</strong></td></tr>';
-                    } elseif ($email == 'mfa_verification') {
-                        echo '<tr class="no-background-color"><td colspan="4"><strong>'.$hesklang['emails_to_everyone'].'</strong></td></tr>';
-                    }
                 ?>
                 <tr <?php if (hesk_SESSION('et_id') == $email) {echo 'class="ticket-new"'; unset($_SESSION['et_id']);} ?>>
                     <td><?php echo $email; ?>.txt</td>
@@ -233,9 +215,6 @@ if ($action == 'edit')
     {
         hesk_error($hesklang['et_fw']);
     }
-
-    // We need this to remember which language was being edited if the modal is closed without saving
-    $_SESSION['edit_language'] = $hesk_settings['edit_language'];
 
     // Start the edit form
     ?>
@@ -376,7 +355,7 @@ if ($action == 'edit')
                             <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
                                 <?php echo $hesklang['wbst_url']; ?>
                             </a>
-                        <?php elseif ($email == 'reset_password' || $email == 'customer_reset_password'): ?>
+                        <?php elseif ($email == 'reset_password'): ?>
                             <a href="javascript:" title="%%NAME%%" onclick="hesk_insertRichTag('NAME')">
                                 <?php echo $hesklang['name']; ?>
                             </a>
@@ -385,51 +364,6 @@ if ($action == 'edit')
                             </a>
                             <a href="javascript:" title="%%PASSWORD_RESET%%" onclick="hesk_insertRichTag('PASSWORD_RESET')">
                                 <?php echo $hesklang['passr']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_TITLE%%" onclick="hesk_insertRichTag('SITE_TITLE')">
-                                <?php echo $hesklang['wbst_title']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
-                                <?php echo $hesklang['wbst_url']; ?>
-                            </a>
-                        <?php elseif ($email == 'customer_verify_registration' || $email == 'customer_verify_new_email'): ?>
-                            <a href="javascript:" title="%%NAME%%" onclick="hesk_insertRichTag('NAME')">
-                                <?php echo $hesklang['name']; ?>
-                            </a>
-                            <a href="javascript:" title="%%FIRST_NAME%%" onclick="hesk_insertRichTag('FIRST_NAME')">
-                                <?php echo $hesklang['fname']; ?>
-                            </a>
-                            <a href="javascript:" title="%%VERIFICATION_URL%%" onclick="hesk_insertRichTag('VERIFICATION_URL')">
-                                <?php echo $hesklang['et_link_verify']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_TITLE%%" onclick="hesk_insertRichTag('SITE_TITLE')">
-                                <?php echo $hesklang['wbst_title']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
-                                <?php echo $hesklang['wbst_url']; ?>
-                            </a>
-                        <?php elseif ($email == 'customer_approved'): ?>
-                            <a href="javascript:" title="%%NAME%%" onclick="hesk_insertRichTag('NAME')">
-                                <?php echo $hesklang['name']; ?>
-                            </a>
-                            <a href="javascript:" title="%%FIRST_NAME%%" onclick="hesk_insertRichTag('FIRST_NAME')">
-                                <?php echo $hesklang['fname']; ?>
-                            </a>
-                            <a href="javascript:" title="%%CUSTOMER_LOGIN_URL%%" onclick="hesk_insertRichTag('CUSTOMER_LOGIN_URL')">
-                                <?php echo $hesklang['et_cust_login']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_TITLE%%" onclick="hesk_insertRichTag('SITE_TITLE')">
-                                <?php echo $hesklang['wbst_title']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
-                                <?php echo $hesklang['wbst_url']; ?>
-                            </a>
-                        <?php elseif ($email == 'customer_rejected'): ?>
-                            <a href="javascript:" title="%%NAME%%" onclick="hesk_insertRichTag('NAME')">
-                                <?php echo $hesklang['name']; ?>
-                            </a>
-                            <a href="javascript:" title="%%FIRST_NAME%%" onclick="hesk_insertRichTag('FIRST_NAME')">
-                                <?php echo $hesklang['fname']; ?>
                             </a>
                             <a href="javascript:" title="%%SITE_TITLE%%" onclick="hesk_insertRichTag('SITE_TITLE')">
                                 <?php echo $hesklang['wbst_title']; ?>
@@ -453,56 +387,15 @@ if ($action == 'edit')
                             <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
                                 <?php echo $hesklang['wbst_url']; ?>
                             </a>
-                        <?php elseif ($email == 'new_customer_approval'): ?>
-                            <a href="javascript:" title="%%NUM%%" onclick="hesk_insertRichTag('NUM')">
-                                <?php echo $hesklang['et_num_customers']; ?>
-                            </a>
-                            <a href="javascript:" title="%%VERIFICATION_URL%%" onclick="hesk_insertRichTag('VERIFICATION_URL')">
-                                <?php echo $hesklang['et_link_customers']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_TITLE%%" onclick="hesk_insertRichTag('SITE_TITLE')">
-                                <?php echo $hesklang['wbst_title']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
-                                <?php echo $hesklang['wbst_url']; ?>
-                            </a>
-                        <?php elseif ($email === 'email_rejected_can_self_register' || $email === 'email_rejected_cannot_self_register'): ?>
+                        <?php else: ?>
                             <a href="javascript:" title="%%NAME%%" onclick="hesk_insertRichTag('NAME')">
                                 <?php echo $hesklang['name']; ?>
                             </a>
-                            <a href="javascript:" title="%%SUBJECT%%" onclick="hesk_insertRichTag('SUBJECT')">
-                                <?php echo $hesklang['email_subject']; ?>
+                            <a href="javascript:" title="%%FIRST_NAME%%" onclick="hesk_insertRichTag('FIRST_NAME')">
+                                <?php echo $hesklang['fname']; ?>
                             </a>
-                            <a href="javascript:" title="%%CUSTOMER_REGISTER_URL%%" onclick="hesk_insertRichTag('CUSTOMER_REGISTER_URL')">
-                                <?php echo $hesklang['register_url']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_TITLE%%" onclick="hesk_insertRichTag('SITE_TITLE')">
-                                <?php echo $hesklang['wbst_title']; ?>
-                            </a>
-                            <a href="javascript:" title="%%SITE_URL%%" onclick="hesk_insertRichTag('SITE_URL')">
-                                <?php echo $hesklang['wbst_url']; ?>
-                            </a>
-                        <?php else: ?>
-                            <a href="javascript:" title="%%REQUESTER%%" onclick="hesk_insertRichTag('REQUESTER')">
-                                <?php echo $hesklang['email_tag_requester']; ?>
-                            </a>
-                            <a href="javascript:" title="%%REQUESTER_NAME%%" onclick="hesk_insertRichTag('REQUESTER_NAME')">
-                                <?php echo $hesklang['email_tag_requester_name']; ?>
-                            </a>
-                            <a href="javascript:" title="%%REQUESTER_FIRST_NAME%%" onclick="hesk_insertRichTag('REQUESTER_FIRST_NAME')">
-                                <?php echo $hesklang['email_tag_requester_first_name']; ?>
-                            </a>
-                            <a href="javascript:" title="%%REQUESTER_EMAIL%%" onclick="hesk_insertRichTag('REQUESTER_EMAIL')">
-                                <?php echo $hesklang['email_tag_requester_email']; ?>
-                            </a>
-                            <a href="javascript:" title="%%FOLLOWERS%%" onclick="hesk_insertRichTag('FOLLOWERS')">
-                                <?php echo $hesklang['email_tag_followers']; ?>
-                            </a>
-                            <a href="javascript:" title="%%FOLLOWER_NAMES%%" onclick="hesk_insertRichTag('FOLLOWER_NAMES')">
-                                <?php echo $hesklang['email_tag_follower_names']; ?>
-                            </a>
-                            <a href="javascript:" title="%%FOLLOWER_EMAILS%%" onclick="hesk_insertRichTag('FOLLOWER_EMAILS')">
-                                <?php echo $hesklang['email_tag_follower_emails']; ?>
+                            <a href="javascript:" title="%%EMAIL%%" onclick="hesk_insertRichTag('EMAIL')">
+                                <?php echo $hesklang['email']; ?>
                             </a>
                             <a href="javascript:" title="%%CATEGORY%%" onclick="hesk_insertRichTag('CATEGORY')">
                                 <?php echo $hesklang['category']; ?>
@@ -673,13 +566,9 @@ function save_et()
         'SURVEY_URL',
         'PASSWORD_RESET',
         'VERIFICATION_CODE',
-        'VERIFICATION_URL',
-        'CUSTOMER_LOGIN_URL',
-        'CUSTOMER_REGISTER_URL',
-        'NUM'
         );
 
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             $email_tags[] = 'CUSTOM' . $i;
         }
 

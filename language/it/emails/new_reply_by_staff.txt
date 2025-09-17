@@ -1,0 +1,12 @@
+Gentile %%NAME%%,
+il nostro staff Le ha appena inviato una risposta relativa al ticket avente per oggetto:
+%%SUBJECT%%
+
+Per leggere il messaggio, inviare una risposta e vedere i dettagli è possibile visitare l'URL sottostante:
+%%TRACK_URL%%
+
+Se tale link non fosse cliccabile, è possibile provare a copiarlo e incollarlo nella barra degli indirizzi del proprio browser.
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

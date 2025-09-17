@@ -129,21 +129,18 @@ else
 }
 
 $ticket['owner'] = $owner;
-$customers = hesk_get_customers_for_ticket($ticket['id']);
-$customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
-$customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
 
 /* --> Prepare message */
 
 // 1. Generate the array with ticket info that can be used in emails
 $info = array(
-'email'			=> implode(';', $customer_emails),
+'email'			=> $ticket['email'],
 'category'		=> $ticket['category'],
 'priority'		=> $ticket['priority'],
 'owner'			=> $ticket['owner'],
 'trackid'		=> $ticket['trackid'],
 'status'		=> $ticket['status'],
-'name'			=> implode(';', $customer_names),
+'name'			=> $ticket['name'],
 'subject'		=> $ticket['subject'],
 'message'		=> $ticket['message'],
 'message_html'  => $ticket['message_html'],

@@ -10,7 +10,6 @@
  *
  */
 
-#[AllowDynamicProperties]
 class pop3_class
 {
 	var $hostname="";
@@ -702,7 +701,6 @@ class pop3_class
 	}
 };
 
-#[AllowDynamicProperties]
 class pop3_stream
 {
 	var $opened = 0;

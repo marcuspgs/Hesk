@@ -1,0 +1,19 @@
+Hej,
+
+Ett support ärende har eskalerat av %%ESCALATED_BY_RULE%%:
+
+Ämne: %%SUBJECT%%
+Kategori: %%CATEGORY%%
+Prioritet: %%PRIORITY%%
+Status: %%STATUS%%
+Tilldelad till: %%OWNER%%
+Spårnings ID: %%TRACK_ID%%
+
+Du kan se detta ärende här:
+%%TRACK_URL%%
+
+
+Bästa hälsningar,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

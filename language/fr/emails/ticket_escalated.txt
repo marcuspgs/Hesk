@@ -1,0 +1,19 @@
+Bonjour,
+
+Un ticket d'assistance a été transmis par %%ESCALATED_BY_RULE%%:
+
+Sujet: %%SUBJECT%%
+Catégorie: %%CATEGORY%%
+Priorité: %%PRIORITY%%
+Status: %%STATUS%%
+Assigné à: %%OWNER%%
+ID de suivi: %%TRACK_ID%%
+
+Vous pouvez voir ce billet ici:
+%%TRACK_URL%%
+
+
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

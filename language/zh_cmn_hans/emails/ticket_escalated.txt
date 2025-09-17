@@ -1,0 +1,18 @@
+您好，
+
+支持票据已由 %%ESCALATED_BY_RULE%% 升级：
+
+主题: %%SUBJECT%%
+类别: %%CATEGORY%%
+优先级: %%PRIORITY%%
+状态: %%STATUS%%
+分配给: %%OWNER%%
+追踪 ID: %%TRACK_ID%%
+
+您可以在这里查看该票据：
+%%TRACK_URL%%
+
+此致，
+
+%%SITE_TITLE%%
+%%SITE_URL%%

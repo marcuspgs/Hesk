@@ -1,0 +1,20 @@
+Hallo,
+
+eine neue private Nachricht von %%NAME%% ist eingetroffen, der Betreff:
+
+%%SUBJECT%%
+
+Die Nachricht kann ansehen und beantwortet werden unter:
+%%TRACK_URL%%
+
+
+* BITTE NICHT AUF DIESE EMAIL ANTWORTEN! *
+Das ist eine automatisch erstellte Email, Anworten darauf können nicht nachverfolgt werden!
+
+Um die eigenen Einstellungen zu Emailbenachrichtigungen anzupassen, bitte im Verwaltungsbereich anmelden und auf "Mein Profil" klicken.
+Um nicht mehr automatisch bei neuen Nachrichten informiert zu werden, bitte die entsprechende Einstellung im Profil angepassen.
+
+Ihr Support-Team,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

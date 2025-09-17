@@ -1,0 +1,12 @@
+Salve.
+Hai ricevuto un messaggio privato da %%NAME%% avente per oggetto:
+%%SUBJECT%%
+-----------------------------------------------------------------
+%%MESSAGE%%
+-----------------------------------------------------------------
+È possibile visualizzare il nuovo messaggio all'URL sottostante:
+%%TRACK_URL%%
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

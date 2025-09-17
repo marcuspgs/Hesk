@@ -1,0 +1,7 @@
+<p>Olá,</p>
+<p>Um novo pedido de suporte foi movido para a sua categoria. Detalhes do pedido:</p>
+<p>Assunto do pedido: %%SUBJECT%%<br />ID de acompanhamento: %%TRACK_ID%%</p>
+<p>Pode gerir este pedido aqui:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p> </p>
+<p>Cumprimentos,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

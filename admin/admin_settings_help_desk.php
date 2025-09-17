@@ -25,6 +25,7 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 // Save the default language for the settings page before choosing user's preferred one
 $hesk_settings['language_default'] = $hesk_settings['language'];
 require(HESK_PATH . 'inc/common.inc.php');
+$hesk_settings['language'] = $hesk_settings['language_default'];
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/setup_functions.inc.php');
 hesk_load_database_functions();
@@ -91,7 +92,6 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
     }
 
 // Check max post size
-    /*
     $tmp = @ini_get('post_max_size');
     if ($tmp) {
         $last = strtoupper(substr($tmp, -1));
@@ -115,10 +115,9 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
             hesk_show_notice($hesklang['fatte3']);
         }
     }
-    */
 }
 ?>
-<div class="main__content settings admin_settings_help_desk">
+<div class="main__content settings">
 
     <?php require_once(HESK_PATH . 'inc/admin_settings_status.inc.php'); ?>
 
@@ -815,31 +814,6 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                 </div>
                 <div class="checkbox-group row">
                     <h5>
-                        <span><?php echo $hesklang['sending_show']; ?></span>
-                        <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#91','400','500')">
-                            <div class="tooltype right">
-                                <svg class="icon icon-info">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                </svg>
-                            </div>
-                        </a>
-                    </h5>
-                    <label class="switch-checkbox">
-                        <input type="checkbox" name="s_submitting_wait" value="1" <?php if ($hesk_settings['submitting_wait']) { echo 'checked'; } ?>>
-                        <div class="switch-checkbox__bullet">
-                            <i>
-                                <svg class="icon icon-close">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
-                                </svg>
-                                <svg class="icon icon-tick">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
-                                </svg>
-                            </i>
-                        </div>
-                    </label>
-                </div>
-                <div class="checkbox-group row">
-                    <h5>
                         <span><?php echo $hesklang['select']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#65','400','500')">
                             <div class="tooltype right">
@@ -919,327 +893,6 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                             <input type="radio" id="s_ticket_formatting_staff2" name="s_ticket_formatting_staff" value="2" <?php echo $html; ?>>
                             <label for="s_ticket_formatting_staff2"><?php echo $hesklang['ticket_formatting_rich_text']; ?></label>
                         </div>
-                    </div>
-                </div>
-                <div class="checkbox-group">
-                    <h5>
-                        <span><?php echo $hesklang['ticket_followers']; ?></span>
-                        <a onclick="hesk_window('<?php echo $help_folder; ?>email.html#57','400','500')">
-                            <div class="tooltype right">
-                                <svg class="icon icon-info">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                </svg>
-                            </div>
-                        </a>
-                    </h5>
-                    <div class="checkbox-custom">
-                        <input type="checkbox" id="s_multi_eml1" name="s_multi_eml" value="1" <?php if ($hesk_settings['multi_eml']) {echo 'checked';} ?>>
-                        <label for="s_multi_eml1"><?php echo $hesklang['ticket_followers2']; ?></label>
-                    </div>
-                </div>
-            </section>
-            <section class="settings__form_block">
-                <h3><?php echo $hesklang['barcode']; ?></h3>
-                <div class="checkbox-group">
-                    <h5>
-                        <span><?php echo $hesklang['barcode_use'];?></span>
-                        <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                            <div class="tooltype right">
-                                <svg class="icon icon-info">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                </svg>
-                            </div>
-                        </a>
-                    </h5>
-                    <?php
-                    $div = $hesk_settings['barcode']['print'] ? 'block' : 'none';
-                    ?>
-                    <label class="switch-checkbox">
-                        <input type="checkbox" name="s_barcode_print" value="1" <?php if ($hesk_settings['barcode']['print']) { echo 'checked'; } ?> onclick="hesk_toggleLayerDisplay('barcode')">
-                        <div class="switch-checkbox__bullet">
-                            <i>
-                                <svg class="icon icon-close">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
-                                </svg>
-                                <svg class="icon icon-tick">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
-                                </svg>
-                            </i>
-                        </div>
-                    </label>
-                </div>
-                <div id="barcode" style="display: <?php echo $div; ?>;">
-                    <div class="checkbox-group">
-                        <h5></h5>
-                        <div class="checkbox-custom">
-                            <input type="checkbox" id="s_staff_only" name="s_staff_only" value="1" <?php if ($hesk_settings['barcode']['staff_only']) {echo 'checked';} ?>>
-                            <label for="s_staff_only"><?php echo $hesklang['barcode_staff_only']; ?></label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <span><?php echo $hesklang['barcode_type']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <div class="dropdown-select center out-close">
-                            <select name="s_barcode_type" id="barcode-type-select">
-                                <?php foreach ($hesk_settings['barcode_types'] as $type => $description): ?>
-                                <option value="<?php echo $type; ?>" <?php echo $type == $hesk_settings['barcode']['type'] ? 'selected' : '' ?>>
-                                    <?php echo $description; ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <span><?php echo $hesklang['barcode_format']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <div class="dropdown-select center out-close">
-                            <select name="s_barcode_format" id="barcode-format-select">
-                                <?php foreach ($hesk_settings['barcode_formats'] as $format => $description): ?>
-                                <option value="<?php echo $format; ?>" <?php echo $format == $hesk_settings['barcode']['format'] ? 'selected' : '' ?>>
-                                    <?php echo $description; ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group short">
-                        <label>
-                            <span><?php echo $hesklang['barcode_width']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <input type="text" class="form-control" name="s_barcode_width" maxlength="30" value="<?php echo $hesk_settings['barcode']['width']; ?>">
-                    </div>
-                    <div class="form-group short">
-                        <label>
-                            <span><?php echo $hesklang['barcode_height']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <input type="text" class="form-control" name="s_barcode_height" maxlength="30" value="<?php echo $hesk_settings['barcode']['height']; ?>">
-                    </div>
-                    <div class="form-group short">
-                        <label>
-                            <span><?php echo $hesklang['barcode_color']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <input type="text" class="form-control" name="s_barcode_color" maxlength="30" value="<?php echo $hesk_settings['barcode']['color']; ?>">
-                    </div>
-                    <div class="form-group short">
-                        <label>
-                            <span><?php echo $hesklang['barcode_bg']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#90','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <input type="text" class="form-control" name="s_barcode_bg" maxlength="30" value="<?php echo $hesk_settings['barcode']['bg']; ?>">
-                    </div>
-                </div>
-            </section>
-            <section class="settings__form_block">
-                <h3><?php echo $hesklang['customer_accounts_heading']; ?></h3>
-                <div class="radio-group">
-                    <h5>
-                        <span><?php echo $hesklang['customer_accounts']; ?></span>
-                        <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#87','400','500')">
-                            <div class="tooltype right">
-                                <svg class="icon icon-info">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                </svg>
-                            </div>
-                        </a>
-                    </h5>
-                    <?php
-                    if ($hesk_settings['customer_accounts'] == 0) {
-                        $ca0 = 'checked';
-                        $ca1 = '';
-                        $ca2 = '';
-                        $ca3 = '';
-                        $div = 'none';
-                    } elseif ($hesk_settings['customer_accounts_required'] == 0) {
-                        $ca0 = '';
-                        $ca1 = 'checked';
-                        $ca2 = '';
-                        $ca3 = '';
-                        $div = 'block';
-                    } elseif ($hesk_settings['customer_accounts_required'] == 2) {
-                        $ca0 = '';
-                        $ca1 = '';
-                        $ca2 = '';
-                        $ca3 = 'checked';
-                        $div = 'block';
-                    } else {
-                        $ca0 = '';
-                        $ca1 = '';
-                        $ca2 = 'checked';
-                        $ca3 = '';
-                        $div = 'block';
-                    }
-                    ?>
-                    <div class="radio-list">
-                        <div class="radio-custom">
-                            <input type="radio" id="s_customer_accounts0" name="s_customer_accounts" value="0" <?php echo $ca0; ?> onclick="hesk_toggleLayer('ca','none')">
-                            <label for="s_customer_accounts0"><?php echo $hesklang['customer_accounts_off']; ?></label>
-                        </div>
-                        <div class="radio-custom">
-                            <input type="radio" id="s_customer_accounts1" name="s_customer_accounts" value="1" <?php echo $ca1; ?> onclick="hesk_toggleLayer('ca','block')">
-                            <label for="s_customer_accounts1"><?php echo $hesklang['customer_accounts_allowed']; ?></label>
-                        </div>
-                        <div class="radio-custom">
-                            <input type="radio" id="s_customer_accounts2" name="s_customer_accounts" value="2" <?php echo $ca2; ?> onclick="hesk_toggleLayer('ca','block')">
-                            <label for="s_customer_accounts2"><?php echo $hesklang['customer_accounts_required_to_submit']; ?></label>
-                        </div>
-                        <div class="radio-custom">
-                            <input type="radio" id="s_customer_accounts3" name="s_customer_accounts" value="3" <?php echo $ca3; ?> onclick="hesk_toggleLayer('ca','block')">
-                            <label for="s_customer_accounts3"><?php echo $hesklang['customer_accounts_required']; ?></label>
-                        </div>
-                    </div>
-                </div>
-                <div id="ca" style="display: <?php echo $div; ?>;">
-                    <?php
-                    if ($hesk_settings['customer_accounts_customer_self_register'] == 0) {
-                        $ca0 = '';
-                        $ca1 = '';
-                        $ca2 = 'checked';
-                        $div = 'none';
-                    } elseif ($hesk_settings['customer_accounts_admin_approvals'] == 1) {
-                        $ca0 = '';
-                        $ca1 = 'checked';
-                        $ca2 = '';
-                        $div = 'block';
-                    } else {
-                        $ca0 = 'checked';
-                        $ca1 = '';
-                        $ca2 = '';
-                        $div = 'block';
-                    }
-                    ?>
-                    <div class="radio-group">
-                        <h5>
-                            <span><?php echo $hesklang['customer_accounts_reg']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#88','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </h5>
-                        <div class="radio-list">
-                            <div class="radio-custom">
-                                <input type="radio" id="s_customer_accounts_register0" name="s_customer_accounts_register" value="0" <?php echo $ca0; ?>>
-                                <label for="s_customer_accounts_register0"><?php echo $hesklang['customer_accounts_reg_customer']; ?></label>
-                            </div>
-                            <div class="radio-custom">
-                                <input type="radio" id="s_customer_accounts_register1" name="s_customer_accounts_register" value="1" <?php echo $ca1; ?>>
-                                <label for="s_customer_accounts_register1"><?php echo $hesklang['customer_accounts_reg_approve']; ?></label>
-                            </div>
-                            <div class="radio-custom">
-                                <input type="radio" id="s_customer_accounts_register2" name="s_customer_accounts_register" value="2" <?php echo $ca2; ?>>
-                                <label for="s_customer_accounts_register2"><?php echo $hesklang['customer_accounts_reg_staff']; ?></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="checkbox-group row">
-                        <h5>
-                            <span><?php echo $hesklang['alo']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#94','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </h5>
-                        <label class="switch-checkbox">
-                            <input type="checkbox" name="s_customer_autologin" value="1" <?php if ($hesk_settings['customer_autologin']) { echo 'checked'; } ?>>
-                            <div class="switch-checkbox__bullet">
-                                <i>
-                                    <svg class="icon icon-close">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
-                                    </svg>
-                                    <svg class="icon icon-tick">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
-                                    </svg>
-                                </i>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="checkbox-group row">
-                        <h5>
-                            <span><?php echo $hesklang['customer_accounts_allow_email_changes']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#92','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </h5>
-                        <label class="switch-checkbox">
-                            <input type="checkbox" name="s_customer_accounts_allow_email_changes" value="1"
-                                <?php if ($hesk_settings['customer_accounts_allow_email_changes']) { echo 'checked'; } ?>>
-                            <div class="switch-checkbox__bullet">
-                                <i>
-                                    <svg class="icon icon-close">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
-                                    </svg>
-                                    <svg class="icon icon-tick">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
-                                    </svg>
-                                </i>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form-group short">
-                        <label>
-                            <span><?php echo $hesklang['customer_accounts_allow_email_resends']; ?></span>
-                            <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#93','400','500')">
-                                <div class="tooltype right">
-                                    <svg class="icon icon-info">
-                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                        </label>
-                        <input type="text" class="form-control" name="s_customer_accounts_verify_email_cooldown" size="5" maxlength="3" value="<?php echo $hesk_settings['customer_accounts_verify_email_cooldown']; ?>">
-                        <span><?php echo $hesklang['mm']; ?></span>
                     </div>
                 </div>
             </section>
@@ -1536,7 +1189,7 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                     </div>
                 </div>
                 <div>
-                    <div class="form-group flex-row">
+                    <div class="form-group">
                         <label for="s_url_key">
                             <span><?php echo $hesklang['ukey']; ?></span>
                             <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#83','400','500')">
@@ -1581,7 +1234,7 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                         </div>
                     </label>
                 </div>
-                <div class="form-group short flex-row">
+                <div class="form-group short">
                     <?php
                     //-- Default value if duration in settings is invalid
                     $elevator_amount = 60;
@@ -1695,7 +1348,7 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                     $tmp = hesk_formatBytes($hesk_settings['attachments']['max_size'], 0);
                     list($size, $unit) = explode(' ', $tmp);
                     ?>
-                    <div class="form-group short flex-row">
+                    <div class="form-group short">
                         <label>
                             <span><?php echo $hesklang['attach_size']; ?></span>
                             <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#39','400','500')">

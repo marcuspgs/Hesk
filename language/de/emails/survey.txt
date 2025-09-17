@@ -1,0 +1,13 @@
+Liebe(r) %%NAME%%,
+
+Wir wenden uns an Sie wegen Ihres aktuellen Tickets "%%SUBJECT%%". Damit wir Ihnen noch besser helfen können, würden wir uns freuen, wenn Sie uns Ihre Erfahrungen mit unserem Support-Team mitteilen.
+
+Bitte teilen Sie uns mit, wie einfach es war, Ihr Problem zu lösen:
+%%SURVEY_URL%%
+
+Wir freuen uns über Ihr Feedback. Und wie immer, wenn wir in Zukunft etwas für Sie tun können, zögern Sie bitte nicht, uns erneut zu kontaktieren.
+
+Vielen Dank,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

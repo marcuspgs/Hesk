@@ -1,0 +1,17 @@
+Hola,
+
+Se ha añadido una nueva nota al ticket "%%SUBJECT%%" que actualmente está asignado a Usted.
+
+Nota de %%NAME%%:
+
+%%MESSAGE%%
+
+
+Puede gestionar este ticket aquí:
+%%TRACK_URL%%
+
+
+Saludos,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

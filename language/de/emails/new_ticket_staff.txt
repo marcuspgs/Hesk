@@ -1,0 +1,23 @@
+Hallo,
+
+ein neues Ticket wurde erstellt.
+
+Details:
+
+Betreff: %%SUBJECT%%
+Tracking-ID: %%TRACK_ID%%
+
+Zur Bearbeitung nachstehenden Link anklicken:
+%%TRACK_URL%%
+
+
+* BITTE NICHT AUF DIESE EMAIL ANTWORTEN! *
+Das ist eine automatisch erstellte Email, Anworten darauf können nicht nachverfolgt werden!
+
+Um die eigenen Einstellungen zu Emailbenachrichtigungen anzupassen, bitte im Verwaltungsbereich anmelden und auf "Mein Profil" klicken.
+Um nicht mehr automatisch bei neuen Nachrichten informiert zu werden, bitte die entsprechende Einstellung im Profil angepassen.
+
+Ihr Support-Team,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

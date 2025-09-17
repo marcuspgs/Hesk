@@ -17,7 +17,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 function hesk_profile_tab($session_array='new',$is_profile_page=true)
 {
-	global $hesk_settings, $hesklang, $can_reply_tickets, $can_view_tickets, $can_view_unassigned, $can_man_customers;
+	global $hesk_settings, $hesklang, $can_reply_tickets, $can_view_tickets, $can_view_unassigned;
 
 	$show_permissions = false;
 	$show_preferences = false;
@@ -82,13 +82,13 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
                     <?php echo $hesklang['pass']; ?>
                 </h4>
                 <div class="form-group">
-                    <label for="prof_newpass"><?php echo (empty($_SESSION[$session_array]['id']) ? $hesklang['pass'] : $hesklang['new_pass']); ?></label>
+                    <label for="prof_newpass"><?php echo $hesklang['pass']; ?></label>
                     <input type="password" id="prof_newpass" name="newpass" autocomplete="off" class="form-control <?php echo in_array('passwords', $errors) ? 'isError' : ''; ?>"
                            value="<?php echo isset($_SESSION[$session_array]['cleanpass']) ? $_SESSION[$session_array]['cleanpass'] : ''; ?>"
                            onkeyup="hesk_checkPassword(this.value)">
                 </div>
                 <div class="form-group">
-                    <label for="prof_newpass2"><?php echo (empty($_SESSION[$session_array]['id']) ? $hesklang['confirm_pass'] : $hesklang['confirm_new_pass']); ?></label>
+                    <label for="prof_newpass2"><?php echo $hesklang['confirm_pass']; ?></label>
                     <input type="password" class="form-control <?php echo in_array('passwords', $errors) ? 'isError' : ''; ?>" id="prof_newpass2" name="newpass2" autocomplete="off"
                            value="<?php echo isset($_SESSION[$session_array]['cleanpass']) ? $_SESSION[$session_array]['cleanpass'] : ''; ?>">
                 </div>
@@ -345,19 +345,7 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
                     <label for="prof_notify_pm"><?php echo $hesklang['npms']; ?></label>
                 </div>
             </section>
-            <?php if (!$is_profile_page || $can_man_customers): ?>
-            <section class="item--section">
-                <div class="checkbox-custom">
-                    <input type="checkbox" id="prof_notify_customer_approval" name="notify_customer_approval" value="1"
-                        <?php if (!empty($_SESSION[$session_array]['notify_customer_approval'])) {echo 'checked';}?>>
-                    <label for="prof_notify_customer_approval"><?php echo $hesklang['n_cust_app']; ?></label>
-                </div>
-            </section>
-            <?php endif; ?>
-            <?php
-            if ($can_view_tickets) {
-                hesk_show_notice($hesklang['ovdcron'] . ' <a href="https://www.hesk.com/knowledgebase/?article=103" target="_blank">'.$hesklang['instructions'].'</a>', '*', false);
-            }?>
+            <?php hesk_show_notice($hesklang['ovdcron'] . ' <a href="https://www.hesk.com/knowledgebase/?article=103" target="_blank">'.$hesklang['instructions'].'</a>', '*', false); ?>
         </div>
     </div>
 

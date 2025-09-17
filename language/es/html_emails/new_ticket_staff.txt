@@ -1,0 +1,7 @@
+<p>Hola,</p>
+<p>Se ha enviado un nuevo ticket de soporte. Detalles del ticket:</p>
+<p>Asunto del ticket: %%SUBJECT%%</p>
+<p>ID de seguimiento: %%TRACK_ID%%</p>
+<p>Puede gestionar este ticket aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Saludos,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

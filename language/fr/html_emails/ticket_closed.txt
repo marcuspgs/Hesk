@@ -1,0 +1,6 @@
+<p>Cher %%NAME%%,</p>
+<p>Votre ticket d'assistance "%%SUBJECT%%" a été mis à jour avec un statut fermé/résolu.</p>
+<p>Vous pouvez consulter le statut de votre ticket ici :<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Si le lien ci-dessus n'est pas cliquable, essayez de le copier et de le coller dans la barre d'adresse de votre navigateur web.</p>
+<p>Cordialement,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

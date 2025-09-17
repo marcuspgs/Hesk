@@ -20,7 +20,6 @@ require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 hesk_load_database_functions();
 require(HESK_PATH . 'inc/posting_functions.inc.php');
-require(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 hesk_session_start();
 hesk_dbConnect();
@@ -61,14 +60,10 @@ if (hesk_dbNumRows($result) != 1)
 }
 $ticket = hesk_dbFetchAssoc($result);
 
-$customers = hesk_get_customers_for_ticket($ticket['id']);
-
 // Demo mode
 if ( defined('HESK_DEMO') )
 {
-	foreach ($customers as $customer) {
-        $customer['email'] = 'hidden@demo.com';
-    }
+	$ticket['email']	= 'hidden@demo.com';
 }
 
 /* Is this user allowed to view tickets inside this category? */
@@ -194,8 +189,25 @@ if (isset($_POST['save']))
     }
     else
     {
-        $tmpvar['customer_id'] = hesk_POST('customer_id') or $hesk_error_buffer[]=$hesklang['customer_required'];
-        $tmpvar['follower_ids'] = hesk_POST_array('follower_id');
+		$tmpvar['name']    = hesk_input( hesk_POST('name') ) or $hesk_error_buffer[]=$hesklang['enter_your_name'];
+
+        if ($hesk_settings['require_email'])
+        {
+            $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0) or $hesk_error_buffer['email']=$hesklang['enter_valid_email'];
+        }
+        else
+        {
+            $tmpvar['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0);
+
+            // Not required, but must be valid if it is entered
+            if ($tmpvar['email'] == '')
+            {
+                if (strlen(hesk_POST('email')))
+                {
+                    $hesk_error_buffer['email'] = $hesklang['not_valid_email'];
+                }
+            }
+        }
 
         // Set Ticket Language
         if (($tmpvar['set_language'] = hesk_input( hesk_POST('set_language') ))) {
@@ -234,16 +246,17 @@ if (isset($_POST['save']))
             $tmpvar['message_html'] = $tmpvar['message'];
         }
 
+		// Demo mode
+		if ( defined('HESK_DEMO') )
+		{
+			$tmpvar['email'] = 'hidden@demo.com';
+		}
+
         // Custom fields
         foreach ($hesk_settings['custom_fields'] as $k=>$v)
         {
-            if ($v['use'])
+            if ($v['use'] && hesk_is_custom_field_in_category($k, $ticket['category']))
             {
-                // Don't overwrite existing not used fields, but don't require them either if not required by category
-                if ( ! hesk_is_custom_field_in_category($k, $ticket['category'])) {
-                    $v['req'] = 0;
-                }
-
                 if ($v['type'] == 'checkbox')
                 {
                     $tmpvar[$k]='';
@@ -376,13 +389,15 @@ if (isset($_POST['save']))
         }
 
 		$custom_SQL = '';
-		for ($i=1; $i<=100; $i++)
+		for ($i=1; $i<=50; $i++)
 		{
 			$custom_SQL .= '`custom'.$i.'`=' . (isset($tmpvar['custom'.$i]) ? "'".hesk_dbEscape($tmpvar['custom'.$i])."'" : "''") . ',';
 		}
 		$custom_SQL = rtrim($custom_SQL, ',');
 
 		hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET
+		`name`='".hesk_dbEscape( hesk_mb_substr($tmpvar['name'], 0, 255) )."',
+		`email`='".hesk_dbEscape( hesk_mb_substr($tmpvar['email'], 0, 1000) )."',
 		`subject`='".hesk_dbEscape( hesk_mb_substr($tmpvar['subject'], 0, 255) )."',
 		`message`='".hesk_dbEscape($tmpvar['message'])."',
 		`message_html`='".hesk_dbEscape($tmpvar['message_html'])."',
@@ -390,16 +405,6 @@ if (isset($_POST['save']))
         $language_SQL
 		$custom_SQL
 		WHERE `id`='".intval($ticket['id'])."'");
-
-        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer`
-        WHERE `ticket_id` = ".intval($ticket['id']));
-
-        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` (`ticket_id`, `customer_id`, `customer_type`)
-                      VALUES (".intval($ticket['id']).", ".intval($tmpvar['customer_id']).", 'REQUESTER')");
-        foreach ($tmpvar['follower_ids'] as $follower_id) {
-            hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` (`ticket_id`, `customer_id`, `customer_type`)
-                          VALUES (".intval($ticket['id']).", ".intval($follower_id).", 'FOLLOWER')");
-        }
     }
 
     unset($tmpvar);
@@ -424,105 +429,29 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
             /* If it's not a reply edit all the fields */
             if (!$is_reply)
             {
-                $requester = null;
-                foreach ($customers as $customer) {
-                    if ($customer['customer_type'] === 'REQUESTER') {
-                        $requester = $customer;
-                        break;
-                    }
-                }
                 ?>
-                <div class="form-group">
-                    <label for="create_customer">
-                        <?php echo $hesklang['customer']; ?> <span class="important">*</span>
-                    </label>
-                    <select name="customer_id" id="create_customer" class="read-write" placeholder="<?php echo hesk_addslashes($hesklang['search_by_name_or_email']); ?>">
-                        <?php if ($requester !== null): ?>
-                            <option value="<?php echo $requester['id']; ?>" selected>
-                                <?php echo $requester['email'] ? "{$requester['name']} <{$requester['email']}>" : $requester['name']; ?>
-                            </option>
-                        <?php endif; ?>
-                    </select>
-                </div>
-                <?php
-                $followers = array_filter($customers, function($customer) { return $customer['customer_type'] === 'FOLLOWER'; });
-                if (count($followers) > 0 || $hesk_settings['multi_eml']):
-                ?>
-                <div class="form-group">
-                    <label for="followers_input">
-                        <?php echo $hesklang['followers']; ?>
-                    </label>
-                    <select name="follower_id[]" multiple id="followers_input" class="read-write" placeholder="<?php echo hesk_addslashes($hesklang['search_by_name_or_email']); ?>">
-                        <?php foreach ($followers as $row) { ?>
-                            <option value="<?php echo $row['id']; ?>" selected>
-                                <?php echo $row['email'] ? "{$row['name']} &lt;{$row['email']}&gt;" : $row['name']; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <?php endif; ?>
                 <div class="form-group">
                     <label for="edit_subject"><?php echo $hesklang['subject']; ?>:</label>
                     <input type="text" class="form-control" id="edit_subject" name="subject" maxlength="70" value="<?php echo $ticket['subject'];?>">
                 </div>
-                <script>
-                    hesk_loadNoResultsSelectizePlugin('<?php echo hesk_addslashes($hesklang['no_results_found']); ?>');
-                    var plugins = ['no_results'];
-                    $('#create_customer').selectize({
-                        valueField: 'id',
-                        labelField: 'displayName',
-                        searchField: ['name','email'],
-                        copyClassesToDropdown: true,
-                        preload: true,
-                        create: false,
-                        options: [],
-                        loadThrottle: 300,
-                        persist: false,
-                        plugins: plugins,
-                        load: function(query, callback) {
-                            $.ajax({
-                                url: 'ajax/search_customers.php?query=' + query,
-                                dataType: 'json',
-                                success: function(data) {
-                                    callback(data);
-                                }
-                            });
-                        }
-                    });
-
-                    plugins = ['no_results','remove_button'];
-                    $('#followers_input').selectize({
-                        valueField: 'id',
-                        labelField: 'displayName',
-                        searchField: ['name','email'],
-                        copyClassesToDropdown: true,
-                        preload: true,
-                        create: false,
-                        options: [],
-                        loadThrottle: 300,
-                        persist: false,
-                        plugins: plugins,
-                        load: function(query, callback) {
-                            $.ajax({
-                                url: 'ajax/search_customers.php?query=' + query,
-                                dataType: 'json',
-                                success: function(data) {
-                                    callback(data);
-                                }
-                            });
-                        }
-                    });
-                </script>
+                <div class="form-group">
+                    <label for="edit_name"><?php echo $hesklang['name']; ?>:</label>
+                    <input type="text" name="name" id="edit_name" class="form-control" maxlength="50" value="<?php echo $ticket['name'];?>">
+                </div>
+                <div class="form-group">
+                    <label for="edit_email"><?php echo $hesklang['email']; ?>:</label>
+                    <input type="<?php echo $hesk_settings['multi_eml'] ? 'text' : 'email'; ?>" name="email" class="form-control" id="edit_email" maxlength="1000" value="<?php echo $ticket['email'];?>">
+                </div>
                 <?php
                 foreach ($hesk_settings['custom_fields'] as $k=>$v) {
-                    if ($v['use'] && $v['place']==0 && (strlen($ticket[$k]) || hesk_is_custom_field_in_category($k, $ticket['category'])) ) {
+                    if ($v['use'] && $v['place']==0 && hesk_is_custom_field_in_category($k, $ticket['category']) ) {
                         $k_value  = $ticket[$k];
 
                         if ($v['type'] == 'checkbox') {
                             $k_value = explode('<br />',$k_value);
                         }
 
-                        $v['req'] = ($v['req']==2 && hesk_is_custom_field_in_category($k, $ticket['category'])) ? '<span class="important">*</span>' : '';
+                        $v['req'] = $v['req']==2 ? '<span class="important">*</span>' : '';
 
                         switch ($v['type']) {
                             /* Radio box */
@@ -971,7 +900,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
                 <?php
             }
             ?>
-            <button type="submit" class="btn btn-full" style="display: inline-flex">
+            <button type="submit" class="btn btn-full" style="display: inline-flex; height: 48px">
                 <?php echo $hesklang['save_changes']; ?>
             </button>
             <a href="javascript:history.go(-1)" class="btn btn--blue-border"><?php echo $hesklang['back']; ?></a>

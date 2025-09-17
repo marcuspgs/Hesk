@@ -22,7 +22,6 @@ if ( function_exists('opcache_reset') )
 
 /* Get all the required files and functions */
 require(HESK_PATH . 'hesk_settings.inc.php');
-$hesk_settings['language_default'] = $hesk_settings['language'];
 require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/email_functions.inc.php');
@@ -52,7 +51,7 @@ if ( defined('HESK_DEMO') )
 }
 
 $set=array();
-$set['language'] = $hesk_settings['language_default'];
+
 
 $smtp_OK = true;
 $pop3_OK = true;
@@ -77,12 +76,6 @@ if ($section === 'GENERAL') {
     if ($set['admin_css_url'] == '' || $set['admin_css_url'] == 'https://www.example.com/hesk-style.css') {
         $set['admin_css'] = 0;
         $set['admin_css_url'] = 'https://www.example.com/hesk-style.css';
-    }
-    $set['admin_js'] = empty($_POST['s_admin_js']) ? 0 : 1;
-    $set['admin_js_url'] = hesk_validateURL( hesk_POST('s_admin_js_url', 'https://www.example.com/hesk-script.js'));
-    if ($set['admin_js_url'] == '' || $set['admin_js_url'] == 'https://www.example.com/hesk-script.js') {
-        $set['admin_js'] = 0;
-        $set['admin_js_url'] = 'https://www.example.com/hesk-script.js';
     }
 
 	/* --> Language settings */
@@ -174,7 +167,6 @@ if ($section === 'GENERAL') {
 	$set['list_users']		= empty($_POST['s_list_users']) ? 0 : 1;
 	$set['debug_mode']		= empty($_POST['s_debug_mode']) ? 0 : 1;
 	$set['short_link']		= empty($_POST['s_short_link']) ? 0 : 1;
-    $set['submitting_wait'] = empty($_POST['s_submitting_wait']) ? 0 : 1;
 	$set['select_cat']		= empty($_POST['s_select_cat']) ? 0 : 1;
 	$set['select_pri']		= empty($_POST['s_select_pri']) ? 0 : 1;
 	$set['cat_show_select'] = hesk_checkMinMax( intval( hesk_POST('s_cat_show_select') ) , 0, 999, 10);
@@ -182,84 +174,6 @@ if ($section === 'GENERAL') {
     // Temporary until Markdown support
     if ($set['staff_ticket_formatting'] == 1) {
         $set['staff_ticket_formatting'] = 0;
-    }
-    $set['multi_eml']		= empty($_POST['s_multi_eml']) ? 0 : 1;
-
-    // Barcode
-	$set['barcode']['print'] = empty($_POST['s_barcode_print']) ? 0 : 1;
-	if ($set['barcode']['print']) {
-        $set['barcode']['staff_only'] = empty($_POST['s_staff_only']) ? 0 : 1;
-        $set['barcode']['type'] = hesk_POST('s_barcode_type', 'C128');
-        if ( ! isset($hesk_settings['barcode_types'][$set['barcode']['type']])) {
-            $set['barcode']['type'] = 'C128';
-        }
-        $set['barcode']['format'] = hesk_POST('s_barcode_format', 'svg');
-        if ( ! isset($hesk_settings['barcode_formats'][$set['barcode']['format']])) {
-            $set['barcode']['format'] = 'svg';
-        }
-        $set['barcode']['width'] = hesk_checkMinMax( intval( hesk_POST('s_barcode_width') ) , 10, 99999, 250);
-        $set['barcode']['height'] = hesk_checkMinMax( intval( hesk_POST('s_barcode_height') ) , 10, 99999, 100);
-        $set['barcode']['color'] = hesk_POST('s_barcode_color', 'black');
-        $set['barcode']['bg'] = hesk_POST('s_barcode_bg', 'white');
-
-        require(HESK_PATH . 'inc/tecnick/autoload.php');
-        $barcode = new \Com\Tecnick\Barcode\Barcode();
-        try {
-            $bobj = $barcode->getBarcodeObj(
-                $set['barcode']['type'],
-                'TEST123',
-                $set['barcode']['width'],
-                $set['barcode']['height'],
-                $set['barcode']['color'],
-                array(2, 2, 20, 2)
-            )->setBackgroundColor($set['barcode']['bg']);
-            // echo '<img alt="Barcode" src="data:image/png;base64,'.base64_encode($bobj->getPngData()).'">';
-        } catch (Exception $e) {
-            $set['barcode']['color'] = 'black';
-            $set['barcode']['bg'] = 'white';
-        }
-	} else {
-        $set['barcode'] = $hesk_settings['barcode'];
-        $set['barcode']['print'] = 0;
-    }
-
-    // Customer Accounts
-    $set['customer_accounts'] = hesk_checkMinMax( intval( hesk_POST('s_customer_accounts') ) , 0, 3, 0);
-    if ($set['customer_accounts']) {
-        if ($set['customer_accounts'] == 3) {
-            $set['customer_accounts'] = 1;
-            $set['customer_accounts_required'] = 2;
-        } elseif ($set['customer_accounts'] == 2) {
-            $set['customer_accounts'] = 1;
-            $set['customer_accounts_required'] = 1;
-        } else {
-            $set['customer_accounts_required'] = 0;
-        }
-
-        $set['customer_accounts_register'] = hesk_checkMinMax( intval( hesk_POST('s_customer_accounts_register') ) , 0, 2, 0);
-        if ($set['customer_accounts_register'] == 2) {
-            $set['customer_accounts_customer_self_register'] = 0;
-            $set['customer_accounts_admin_approvals'] = 1;
-        } elseif ($set['customer_accounts_register'] == 1) {
-            $set['customer_accounts_customer_self_register'] = 1;
-            $set['customer_accounts_admin_approvals'] = 1;
-        } else {
-            $set['customer_accounts_customer_self_register'] = 1;
-            $set['customer_accounts_admin_approvals'] = 0;
-        }
-
-        $set['customer_accounts_allow_email_changes'] = empty($_POST['s_customer_accounts_allow_email_changes']) ? 0 : 1;
-        $set['customer_accounts_verify_email_cooldown'] = intval($_POST['s_customer_accounts_verify_email_cooldown']);
-        $set['customer_autologin'] = empty($_POST['s_customer_autologin']) ? 0 : 1;
-    } else {
-        // Disabled, preserve other settings
-        $set['customer_accounts'] = 0;
-        $set['customer_accounts_required'] = $hesk_settings['customer_accounts_required'];
-        $set['customer_accounts_customer_self_register'] = $hesk_settings['customer_accounts_customer_self_register'];
-        $set['customer_accounts_admin_approvals'] = $hesk_settings['customer_accounts_admin_approvals'];
-        $set['customer_accounts_allow_email_changes'] = $hesk_settings['customer_accounts_allow_email_changes'];
-        $set['customer_accounts_verify_email_cooldown'] = $hesk_settings['customer_accounts_verify_email_cooldown'];
-        $set['customer_autologin'] = $hesk_settings['customer_autologin'];
     }
 
 	/* --> SPAM prevention */
@@ -374,7 +288,6 @@ if ($section === 'GENERAL') {
     $set['noreply_name']     = str_replace(array('\\&quot;','&lt;','&gt;'),'',$set['noreply_name']);
     $set['noreply_name']     = trim( preg_replace('/\s{2,}/', ' ', $set['noreply_name']) );
     $set['noreply_name']     = preg_replace("/\n|\r|\t|%0A|%0D|%08|%09/", '', $set['noreply_name']);
-    $set['email_max_recipients'] = hesk_checkMinMax( intval( hesk_POST('s_email_max_recipients') ) , 0, 99999, 50);
     $set['email_formatting'] = hesk_checkMinMax( intval( hesk_POST('s_email_formatting') ) , 0, 3, 3);
 
 	$set['smtp'] = empty($_POST['s_smtp']) ? 0 : 1;
@@ -434,7 +347,6 @@ if ($section === 'GENERAL') {
 		$set['imap_enc']		= hesk_POST('tmp_imap_enc');
 		$set['imap_enc']		= ($set['imap_enc'] == 'ssl' || $set['imap_enc'] == 'tls') ? $set['imap_enc'] : '';
 		$set['imap_noval_cert'] = empty($_POST['tmp_imap_noval_cert']) ? 0 : 1;
-        $set['imap_disable_GSSAPI'] = empty($_POST['tmp_imap_disable_GSSAPI']) ? 0 : 1;
 		$set['imap_keep']		= empty($_POST['tmp_imap_keep']) ? 0 : 1;
 		$set['imap_user']		= hesk_input( hesk_POST('tmp_imap_user') );
 		$set['imap_password']	= hesk_input( hesk_POST('tmp_imap_password') );
@@ -482,10 +394,6 @@ if ($section === 'GENERAL') {
     $set['pipe_block_duplicate'] = empty($_POST['s_pipe_block_duplicate']) ? 0 : 1;
     $set['loop_hits']            = hesk_checkMinMax( intval( hesk_POST('s_loop_hits') ) , 0, 999, 5);
     $set['loop_time']            = hesk_checkMinMax( intval( hesk_POST('s_loop_time') ) , 1, 86400, 300);
-    $set['pipe_customer_rejection_notification'] = empty($_POST['s_pipe_customer_rejection_notification']) ? 0 : 1;
-    if ($set['pipe_customer_rejection_notification']) {
-        $set['pipe_customer_rejection_email_cooldown_hours'] = hesk_checkMinMax(intval(hesk_POST('s_pipe_customer_rejection_email_cooldown_hours')), 0, 999, 24);
-    }
 
 	/* --> Detect email typos */
 	$set['detect_typos']	= empty($_POST['s_detect_typos']) ? 0 : 1;
@@ -573,6 +481,7 @@ if ($section === 'GENERAL') {
 	$set['notify_spam_tags'] = count($set['notify_spam_tags']) ?  "'" . implode("','", $set['notify_spam_tags']) . "'" : '';
 
 	/* --> Other */
+	$set['multi_eml']					= empty($_POST['s_multi_eml']) ? 0 : 1;
 	$set['confirm_email']				= empty($_POST['s_confirm_email']) ? 0 : 1;
 	$set['open_only']					= empty($_POST['s_open_only']) ? 0 : 1;
 } elseif ($section === 'TICKET_LIST') {
@@ -657,8 +566,6 @@ $hesk_settings[\'webmaster_mail\']=\'' . hesk_getProperty($set, 'webmaster_mail'
 $hesk_settings[\'site_theme\']=\'' . hesk_getProperty($set, 'site_theme') . '\';
 $hesk_settings[\'admin_css\']=' . hesk_getProperty($set, 'admin_css') . ';
 $hesk_settings[\'admin_css_url\']=\'' . hesk_getProperty($set, 'admin_css_url') . '\';
-$hesk_settings[\'admin_js\']=' . hesk_getProperty($set, 'admin_js') . ';
-$hesk_settings[\'admin_js_url\']=\'' . hesk_getProperty($set, 'admin_js_url') . '\';
 
 // --> Language settings
 $hesk_settings[\'can_sel_lang\']=' . hesk_getProperty($set, 'can_sel_lang') . ';
@@ -707,32 +614,10 @@ $hesk_settings[\'spam_notice\']=' . hesk_getProperty($set, 'spam_notice') . ';
 $hesk_settings[\'list_users\']=' . hesk_getProperty($set, 'list_users') . ';
 $hesk_settings[\'debug_mode\']=' . hesk_getProperty($set, 'debug_mode') . ';
 $hesk_settings[\'short_link\']=' . hesk_getProperty($set, 'short_link') . ';
-$hesk_settings[\'submitting_wait\']=' . hesk_getProperty($set, 'submitting_wait') . ';
 $hesk_settings[\'select_cat\']=' . hesk_getProperty($set, 'select_cat') . ';
 $hesk_settings[\'select_pri\']=' . hesk_getProperty($set, 'select_pri') . ';
 $hesk_settings[\'cat_show_select\']=' . hesk_getProperty($set, 'cat_show_select') . ';
 $hesk_settings[\'staff_ticket_formatting\']=' . hesk_getProperty($set, 'staff_ticket_formatting') . ';
-
-// --> Barcode
-$hesk_settings[\'barcode\']=array(
-\'print\' => ' . (isset($set['barcode']) ? $set['barcode']['print'] : $hesk_settings['barcode']['print']) . ',
-\'staff_only\' => ' . (isset($set['barcode']) ? $set['barcode']['staff_only'] : $hesk_settings['barcode']['staff_only']) . ',
-\'type\' => \'' . (isset($set['barcode']) ? $set['barcode']['type'] : $hesk_settings['barcode']['type']) . '\',
-\'format\' => \'' . (isset($set['barcode']) ? $set['barcode']['format'] : $hesk_settings['barcode']['format']) . '\',
-\'width\' => ' . (isset($set['barcode']) ? $set['barcode']['width'] : $hesk_settings['barcode']['width']) . ',
-\'height\' => ' . (isset($set['barcode']) ? $set['barcode']['height'] : $hesk_settings['barcode']['height']) . ',
-\'color\' => \'' . (isset($set['barcode']) ? $set['barcode']['color'] : $hesk_settings['barcode']['color']) . '\',
-\'bg\' => \'' . (isset($set['barcode']) ? $set['barcode']['bg'] : $hesk_settings['barcode']['bg']) . '\',
-);
-
-// --> Customer Accounts
-$hesk_settings[\'customer_accounts\']=' . hesk_getProperty($set, 'customer_accounts') . ';
-$hesk_settings[\'customer_accounts_required\']=' . hesk_getProperty($set, 'customer_accounts_required') . ';
-$hesk_settings[\'customer_accounts_customer_self_register\']=' . hesk_getProperty($set, 'customer_accounts_customer_self_register') . ';
-$hesk_settings[\'customer_accounts_admin_approvals\']=' . hesk_getProperty($set, 'customer_accounts_admin_approvals') . ';
-$hesk_settings[\'customer_autologin\']=' . hesk_getProperty($set, 'customer_autologin') . ';
-$hesk_settings[\'customer_accounts_allow_email_changes\']=' . hesk_getProperty($set, 'customer_accounts_allow_email_changes') . ';
-$hesk_settings[\'customer_accounts_verify_email_cooldown\']=' . hesk_getProperty($set, 'customer_accounts_verify_email_cooldown') . ';
 
 // --> SPAM Prevention
 $hesk_settings[\'secimg_use\']=' . hesk_getProperty($set, 'secimg_use') . ';
@@ -758,7 +643,7 @@ $hesk_settings[\'require_mfa\']='. hesk_getProperty($set, 'require_mfa')  . ';
 $hesk_settings[\'elevator_duration\']=\''. hesk_getProperty($set, 'elevator_duration') .'\';
 
 // --> Attachments
-$hesk_settings[\'attachments\']=array(
+$hesk_settings[\'attachments\']=array (
 \'use\' => ' . (isset($set['attachments']) ? $set['attachments']['use'] : $hesk_settings['attachments']['use']) . ',
 \'max_number\' => ' . (isset($set['attachments']) ? $set['attachments']['max_number'] : $hesk_settings['attachments']['max_number']) . ',
 \'max_size\' => ' . (isset($set['attachments']) ? $set['attachments']['max_size'] : $hesk_settings['attachments']['max_size']) . ',
@@ -792,7 +677,6 @@ $hesk_settings[\'kb_related\']=' . hesk_getProperty($set, 'kb_related') . ';
 // --> Email sending
 $hesk_settings[\'noreply_mail\']=\'' . hesk_getProperty($set, 'noreply_mail') . '\';
 $hesk_settings[\'noreply_name\']=\'' . hesk_getProperty($set, 'noreply_name') . '\';
-$hesk_settings[\'email_max_recipients\']=' . hesk_getProperty($set, 'email_max_recipients') . ';
 $hesk_settings[\'email_formatting\']=' . hesk_getProperty($set, 'email_formatting') . ';
 $hesk_settings[\'smtp\']=' . hesk_getProperty($set, 'smtp') . ';
 $hesk_settings[\'smtp_host_name\']=\'' . hesk_getProperty($set, 'smtp_host_name') . '\';
@@ -815,7 +699,6 @@ $hesk_settings[\'imap_host_name\']=\'' . hesk_getProperty($set, 'imap_host_name'
 $hesk_settings[\'imap_host_port\']=' . hesk_getProperty($set, 'imap_host_port') . ';
 $hesk_settings[\'imap_enc\']=\'' . hesk_getProperty($set, 'imap_enc') . '\';
 $hesk_settings[\'imap_noval_cert\']=' . hesk_getProperty($set, 'imap_noval_cert') . ';
-$hesk_settings[\'imap_disable_GSSAPI\']=' . hesk_getProperty($set, 'imap_disable_GSSAPI') . ';
 $hesk_settings[\'imap_keep\']=' . hesk_getProperty($set, 'imap_keep') . ';
 $hesk_settings[\'imap_user\']=\'' . hesk_getProperty($set, 'imap_user') . '\';
 $hesk_settings[\'imap_password\']=\'' . hesk_getProperty($set, 'imap_password') . '\';
@@ -844,8 +727,6 @@ $hesk_settings[\'pipe_block_returned\']=' . hesk_getProperty($set, 'pipe_block_r
 $hesk_settings[\'pipe_block_duplicate\']=' . hesk_getProperty($set, 'pipe_block_duplicate') . ';
 $hesk_settings[\'loop_hits\']=' . hesk_getProperty($set, 'loop_hits') . ';
 $hesk_settings[\'loop_time\']=' . hesk_getProperty($set, 'loop_time') . ';
-$hesk_settings[\'pipe_customer_rejection_notification\']=' . hesk_getProperty($set, 'pipe_customer_rejection_notification') . ';
-$hesk_settings[\'pipe_customer_rejection_email_cooldown_hours\']=' . hesk_getProperty($set, 'pipe_customer_rejection_email_cooldown_hours') . ';
 
 // --> Detect email typos
 $hesk_settings[\'detect_typos\']=' . hesk_getProperty($set, 'detect_typos') . ';
@@ -881,7 +762,7 @@ $hesk_settings[\'timezone\']=\'' . hesk_getProperty($set, 'timezone') . '\';
 $hesk_settings[\'format_time\']=\'' . hesk_getProperty($set, 'format_time') . '\';
 $hesk_settings[\'format_date\']=\'' . hesk_getProperty($set, 'format_date') . '\';
 $hesk_settings[\'format_timestamp\']=\'' . hesk_getProperty($set, 'format_timestamp') . '\';
-$hesk_settings[\'time_display\']=' . hesk_getProperty($set, 'time_display') . ';
+$hesk_settings[\'time_display\']=\'' . hesk_getProperty($set, 'time_display') . '\';
 $hesk_settings[\'format_datepicker_js\']=\'' . hesk_getProperty($set, 'format_datepicker_js') . '\';
 $hesk_settings[\'format_datepicker_php\']=\'' . hesk_getProperty($set, 'format_datepicker_php') . '\';
 

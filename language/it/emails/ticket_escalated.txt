@@ -1,0 +1,19 @@
+Ciao,
+
+questa comunicazione è per informarti che abbiamo innalzato la priorità del tuo Ticket %%ESCALATED_BY_RULE%%:
+
+Oggetto: %%SUBJECT%%
+Categoria: %%CATEGORY%%
+Priorità: %%PRIORITY%%
+Stato: %%STATUS%%
+Assegnato a: %%OWNER%%
+ID del Ticket: %%TRACK_ID%%
+
+Puoi gestire il tuo ticket da qui:
+%%TRACK_URL%%
+
+
+Cordiali Saluti,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

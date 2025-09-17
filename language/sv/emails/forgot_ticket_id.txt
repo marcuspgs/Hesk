@@ -1,0 +1,12 @@
+﻿Hej %%NAME%%,
+
+Detta e-postmeddelande innehåller en lista över supportärenden som inkommit med denna e-postadressen. 
+
+Antalet supportärenden hittade: %%NUM%
+
+%%LIST_TICKETS%%
+
+Med vänliga hälsningar,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

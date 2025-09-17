@@ -1,0 +1,12 @@
+Hej,
+
+En kund har just svarat på ärendet "%%SUBJECT%%".
+
+Du kan hantera detta ärende här:
+%%TRACK_URL%%
+
+
+Hälsningar,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

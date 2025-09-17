@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Ayuda interactiva para la configuración de Hesk</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="help_style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- next: 73 -->
+
+<h3>Ayuda interactiva para la configuración de Hesk</h3>
+
+<p>&nbsp;</p>
+
+<a name="55"></a><p class="title">Remitente del correo electrónico</p>
+<p>Seleccione si HESK debe enviar correos electrónicos usando la función PHP mail() o usando un servidor SMTP configurado manualmente.</p>
+
+<p>PHP mail() debería funcionar en la mayoría de las configuraciones, si no es así, puede intentar configurar un servidor SMTP en su lugar.</p>
+
+<p>Variables SMTP disponibles:</p>
+
+<p>
+<b>SMTP Host</b> - Nombre de host de su servidor SMTP, generalmente <i>localhost</i> or <i>mail.example.com</i><br />
+<b>SMTP Port</b> - Su puerto SMTP, generalmente 25<br />
+<b>SMTP Timeout</b> - Tiempo de espera de SMTP en segundos<br />
+<b>Encryption</b> - Actívelo si su servidor SMTP requiere conexiones cifradas<br />
+<b>SMTP Username</b> - Su nombre de usuario SMTP (si se usa)<br />
+<b>SMTP Password</b> - Su contraseña SMTP (si se usa)<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="54"></a><p class="title">Canalización de correo electrónico</p>
+
+<p>Habilita la canalización de correo electrónico (creación de tickets a partir de correos electrónicos).</p>
+
+<p>Esta opción sólo habilita la funcionalidad de canalización en HESK, para una configuración completa de canalización de correo electrónico, consulte el archivo readme.html.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="59"></a><p class="title">Obtención de POP3</p>
+
+<p>Esta configuración habilita o deshabilita la obtención de POP3: crea tickets a partir de correos electrónicos conectándose a una cuenta de correo electrónico mediante una conexión POP3.
+
+<p>Para obtener instrucciones sobre cómo configurar la obtención de POP3, consulte el archivo readme.html.</p>
+
+<p>Las variables disponibles son:/p>
+
+<p><b>Task Timeout</b> - Número de minutos de espera para que finalice un trabajo de obtención de POP3 existente.
+completo. No se iniciarán nuevos trabajos de recuperación hasta que se alcance el tiempo de espera.
+Establézcalo en <b>0</b> para deshabilitar los tiempos de espera y comenzar siempre un nuevo trabajo de recuperación.</p>
+
+<p>
+<b>POP3 Host</b> - Nombre de host de su servidor POP3, generalmente <i>mail.example.com</i><br />
+<b>POP3 Port</b> - Su puerto POP3, generalmente 110. Gmail, por ejemplo, usa 995<br />
+<b>TLS Protocol</b> - Actívelo si su servidor POP3 requiere el protocolo TLS<br />
+<b>Keep a copy</b> - Si está habilitado, HESK <b>no</b> eliminará el correo del servidor POP3<br />
+<b>POP3 Username</b> - Su nombre de usuario POP3<br />
+<b>POP3 Password</b> - Su contraseña POP3<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="67"></a><p class="title">Obtención de IMAP</p>
+
+<p>Esta configuración activa o desactiva la obtención de IMAP: crear tickets a partir de correos electrónicos conectándose a una cuenta de correo electrónico mediante una conexión IMAP.</p>
+
+<p>Para obtener instrucciones sobre cómo configurar la obtención de IMAP, consulte el archivo readme.html.</p>
+
+<p>Las variables disponibles son:</p>
+
+<p><b>Task Timeout</b> - Número de minutos de espera para que se complete un trabajo de obtención de IMAP existente.
+completo. No se iniciarán nuevos trabajos de recuperación hasta que se alcance el tiempo de espera.
+Establézcalo en <b>0</b> para deshabilitar los tiempos de espera y comenzar siempre un nuevo trabajo de recuperación.</p>
+
+<p>
+<b>IMAP Host</b> - Nombre de host de su servidor IMAP, generalmente <i>mail.example.com</i><br />
+<b>IMAP Port</b> - Su puerto IMAP, generalmente 143 para no encriptado y 993 para SSL/TLS<br />
+<b>Encryption</b> - Configure el cifrado IMAP requerido<br />
+<b>Keep a copy</b> - Si está habilitado, HESK <b>no</b> eliminará el correo del servidor IMAP<br />
+<b>IMAP Username</b> - Su nombre de usuario IMAP<br />
+<b>IMAP Password</b> - Su contraseña IMAP<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="68"></a><p class="title">No validar certificados de servidor</p>
+
+<p>Si está marcado, Hesk no validará los certificados del servidor TLS/SSL.</p>
+
+<p>Por lo general, es necesario omitir la validación de certificados si el servidor usa certificados autofirmados.</p>
+
+<p>Le recomendamos encarecidamente que <b>no</b> deshabilite la validación de certificados en servidores de producción y cuando se conecte a servidores de terceros, ya que lo hace vulnerable a ataques de intermediarios (Man-in-the-middle).</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="70"></a><p class="title">No responder</p>
+
+<p>Si está marcada, Hesk intentará detectar los correos electrónicos enviados desde &quot;No responder&quot; direcciones de correo electrónico e ignorarlas.</p>
+
+<p>Eejmplos:<br>
+do-not-reply@example.com<br>
+do_not_reply@example.com<br>
+no_reply@example.com
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="71"></a><p class="title">Devueltos</p>
+
+<p>Si está marcado, Hesk intentará detectar e ignorar los correos electrónicos devueltos.</p>
+
+<p>Por ejemplo, ignorará los correos electrónicos enviados desde mail-deamon@example.com y los correos electrónicos con un asunto como &quot;Correo devuelto&quot;, &quot;No se pudo entregar&quot;, &quot;Fuera de la oficina&quot; o similar.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="72"></a><p class="title">Duplicados</p>
+
+<p>Si está marcado, Hesk detectará e ignorará un correo electrónico si Hesk ya ha procesado un correo electrónico con el mismo mensaje dentro del &quot;plazo&quot; segundos.</p>
+
+<p>Cuando pruebe la funcionalidad de correo electrónico a ticket, deshabilite esta configuración o envíe correos electrónicos de prueba con mensajes únicos.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="60"></a><p class="title">Bucles de correo electrónico</p>
+
+<p>Configuración para ayudar a detectar bucles de correo electrónico creados a partir de respuestas automáticas o correo electrónico que no se puede entregar.</p>
+
+<p>Cualquier número de correos electrónicos superior al <b>Máximo de visitas</b> de una dirección de correo electrónico en <b>Período de tiempo</b> segundos
+será ignorado por la canalización de correo electrónico.</p>
+
+<p>Establezca <b>Máx Intentos</b> to <b>0</b> para desactivar la detección de bucles.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="62"></a><p class="title">Detectar errores tipográficos en los correos electrónicos</p>
+
+<p>Esta función intentará detectar errores ortográficos comunes en los nombres de dominio de correo electrónico y sugerirá una versión corregida.</p>
+
+<p>Por ejemplo, si el cliente ingresa usuario@<span style="color:red"><b>gmial.com</b></span> HESK lo detectará y sugerirá
+user@<span style="color:green"><b>gmail.com</b></span> en su lugar.</p>
+
+<p>HESK comparará los dominios de correo electrónico con los dominios enumerados en la lista <i>Proveedores de correo electrónico</i>.</p>
+
+<p>&nbsp;</p>
+
+<a name="63"></a><p class="title">Proveedores de correo electrónico</p>
+
+<p>Una lista de proveedores de correo electrónico comunes que utilizan sus clientes. HESK utilizará esta lista para intentar detectar direcciones de correo electrónico mal escritas.</p>
+
+<p>Introduzca un dominio por línea, <u>sin</u> el signo @.</p>
+
+<p>Puede introducir cualquier cantidad de nombres de dominio comunes, pero intente no exagerar; introduzca sólo los más comunes.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="65"></a><p class="title">Notificar al cliente cuando</p>
+
+<p>Seleccione cuándo HESK debe enviar una notificación por correo electrónico a los clientes:</p>
+
+<ul>
+<li><b>cuando el cliente envía un nuevo ticket de soporte</b><br /><br />
+Nota: si el ticket se envía por correo electrónico (canalización de correo electrónico o obtención de POP3), HESK puede
+omitir el envío de una notificación de nuevo ticket al cliente si el asunto del correo electrónico contiene
+una de las etiquetas enumeradas en el cuadro de texto (una etiqueta por línea).<br /><br />Puede usar esto para evitar
+respuestas automáticas a correos electrónicos detectados como posible SPAM por el filtro de SPAM de su servidor.<br />&nbsp;
+</li>
+<li><b>cuando un ticket de soporte se marca como Resuelto</b> (sin responder))</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>Tenga en cuenta que las preferencias de notificación se configuran individualmente por ticket cuando el personal responde a un ticket o cuando el personal envía un ticket desde la interfaz de administración.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="61"></a><p class="title">Respuesta entre comillas</p>
+
+<p>Esta función elimina las respuestas entre comillas de todos los correos electrónicos de los clientes antes de que se conviertan en un ticket mediante la canalización de correo electrónico o la obtención de POP3.</p>
+
+<p>Todos los correos electrónicos enviados a los clientes comenzarán con esta línea:</p>
+
+<p>------ Responder encima de esta línea ------</p>
+
+<p>Cualquier texto debajo de esta línea se eliminará cuando se importe un correo electrónico a la respuesta del ticket.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="66"></a><p class="title">Mensaje requerido</p>
+
+<p>Si está habilitado, los correos electrónicos de la canalización de correo electrónico o la obtención de POP3 se ignorarán si no contienen ningún mensaje.</p>
+
+<p>Si está deshabilitado, incluso los correos electrónicos sin mensaje se convertirán en tickets.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="64"></a><p class="title">Archivos incrustados</p>
+
+<p>Habilite si desea que HESK guarde archivos de correo electrónico incrustados (por ejemplo, imágenes incrustadas) como archivos adjuntos al importar tickets a través de canalización de correo electrónico o recuperación POP3.</p>
+
+<p>Se ignorarán los archivos que excedan el límite máximo permitido de archivos adjuntos.</p>
+
+<p>Tenga en cuenta que con HESK los archivos adjuntos tienen prioridad sobre los archivos incrustados. Por ejemplo si permite dos archivos adjuntos y recibe un correo electrónico con un archivo adjunto
+y tres imágenes incrustadas, HESK guardará el archivo adjunto y la primera imagen incrustada, el resto será ignorado.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="57"></a><p class="title">Múltiples correos electrónicos</p>
+<p>Si un cliente intenta introducir varios correos electrónicos (separados por comas) en el campo Correo electrónico al enviar un ticket HESK
+sólo usará el primer correo electrónico de forma predeterminada e ignorará cualquier otro correo electrónico.</p>
+
+<p>Para permitir que los clientes ingresen varios correos electrónicos, habilite esta función marcando la casilla.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="50"></a><p class="title">Confirmar correo electrónico</p>
+<p>Si se selecciona, la opción &quot;Enviar un ticket&quot; el formulario mostrará un &quot;Confirmar correo electrónico&quot;
+obligando al cliente a escribir la dirección de correo electrónico dos veces. Esto ayuda a evitar errores tipográficos.
+en direcciones de correo electrónico.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="58"></a><p class="title">Sólo abiertos</p>
+<p>Si está marcada, la opción &quot;Olvidé mi ID de ticket&quot; correo electrónico (correo electrónico enviado para recordar a los clientes su número de identificación de seguimiento de tickets)
+sólo enumerará los tickets abiertos e ignorará los resueltos.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="69"></a><p class="title">Formato de correo electrónico</p>
+<p>Determina qué formatos de correo electrónico se incluyen al enviar correos electrónicos. Las opciones incluyen:</p>
+
+<p>
+<b>HTML con texto sin formato alternativo a la plantilla de texto sin formato (predeterminado)</b>: los correos electrónicos se enviarán como HTML. El contenido de la plantilla de correo electrónico de texto sin formato de Hesk se utilizará para el texto alternativo en el correo electrónico (varias partes/alternativo).<br />
+<b>HTML con alternativa de texto sin formato generada a partir de una plantilla HTML</b>: los correos electrónicos se enviarán como HTML. El texto alternativo en el correo electrónico (varias partes/alternativo) se generará convirtiendo la plantilla HTML en texto sin formato. Se ignorarán las plantillas de correo electrónico de texto sin formato de Hesk.<br />
+<b>Solo HTML</b>: los correos electrónicos se enviarán solo como HTML sin varias partes/alternativa.<br />
+<b>Solo texto sin formato</b>: los correos electrónicos se enviarán como texto sin formato.<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Cerrar ventana</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

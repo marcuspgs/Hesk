@@ -25,6 +25,7 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 // Save the default language for the settings page before choosing user's preferred one
 $hesk_settings['language_default'] = $hesk_settings['language'];
 require(HESK_PATH . 'inc/common.inc.php');
+$hesk_settings['language'] = $hesk_settings['language_default'];
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/setup_functions.inc.php');
 hesk_load_database_functions();
@@ -189,7 +190,7 @@ hesk_handle_messages();
                     </label>
                     <input type="text" class="form-control" name="s_webmaster_mail" maxlength="255" value="<?php echo $hesk_settings['webmaster_mail']; ?>">
                 </div>
-                <div class="form-group flex-row">
+                <div class="form-group">
                     <label>
                         <span><?php echo $hesklang['site_theme']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>general.html#58','400','500')">
@@ -231,31 +232,10 @@ hesk_handle_messages();
                         </div>
                     </div>
                 </div>
-                <div class="checkbox-group">
-                    <h5>
-                        <span><?php echo $hesklang['admin_js']; ?></span>
-                        <a onclick="hesk_window('<?php echo $help_folder; ?>general.html#60','400','500')">
-                            <div class="tooltype right" style="vertical-align: top;">
-                                <svg class="icon icon-info">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                                </svg>
-                            </div>
-                        </a>
-                    </h5>
-                    <div class="checkbox-list">
-                        <div class="checkbox-custom">
-                            <input type="checkbox" id="s_admin_js" name="s_admin_js" value="1" onchange="hesk_toggleLayerDisplay('admin_js');" <?php if ($hesk_settings['admin_js']) {echo 'checked';} ?>>
-                            <label for="s_admin_js"><?php echo $hesklang['admin_js2']; ?></label>
-                        </div>
-                        <div id="admin_js" style="margin-left:25px;display:<?php echo $hesk_settings['admin_js'] ? 'block' : 'none'; ?>">
-                            <input type="text" class="form-control" name="s_admin_js_url" maxlength="255" value="<?php echo $hesk_settings['admin_js_url']; ?>">
-                        </div>
-                    </div>
-                </div>
             </section>
             <section class="settings__form_block language">
                 <h3><?php echo $hesklang['lgs']; ?></h3>
-                <div class="form-group row flex-row">
+                <div class="form-group row">
                     <label>
                         <span><?php echo $hesklang['hesk_lang']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>general.html#9','400','500')">
@@ -354,20 +334,7 @@ hesk_handle_messages();
                             </div>
                         </a>
                     </label>
-                    <div class="input-wrapper has-side-checkbox">
-                        <input type="password" class="form-control" name="s_db_pass" id="m4" maxlength="255" value="<?php echo str_replace(array('&', '>', '<'), array('&amp;', '&gt;', '&lt;'), $hesk_settings['db_pass']); ?>" autocomplete="off">
-                        <div class="checkbox-custom">
-                            <input type="checkbox" id="m4_pass" onchange="hesk_toggleShowPassword('m4');">
-                            <label for="m4_pass">
-                                <svg class="icon icon-eye-open">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-open"></use>
-                                </svg>
-                                <svg class="icon icon-eye-close">
-                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-eye-close"></use>
-                                </svg>
-                            </label>
-                        </div>
-                    </div>
+                    <input type="password" class="form-control" name="s_db_pass" id="m4" maxlength="255" value="<?php echo str_replace('&', '&amp;', $hesk_settings['db_pass']); ?>" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label>
@@ -780,7 +747,7 @@ function hesk_testLanguage($return_options = 0)
             /* Add an option for the <select> if needed */
             if ($add)
             {
-				if ($l[1] == $hesk_settings['language_default'])
+				if ($l[1] == $hesk_settings['language'])
 				{
 					$html .= '<option value="'.$subdir.'|'.$l[1].'" selected="selected">'.$l[1].'</option>';
 				}

@@ -1,0 +1,5 @@
+<p>Gentile %%NAME%%,</p>
+<p>Questa mail contiene un elenco di ticket di supporto inviati dal tuo indirizzo mail. Numero di ticket trovati: <strong>%%NUM%%</strong></p>
+<p>%%LIST_TICKETS%%</p>
+<p>Cordiali saluti,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

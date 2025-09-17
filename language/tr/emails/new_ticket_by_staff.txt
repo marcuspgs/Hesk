@@ -1,0 +1,18 @@
+Sayın %%NAME%%,
+
+"%%SUBJECT%%" Konulu Destek Talebiniz Gönderildi.
+
+Tüm taleplere genel talep yoğunluğuna göre mümkün olan en kısa sürede, 24 ila 48 saat içinde yanıt veriyoruz. Talebinizde bahsettiğiniz sorununuzun çözümünün bu sürede bitmeyeceğinizi, ek süre alacağını düşünürsek, size bir e-posta göndererek sizi bilgilendireceğiz.
+
+Talep Takip IDsi: %%TRACK_ID%%
+
+Talebinizin durumunu buradan görüntüleyebilirsiniz :
+%%TRACK_URL%%
+
+Taleplerin çözümü ile ilgilenen Personelimiz talebinize yanıt verdiğinde bir e-posta bildirimi alacaksınız.
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

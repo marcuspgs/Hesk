@@ -11,8 +11,6 @@ global $hesk_settings, $hesklang;
  * @var array $topArticles
  * @var array $latestArticles
  * @var array $latestArticles
- * @var bool $customerLoggedIn - `true` if a customer is logged in, `false` otherwise
- * @var array $customerUserContext - User info for a customer if logged in.  `null` if a customer is not logged in.
  */
 
 // This guard is used to ensure that users can't hit this outside of actual HESK code
@@ -23,7 +21,6 @@ if (!defined('IN_SCRIPT')) {
 require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
 require_once(TEMPLATE_PATH . 'customer/util/kb-search.php');
 require_once(TEMPLATE_PATH . 'customer/util/rating.php');
-require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
 
 $service_message_type_to_class = array(
     '0' => 'none',
@@ -91,7 +88,6 @@ $service_message_type_to_class = array(
                     <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
                         <?php echo $hesk_settings['hesk_title']; ?>
                     </a>
-                    <?php renderLoginNavbarElements($customerUserContext); ?>
                     <?php if ($hesk_settings['can_sel_lang']): ?>
                         <div class="header__lang">
                             <form method="get" action="" style="margin:0;padding:0;border:0;white-space:nowrap;">
@@ -153,7 +149,7 @@ $service_message_type_to_class = array(
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php hesk3_show_messages($serviceMessages); ?>
+                <?php hesk3_show_messages($service_messages); ?>
                 <div class="content">
                     <?php if ($currentCategory['id'] == 1): ?>
                         <div class="block__head">
@@ -431,7 +427,7 @@ END LICENSE CODE
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 <?php outputSearchJavascript(); ?>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
+<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js"></script>
 <script src="<?php echo TEMPLATE_PATH; ?>customer/js/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
 </body>
 </html>

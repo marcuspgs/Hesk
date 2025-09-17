@@ -51,11 +51,6 @@ if ($status != 3)
 
 $locked = 0;
 
-// Is the new status same as old status?
-if (hesk_get_ticket_status_from_DB($trackingID) == $status) {
-    hesk_process_messages($hesklang['noch'],'admin_ticket.php?track='.$trackingID.'&Refresh='.mt_rand(10000,99999),'NOTICE');
-}
-
 if ($status == 3) // Closed
 {
     if ( ! hesk_checkPermission('can_resolve', 0))
@@ -84,15 +79,6 @@ if ($status == 3) // Closed
 		$ticket['dt'] = hesk_date($ticket['dt'], true);
 		$ticket['lastchange'] = hesk_date($ticket['lastchange'], true);
         $ticket['due_date'] = hesk_format_due_date($ticket['due_date']);
-
-        require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
-        $customers = hesk_get_customers_for_ticket($ticket['id']);
-        $customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
-        $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
-        
-        $ticket['email'] = implode(';', $customer_emails);
-        $ticket['name'] = implode(';', $customer_names);
-        $ticket['last_reply_by'] = hesk_getReplierName($ticket);
 		$ticket = hesk_ticketToPlain($ticket, 1, 0);
 
 		// Notify customer

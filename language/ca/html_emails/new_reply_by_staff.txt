@@ -1,0 +1,7 @@
+<p>Benvolgut/da %%NAME%%,</p>
+<p>Els nostres tècnics acaben de respondre la vostra incidència "%%SUBJECT%%".</p>
+<p>Podeu veure la incidència aquí:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a> <br /><br /></p>
+<p>Si l'enllaç de sobre no és clicable, proveu copiant i enganxant-lo a la barra d'adreces del navegador web.</p>
+<p><strong>NO CONTESTEU AQUEST CORREU</strong><br />Aquest és un missatge de correu automàtic enviat des del sistema de suport. No contesteu aquest correu ja que no rebrem la vosra resposta, utilitzeu l'enllaç de sobre per una comunicació correcta!</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

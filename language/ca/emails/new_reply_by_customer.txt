@@ -1,0 +1,17 @@
+Hola,
+
+Un client acaba de contestar a la incidència "%%SUBJECT%%".
+
+Podeu veure la incidència aquí:
+%%TRACK_URL%%
+
+
+*NO CONTESTEU AQUEST CORREU*
+Aquest és un missatge de correu automàtic enviat pel sistema de suport. No contesteu aquest correu ja que el client no rebrà la vostra resposta!
+
+Per canviar les preferències de notificació per correu entreu a l'administració del help desk i aneu a "Perfil".
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

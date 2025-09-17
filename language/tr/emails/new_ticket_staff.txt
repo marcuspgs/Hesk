@@ -1,0 +1,15 @@
+Merhaba,
+
+Yardım Masasına yeni bir destek talebi gönderildi. Talep Detayları :
+
+Talep Konusu : %%SUBJECT%%
+Takip Kodu : %%TRACK_ID%%
+
+Talebi buradan yönetebilirsiniz :
+%%TRACK_URL%%
+
+
+Saygılarımızla,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

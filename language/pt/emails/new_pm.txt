@@ -1,0 +1,20 @@
+Olá,
+
+Você recebeu uma nova mensagem privada de %%NAME%% com o seguinte assunto:
+
+%%SUBJECT%%
+
+Você pode visualizar sua nova mensagem pelo seguinte link:
+%%TRACK_URL%%
+
+Você sempre pode escolher em ser ou não notificado a cada nova mensagem alterando as configurações adequadas nas propriedades do seu perfil.
+
+
+*NÃO RESPONDA A ESTE E-MAIL !!!*
+Esta é uma mensagem automática enviada pelo Sistema de Gestão de tickets. Não responda este e-mail, pois não irá receber nenhuma resposta!
+
+Atenciosamente,
+Sistema de Gestão de Tickets.
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,20 @@
+Bonjour M.%%NAME%%,
+
+Votre demande d'Assistance: "%%SUBJECT%%" a bien été enregistrée. 
+
+Nous nous efforcerons d'y répondre dans les plus brefs délais.
+
+La référence de votre demande : %%TRACK_ID%%
+Merci de noter que ce numéro est très important pour suivre votre demande.
+
+Vous pouvez voir le statut de votre demande via le lien ci-dessous:
+	%%TRACK_URL%%
+
+Vous recevrez automatiquement un E-mail dès que notre Service Support aura traité votre demande.
+
+Ceci est un message généré automatiquement envoyé par nos serveurs. 
+Ne répondez pas à cet email car nous ne recevrions pas votre réponse.
+
+Cordialement,
+
+%%SITE_TITLE%%

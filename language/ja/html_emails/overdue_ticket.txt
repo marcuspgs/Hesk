@@ -1,0 +1,7 @@
+<p>こんにちは、</p>
+<p>チケットの期限が過ぎています！チケットの詳細：</p>
+<p>チケット件名: %%SUBJECT%%</p>
+<p>追跡ID: %%TRACK_ID%%</p>
+<p>こちらのリンクからチケットを管理できます：<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>よろしくお願いいたします。</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

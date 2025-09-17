@@ -1,0 +1,5 @@
+<p>Merhaba %%NAME%%,</p>
+<p>Aşağıda Çok Faktörlü Kimlik Doğrulamada kullanacağınız Doğrulama Kodunuz bulunmaktadır. Bu kodun süresi 20 dakika içinde doluyor.</p>
+<p><strong>%%VERIFICATION_CODE%%</strong></p>
+<p>Teşekkür Ederiz,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

@@ -47,16 +47,8 @@ $onload='';
 
     <link rel="stylesheet" media="all" href="<?php echo HESK_PATH; ?>css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>">
     <script src="<?php echo HESK_PATH; ?>js/jquery-3.5.1.min.js"></script>
-    <?php
-    // Do we need to load CSV parsing?
-    if (defined('CSV')) {
-        ?>
-        <script src="<?php echo HESK_PATH; ?>js/jquery.csv.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-        <?php
-    }
-    ?>
-    <script src="<?php echo HESK_PATH; ?>js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-    <script type="text/javascript" src="<?php echo HESK_PATH; ?>js/hesk_javascript<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
+	<script type="text/javascript" src="<?php echo HESK_PATH; ?>js/hesk_javascript<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
+    <script src="<?php echo HESK_PATH; ?>js/selectize.min.js"></script>
 
     <?php
 	/* Tickets shouldn't be indexed by search engines */
@@ -72,7 +64,7 @@ $onload='';
 	{
         require(HESK_PATH . 'inc/tiny_mce/tinymce.inc.php');
 		?>
-		<script type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tiny_mce/5.10.9/tinymce.min.js"></script>
+		<script type="text/javascript" src="<?php echo HESK_PATH; ?>inc/tiny_mce/5.10.6/tinymce.min.js"></script>
 		<?php
 	}
 
@@ -233,13 +225,8 @@ $onload='';
         new $.Zebra_Tooltips($('.tooltip'), {animation_offset: 0, animation_speed: 100, hide_delay: 0, show_delay: 0, vertical_alignment: 'above', vertical_offset: 5});
     });
     </script>
-
     <?php if ($hesk_settings['admin_css']): ?>
     <link rel="stylesheet" href="<?php echo $hesk_settings['admin_css_url']; ?>">
-    <?php endif; ?>
-
-    <?php if ($hesk_settings['admin_js']): ?>
-    <script type="text/javascript" src="<?php echo $hesk_settings['admin_js_url']; ?>"></script>
     <?php endif; ?>
 
 </head>

@@ -171,7 +171,7 @@ function process_attachments($attachments)
 		}
         elseif ($type == 'message')
         {
-            $orig_name = ($key + 1) . ".eml";
+            $orig_name = ($key + 1) . ".msg";
         }
 
 		if ( ! strlen($orig_name))
@@ -358,13 +358,6 @@ function process_results($result,$tempdir)
     	if ( array_key_exists("Attachments", $result) )
         {
             $r["attachments"] = array_merge($r["attachments"], process_attachments($result["Attachments"]) );
-
-            // Attachments to attachments?
-            foreach ($result["Attachments"] as $att) {
-                if (isset($att["Attachments"])) {
-                    $r["attachments"] = array_merge($r["attachments"], process_attachments($att["Attachments"]) );
-                }
-            }
         }
 
     	// Save embedded files (for example embedded images)
@@ -379,14 +372,6 @@ function process_results($result,$tempdir)
 
     // Custom Hesk tag with tracking ID
     $r["X-Hesk-Tracking_ID"] = isset($result["X-Hesk-Tracking_ID"]) ? strtoupper($result["X-Hesk-Tracking_ID"]) : "";
-
-    // Do we have a priority tag?
-    $r["X-Priority"] = isset($result["X-Priority"]) ? strtolower($result["X-Priority"]) : "low";
-
-    // Message ID and related tags
-    $r["Message-ID"] = isset($result["Message-ID"]) ? $result["Message-ID"] : "";
-    $r["In-Reply-To"] = isset($result["In-Reply-To"]) ? $result["In-Reply-To"] : "";
-    $r["References"] = isset($result["References"]) ? $result["References"] : "";
 
 	return $r;
 }

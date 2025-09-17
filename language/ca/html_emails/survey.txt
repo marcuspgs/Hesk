@@ -1,0 +1,6 @@
+<p>Benvolgut/da %%NAME%%,</p>
+<p>Ens posem en contacte amb vós amb motiu de la incidència recent <a href="%%TRACK_URL%%">%%SUBJECT%%</a>. Per ajudar-nos a millorar l'atenció ens encantaria saber sobre la vostra experiència amb el nostre equip de suport.</p>
+<p>Si us plau feu-nos saber com de fàcil ha estat la resolució de la vostra incidència <a href="%%SURVEY_URL%%">clicant aquí</a>.</p>
+<p>Apreciem els vostres comentaris. I com sempre, si hi ha alguna cosa més que podem fer per vós en ul futur – no dubteu en tornar a contactar amb nosaltres.</p>
+<p>Gràcies,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

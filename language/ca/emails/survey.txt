@@ -1,0 +1,13 @@
+Benvolgut/da %%NAME%%,
+
+Ens posem en contacte amb vostè amb motiu de la incidència recent "%%SUBJECT%%". Per ajudar-nos a millorar l'atenció ens encantaria saber sobre la vostra experiència amb el nostre equip de suport.
+
+Si us plau feu-nos saber com de fàcil ha estat la resolució de la vostra incidència:
+%%SURVEY_URL%%
+
+Apreciem els vostres comentaris. I com sempre, si hi ha alguna cosa més que podem fer per vostè en un futur – no dubteu en tornar a contactar amb nosaltres.
+
+Gràcies,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

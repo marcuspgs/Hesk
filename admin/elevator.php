@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             handle_successful_elevation();
         } else {
             // Verification failed
-            hesk_process_messages($hesklang['mfa_invalid_backup_code'], 'NOREDIRECT');
+            hesk_process_messages($hesklang['mfa_invalid_verification_code'], 'NOREDIRECT');
         }
     } else {
         // Invalid action, something strange is going on... Let's force logout

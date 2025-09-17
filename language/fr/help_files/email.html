@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+<title>Aide interactive pour les paramètres Hesk</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="help_style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- next: 73 -->
+
+<h3>Aide interactive pour les paramètres Hesk</h3>
+
+<p>&nbsp;</p>
+
+<a name="55"></a><p class="title">Expéditeur de l'e-mail</p>
+<p>Sélectionnez si HESK doit envoyer des e-mails en utilisant la fonction PHP mail() ou en utilisant un serveur SMTP configuré manuellement.</p>
+
+<p>PHP mail() devrait fonctionner sur la plupart des configurations, si ce n'est pas le cas, vous pouvez essayer de configurer un serveur SMTP à la place.</p>
+
+<p>Variables SMTP disponibles:</p>
+
+<p>
+<b>Hôte SMTP</b> - nom d'hôte de votre serveur SMTP, généralement <i>localhost</i> ou <i>mail.example.com</i><br />
+<b>Port SMTP</b> - votre port SMTP, généralement 25<br />
+<b>Délai d'expiration SMTP</b> - Délai d'expiration SMTP en secondes<br />
+<b>Cryptage</b> - activez si votre serveur SMTP nécessite des connexions cryptées<br />
+<b>Nom d'utilisateur SMTP</b> - votre nom d'utilisateur SMTP (si utilisé)<br />
+<b>Mot de passe SMTP</b> - votre mot de passe SMTP (si utilisé)<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="54"></a><p class="title">Canalisation des e-mails</p>
+
+<p>Active le routage des e-mails (création de tickets à partir d'e-mails).</p>
+
+<p>Cette option active simplement la fonctionnalité de canalisation dans HESK, pour une configuration complète de la canalisation de courrier électronique, veuillez vous référer au fichier readme.html.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="59"></a><p class="title">Récupération POP3</p>
+
+<p>Ce paramètre active ou désactive la récupération POP3 - création de tickets à partir d'e-mails en se connectant à un compte de messagerie à l'aide d'une connexion POP3.</p>
+
+<p>Pour obtenir des instructions sur la configuration de la récupération POP3, veuillez consulter le fichier readme.html.</p>
+
+<p>Les variables disponibles sont :</p>
+
+<p><b>Task Timeout</b> : nombre de minutes d'attente avant qu'une tâche de récupération POP3 existante
+Achevée. Aucune nouvelle tâche de récupération ne démarrera tant que le délai d'attente n'aura pas été atteint.
+Définissez sur <b>0</b> pour désactiver les délais d'attente et toujours démarrer une nouvelle tâche de récupération.</p>
+
+<p>
+<b>Hôte POP3</b> : nom d'hôte de votre serveur POP3, généralement <i>mail.example.com</i><br />
+<b>Port POP3</b> : votre port POP3, généralement le 110. Gmail, par exemple, utilise le 995<br />
+<b>Protocole TLS</b> - activez si votre serveur POP3 nécessite le protocole TLS<br />
+<b>Conserver une copie</b> : si cette option est activée, HESK ne supprimera <b>pas</b> les messages du serveur POP3<br />
+<b>Nom d'utilisateur POP3</b> - votre nom d'utilisateur POP3<br />
+<b>Mot de passe POP3</b> - votre mot de passe POP3<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="67"></a><p class="title">Récupération IMAP</p>
+
+<p>Ce paramètre active ou désactive la récupération IMAP - création de tickets à partir d'e-mails en se connectant à un compte de messagerie à l'aide d'une connexion IMAP.</p>
+
+<p>Pour obtenir des instructions sur la configuration de la récupération IMAP, veuillez consulter le fichier readme.html.</p>
+
+<p>Les variables disponibles sont :</p>
+
+<p><b>Task Timeout</b> : nombre de minutes d'attente avant qu'une tâche de récupération IMAP existante
+Achevée. Aucune nouvelle tâche de récupération ne démarrera tant que le délai d'attente n'aura pas été atteint.
+Définissez sur <b>0</b> pour désactiver les délais d'attente et toujours démarrer une nouvelle tâche de récupération.</p>
+
+<p>
+<b>IMAP Host</b> - nom d'hôte de votre serveur IMAP, généralement <i>mail.example.com</i><br />
+<b>Port IMAP</b> - votre port IMAP, généralement 143 pour non chiffré et 993 pour SSL/TLS<br />
+<b>Cryptage</b> : définissez le cryptage IMAP requis<br />
+<b>Conserver une copie</b> - si activé, HESK ne supprimera <b>pas</b> les messages du serveur IMAP<br />
+<b>Nom d'utilisateur IMAP</b> - votre nom d'utilisateur IMAP<br />
+<b>Mot de passe IMAP</b> - votre mot de passe IMAP<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="68"></a><p class="title">Ne pas valider les certificats de serveur</p>
+
+<p>Si coché, Hesk ne validera pas les certificats du serveur TLS/SSL.</p>
+
+<p>La validation du certificat doit généralement être ignorée si le serveur utilise des certificats auto-signés.</p>
+
+<p>Nous vous recommandons vivement de <b>ne pas</b> désactiver la validation des certificats sur les serveurs de production et lors de la connexion à des serveurs tiers, car cela vous rend vulnérable aux attaques de l'homme du milieu.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="70"></a><p class="title">Do not reply</p>
+
+<p>Si coché, Hesk essaiera de détecter les e-mails envoyés depuis &quot;Do not reply&quot; adresses e-mail et les ignorer.</p>
+
+<p>Examples:<br>
+do-not-reply@example.com<br>
+do_not_reply@example.com<br>
+no_reply@example.com
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="71"></a><p class="title">Revenu</p>
+
+<p>Si coché, Hesk essaiera de détecter et d'ignorer les e-mails renvoyés.</p>
+
+<p>Par exemple, il ignorera les e-mails envoyés depuis mail-deamon@example.com et les e-mails avec un objet tel que "Courrier retourné", "Non distribuable", "Absent du bureau" ou similaire.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="72"></a><p class="title">Doublons</p>
+
+<p>Si cette case est cochée, Hesk détectera et ignorera un e-mail si Hesk a déjà traité un e-mail contenant le même message dans le "Timeframe" secondes.</p>
+
+<p>Lorsque vous testez la fonctionnalité e-mail vers ticket, désactivez ce paramètre ou envoyez des e-mails de test avec des messages uniques.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="60"></a><p class="title">Boucles d'e-mails</p>
+
+<p>Paramètres permettant de détecter les boucles d'e-mails créées à partir de répondeurs automatiques ou d'e-mails non distribuables.</p>
+
+<p>Tout nombre d'e-mails supérieur au <b>Accès max</b> à partir d'une adresse e-mail dans un délai de <b>délai</b> secondes
+sera ignoré par le routage des e-mails.</p>
+
+<p>Définissez <b>Max Hits</b> sur <b>0</b> pour désactiver la détection de boucle.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="62"></a><p class="title">Détecter les fautes de frappe dans les e-mails</p>
+
+<p>Cette fonction essaiera de détecter les fautes d'orthographe courantes des noms de domaine de messagerie et suggérera une version corrigée.</p>
+
+<p>Par exemple, si le client entre user@<span style="color:red"><b>gmial.com</b></span> HESK le détectera et suggérera
+user@<span style="color:green"><b>gmail.com</b></span> à la place.</p>
+
+<p>HESK comparera les domaines de messagerie aux domaines répertoriés dans la liste des <i>fournisseurs de messagerie</i>.</p>
+
+<p>&nbsp;</p>
+
+<a name="63"></a><p class="title">Fournisseurs de messagerie</p>
+
+<p>Une liste des fournisseurs de messagerie courants utilisés par vos clients. HESK utilisera cette liste pour essayer de détecter les adresses e-mail mal saisies.</p>
+
+<p>Entrez un domaine par ligne, <u>sans</u> le signe @.</p>
+
+<p>Vous pouvez saisir n'importe quel nombre de noms de domaine courants, mais essayez de ne pas en faire trop; saisissez uniquement les plus courants.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="65"></a><p class="title">Avertir le client quand</p>
+
+<p>Sélectionnez quand HESK doit envoyer une notification par e-mail aux clients :</p>
+
+<ul>
+<li><b>lorsque le client soumet un nouveau ticket d'assistance</b><br /><br />
+Remarque : si le ticket est soumis par e-mail (acheminement des e-mails ou récupération POP3), HESK peut
+ignorer l'envoi d'une nouvelle notification de ticket au client si l'objet de l'e-mail contient
+l'une des balises répertoriées dans la zone de texte (une balise par ligne).<br /><br />Vous pouvez l'utiliser pour éviter
+réponses automatiques aux e-mails détectés comme possible SPAM par le filtre anti-spam de votre serveur.<br />
+</li>
+<li><b>lorsqu'un ticket d'assistance est marqué comme Résolu</b> (sans répondre)</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>Notez que les préférences de notification sont définies individuellement par ticket lorsque le personnel répond à un ticket ou lorsque le personnel soumet un ticket depuis l'interface d'administration.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="61"></a><p class="title">Supprimer la réponse citée</p>
+
+<p>Cette fonction supprime les réponses citées de tous les e-mails des clients avant qu'elles ne soient converties en ticket à l'aide de la canalisation d'e-mails ou de la récupération POP3.</p>
+
+<p>Tous les e-mails envoyés aux clients commenceront par cette ligne :</p>
+
+<p>------ Répondre au-dessus de cette ligne ------</p>
+
+<p>Tout texte sous cette ligne sera supprimé lorsqu'un e-mail sera importé dans la réponse au ticket.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="66"></a><p class="title">Exiger un message</p>
+
+<p>Si cette option est activée, les e-mails provenant du routage des e-mails ou de la récupération POP3 seront ignorés s'ils ne contiennent aucun message.</p>
+
+<p>Si désactivé, même les e-mails sans message seront transformés en tickets.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="64"></a><p class="title">Fichiers intégrés</p>
+
+<p>Activez si vous souhaitez que HESK enregistre les fichiers d'e-mails intégrés (par exemple, les images intégrées) en tant que pièces jointes lors de l'importation de tickets via la canalisation d'e-mails ou la récupération POP3.</p>
+
+<p>Les fichiers dépassant la limite maximale de pièces jointes autorisées seront ignorés.</p>
+
+<p>Notez qu'avec HESK, les pièces jointes ont priorité sur les fichiers intégrés. Par exemple, si vous autorisez 2 pièces jointes et recevez un e-mail avec 1 pièce jointe
+et 3 images intégrées, HESK enregistrera la pièce jointe et la première image intégrée, le reste sera ignoré.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="57"></a><p class="title">Plusieurs e-mails</p>
+<p>Si un client essaie de saisir plusieurs e-mails (séparés par une virgule) dans le champ E-mail lors de la soumission d'un ticket HESK
+n'utilisera que le premier e-mail par défaut et ignorera tous les autres e-mails.</p>
+
+<p>Pour permettre aux clients de saisir plusieurs e-mails, activez cette fonctionnalité en cochant la case.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="50"></a><p class="title">Confirmer l'e-mail</p>
+<p>Si sélectionné, le formulaire "Soumettre un ticket" affichera un "E-mail de confirmation"
+forçant le client à saisir deux fois l'adresse e-mail. Cela permet d'éviter les fautes de frappe
+dans les adresses e-mail.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="58"></a><p class="title">Ouvert uniquement</p>
+<p>Si coché, l'e-mail "ID de ticket oublié" (e-mail envoyé pour rappeler aux clients leur numéro d'identification de suivi de ticket)
+ne listera que les tickets ouverts et ignorera les résolus.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="69"></a><p class="title">Formatage des e-mails</p>
+<p>Détermine quels formats d'e-mail sont inclus lors de l'envoi d'e-mails. Les options incluent :</p>
+
+<p>
+<b>HTML avec alternative en texte brut à partir du modèle de texte brut (par défaut)</b> - les e-mails seront envoyés au format HTML. Le contenu du modèle d'e-mail en texte brut Hesk sera utilisé pour le texte alternatif dans l'e-mail (multipart/alternative).<br />
+<b>HTML avec une alternative en texte brut générée à partir du modèle HTML</b> - les e-mails seront envoyés au format HTML. Le texte alternatif dans l'e-mail (multipart/alternative) sera généré en convertissant le modèle HTML en texte brut. Les modèles d'e-mails en texte brut Hesk seront ignorés.<br />
+<b>HTML uniquement</b> - les e-mails seront envoyés au format HTML uniquement sans multipart/alternative.<br />
+<b>Texte brut uniquement</b> - les e-mails seront envoyés en texte brut.<br />
+</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Fermer la fenêtre</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

@@ -83,8 +83,5 @@ else
     $sort_possible[$sort] = 0;
 }
 
-// Options
-$history = hesk_GET('history') ? 1 : 0;
-
 # Uncomment for debugging purposes
 # echo "SQL: $sql<br>";

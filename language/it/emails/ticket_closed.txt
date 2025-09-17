@@ -1,0 +1,13 @@
+Gentile %%NAME%%,
+il suo ticket avente per oggetto:
+%%SUBJECT%%
+è stato aggiornato allo stato di: "Chiuso/Risolto".
+
+È possibile visualizzare lo stato del ticket all'URL sottostante:
+%%TRACK_URL%%
+
+Se tale link non fosse cliccabile, è possibile provare a copiarlo e incollarlo nella barra degli indirizzi del proprio browser.
+
+Cordiali saluti,
+%%SITE_TITLE%% Helpdesk
+%%SITE_URL%%

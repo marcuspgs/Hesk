@@ -30,7 +30,6 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
             selector: '<?php echo $selector; ?>',
             convert_urls: false,
             branding: false,
-            promotion: false,
             browser_spellcheck: true,
             contextmenu: 'link useBrowserSpellcheck image table',
             setup: function (editor) {
@@ -39,9 +38,6 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
                 editor.on('KeyUp', function (e) {
                     clearTimeout(<?php echo $onKeyUpTimer; ?>);
                     <?php echo $onKeyUpTimer; ?> = setTimeout(<?php echo $onKeyUpFunction; ?>, <?php echo $onKeyUpTimeout; ?>);
-                }),
-                editor.on('submit', function (e) {
-                    clearTimeout(<?php echo $onKeyUpTimer; ?>);
                 }),
                 <?php endif; ?>
 
@@ -63,16 +59,13 @@ function hesk_tinymce_init($selector='#message', $onKeyUpFunction = '', $onKeyUp
                 }
               });
             },
-            toolbar: 'undo redo | styleselect fontselect fontsizeselect | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | bullist numlist outdent indent | link unlink anchor image codesample code',
-            plugins: 'charmap code codesample image link lists table autolink anchor',
+            toolbar: 'undo redo | styleselect fontselect fontsizeselect | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | bullist numlist outdent indent | link unlink image codesample code',
+            plugins: 'charmap code codesample image link lists table autolink',
             height: 350,
             toolbar_mode: 'sliding',
             mobile: {
                 toolbar_mode: 'scrolling',
                 height: 300
-            },
-            images_dataimg_filter: function(img) {
-                return img.hasAttribute('internal-blob');
             }
         });
     </script>

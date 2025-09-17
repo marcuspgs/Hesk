@@ -1,0 +1,17 @@
+Hola,
+
+Una incidència està vençuda! Detalls de la incidència:
+
+Tema de la incidència: %%SUBJECT%%
+ID de seguiment: %%TRACK_ID%%
+
+Podeu gestionar la incidència aquí:
+%%TRACK_URL%%
+
+*NO CONTESTEU AQUEST CORREU*
+Aquet és un correu electrònic automàtic enviat pel nostre sistema de suport. No contesteu aquest correu ja que no rebrem la vostra resposta, utilitzeu l'enllaç de sobre per una comunicació correcta!
+
+Atentament,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

@@ -1,0 +1,6 @@
+<p>Ciao,</p>
+<p>Hai ricevuto un nuovo messaggio privato da %%NAME%% con il seguente oggetto:</p>
+<p>%%SUBJECT%%</p>
+<p>Puoi vedere il messaggio al link seguente:<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
+<p>Cordiali saluti,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

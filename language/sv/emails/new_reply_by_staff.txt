@@ -1,0 +1,12 @@
+Hej %%NAME%%,
+
+Vår personal har just svarat på ditt ärende "%%SUBJECT%%".
+
+Du kan granska ärendet här:
+%%TRACK_URL%%
+
+
+Med vänliga hälsningar,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

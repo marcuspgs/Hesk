@@ -1,0 +1,6 @@
+<p>Benvolgut/da %%NAME%%,</p>
+<p>Aquest correu conté una llista de les incidències que hem rebut des de la vostra adreça de correu. Nombre d'incidències trobades: <strong>%%NUM%%</strong></p>
+<p>%%LIST_TICKETS%%</p>
+<p><strong>NO CONTESTEU AQUEST CORREU</strong><br />Aquest és un missatge de correu automàtic enviat des del sistema de suport. No contesteu aquest correu ja que no rebrem la vosra resposta!</p>
+<p>Atentament,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

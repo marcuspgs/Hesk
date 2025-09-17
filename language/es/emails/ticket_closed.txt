@@ -1,0 +1,13 @@
+Estimado %%NAME%%,
+
+Su ticket de soporte "%%SUBJECT%%" ha sido actualizado a un estado Cerrado/Resuelto.
+
+Puede ver el estado de su ticket aquí:
+%%TRACK_URL%%
+
+Si no puede hacer click en el enlace anterior, intente copiarlo y pegarlo en la barra de direcciones de su navegador.
+
+Atentamente,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

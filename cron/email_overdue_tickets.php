@@ -36,9 +36,9 @@ if (hesk_check_maintenance(false)) {
 
 hesk_overdue_ticket_log($hesklang['overdue_starting']);
 
-$sql = "SELECT `ticket`.`id` AS `id`, `ticket`.`trackid` AS `trackid`, `ticket`.`subject` AS `subject`,
+$sql = "SELECT `ticket`.`id` AS `id`, `ticket`.`trackid` AS `trackid`, `ticket`.`name` AS `name`, `ticket`.`subject` AS `subject`,
     `ticket`.`message` AS `message`, `ticket`.`message_html` AS `message_html`, `ticket`.`category` AS `category`, `ticket`.`priority` AS `priority`,
-    `ticket`.`owner` AS `owner`, `ticket`.`status` AS `status`, `ticket`.`dt` AS `dt`,
+    `ticket`.`owner` AS `owner`, `ticket`.`status` AS `status`, `ticket`.`email` AS `email`, `ticket`.`dt` AS `dt`,
     `ticket`.`lastchange` AS `lastchange`, `ticket`.`due_date` AS `due_date`, `user`.`language` AS `user_language`, `user`.`email` AS `user_email`,
     `ticket`.`time_worked` AS `time_worked`, `ticket`.`lastreplier` AS `lastreplier`, `ticket`.`replierid` AS `replierid`,
     `ticket`.`custom1` AS `custom1`, `ticket`.`custom2` AS `custom2`, `ticket`.`custom3` AS `custom3`, `ticket`.`custom4` AS `custom4`,

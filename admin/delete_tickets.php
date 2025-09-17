@@ -19,7 +19,6 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 define('TEMPLATE_PATH', HESK_PATH . "theme/{$hesk_settings['site_theme']}/");
 require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
-require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 hesk_load_database_functions();
 
 hesk_session_start();
@@ -76,7 +75,7 @@ if ( isset($_GET['delete_ticket']) )
 	/* Is this user allowed to delete tickets inside this category? */
 	hesk_okCategory($ticket['category']);
 
-	hesk_fullyDeleteTicket($ticket['id'], $ticket['trackid']);
+	hesk_fullyDeleteTicket();
 
     hesk_process_messages(sprintf($hesklang['num_tickets_deleted'],1),$referer,'SUCCESS');
 }
@@ -189,22 +188,18 @@ if ( isset($_POST['action-type']) && $_POST['action-type'] == 'assi')
 			$num_assigned++;
 
 			$ticket['owner'] = $owner;
-			$customers = hesk_get_customers_for_ticket($ticket['id']);
-			$customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
-			$first_name = empty($customer_names) ? '' : $customer_names[0];
-			$customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
 
             /* --> Prepare message */
 
             // 1. Generate the array with ticket info that can be used in emails
             $info = array(
-            'email'			=> implode(';', $customer_emails),
+            'email'			=> $ticket['email'],
             'category'		=> $ticket['category'],
             'priority'		=> $ticket['priority'],
             'owner'			=> $ticket['owner'],
             'trackid'		=> $ticket['trackid'],
             'status'		=> $ticket['status'],
-            'name'			=> implode(',', $customer_names),
+            'name'			=> $ticket['name'],
             'subject'		=> $ticket['subject'],
             'message'		=> $ticket['message'],
             'message_html'  => $ticket['message_html'],
@@ -308,7 +303,7 @@ elseif ($_POST['a']=='delete')
 
         hesk_okCategory($ticket['category']);
 
-        hesk_fullyDeleteTicket($ticket['id'], $ticket['trackid']);
+        hesk_fullyDeleteTicket();
         $i++;
     }
 
@@ -450,7 +445,7 @@ elseif ($_POST['a']=='anonymize')
         }
 
         $this_id = intval($this_id) or hesk_error($hesklang['id_not_valid']);
-        $result = hesk_dbQuery("SELECT `id`,`trackid`,`category` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`='".intval($this_id)."' AND ".hesk_myOwnership()." LIMIT 1");
+        $result = hesk_dbQuery("SELECT `id`,`trackid`,`name`,`category` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`='".intval($this_id)."' AND ".hesk_myOwnership()." LIMIT 1");
         if (hesk_dbNumRows($result) != 1)
         {
             continue;
@@ -539,37 +534,11 @@ elseif ($_POST['a']=='print')
         }
 
         // All good, continue...
-        $customers = hesk_get_customers_for_ticket($ticket['id']);
-
-// Demo mode
-        if ( defined('HESK_DEMO') )
-        {
-            foreach ($customers as $customer) {
-                $customer['email'] = 'hidden@demo.com';
-            }
-            $ticket['ip']	 = '127.0.0.1';
-        }
 
         $category['name'] = isset($hesk_settings['categories'][$ticket['category']]) ? $hesk_settings['categories'][$ticket['category']] : $hesklang['catd'];
 
         // Get replies
-        $res  = hesk_dbQuery("SELECT `replies`.*, `reply_customer`.`name` AS `customer_name`, `reply_staff`.`name` AS `staff_name` 
-            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `replies`
-            LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `reply_customer`
-                ON `replies`.`customer_id` = `reply_customer`.`id`
-            LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `reply_staff`
-                ON `replies`.`staffid` = `reply_staff`.`id`
-            WHERE `replyto`='{$ticket['id']}' ORDER BY `replies`.`id` ASC");
-
-        $replies = [];
-        while ($row = hesk_dbFetchAssoc($res)) {
-            if (intval($row['staffid']) > 0) {
-                $row['name'] = $row['staff_name'];
-            } else {
-                $row['name'] = $row['customer_name'];
-            }
-            $replies[] = $row;
-        }
+        $res  = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `replyto`='{$ticket['id']}' ORDER BY `id` ASC");
 
         // Get notes
         $notes = array();
@@ -580,9 +549,8 @@ elseif ($_POST['a']=='print')
         }
 
         $ticket['notes'] = $notes;
-        $ticket['replies'] = $replies;
+        $ticket['replies'] = $res;
         $ticket['categoryName'] = $category['name'];
-        $ticket['customers'] = $customers;
         $tickets[] = $ticket;
     }
 
@@ -632,16 +600,6 @@ else
 		{
 			$ticket['dt'] = hesk_date($ticket['dt'], true);
 			$ticket['lastchange'] = hesk_date($ticket['lastchange'], true);
-            $ticket['due_date'] = hesk_format_due_date($ticket['due_date']);
-
-            $customers = hesk_get_customers_for_ticket($ticket['id']);
-            $customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
-            $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
-
-            $ticket['email'] = implode(';', $customer_emails);
-            $ticket['name'] = implode(';', $customer_names);
-            $ticket['last_reply_by'] = hesk_getReplierName($ticket);
-
 			$ticket = hesk_ticketToPlain($ticket, 1, 0);
 			hesk_notifyCustomer('ticket_closed');
 		}
@@ -649,3 +607,42 @@ else
 
     hesk_process_messages(sprintf($hesklang['num_tickets_closed'],$i),$referer,'SUCCESS');
 }
+
+
+/*** START FUNCTIONS ***/
+
+
+function hesk_fullyDeleteTicket()
+{
+	global $hesk_settings, $hesklang, $ticket;
+
+    /* Delete attachment files */
+	$res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."attachments` WHERE `ticket_id`='".hesk_dbEscape($ticket['trackid'])."'");
+    if (hesk_dbNumRows($res))
+    {
+    	$hesk_settings['server_path'] = dirname(dirname(__FILE__));
+
+    	while ($file = hesk_dbFetchAssoc($res))
+        {
+        	hesk_unlink($hesk_settings['server_path'].'/'.$hesk_settings['attach_dir'].'/'.$file['saved_name']);
+        }
+    }
+
+    /* Delete attachments info from the database */
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."attachments` WHERE `ticket_id`='".hesk_dbEscape($ticket['trackid'])."'");
+
+    /* Delete the ticket */
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`='".intval($ticket['id'])."'");
+
+    /* Delete replies to the ticket */
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `replyto`='".intval($ticket['id'])."'");
+
+    /* Delete ticket notes */
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."notes` WHERE `ticket`='".intval($ticket['id'])."'");
+
+	/* Delete ticket reply drafts */
+	hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."reply_drafts` WHERE `ticket`=".intval($ticket['id']));
+
+    return true;
+}
+?>

@@ -121,7 +121,7 @@ function hesk_get_status_select($ignore_status = '', $can_resolve = true, $selec
         }
         elseif ($k == 3)
         {
-            if ($can_resolve || $k == $select_status)
+            if ($can_resolve)
             {
                 $last = '<option value="'.$k.'" '.($k == $select_status ? 'selected' : '').'>'.$v['name'].'</option>';
             }
@@ -220,23 +220,6 @@ function hesk_get_ticket_status($status, $append = '', $check_change = 1)
     return $hesk_settings['statuses'][$status]['name'] . $append;
 
 } // END hesk_get_ticket_status()
-
-
-function hesk_get_ticket_status_from_DB($trackingID)
-{
-    global $hesk_settings, $hesklang;
-
-    if (empty($trackingID)) {
-        hesk_error($hesklang['no_trackID']);
-    }
-
-    $result = hesk_dbQuery("SELECT `status` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `trackid`='".hesk_dbEscape($trackingID)."' LIMIT 1");
-    if (hesk_dbNumRows($result) != 1) {
-        hesk_error($hesklang['ticket_not_found']);
-    }
-
-    return hesk_dbResult($result);
-} // END hesk_get_ticket_status_from_DB()
 
 
 function hesk_can_customer_change_status($status)

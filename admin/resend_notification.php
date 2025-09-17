@@ -20,7 +20,6 @@ require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 hesk_load_database_functions();
 require(HESK_PATH . 'inc/email_functions.inc.php');
-require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 hesk_session_start();
 hesk_dbConnect();
@@ -81,19 +80,16 @@ if ($reply_id > 0)
 }
 
 /* --> Prepare message */
-$customers = hesk_get_customers_for_ticket($ticket['id']);
-$customer_emails = array_map(function($customer) { return $customer['email']; }, $customers);
-$customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
 
 // 1. Generate the array with ticket info that can be used in emails
 $info = array(
-'email'			=> implode(';', $customer_emails),
+'email'			=> $ticket['email'],
 'category'		=> $ticket['category'],
 'priority'		=> $ticket['priority'],
 'owner'			=> $ticket['owner'],
 'trackid'		=> $ticket['trackid'],
 'status'		=> $ticket['status'],
-'name'			=> implode(';', $customer_names),
+'name'			=> $ticket['name'],
 'subject'		=> $ticket['subject'],
 'message'		=> $ticket['message'],
 'message_html'  => $ticket['message_html'],
@@ -104,7 +100,6 @@ $info = array(
 'id'			=> $ticket['id'],
 'time_worked'   => $ticket['time_worked'],
 'last_reply_by' => hesk_getReplierName($ticket),
-'language'      => $ticket['language'],
 );
 
 // 2. Add custom fields to the array
@@ -115,16 +110,6 @@ foreach ($hesk_settings['custom_fields'] as $k => $v)
 
 // 3. Make sure all values are properly formatted for email
 $ticket = hesk_ticketToPlain($info, 1, 0);
-
-// Remind assigned staff?
-if (hesk_GET('remind') == 1 && $ticket['owner']) {
-    hesk_notifyAssignedStaff(false, 'ticket_assigned_to_you');
-    $res = hesk_dbQuery("SELECT `user`,`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`=".intval($ticket['owner'])." LIMIT 1");
-    $row = hesk_dbFetchAssoc($res);
-    $revision = sprintf($hesklang['thist23'],hesk_date(),addslashes($row['name']).' ('.$row['user'].')',addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
-    hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `lastchange`=`lastchange`, `history`=CONCAT(`history`,'" . hesk_dbEscape($revision) . "') WHERE `id`=" . intval($ticket['id']));
-    hesk_process_messages($hesklang['remind_sent'],'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'SUCCESS');
-}
 
 // Notification of a reply
 if ($reply_id > 0)

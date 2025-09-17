@@ -116,7 +116,7 @@ $hesk_settings['TEST-MODE'] = (hesk_GET('test_mode') == 1) ? true : false;
 
 $imap = new HeskIMAP();
 $imap->host = $hesk_settings['imap_host_name'];
-$imap->port = $hesk_settings['imap_host_port'];
+$imap->port = 993;
 $imap->username = $hesk_settings['imap_user'];
 if ($hesk_settings['imap_conn_type'] === 'basic') {
     $imap->password = hesk_htmlspecialchars_decode($hesk_settings['imap_password']);
@@ -138,7 +138,6 @@ if ($hesk_settings['imap_conn_type'] === 'basic') {
 
 $imap->readOnly = $hesk_settings['TEST-MODE'];
 $imap->ignoreCertificateErrors = $hesk_settings['imap_noval_cert'];
-$imap->disableGSSAPI = $hesk_settings['imap_disable_GSSAPI'];
 $imap->connectTimeout = 15;
 $imap->responseTimeout = 15;
 

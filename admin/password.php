@@ -84,7 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				if ( isset($_SESSION['checksum']) && $sc->checkCode($mysecnum, $_SESSION['checksum']) )
 				{
 					//$_SESSION['img_a_verified'] = true;
-                    unset($_SESSION['checksum']);
 				}
 				else
 				{
@@ -132,10 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		else
 		{
 			$row = hesk_dbFetchAssoc($res);
-			$hash = sha1(microtime() . hesk_getClientIP() . mt_rand() . $row['id'] . $row['name'] . $row['pass'] . 'STAFF');
+			$hash = sha1(microtime() . hesk_getClientIP() . mt_rand() . $row['id'] . $row['name'] . $row['pass']);
 
 			// Insert the verification hash into the database
-			hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."reset_password` (`user`, `hash`, `ip`, `user_type`) VALUES (".intval($row['id']).", '{$hash}', '".hesk_dbEscape(hesk_getClientIP())."', 'STAFF') ");
+			hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."reset_password` (`user`, `hash`, `ip`) VALUES (".intval($row['id']).", '{$hash}', '".hesk_dbEscape(hesk_getClientIP())."') ");
 
 			// Prepare and send email
 			require(HESK_PATH . 'inc/email_functions.inc.php');
@@ -165,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 $html_msg);
 
 			// Send email
-			hesk_mail($email, [], $hesklang['reset_password'], $msg, $html_msg);
+			hesk_mail($email, $hesklang['reset_password'], $msg, $html_msg);
 
 			// Show success
             $show_sent_email_message = true;
@@ -207,7 +206,7 @@ elseif ( isset($_GET['h']) )
 		else
 		{
 			// Expire all verification hashes for this user
-			hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."reset_password` WHERE `user_type` = 'STAFF' AND `user`=".intval($row['user']));
+			hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."reset_password` WHERE `user`=".intval($row['user']));
 
 			// Load additional required functions
 			require(HESK_PATH . 'inc/admin_functions.inc.php');
@@ -303,8 +302,8 @@ $login_wrapper = true;
                             <?php } else {
                                 $cls = in_array('mysecnum',$_SESSION['a_iserror']) ? ' class="form-control isError" ' : ' class="form-control" ';
 
-                                echo '<div class="form-group"><label>'.$hesklang['sec_enter'].'</label><img src="print_sec_img.php?'.rand(10000,99999).'" width="150" height="40" alt="'.$hesklang['sec_img'].'" title="'.$hesklang['sec_img'].'" border="1" name="secimg" style="vertical-align:middle" /> '.
-                                    '<a style="vertical-align: middle; display: inline" class="btn btn-refresh" href="javascript:" onclick="document.form1.secimg.src=\'print_sec_img.php?\'+ ( Math.floor((90000)*Math.random()) + 10000);">
+                                echo '<div class="form-group"><label>'.$hesklang['sec_enter'].'</label><img src="'.HESK_PATH.'print_sec_img.php?'.rand(10000,99999).'" width="150" height="40" alt="'.$hesklang['sec_img'].'" title="'.$hesklang['sec_img'].'" border="1" name="secimg" style="vertical-align:middle" /> '.
+                                    '<a style="vertical-align: middle; display: inline" class="btn btn-refresh" href="javascript:" onclick="document.form1.secimg.src=\''.HESK_PATH.'print_sec_img.php?\'+ ( Math.floor((90000)*Math.random()) + 10000);">
                                             <svg class="icon icon-refresh">
                                                 <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-refresh"></use>
                                             </svg>

@@ -102,32 +102,8 @@ if ($_SESSION['step'] == 3)
 	// Now update HESK database tables
 	hesk_iUpdateTables();
 
-    // Do we need to migrate customers?
-    $ticket_count = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` LIMIT 1");
-    $any_tickets = hesk_dbNumRows($ticket_count) > 0;
-
-    if ($any_tickets) {
-        $_SESSION['step']=4;
-    } else {
-        hesk_iDropOldPreCustomerColumns();
-        $_SESSION['step']=5;
-    }
-}
-
-if ($_SESSION['step'] == 4) {
-    // Have customer accounts been migrated?
-    if (hesk_REQUEST('migration-complete')) {
-        $_SESSION['step'] = 5;
-    } else {
-        $reply_name_column_gone = hesk_dbQuery("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS 
-         WHERE TABLE_SCHEMA = '" . hesk_dbEscape($hesk_settings['db_name']) . "' 
-           AND TABLE_NAME = '" . hesk_dbEscape($hesk_settings['db_pfix']) . "replies' 
-           AND COLUMN_NAME = 'name'");
-
-        if (hesk_dbNumRows($reply_name_column_gone) === 0) {
-            $_SESSION['step'] = 5;
-        }
-    }
+	// And move to the next step
+	$_SESSION['step']=4;
 }
 
 // Which step are we at?
@@ -139,10 +115,7 @@ switch ($_SESSION['step'])
 	case 3:
 	   hesk_iDatabase();
 	   break;
-    case 4:
-       hesk_iCustomerMigrationIntro();
-       break;
-	case 5:
+	case 4:
 	   hesk_iFinish();
 	   break;
 	default:
@@ -1432,133 +1405,10 @@ function hesk_iUpdateTables()
     // 3.4.1 no changes
     // 3.4.2 no changes
     // 3.4.3 no changes
-    // 3.4.4 no changes
-    // 3.4.5 no changes
-    // 3.4.6 no changes
-
-    // Updating 3.4.x to 3.5.0
-    if ($update_all_next || $hesk_settings['update_from'] == '3.4.0') {
-        // -> Customer Accounts
-        hesk_dbQuery("
-        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` (
-          `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-          `pass` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-          `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-          `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-          `language` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-          `verified` smallint(1) UNSIGNED NOT NULL DEFAULT 0,
-          `verification_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-          `verification_email_sent_at` timestamp NULL,
-          `mfa_enrollment` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
-          `mfa_secret` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-          PRIMARY KEY (`id`),
-          KEY `email` (`email`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-        ");
-        hesk_dbQuery("
-        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."pending_customer_email_changes` (
-          `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-          `customer_id` mediumint(8) unsigned NOT NULL,
-          `new_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-          `verification_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-          `expires_at` timestamp NOT NULL DEFAULT '2000-01-01 00:00:00',
-          PRIMARY KEY (`id`),
-          KEY `email` (`new_email`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-        ");
-        hesk_dbQuery("
-        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` (
-          `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-          `ticket_id` mediumint(8) unsigned NOT NULL,
-          `customer_id` mediumint(8) unsigned NOT NULL,
-          `customer_type` varchar(9) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'REQUESTER',
-          PRIMARY KEY (`id`),
-          KEY `ticket_id` (`ticket_id`),
-          KEY `customer_id` (`customer_id`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-        ");
-        // -> Bookmarks
-        hesk_dbQuery("
-        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."bookmarks` (
-          `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-          `user_id` smallint(5) unsigned NOT NULL,
-          `ticket_id` mediumint(8) unsigned NOT NULL,
-          PRIMARY KEY (`id`),
-          KEY `ticket_id` (`ticket_id`,`user_id`),
-          KEY `user_id` (`user_id`,`ticket_id`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-        ");
-
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`
-                    ADD `eid` varchar(1000) NULL DEFAULT NULL AFTER `satisfaction_email_dt`,
-                    CHANGE `name` `u_name` varchar(255) NOT NULL default '',
-                    CHANGE `email` `u_email` varchar(1000) NOT NULL default ''");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies`
-                    ADD `customer_id` mediumint(8) unsigned NULL DEFAULT NULL AFTER `staffid`,
-                    ADD `eid` varchar(1000) NULL DEFAULT NULL AFTER `read`;");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."reset_password`
-                    ADD `user_type` varchar(8) NOT NULL DEFAULT 'STAFF' AFTER `dt`");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_verification_tokens`
-                    ADD `user_type` varchar(8) NOT NULL DEFAULT 'STAFF' AFTER `user_id`");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes`
-                    ADD `user_type` varchar(8) NOT NULL DEFAULT 'STAFF' AFTER `user_id`");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens`
-                    ADD `user_type` varchar(8) NOT NULL DEFAULT 'STAFF' AFTER `user_id`");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."service_messages`
-                    ADD `location` varchar(255) NULL DEFAULT NULL AFTER `order`");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."users`
-                    ADD `notify_customer_approval` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `notify_overdue_my`,
-                    CHANGE `default_list` `default_list` VARCHAR(1000) NOT NULL DEFAULT ''");
-        hesk_dbQuery("
-        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."pipe_rejections` (
-          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-          `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-          `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-          PRIMARY KEY (`id`),
-          KEY `email` (`email`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-        ");
-
-        // Increase custom fields to 100; try preserving current custom fields
-        $sql = array();
-        $sql_custom = array();
-        $res = hesk_dbQuery("DESCRIBE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`");
-        while($row = hesk_dbFetchAssoc($res)) {
-            $table[$row['Field']] = $row['Type'];
-        }
-        for ($i=51; $i<=100; $i++) {
-            if (isset($table['custom'.$i])) {
-                if (strtolower($table['custom'.$i]) != 'mediumtext') {
-                    $sql[] = 'CHANGE `custom'.$i.'` `custom'.$i.'` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL';
-                }
-            } else {
-                $sql[] = 'ADD `custom'.$i.'` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL';
-                $sql_custom[] = "({$i}, '0', '0', 'text', '0', NULL, '', NULL, 1000)";
-            }
-        }
-        if (count($sql)) {
-            hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` " . implode(',', $sql));
-        }
-        if (count($sql_custom)) {
-            hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."custom_fields` (`id`, `use`, `place`, `type`, `req`, `category`, `name`, `value`, `order`) VALUES ".implode(',', $sql_custom)."");
-        }
-
-        $update_all_next = 1;
-    }
-
-    // 3.5.1 no changes
-
-    // Updating 3.5.x to 3.5.2
-    if ($update_all_next || $hesk_settings['update_from'] == '3.5.0') {
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` CHANGE `eid` `eid` VARCHAR(1000) NULL DEFAULT NULL, ADD KEY `customer_id` (`customer_id`)");
-        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` CHANGE `eid` `eid` VARCHAR(1000) NULL DEFAULT NULL");
-
-        $update_all_next = 1;
-    }
 
 	// Insert the "HESK updated to latest version" mail for the administrator
-    $offer_license = file_exists(HESK_PATH.'hesk_license.php') ? "" : "<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n";
-    hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."mail` (`id`, `from`, `to`, `subject`, `message`, `dt`, `read`, `deletedby`) VALUES (NULL, 9999, 1, 'Hesk updated to version ".HESK_NEW_VERSION."', '".hesk_dbEscape("</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">Congratulations, your Hesk has been successfully updated! Now is your chance to:</h2>\r\n\r\n<h3>&raquo; Rate us</h3>\r\n\r\n<p>Positive ratings and reviews motivate us to continue developing Hesk. Please take a moment to:</p>\r\n\r\n<ul>\r\n<li>rate or review Hesk at <a href=\"https://www.capterra.com/p/156452/HESK/\" rel=\"nofollow\">Capterra</a></li>\r\n<li>rate or review Hesk at <a href=\"https://softaculous.com/apps/customersupport/HESK\" rel=\"nofollow\">Softaculous</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://x.com/HESKdotCOM\" rel=\"nofollow\">follow Hesk on <b>X</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume, zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n{$offer_license}&nbsp;\r\n\r\n<h3>&raquo; Tired of manual updates? Upgrade to Hesk Cloud!</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>")."', NOW(), '0', 9999)");
+    $offer_license = file_exists(HESK_PATH.'hesk_license.php') ? "" : "<h3>&raquo; Look professional</h3>\r\n\r\n<p>To not only support Hesk development but also look more professional, <a href=\"https://www.hesk.com/get/hesk3-license\">remove &quot;Powered by&quot; links</a> from your help desk.</p>\r\n\r\n";
+    hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."mail` (`id`, `from`, `to`, `subject`, `message`, `dt`, `read`, `deletedby`) VALUES (NULL, 9999, 1, 'Hesk updated to version ".HESK_NEW_VERSION."', '".hesk_dbEscape("</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">Congratulations, your Hesk has been successfully updated! Now is your chance to:</h2>\r\n\r\n<h3>&raquo; Help us improve</h3>\r\n\r\n<p>Suggest what features we should add to Hesk by posting them <a href=\"https://hesk.uservoice.com/forums/69851-general\" target=\"_blank\">here</a>.</p>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://twitter.com/HESKdotCOM\">follow Hesk on <b>Twitter</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n{$offer_license}<h3>&raquo; Tired of manual updates? Upgrade to Hesk Cloud!</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>")."', NOW(), '0', 9999)");
 
 	return true;
 
@@ -1626,7 +1476,6 @@ function hesk_iSaveSettings()
     }
 
 	// Arrays need special care
-    $hesk_settings['barcode'] = isset($hesk_settings['barcode']) ? $hesk_settings['barcode'] : $hesk_default['barcode'];
     $hesk_settings['attachments'] = isset($hesk_settings['attachments']) ? $hesk_settings['attachments'] : $hesk_default['attachments'];
     $hesk_settings['email_providers'] = isset($hesk_settings['email_providers']) ? array_unique(array_merge($hesk_settings['email_providers'], $hesk_default['email_providers'])) : $hesk_default['email_providers'];
     $hesk_settings['notify_spam_tags'] = isset($hesk_settings['notify_spam_tags']) ? $hesk_settings['notify_spam_tags'] : $hesk_default['notify_spam_tags'];
@@ -1680,15 +1529,11 @@ function hesk_defaultSettings()
 
 	// --> General settings
 	$hesk_settings['site_title']='Website';
-	$hesk_settings['site_url']='https://www.example.com';
-	$hesk_settings['hesk_title']='Help Desk';
-	$hesk_settings['hesk_url']='https://www.example.com/helpdesk';
+	$hesk_settings['site_url']='http://www.example.com';
 	$hesk_settings['webmaster_mail']='support@example.com';
     $hesk_settings['site_theme']='hesk3';
     $hesk_settings['admin_css']=0;
     $hesk_settings['admin_css_url']='https://www.example.com/hesk-style.css';
-    $hesk_settings['admin_js']=0;
-    $hesk_settings['admin_js_url']='https://www.example.com/hesk-script.js';
 
 	// --> Language settings
 	$hesk_settings['can_sel_lang']=0;
@@ -1708,6 +1553,8 @@ function hesk_defaultSettings()
 	// ==> HELP DESK
 
 	// --> Help desk settings
+	$hesk_settings['hesk_title']='Help Desk';
+	$hesk_settings['hesk_url']='http://www.example.com/helpdesk';
 	$hesk_settings['admin_dir']='admin';
 	$hesk_settings['attach_dir']='attachments';
 	$hesk_settings['cache_dir']='cache';
@@ -1738,32 +1585,10 @@ function hesk_defaultSettings()
 	$hesk_settings['list_users']=0;
 	$hesk_settings['debug_mode']=0;
 	$hesk_settings['short_link']=0;
-    $hesk_settings['submitting_wait']=1;
 	$hesk_settings['select_cat']=0;
 	$hesk_settings['select_pri']=0;
 	$hesk_settings['cat_show_select']=15;
 	$hesk_settings['staff_ticket_formatting']=0;
-
-    // --> Barcode
-    $hesk_settings['barcode']=array(
-        'print' => 0,
-        'staff_only' => 0,
-        'type' => 'C128',
-        'format' => 'svg',
-        'width' => 300,
-        'height' => 80,
-        'color' => 'black',
-        'bg' => 'white',
-    );
-
-    // --> Customer Accounts
-    $hesk_settings['customer_accounts']=0;
-    $hesk_settings['customer_accounts_required']=0;
-    $hesk_settings['customer_accounts_customer_self_register']=1;
-    $hesk_settings['customer_accounts_admin_approvals']=0;
-    $hesk_settings['customer_autologin']=1;
-    $hesk_settings['customer_accounts_allow_email_changes']=1;
-    $hesk_settings['customer_accounts_verify_email_cooldown']=15;
 
 	// --> SPAM Prevention
 	$hesk_settings['secimg_use']=1;
@@ -1823,7 +1648,6 @@ function hesk_defaultSettings()
 	// --> Email sending
 	$hesk_settings['noreply_mail']='noreply@example.com';
 	$hesk_settings['noreply_name']='Help Desk';
-	$hesk_settings['email_max_recipients']=50;
 	$hesk_settings['email_formatting']=0;
 	$hesk_settings['smtp']=0;
 	$hesk_settings['smtp_host_name']='mail.example.com';
@@ -1846,7 +1670,6 @@ function hesk_defaultSettings()
 	$hesk_settings['imap_host_port']=993;
 	$hesk_settings['imap_enc']='ssl';
 	$hesk_settings['imap_noval_cert']=0;
-    $hesk_settings['imap_disable_GSSAPI']=0;
 	$hesk_settings['imap_keep']=0;
 	$hesk_settings['imap_user']='';
 	$hesk_settings['imap_password']='';
@@ -1875,8 +1698,6 @@ function hesk_defaultSettings()
     $hesk_settings['pipe_block_duplicate']=1;
 	$hesk_settings['loop_hits']=6;
 	$hesk_settings['loop_time']=300;
-    $hesk_settings['pipe_customer_rejection_notification']=1;
-    $hesk_settings['pipe_customer_rejection_email_cooldown_hours']=24;
 
 	// --> Detect email typos
 	$hesk_settings['detect_typos']=1;
@@ -1944,20 +1765,6 @@ function hesk_iDetectVersion()
     if ( ! in_array($hesk_settings['db_pfix'].'categories', $tables) || ! in_array($hesk_settings['db_pfix'].'replies', $tables) || ! in_array($hesk_settings['db_pfix'].'tickets', $tables) || ! in_array($hesk_settings['db_pfix'].'users', $tables) )
     {
         hesk_iDatabase(3);
-    }
-
-    // Version 3.5.0 tables installed?
-    if (in_array($hesk_settings['db_pfix'].'customers', $tables))
-    {
-        // Version 3.5.2 tables installed?
-        $res = hesk_dbQuery("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".hesk_dbEscape($hesk_settings['db_pfix'])."tickets' AND table_schema = '".hesk_dbEscape($hesk_settings['db_name'])."' AND column_name = 'eid' LIMIT 0, 1");
-        $row = hesk_dbFetchRow($res);
-        if ($row[0] == 1000)
-        {
-            return '3.5.2';
-        }
-
-        return '3.5.0';
     }
 
     // Version 3.4.0 tables installed?

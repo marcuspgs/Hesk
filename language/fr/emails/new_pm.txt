@@ -1,0 +1,25 @@
+Bonjour,
+
+Vous avez reçu un nouveau message privé de %%NAME%% avec le sujet suivant:
+
+Sujet: %%SUBJECT%%
+---------------------------
+
+	%%MESSAGE%%
+
+---------------------------
+
+Vous pouvez afficher votre nouveau message en cliquant sur le lien suivant:
+%%TRACK_URL%%
+
+Vous pouvez toujours choisir de ne pas être averti des nouveaux messages en changeant le paramètre approprié dans votre profil.
+
+
+				*Ne répondez pas à cet email*
+
+Ceci est un message généré automatiquement et vous a été envoyé par nos serveurs. 
+Ne répondez pas à cet email car nous ne recevrions pas votre réponse!
+Cordialement,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

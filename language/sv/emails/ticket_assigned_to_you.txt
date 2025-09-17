@@ -1,0 +1,18 @@
+﻿Hej,
+
+Ett nytt supportärende har tilldelats dig.
+
+Ärendeinformation:
+
+Ärendeämne: %%SUBJECT%%
+
+Ärende-ID: %%TRACK_ID%%
+
+Du kan hantera detta ärende här:
+%%TRACK_URL%%
+
+
+Hälsningar,
+
+%%SITE_TITLE%%
+%%SITE_URL%%

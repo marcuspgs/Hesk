@@ -1,0 +1,5 @@
+<p>Hi %%NAME%%,</p>
+<p>Nachstehend finden Sie den Code für Ihre Multi-Faktor-Authentifizierung. Dieser Code läuft in 20 Minuten ab.</p>
+<p><strong>%%VERIFICATION_CODE%%</strong></p>
+<p>Danke,</p>
+<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>
