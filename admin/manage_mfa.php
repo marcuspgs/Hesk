@@ -264,7 +264,7 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 
     <?php
     if (intval($_SESSION['mfa_enrollment']) !== 0):
-        $res = hesk_dbQuery("SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` WHERE `user_id`=".intval($_SESSION['id']));
+        $res = hesk_dbQuery("SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` WHERE `user_id`=".intval($_SESSION['id']) . " AND `user_type`='STAFF'");
         $num = hesk_dbResult($res,0,0);
     ?>
 

@@ -617,7 +617,7 @@ function hesk_customerAutoLogin($noredirect = false)
     define('HESK_USER_CUSTOMER', $user);
 
     // Change language?
-    if ($hesk_settings['language'] != $row['language']) {
+    if ( ! empty($row['language']) && $hesk_settings['language'] != $row['language']) {
         hesk_setLanguage($row['language']);
         hesk_setcookie('hesk_language',$row['language'],time()+31536000,'/');
     }

@@ -182,6 +182,10 @@ function hesk_setcookie($name, $value, $expire=0, $path="")
 {
     global $hesk_settings;
 
+    if ($value === null) {
+        return true;
+    }
+
     // PHP < 7.3 doesn't support the SameSite attribute, let's use a trick
     if (PHP_VERSION_ID < 70300)
     {

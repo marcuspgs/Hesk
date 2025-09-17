@@ -1669,6 +1669,7 @@ function hesk_iUpdateTables()
     // 3.6.1 no changes
     // 3.6.2 no changes
     // 3.6.3 no changes
+    // 3.6.4 no changes
 
 	// Insert the "HESK updated to latest version" mail for the administrator
     $offer_license = file_exists(HESK_PATH.'hesk_license.php') ? "" : "<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n";

@@ -104,6 +104,16 @@ function hesk_kbCategoriesArray($public_only = true)
     foreach ($categories as $id => $category) {
         if ($category['type'] == 1) {
             unset($categories[$id]);
+
+            // Remove also from children and descendant arrays
+            foreach ($categories as $i => $c) {
+                if (($key = array_search($id, $categories[$i]['children'])) !== false) {
+                    unset($categories[$i]['children'][$key]);
+                }
+                if (($key = array_search($id, $categories[$i]['descendants'])) !== false) {
+                    unset($categories[$i]['descendants'][$key]);
+                }
+            }
         }
     }
     $hesk_settings['public_kb_categories'] = $categories;
