@@ -933,6 +933,9 @@ function update_user()
 
     	/* Unassign tickets from categories that the user had access before but doesn't anymore */
         hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
+
+        // Remove the user as collaborator from cateogries with no permission
+        hesk_dbQuery("DELETE `c` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `c` JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `t` ON `c`.`ticket_id` = `t`.`id` WHERE `c`.`user_id`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
     }
 
 	hesk_dbQuery(
@@ -1242,6 +1245,9 @@ function remove()
 
     // Clear users' bookmarks
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."bookmarks` WHERE `user_id` = {$myuser}");
+
+    // Remove user as collaborator
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` WHERE `user_id` = {$myuser}");
 
 	// Refresh autoassign configs to ensure their ID is gone
     hesk_updateAutoassignConfigs();

@@ -2618,10 +2618,11 @@ $hesklang['link_ticket_itself_error']='A ticket cannot be linked to itself. Plea
 $hesklang['already_linked_error']='The ticket has already been linked';
 $hesklang['unlink_success']='The ticket has been successfully unlinked';
 $hesklang['unlink_error']='No linked record exists';
-$hesklang['link_history']='<li class="smaller">%s | %s ticket link by %s</li>';
-$hesklang['unlink_history']='<li class="smaller">%s | %s ticket unlink by %s</li>';
+$hesklang['link_history']='<li class="smaller">%s | %s ticket linked by %s</li>';
+$hesklang['unlink_history']='<li class="smaller">%s | %s ticket unlinked by %s</li>';
 $hesklang['can_link_tickets']='Can link ticket';
 $hesklang['link_a_ticket']='Link a ticket';
+$hesklang['unlink_btn']='Unlink';
 
 // DO NOT CHANGE BELOW
 if (!defined('IN_SCRIPT')) die('PHP syntax OK!');

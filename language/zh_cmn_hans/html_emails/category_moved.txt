@@ -1,7 +1,0 @@
-<p>您好,</p>
-<p>有新问题移交到您的类目。问题细节：</p>
-<p>问题标题: %%SUBJECT%%<br />问题追踪码: %%TRACK_ID%%</p>
-<p>您可以访问下面这个链接处理该问题：<br /><a href="%%TRACK_URL%%">%%TRACK_URL%%</a></p>
-<p> </p>
-<p>此致,</p>
-<p>%%SITE_TITLE%%<br /><a href="%%SITE_URL%%">%%SITE_URL%%</a></p>

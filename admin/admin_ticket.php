@@ -505,7 +505,18 @@ if (isset($_POST['notemsg']) && hesk_token_check('POST'))
         // Notify staff (owner and collaborators) of a new note
         if (($ticket['owner'] && $ticket['owner'] != $_SESSION['id']) || count($ticket['collaborators']))
         {
-			$res = hesk_dbQuery("SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE (`id`='".intval($ticket['owner'])."' AND `notify_note`='1') OR (`notify_collaborator_note`='1' AND `id` IN (".implode(",", $ticket['collaborators'])."))");
+            $sql_note = "SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE ";
+            if ($ticket['owner'] && $ticket['owner'] != $_SESSION['id']) {
+                $sql_note .= " (`id`=".intval($ticket['owner'])." AND `notify_note`='1') ";
+            } else {
+                $sql_note .= " 1 ";
+            }
+
+            if (count($ticket['collaborators'])) {
+                $sql_note .= " OR (`notify_collaborator_note`='1' AND `id` IN (".implode(",", $ticket['collaborators'])."))";
+            }
+
+            $res = hesk_dbQuery($sql_note);
 
 			if (hesk_dbNumRows($res) > 0)
 			{
@@ -733,7 +744,7 @@ if (isset($_POST['action_type']) && $_POST['action_type'] == 'linked_ticket' && 
             exit;
         } else {
             // Insert ticket relation into database
-            $q = "INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."linked_tickets` (`ticket_id1`, `ticket_id2`, `dt_created`) VALUES ('".hesk_dbEscape($ticket['id'])."', '".hesk_dbEscape($get_ticket_data['id'])."','".hesk_date()."')";
+            $q = "INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."linked_tickets` (`ticket_id1`, `ticket_id2`, `dt_created`) VALUES ('".hesk_dbEscape($ticket['id'])."', '".hesk_dbEscape($get_ticket_data['id'])."',NOW())";
             hesk_dbQuery($q);
             //Update insert history log
             $link_ticket_log = sprintf($hesklang['link_history'], hesk_date(), $ticket_track_id, addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');;
@@ -1041,7 +1052,7 @@ function getLinkedHtml($customers, $ticket, $can_link_tickets){
                 endif;
             $html.='<a href="admin_ticket.php?track='.$linked_ticket['trackid'].'&amp;Refresh='.rand(10000,99999).'">'.$linked_ticket['subject'].'</a>';
             if($can_link_tickets){
-                $html.='<a class="btn btn-links unlink" data-ticket1='.$linked_ticket['id'].' data-ticket2='.$ticket['id'].' data-trackid='.$linked_ticket['trackid'].' data-action="admin_ticket.php?track='.$trackingID.'&amp;Refresh='.rand(10000,99999).'" href="javascript:;">Unlink</a>';
+                $html.='<a class="btn btn-links unlink" data-ticket1='.$linked_ticket['id'].' data-ticket2='.$ticket['id'].' data-trackid='.$linked_ticket['trackid'].' data-action="admin_ticket.php?track='.$trackingID.'&amp;Refresh='.rand(10000,99999).'" href="javascript:;">'.$hesklang['unlink_btn'].'</a>';
             }
             $html.="</div>";
         }

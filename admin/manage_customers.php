@@ -284,7 +284,7 @@ if ( $action = hesk_REQUEST('a') )
     }
     $res = hesk_dbQuery("SELECT `hc`.*, COUNT(CASE WHEN htc.customer_type = 'REQUESTER' THEN 1 END) AS `tickets`, COUNT(CASE WHEN htc.customer_type = 'FOLLOWER' THEN 1 END) AS `following`
                     FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `hc`
-                    LEFT JOIN `hesk_ticket_to_customer` AS `htc` ON `hc`.`id` = `htc`.`customer_id`
+                    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `htc` ON `hc`.`id` = `htc`.`customer_id`
                     {$where_clause}
                     GROUP BY `hc`.`id`, `hc`.`name`, `hc`.`email`
                     ORDER BY CASE WHEN `hc`.`verified` = 2 THEN 0 ELSE 1 END ASC, `{$search_sort_column}` {$search_sort_direction}
@@ -764,14 +764,13 @@ function new_user()
 
 	$myuser = hesk_validateUserInfo();
 
-    /* Check for duplicate emails.  Don't care about registration state as the staff member can update an existing record */
-	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
-	    WHERE `email` = '".hesk_dbEscape($myuser['email'])."' 
-	    LIMIT 1");
-	if (hesk_dbNumRows($result) != 0)
-	{
-        hesk_process_messages($hesklang['customer_email_exists'],'manage_customers.php');
-	}
+    // Check for duplicate emails. Don't care about registration state as the staff member can update an existing record
+    if (strlen($myuser['email'])) {
+        $result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `email` = '".hesk_dbEscape($myuser['email'])."' LIMIT 1");
+        if (hesk_dbNumRows($result) != 0) {
+            hesk_process_messages($hesklang['customer_email_exists'],'manage_customers.php');
+        }
+    }
 
     $pass = $myuser['pass'] === null ? 'NULL' : "'".hesk_dbEscape($myuser['pass'])."'";
 

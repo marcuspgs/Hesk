@@ -12442,16 +12442,39 @@ th > .tooltype:hover .icon-info {
     z-index: 0
 }
 
-@media screen and (max-width: 899px) {
+@media screen and (max-width: 600px) {
     .tooltype .tooltype__content {
-        position: fixed!important;
-        top: 50%!important;
-        left: 50%!important;
-        -ms-transform: translate(-50%, -50%)!important;
-        transform: translate(-50%, -50%)!important
+        max-width: 85vw;
+
+        /* New way, that utilized fixed positioning, that should work everywhere
+        Using top auto/bottom helps ensure it's relative to it's original static position.
+        */
+        position: fixed !important;
+        left: 10px !important;
+        bottom: auto !important;
+        top: auto !important;
+        transform: translate(0, 20px) !important;
     }
-    .tooltype .tooltype__content::before {
-        display: none
+}
+@media screen and (max-width: 899px) {
+    /* Note: Unortunately have to override again, as this solution, if browsers support it, has to override the above gain*/
+
+    /* For tooltips, additionally, for browser that support :has() - cca 92% browsers
+    We can dynamically target the parent, and give it a relative position, and remove it to the tooltip.
+    This way we can position the tooltip more to the left, and make most of the space
+     */
+    .wrapper *:has( > .tooltype) {
+        position: relative;
+    }
+    .wrapper *:has( > .tooltype) .tooltype {
+        position: unset;
+    }
+    .wrapper *:has( > .tooltype) .tooltype .tooltype__content {
+        position: absolute !important;
+        transform: translate(0%, 20px) !important;
+        bottom: unset !important;
+        top: 0% !important;
+        left: 0 !important;
     }
 }
 

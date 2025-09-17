@@ -209,6 +209,8 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
         });
     }
 
+    <?php
+    /*
     $(document).on('change', ':input,select,textarea,:checkbox,:radio', function(){
         unsaved_action = 1;
     });
@@ -218,5 +220,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
             return false;
         }
     });
-</script>  
+    */
+    ?>
+</script>
 
