@@ -34,14 +34,11 @@ hesk_purge_expired_email_change_requests();
 $hesk_error_buffer = array();
 
 if (hesk_REQUEST('action') !== '') {
-    // Demo mode
-    if ( defined('HESK_DEMO') ) {
-        hesk_process_messages($hesklang['ddemo'], 'profile.php', 'NOTICE');
-    }
-
     // What are changing?
     $action = hesk_REQUEST('action');
-    if ($action === 'profile') {
+    if ( ! empty($action) && defined('HESK_DEMO') ) {
+        hesk_process_messages($hesklang['ddemo'], 'NOREDIRECT', 'NOTICE');
+    } elseif ($action === 'profile') {
         handle_profile_update($hesk_error_buffer, $customerUserContext);
     } elseif ($action === 'password') {
         handle_password_change($hesk_error_buffer);

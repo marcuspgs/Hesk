@@ -103,7 +103,7 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                         </div>
                         <div class="listitem__menu">
                             <a href="manage_ticket_templates.php" class="listitem__caption">
-                                <?php echo $hesklang['tickets']; ?>
+                                <?php echo $hesklang['nav_templates']; ?>
                             </a>
                         </div>
                     </li>
@@ -173,10 +173,20 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                     </div>
                 </li>
                 <li class="separator"></li>
-                <?php if ($hesk_settings['customer_accounts'] > 0 &&
-                    (hesk_checkPermission('can_man_users',0) || hesk_checkPermission('can_view_users',0)) &&
-                    (hesk_checkPermission('can_man_customers',0) || hesk_checkPermission('can_view_customers',0))):
-                    $pages = array('manage_users', 'manage_customers', 'import_customers');
+                <?php
+                $number_of_accessible_pages = 0;
+                if (hesk_checkPermission('can_man_users',0) || hesk_checkPermission('can_view_users',0)) {
+                    $number_of_accessible_pages++;
+                }
+                if (hesk_checkPermission('can_man_customers',0) || hesk_checkPermission('can_view_customers',0)) {
+                    $number_of_accessible_pages++;
+                }
+                if (hesk_checkPermission('can_man_permission_groups',0)) {
+                    $number_of_accessible_pages++;
+                }
+
+                if ($number_of_accessible_pages > 1):
+                    $pages = array('manage_users', 'manage_customers', 'import_customers', 'manage_permission_groups');
                     $open_menu = in_array($calling_script, $pages) ? 'current submenu-is-opened' : '';
                 ?>
                     <li class="listitem submenu <?php echo $open_menu; ?>">
@@ -205,11 +215,16 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                                 <?php endif; ?>
                             </a>
                             <ul class="submenu__list">
+                                <?php if (hesk_checkPermission('can_man_users',0) || hesk_checkPermission('can_view_users',0)): ?>
                                 <li class="submenu__listitem <?php if ($calling_script === 'manage_users') { ?>current<?php } ?>">
                                     <a href="manage_users.php">
                                         <?php echo $hesklang['team']; ?>
                                     </a>
                                 </li>
+                                <?php
+                                endif;
+                                if (hesk_checkPermission('can_man_customers',0) || hesk_checkPermission('can_view_customers',0)):
+                                ?>
                                 <li class="submenu__listitem <?php if (in_array($calling_script, ['manage_customers','import_customers'])) { ?>current<?php } ?>">
                                     <a href="manage_customers.php">
                                         <?php
@@ -221,6 +236,16 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                                         <?php endif; ?>
                                     </a>
                                 </li>
+                                <?php
+                                endif;
+                                if (hesk_checkPermission('can_man_permission_groups',0)):
+                                ?>
+                                <li class="submenu__listitem <?php if ($calling_script === 'manage_permission_groups') { ?>current<?php } ?>">
+                                    <a href="manage_permission_groups.php">
+                                        <?php echo $hesklang['permission_groups_title']; ?>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </li>
@@ -254,6 +279,23 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                             <div class="listitem__menu">
                                 <a href="manage_customers.php" class="listitem__caption">
                                     <?php echo $hesklang['customers']; ?>
+                                </a>
+                            </div>
+                        </li>
+                        <?php
+                    }
+                    if (hesk_checkPermission('can_man_permission_groups',0)) { ?>
+                        <li class="listitem <?php if ($calling_script === 'manage_permission_groups') { ?>current<?php } ?>">
+                            <div class="listitem__icon">
+                                <a href="manage_permission_groups.php">
+                                    <svg class="icon icon-team">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-team"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="listitem__menu">
+                                <a href="manage_permission_groups.php" class="listitem__caption">
+                                    <?php echo $hesklang['permission_groups_title']; ?>
                                 </a>
                             </div>
                         </li>
@@ -374,11 +416,12 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
 
                 // Tools
                 if (hesk_checkPermission('can_ban_emails',0) ||
+                    hesk_checkPermission('can_mute_emails',0) ||
                     hesk_checkPermission('can_ban_ips',0) ||
                     hesk_checkPermission('can_service_msg',0) ||
                     hesk_checkPermission('can_email_tpl',0) ||
                     hesk_checkPermission('can_man_settings',0)) {
-                    $pages = array('banned_emails', 'banned_ips', 'service_messages', 'email_templates', 'custom_fields', 'custom_statuses', 'oauth_providers', 'custom_priorities');
+                    $pages = array('banned_emails', 'muted_emails', 'banned_ips', 'service_messages', 'email_templates', 'custom_fields', 'custom_statuses', 'oauth_providers', 'custom_priorities');
                     $open_menu = in_array($calling_script, $pages) ? 'current submenu-is-opened' : '';
                 ?>
                 <li class="separator"></li>
@@ -400,6 +443,16 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                                 <li class="submenu__listitem <?php if ($calling_script === 'banned_emails') { ?>current<?php } ?>">
                                     <a href="banned_emails.php">
                                         <?php echo $hesklang['banemail']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+
+                            if (hesk_checkPermission('can_mute_emails',0)) {
+                                ?>
+                                <li class="submenu__listitem <?php if ($calling_script === 'muted_emails') { ?>current<?php } ?>">
+                                    <a href="muted_emails.php">
+                                        <?php echo $hesklang['mute_emails']; ?>
                                     </a>
                                 </li>
                                 <?php
@@ -467,7 +520,7 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                 }
 
                 if (hesk_checkPermission('can_man_settings',0)) {
-                    $pages = array('admin_settings_general', 'admin_settings_help_desk', 'admin_settings_knowledgebase',
+                    $pages = array('admin_settings_custom_html', 'admin_settings_general', 'admin_settings_help_desk',  'admin_settings_theme', 'admin_settings_knowledgebase',
                         'admin_settings_email', 'admin_settings_ticket_list', 'admin_settings_misc');
                     $open_menu = in_array($calling_script, $pages) ? 'current submenu-is-opened' : '';
                     ?>
@@ -492,6 +545,11 @@ $calling_script = basename($_SERVER['PHP_SELF'], '.php');
                                 <li class="submenu__listitem <?php if ($calling_script === 'admin_settings_help_desk') { ?>current<?php } ?>">
                                     <a href="admin_settings_help_desk.php">
                                         <?php echo $hesklang['tab_2']; ?>
+                                    </a>
+                                </li>
+                                <li class="submenu__listitem <?php if ($calling_script === 'admin_settings_theme' || $calling_script === 'admin_settings_custom_html') { ?>current<?php } ?>">
+                                    <a href="admin_settings_theme.php">
+                                        <?php echo $hesklang['tab_8']; ?>
                                     </a>
                                 </li>
                                 <li class="submenu__listitem <?php if ($calling_script === 'admin_settings_knowledgebase') { ?>current<?php } ?>">

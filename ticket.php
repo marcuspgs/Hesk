@@ -84,6 +84,12 @@ hesk_cleanSessionVars( array('t_track', 't_email', 't_form', 't_remember') );
 /* Any errors? Show the form */
 if ($is_form)
 {
+    if ($user_context !== null) {
+        // Logged in customers should go to My Tickets
+        header('Location: '.HESK_PATH.'my_tickets.php');
+        return;
+    }
+
 	if ( empty($trackingID) )
     {
     	$hesk_error_buffer[] = $hesklang['eytid'];
@@ -110,10 +116,22 @@ if ($is_form)
 }
 elseif (empty($trackingID))
 {
+    if ($user_context !== null) {
+        // Logged in customers should go to My Tickets
+        header('Location: '.HESK_PATH.'my_tickets.php');
+        return;
+    }
+
 	print_form();
 }
 elseif (empty($my_email) && $hesk_settings['email_view_ticket'])
 {
+    if ($user_context !== null) {
+        // Logged in customers should go to My Tickets
+        header('Location: '.HESK_PATH.'my_tickets.php');
+        return;
+    }
+
     if ($hesk_settings['require_email']) {
         print_form();
     } else {
@@ -134,7 +152,7 @@ require_once(HESK_PATH . 'inc/statuses.inc.php');
 require_once(HESK_PATH . 'inc/priorities.inc.php');
 
 /* Get ticket info */
-$res = hesk_dbQuery( "SELECT `t1`.* , `t2`.name AS `repliername` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `t1` LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `t2` ON `t1`.`replierid` = `t2`.`id` WHERE `trackid`='".hesk_dbEscape($trackingID)."' LIMIT 1");
+$res = hesk_dbQuery( "SELECT `t1`.* , `t2`.name AS `repliername`, `t2`.`nickname` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `t1` LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `t2` ON `t1`.`replierid` = `t2`.`id` WHERE `trackid`='".hesk_dbEscape($trackingID)."' LIMIT 1");
 
 /* Ticket found? */
 if (hesk_dbNumRows($res) != 1)
@@ -204,22 +222,21 @@ if ($is_form)
 }
 
 /* Set last replier name */
-if ($ticket['lastreplier'])
-{
-	if (empty($ticket['repliername']))
-	{
-		$ticket['repliername'] = $hesklang['staff'];
-	}
-}
-else
-{
-    $ticket['repliername'] = hesk_getReplierName($ticket);
+if ($ticket['lastreplier']) {
+    if (empty($ticket['repliername'])) {
+        $ticket['repliername'] = $hesklang['staff'];
+    } elseif ($hesk_settings['staff_nicknames'] && $ticket['nickname'] != '') {
+        $ticket['repliername'] = $ticket['nickname'];
+    }
+} else {
+    $last_replier = hesk_getReplierNameArray($ticket);
+    $ticket['repliername'] = $last_replier['nickname'];
 }
 
 // If IP is unknown (tickets via email pipe/pop3 fetching) assume current visitor IP as customer IP
 if ($ticket['ip'] == '' || $ticket['ip'] == 'Unknown' || $ticket['ip'] == $hesklang['unknown'])
 {
-	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `ip` = '".hesk_dbEscape(hesk_getClientIP())."' WHERE `id`=".intval($ticket['id']));
+	hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `ip` = '".hesk_dbEscape(hesk_getClientIP())."', `lastchange`=`lastchange` WHERE `id`=".intval($ticket['id']));
 }
 
 if ( ! isset($hesk_settings['priorities'][$ticket['priority']])) {
@@ -238,13 +255,13 @@ if (hesk_dbNumRows($result) != 1)
 $category = hesk_dbFetchAssoc($result);
 
 /* Get replies */
-$result  = hesk_dbQuery("SELECT `replies`.*, `customers`.`name` AS `customer_name`, `users`.`name` AS `staff_name`
+$result  = hesk_dbQuery("SELECT `replies`.*, `customers`.`name` AS `customer_name`, `customers`.`email` AS `customer_email`, `users`.`name` AS `staff_name`, `users`.`nickname`
     FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `replies`
     LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customers`
         ON `customers`.`id` = `replies`.`customer_id`
     LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `users`
-        ON `users`.`id` = `replies`.`staffid`  
-    WHERE `replyto`='".intval($ticket['id'])."' 
+        ON `users`.`id` = `replies`.`staffid`
+    WHERE `replyto`='".intval($ticket['id'])."'
     ORDER BY `id` ".($hesk_settings['new_top'] ? 'DESC' : 'ASC') );
 $replies = hesk_dbNumRows($result);
 $repliesArray = array();
@@ -253,15 +270,21 @@ while ($row = hesk_dbFetchAssoc($result)) {
     if ($row['staffid']) {
         $row['name'] = $row['staff_name'] === null ?
             $hesklang['staff_deleted'] :
-            $row['staff_name'];
+            (($hesk_settings['staff_nicknames'] && $row['nickname'] != '') ? $row['nickname'] : $row['staff_name']);
 
         if (!$row['read']) {
             $unread_replies[] = $row['id'];
         }
     } else {
-        $row['name'] = $row['customer_name'] === null ?
-            $hesklang['anon_name'] :
-            $row['customer_name'];
+        if ($row['customer_name'] === null || $row['customer_name'] == '') {
+            if ($row['customer_email'] !== null && strlen($row['customer_email'])) {
+                $row['name'] = $row['customer_email'];
+            } else {
+                $row['name'] = $hesklang['anon_name'];
+            }
+        } else {
+            $row['name'] = $row['customer_name'];
+        }
     }
 
     $repliesArray[] = $row;

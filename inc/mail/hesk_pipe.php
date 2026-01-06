@@ -62,10 +62,17 @@ hesk_email2ticket($results, 0, $set_category, $set_priority);
 
 // Uncomment for debugging
 /*
-if (isset($hesk_settings['DEBUG_LOG']['PIPE']))
-{
+if (isset($hesk_settings['DEBUG_LOG']['PIPE'])) {
     echo "<pre>Ticket NOT inserted: " . $hesk_settings['DEBUG_LOG']['PIPE'] . "</pre>\n";
 }
-*/
+
+if (isset($hesk_settings['DEBUG_LOG']['NOTICES'])) {
+    echo "<pre>";
+    foreach ($hesk_settings['DEBUG_LOG']['NOTICES'] as $notice) {
+        echo "$notice\n";
+    }
+    echo "</pre>\n";
+}
+/* */
 
 return NULL;

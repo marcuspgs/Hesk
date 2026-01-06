@@ -1,0 +1,240 @@
+/*
+    Official Hesk Midnight Ocean (dark theme)
+
+    Create your own theme by adjusting the main theme variables.
+    TIPS:
+        1) Midnight Ocean is the perfect starting base for creating any "dark" theme, as it requires no additional CSS adjustments, besides just changing colors.
+            I.e. Things like inverted icon colors, or lighter texts etc.
+        2) Instead of adjusting the existing theme files, please simply create a copy of this file, and renamed it to your new theme.
+            The theme will then automatically become available under Admin -> Settings -> General -> Customer Theme
+        3) Any theme can also have values overwritten in Admin Settings -> Look & Feel,
+        so if what you need is just some changes that are support by the existing theme colors, we suggest using that.
+
+        4) USAGE:
+        - By adjusting --primary, --secondary and --tertiary, most of other colors will be adjusted
+          programmatically based on these.
+        - Programmatic adjustments require support of the css function color-mix().
+          This is currently supported for roughly 93% browser users (growing yearly).
+          For the rest, there are fallbacks, but they might "not look as good", but keep things functional.
+        - For the active theme, a "theme_{theme_file_name}" class will be added to the HTML element.
+          This means you can easily override styling of any elements, by overriding the default CSS selector with a stronger specifier.
+          For example, say you wanted to override styling of the ".btn-full" selector only for this theme, you could do so by defining this below in this file:
+          .theme_midnight_ocean .btn-full {
+            padding: 50px;
+          }
+*/
+
+/*
+This first :root section is for setting any values of the main theme variables found in the 0_00_default_theme_vars.css file.
+*/
+:root {
+    --primary: #2f75c1;         /* dark theme - slightly lighter or more saturated */
+    --tertiary: #4ab8f2;
+    --surface: #1a1d21;                 /* replaces white for containers */
+    --main-background: #0f1113;         /* replaces light gray bg */
+    --font__pri-clr: #ffffff;           /* not primary, just main readable text */
+    --font__sec-clr: var(--surface);           /* not primary, just main readable text */
+    --font__sec-clr: #2a2a2a;           /* not primary, just main readable text */
+    --font__sec-clr: var(--gray-1);           /* not primary, just main readable text */
+
+    --main-background: #0f1113;
+    --foreground: #ffffff;
+    --input-bg: #2a2a2a;
+    --input-clr: #f0f0f0;
+
+    --radio__bg: var(--surface);
+    --radio__fill-clr: var(--white-1);
+    --radio__hover-bg: var(--primary);
+
+    --shadow-1: rgba(0,0,0,0.5);
+
+    --notification__clr: #2a2a2a;
+    --notification__clr: var(--foreground);
+
+    --header_nav__clr: #b3b3b3;
+    --header_nav__clr: var(--font__pri-clr);
+    --header_nav__hover_clr: var(--surface);
+
+    --link__pri-hover-clr: var(--surface);
+    --link__pri-hover-clr: var(--font__sec-clr);
+    --link__sec-hover-clr: #a1deff;
+
+    --btn__clr-pri: var(--font__pri-clr);
+
+    --article_preview__hover-clr: var(--font__pri-clr);
+    --article_preview_suggestion_clr: var(--font__pri-clr);
+
+    --dropdown__clr: var(--font__pri-clr);
+
+    --search__clr: var(--font__pri-clr);
+    --search__bg: var(--main-background);
+
+    --shadow-1-hsla: 210, 90%, 90%;
+
+    --shadow_smaller: 0 1px 2px 0;
+    --shadow_smaller_invert: 0 -1px 2px 0;
+    --shadow_small: 0 1px 2px 0;
+    --shadow_med: 0 2px 4px 0;
+    --shadow_blur-only: 0 0 5px 0;
+
+    --shadow_dropdown_label: inset 1px 1px 1px;
+    --shadow_dropdown_label_invert:  inset -1px -1px 1px;
+
+    --table_row__bg: color-mix(in srgb, var(--primary) 23%, var(--surface));
+    --table_row__bg-even: color-mix(in srgb, var(--tertiary) 1%, var(--surface));
+    --table_row__bg-hover: color-mix(in srgb, var(--surface) 90%, var(--primary));
+
+    --navlink__clr: var(--font__sec-clr);
+    --navlink__hover-bg: color-mix(in srgb, var(--surface) 95%, var(--foreground));
+    --header_profile__clr: var(--font__pri-clr);
+
+    --preview__hover-bg: color-mix(in srgb, var(--surface) 98%, var(--foreground));
+    --suggest_preview__clr: var(--font__sec-clr);
+    --suggest_preview__hover-bg: var(--preview__hover-bg);
+
+    --ticket_response__bg: var(--ticket_body__bg);
+
+    --datepicker__clr: var(--tertiary);
+
+    --success: var(--green-1);
+    --success-2: #53c3a1;
+    --success-2: var(--surface);
+    --error: var(--red-1);
+    --error-2: #c57979;
+    --error-2: var(--surface);
+    --warning: var(--yellow-1);
+    --warning-2: #c5c574;
+    --warning-2: var(--surface);
+    --info: #4ab8f2;
+    --info-2: #539cc8;
+    --info-2: var(--surface);
+    --info-3: #3a3a3a;
+
+    --link__pri-clr: #4ab8f2;
+    --breadcrumbs__a-clr: var(--link__pri-clr);
+    --breadcrumbs__a-hover-clr: var(--link__sec-hover-clr);
+    --preview__title-clr: var(--link__pri-clr);
+    --navlink__title-clr: var(--link__pri-clr);
+    --search__icon-fill: var(--link__pri-clr);
+}
+
+/* ADDITIONAL OVERWRITES BELOW - CSS helper vars, and general selector overwrites:
+(needed for specifically desired themes, which are currently not part of admin variables.
+They ALL require !important; to properly override followup loaded CSS!
+*/
+:root {
+    /* make the border buttons the same as full */
+    --btn_blue_border__border-clr: var(--btn_full_border-clr) !important;
+    --btn_blue_border__clr: var(--btn_full_clr) !important;
+    --btn_blue_border__bg: var(--btn_full_bg) !important;
+    --btn_blue_border__hover_bg: var(--btn_full__hover_bg) !important;
+    --datepicker_cell__selected-clr: var(--white-1) !important;
+}
+/* Exception, as we have to make it visible against dark background in this case! */
+.selectize-control .selectize-input::after {
+    transition: all var(--transition-time-sec) ease;
+    color: var(--dropdown_input__hover-after-clr);
+    fill: var(--dropdown_input__hover-after-fill);
+    filter: brightness(0%) invert(100%);
+    opacity: 1 !important;
+}
+.header .header__nav .profile__user .profile__menu .profile--logout a {
+    color: var(--btn_full_clr);
+}
+.browser-default code {
+    color: black !important;
+}
+.article__heading {
+    color: var(--link__pri-clr) !important;
+}
+.notification.green p:first-child {
+    color: var(--success);
+}
+.notification.red p:first-child {
+    color: var(--error);
+}
+.notification.orange p:first-child {
+    color: var(--warning);
+}
+.notification.blue p:first-child {
+    color: var(--info);
+}
+.alert {
+    background: color-mix(in srgb, var(--surface) 90%, var(--secondary)) !important;
+}
+.tabbed__head .tabbed__head_tabs li {
+    color: var(--foreground) !important;
+    background: var(--gray-7) !important;
+}
+.tabbed__head .tabbed__head_tabs li.current {
+    background: var(--primary) !important;
+    border-color: var(--surface) !important;
+}
+.cust-help .block__head .h-3 {
+    color: var(--foreground);
+}
+.block__head .kb--folder a {
+    color: var(--link__pri-clr);
+}
+#cc-link a {
+    color: var(--foreground) !important;
+}
+.radio-custom [type="radio"] + label {
+    color: var(--tertiary) !important;
+}
+.checkbox-custom [type="checkbox"]:checked + label::after,
+.checkbox-custom [type="checkbox"]:not(:checked) + label::after {
+    filter: invert(100%) brightness(200%);
+}
+.modal {
+    background: var(--surface) !important;
+}
+.modal a.close-modal {
+    filter: invert(100%);
+    border-radius: 50%;
+}
+.modal a.close-modal:hover {
+    filter: none !important;
+    border: 1px solid white;
+}
+.table-wrap .table thead a {
+    color: var(--foreground) !important;
+}
+.table thead th .handle {
+    filter: invert(100%);
+}
+.table thead th a:hover .handle{
+    filter: none;
+}
+.ticket__body_block .block--head .contact b {
+    color: var(--primary) !important;
+}
+article.article .block__head .h-3 {
+    color: var(--white-1) !important;
+}
+.form-group .form-control__error {
+    background: none !important;
+}
+.radio-custom [type="radio"]:not(:checked) + label,
+.radio-custom [type="radio"]:checked + label {
+    color: var(--font__sec-clr) !important;
+}
+.checkbox-custom [type="checkbox"]:not(:checked) + label,
+.checkbox-custom [type="checkbox"]:checked + label {
+    color: var(--font__sec-clr) !important;
+}
+.ticket__body_block .block--head .contact b {
+    color: var(--font__pri-clr) !important;
+}
+.ticket__body_block.response {
+    border: 1px solid var(--success) !important;
+}
+.ticket__body_block.response .block--head .contact b {
+    color: var(--success) !important;
+}
+.ticket__body_block h1 {
+    color: var(--tertiary) !important;
+}
+.kb--folder a:hover {
+    color: var(--link__sec-hover-clr) !important;
+}

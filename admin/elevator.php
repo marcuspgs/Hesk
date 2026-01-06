@@ -272,7 +272,7 @@ require_once(HESK_PATH . 'inc/footer.inc.php');
 function fetch_current_user_password() {
     global $hesk_settings, $hesklang;
 
-    $res = hesk_dbQuery("SELECT `pass` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id` = ".intval($_SESSION['id'])." LIMIT 1");
+    $res = hesk_dbQuery("SELECT `pass` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id` = ".intval($_SESSION['id'])." AND `active` = 1 LIMIT 1");
     if (hesk_dbNumRows($res) != 1) {
         hesk_forceLogout($hesklang['wrong_user']);
     }

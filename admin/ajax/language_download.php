@@ -79,7 +79,7 @@ try {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
         $zip_data = curl_exec($ch);
-        curl_close($ch);
+        hesk_curl_close($ch);
     }
 
     // Try using a simple PHP function instead

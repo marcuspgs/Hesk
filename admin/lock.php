@@ -73,8 +73,13 @@ else
 			$ticket['dt'] = hesk_date($ticket['dt'], true);
 			$ticket['lastchange'] = hesk_date($ticket['lastchange'], true);
             $ticket['due_date'] = hesk_format_due_date($ticket['due_date']);
-            $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+            $ticket['last_reply_by'] = hesk_getReplierNameArray($ticket);
 			hesk_notifyCustomer('ticket_closed');
+
+            $ticket['collaborators'] = hesk_getTicketsCollaboratorIDs($ticket['id']);
+            if (count($ticket['collaborators'])) {
+                hesk_notifyAssignedStaff(false, 'collaborator_resolved', 'notify_collaborator_resolved', 'notify_collaborator_resolved', array($_SESSION['id']));
+            }
 		}
 	}
 }
@@ -84,4 +89,4 @@ hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `
 
 /* Back to ticket page and show a success message */
 hesk_process_messages($tmp,'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'SUCCESS');
-?>
+

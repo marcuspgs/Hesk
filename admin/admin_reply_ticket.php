@@ -171,7 +171,7 @@ if (strlen($message))
         // Turn newlines into <br /> tags
         $signature = nl2br($signature);
 
-        $message_html .= "<br/><br/>" . addslashes($signature) . "<br/>";
+        $message_html .= "<p>" . addslashes($signature) . "</p>";
 	}
 
     // Make links clickable
@@ -265,7 +265,8 @@ $customer_emails = implode(';', array_map(function($customer) { return $customer
 // Add reply
 if ($submit_as_customer)
 {
-	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`message`,`message_html`,`dt`,`attachments`,`customer_id`) VALUES ('".intval($replyto)."','".hesk_dbEscape($message."<br /><br /><i>{$hesklang['creb']} ".addslashes($_SESSION['name'])."</i>")."','".hesk_dbEscape($message_html."<br /><br /><i>{$hesklang['creb']} ".addslashes($_SESSION['name'])."</i>")."',NOW(),'".hesk_dbEscape($myattachments)."', {$customer_id})");
+    $staff_name = ($hesk_settings['staff_nicknames'] && $_SESSION['nickname'] != '') ? $_SESSION['nickname'] : $_SESSION['name'];
+    hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`message`,`message_html`,`dt`,`attachments`,`customer_id`) VALUES ('".intval($replyto)."','".hesk_dbEscape($message."<br /><br /><i>{$hesklang['creb']} ".addslashes($staff_name)."</i>")."','".hesk_dbEscape($message_html."<br /><br /><i>{$hesklang['creb']} ".addslashes($staff_name)."</i>")."',NOW(),'".hesk_dbEscape($myattachments)."', {$customer_id})");
 }
 else
 {
@@ -433,7 +434,7 @@ $info = array(
 'id'			=> $ticket['id'],
 'language'		=> $ticket['language'],
 'time_worked'   => $ticket['time_worked'],
-'last_reply_by'	=> ($submit_as_customer ? $primary_customer['name'] : $_SESSION['name']),
+'last_reply_by'	=> ($submit_as_customer ? $primary_customer['name'] : ($hesk_settings['staff_nicknames'] && $_SESSION['nickname'] != '' ? array('name' => $_SESSION['name'], 'nickname' => $_SESSION['nickname']) : $_SESSION['name'])),
 );
 
 // 2. Add custom fields to the array

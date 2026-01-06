@@ -32,6 +32,8 @@ hesk_isLoggedIn();
 $can_man_customers = hesk_checkPermission('can_man_customers', false);
 $can_edit_tickets = hesk_checkPermission('can_edit_tickets', false);
 $can_view_customers = hesk_checkPermission('can_view_customers', false);
+$can_merge_customers = hesk_checkPermission('can_merge_customers', false);
+
 if ($can_man_customers || (!$hesk_settings['customer_accounts'] && $can_edit_tickets && ! empty(hesk_REQUEST('a')))) {
     $elevation_target = !isset($_GET['track']) ?
         'manage_customers.php' :
@@ -178,6 +180,22 @@ if ( $action = hesk_REQUEST('a') )
         </div>
         <?php endif; ?>
     </section>
+
+    <?php
+    // START check if we have any customers in the database
+    $res = hesk_dbQuery("SELECT EXISTS (SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`)");
+    if ( ! hesk_dbResult($res)):
+        hesk_show_notice(
+            $hesklang['no_customers'] . '<br><br>' .
+            (
+                $hesk_settings['customer_accounts'] ?
+                $hesklang['no_customers_enabled'] . ($can_man_customers ? '<br><br>' . $hesklang['no_customers_enabled2'] : '') :
+                $hesklang['no_customers_disabled']
+            ), ' ', false
+        );
+    else:
+    ?>
+
     <?php
     $search_name = isset($saved_search['search_name']) ? $saved_search['search_name'] : hesk_REQUEST('search_name');
     $url_name = urlencode($search_name);
@@ -194,20 +212,6 @@ if ( $action = hesk_REQUEST('a') )
     ?>
     <form action="manage_customers.php" method="get" name="form1">
         <div class="table-wrap customers__search">
-            <?php
-                // Do we have any customers in the database?
-                $res = hesk_dbQuery("SELECT EXISTS (SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`)");
-                if( ! hesk_dbResult($res)) {
-                    hesk_show_notice(
-                        $hesklang['no_customers'] . '<br><br>' .
-                        (
-                            $hesk_settings['customer_accounts'] ?
-                            $hesklang['no_customers_enabled'] . ($can_man_customers ? '<br><br>' . $hesklang['no_customers_enabled2'] : '') :
-                            $hesklang['no_customers_disabled']
-                        ), ' ', false
-                    );
-                }
-            ?>
             <h3><?php echo $hesklang['search_customers']; ?></h3>
             <div class="customers__search_form form">
                 <div class="filters">
@@ -299,7 +303,11 @@ if ( $action = hesk_REQUEST('a') )
         array_map(function($customer) { return intval($customer['id']); }, $customers) :
         [-1];
 
-    $delete_modal_ids = [];
+    $pending_delete_modal_ids = [];
+    $verified_delete_modal_ids = [];
+    $pending_customers = [];
+    $verified_customers = [];
+
     foreach ($customers as $customer) {
         if ($can_man_customers) {
             $modal_body = $hesklang['sure_remove_customer']."<br>".$hesklang['sure_remove_customer_additional_note']."<br>";
@@ -353,221 +361,170 @@ if ( $action = hesk_REQUEST('a') )
                 'use_form' => true,
                 'form_method' => 'GET'
             ]);
-            $delete_modal_ids[$customer['id']] = $modal_id;
+            if (intval($customer['verified']) === 2) {
+                $pending_delete_modal_ids[$customer['id']] = $modal_id;
+            } else {
+                $verified_delete_modal_ids[$customer['id']] = $modal_id;
+            }
+        }
+
+        if (intval($customer['verified']) === 2) {
+            $pending_customers[] = $customer;
+        } else {
+            $verified_customers[] = $customer;
         }
     }
+
+    $confirm_modal_body = $hesklang['confirm_merge_text']."<br>".$hesklang['confirm_merge_additional_text']."<br>";
+
+    $confirm_modal_id = hesk_generate_delete_modal([
+        'title' => $hesklang['confirm_merge'],
+        'body' => $confirm_modal_body,
+        'confirm_action' => 'manage_customers.php',
+        'use_form' => false,
+        'form_method' => 'POST',
+        'delete_text' => $hesklang['yes_title_case'],
+        'cancel_text' => $hesklang['no_title_case'],
+        'custom_class' => 'merge_customers'
+    ]);
+
+    endif;
     ?>
+    <?php if (($can_man_customers || $can_view_customers) && count($pending_customers)>0): ?>
     <form action="manage_customers.php" method="post" name="customersTable">
+        <h3 class="cus_label"><?php echo $hesklang['customers_pending_approval']; ?></h3>
         <input type="hidden" name="a" value="bulk">
         <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
-        <section class="team__head bulk-actions" id="bulk-buttons" style="display: none">
+        <section class="team__head bulk-actions" id="bulk-buttons">
             <div class="buttons">
-                <button class="btn btn--blue-border" type="submit" name="bulk_approve"><?php echo $hesklang['customer_manage_bulk_approve']; ?></button>
-                <button class="btn btn--blue-border" type="submit" name="bulk_reject"><?php echo $hesklang['customer_manage_bulk_reject']; ?></button>
-                <button class="btn btn--blue-border" type="submit" name="bulk_delete"><?php echo $hesklang['customer_manage_bulk_delete']; ?></button>
+                <?php if ($pending_approval_count > 0 && $can_man_customers): ?>
+                    <button class="btn btn--blue-border" type="submit" name="bulk_approve"><?php echo $hesklang['customer_manage_bulk_approve']; ?></button>
+                    <button class="btn btn--blue-border" type="submit" name="bulk_reject"><?php echo $hesklang['customer_manage_bulk_reject']; ?></button>
+                    <button class="btn btn--blue-border" type="submit" name="bulk_delete"><?php echo $hesklang['customer_manage_bulk_delete']; ?></button>
+                <?php endif; ?>
             </div>
         </section>
-        <?php endif; ?>
-        <div class="table-wrap">
-            <div class="table">
-                <table id="default-table" class="table sindu-table">
-                    <thead>
-                    <tr>
-                        <?php if ($pending_approval_count > 0 && $can_man_customers): ?>
-                            <th>
-                                <div class="checkbox-custom">
-                                    <input type="checkbox" id="customer_checkall" onclick="toggleCheckboxes()">
-                                    <label for="customer_checkall">&nbsp;</label>
-                                </div>
-                            </th>
-                        <?php endif; ?>
-                        <th class="sindu-handle <?php echo $search_sort_column === 'id' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
-                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'id', $search_sort_direction); ?>">
-                                <div class="sort">
-                                    <span><?php echo $hesklang['id']; ?></span>
-                                    <i class="handle"></i>
-                                </div>
-                            </a>
-
-                        </th>
-                        <th class="sindu-handle <?php echo $search_sort_column === 'name' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
-                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'name', $search_sort_direction); ?>">
-                                <div class="sort">
-                                    <span><?php echo $hesklang['name']; ?></span>
-                                    <i class="handle"></i>
-                                </div>
-                            </a>
-                        </th>
-                        <th class="sindu-handle <?php echo $search_sort_column === 'email' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
-                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'email', $search_sort_direction); ?>">
-                                <div class="sort">
-                                    <span><?php echo $hesklang['email']; ?></span>
-                                    <i class="handle"></i>
-                                </div>
-                            </a>
-                        </th>
-                        <th class="sindu-handle <?php echo $search_sort_column === 'tickets' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
-                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'tickets', $search_sort_direction); ?>">
-                                <div class="sort">
-                                    <span><?php echo $hesklang['not']; ?></span>
-                                    <i class="handle"></i>
-                                </div>
-                            </a>
-                        </th>
-                        <th><?php echo $hesklang['mfa_short']; ?></th>
-                        <?php if ($can_man_customers): ?>
-                            <th></th>
-                        <?php endif; ?>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach ($customers as $myuser) {
-                        if (defined('HESK_DEMO')) {
-                            $myuser['email'] = 'hidden@demo.com';
-                        }
-
-                        $table_row = '';
-                        if (isset($_SESSION['seluser']) && is_array($_SESSION['seluser']) && in_array($myuser['id'], $_SESSION['seluser'])) {
-                            $table_row = 'class="ticket-new"';
-                            $index = array_search($myuser['id'], $_SESSION['seluser']);
-                            unset($_SESSION['seluser'][$index]);
-                        }
-
-                        $checkbox_code = $pending_approval_count > 0 && $can_man_customers ? '<td></td>' : '';
-                        if ($can_man_customers && intval($myuser['verified']) === 2) {
-                            $table_row = 'class="pending-approval"';
-                            $checkbox_code = '<td class="table__first_th sindu_handle"><div class="checkbox-custom">
-                            <input type="checkbox" id="customer_check_'.$myuser['id'].'" name="id[]" value="'.$myuser['id'].'" class="customer-checkbox" onchange="updateBulkButtonState()">
-                            <label for="customer_check_'.$myuser['id'].'">&nbsp;</label>
-                        </div></td>';
-                            $approval_code = '
-                            <a href="manage_customers.php?a=approve&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip"
-                                title="'.$hesklang['customer_manage_approve'].'">
-                                <svg class="icon icon-tick">
-                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-tick"></use>
-                                </svg>
-                            </a>
-                            <a href="manage_customers.php?a=reject&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip" title="'.$hesklang['customer_manage_reject'].'">
-                                <svg class="icon icon-cross">
-                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-cross"></use>
-                                </svg>
-                            </a>
-                            <a href="manage_customers.php?a=delete&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip" title="'.$hesklang['customer_manage_delete'].'">
-                                <svg class="icon icon-cross">
-                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-delete"></use>
-                                </svg>
-                            </a>';
-                        } else {
-                            $approval_code = '';
-                        }
-
-                        if ($can_man_customers && intval($myuser['verified']) !== 2) {
-                            $edit_code = '
-                            <a href="manage_customers.php?a=edit&amp;id='.$myuser['id'].'" class="edit tooltip" title="'.$hesklang['edit'].'">
-                                <svg class="icon icon-edit-ticket">
-                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-edit-ticket"></use>
-                                </svg>
-                            </a>';
-                        } else {
-                            $edit_code = '';
-                        }
-
-                        if ($can_man_customers && intval($myuser['verified']) !== 2) {
-                            $remove_code = '
-                        <a href="javascript:" data-modal="[data-modal-id=\''.$delete_modal_ids[$myuser['id']].'\']"
-                            title="'.$hesklang['remove'].'"
-                            class="delete tooltip">
-                            <svg class="icon icon-delete">
-                                <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-delete"></use>
-                            </svg>
-                        </a>';
-                        } else {
-                            $remove_code = '';
-                        }
-                        if ($can_man_customers && intval($myuser['verified']) === 0 && $myuser['verification_token'] !== null) {
-                            $resend_email_code = '
-                        <a href="manage_customers.php?a=resend_verification_email&amp;id='.$myuser['id'].'"
-                            title="'.$hesklang['customer_login_resend_verification_email'].'"
-                            class="delete tooltip">
-                            <svg class="icon icon-mail">
-                                <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-mail"></use>
-                            </svg>
-                        </a>';
-                        } else {
-                            $resend_email_code = '';
-                        }
-
-                        echo <<<EOC
-<tr $table_row>
-$checkbox_code
-<td>$myuser[id]</td>
-<td>$myuser[name]</td>
-<td><a href="mailto:$myuser[email]">$myuser[email]</a></td>
-<td><a href="find_tickets.php?what=customer&amp;q={$myuser['id']}&amp;s_my=1&amp;s_ot=1&amp;s_un=1">$myuser[tickets]</a></td>
-
-EOC;
-
-                        $mfa_enrollment = intval($myuser['mfa_enrollment']);
-                        $mfa_status = $hesklang['mfa_method_none'];
-                        $mfa_reset = '';
-                        $modal_id = hesk_generate_old_delete_modal($hesklang['mfa_reset_to_default'],
-                            $hesklang['mfa_reset_confirm'],
-                            'manage_customers.php?a=resetmfa&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0),
-                            $hesklang['mfa_reset_yes']);
-
-                        if ($mfa_enrollment === 1) {
-                            $mfa_status = $hesklang['mfa_method_email'];
-
-                            if (!$hesk_settings['require_mfa'] && $can_man_customers) {
-
-                                $mfa_reset = '<div class="tooltype right out-close">
-                                <a href="javascript:" data-modal="[data-modal-id=\''.$modal_id.'\']"
-                                    title="'.$hesklang['mfa_reset_to_default'].'"
-                                    class="delete tooltip">
-                                    <svg class="icon icon-refresh">
-                                        <use xlink:href="'. HESK_PATH . 'img/sprite.svg#icon-refresh"></use>
-                                    </svg>
-                                </a>
-                            </div>';
-                            }
-                        } elseif ($mfa_enrollment === 2) {
-                            $mfa_status = $hesklang['mfa_method_auth_app_short'];
-
-                            if ($can_man_customers) {
-                                $mfa_reset = '<div class="tooltype right out-close">
-                                    <a href="javascript:" data-modal="[data-modal-id=\''.$modal_id.'\']"
-                                        title="'.$hesklang['mfa_reset_to_default'].'"
-                                        class="delete tooltip">
-                                        <svg class="icon icon-refresh">
-                                            <use xlink:href="'. HESK_PATH . 'img/sprite.svg#icon-refresh"></use>
-                                        </svg>
-                                    </a>
-                                </div>';
-                            }
-                        }
-                        $actions_html = $can_man_customers ? '<td class="nowrap buttons"><p>'.$approval_code.' '.$resend_email_code.' '.$edit_code.' '.$remove_code.'</p></td>' : '';
-                        echo <<<EOC
-<td>$mfa_status $mfa_reset</td>
-$actions_html
-</tr>
-
-EOC;
-                    } // End while
-                    ?>
-                    </tbody>
-                </table>
-                <?php
-                $total_pages = intval($total_count / $search_pagesize);
-                if ($total_count % $search_pagesize !== 0) {
-                    $total_pages++;
-                }
-                hesk_output_pager($total_count, $total_pages, $search_pagenumber, $query_url, 'search_pagenumber');
-                ?>
-            </div>
-        </div>
+        <?php hesk_render_customer_table($pending_customers,$can_man_customers,$can_merge_customers,$pending_approval_count,$pending_delete_modal_ids,$search_sort_column,$search_sort_direction,$sort_query_url,$url_sort_column,'pending'); ?>
     </form>
+    <?php endif; ?>
+
+    <?php if (($can_man_customers || $can_view_customers) && count($verified_customers)>0): ?>
+        <?php
+        $cls = '';
+        if($search_pagesize <= count($pending_customers)){
+            $cls = 'd_hide';
+        }
+        ?>
+        <form action="manage_customers.php" method="post" name="customersTable" id="activeCustomersTable" class='<?php echo $cls;?>'>
+            <h3 class="cus_label"><?php echo $hesklang['existing_customers']; ?></h3>
+            <input type="hidden" name="a" value="bulk">
+            <input type="hidden" name="token" value="<?php hesk_token_echo(); ?>">
+            <section class="team__head bulk-actions" id="bulk-buttons">
+                <div class="buttons">
+                    <?php if ($can_man_customers && $can_merge_customers && $hesk_settings['customer_accounts'] > 0): ?>
+                        <input type="hidden" name="merge_customers" value="">
+                        <button type="button" data-modal="[data-modal-id='<?php echo $confirm_modal_id; ?>']"
+                            title="<?php echo $hesklang['merge_selected_customers']; ?>"
+                            class="btn btn--blue-border tooltip">
+                            <?php echo $hesklang['merge_selected_customers']; ?>
+                        </button>
+                    <?php endif; ?>
+                </div>
+            </section>
+
+            <?php hesk_render_customer_table($verified_customers,$can_man_customers,$can_merge_customers,$pending_approval_count,$verified_delete_modal_ids,$search_sort_column, $search_sort_direction,$sort_query_url,$url_sort_column,'active'); ?>
+        </form>
+    <?php endif; ?>
+    <?php
+    $total_pages = intval($total_count / $search_pagesize);
+    if ($total_count % $search_pagesize !== 0) {
+        $total_pages++;
+    }
+    hesk_output_pager($total_count, $total_pages, $search_pagenumber, $query_url, 'search_pagenumber');
+    ?>
+
+    <?php
+    endif; // END check if we have any customers in the database
+    ?>
 </div>
+
+<?php if ($can_man_customers || $can_merge_customers): ?>
+<script>
+function toggleCheckboxes(id) {
+    // Find the master checkbox
+    var master = document.getElementById(id);
+    if (!master) return;
+
+    // Find the form/table this master belongs to
+    var form = master.closest("form");
+    if (!form) return;
+
+    // Clear selections in other forms
+    document.querySelectorAll('form').forEach(f => {
+        if (f !== form && f.querySelector('.customer-checkbox')) {
+            f.querySelectorAll('.customer-checkbox').forEach(cb => cb.checked = false);
+            const otherMaster = f.querySelector("input[id^='customer_checkall_']");
+            if (otherMaster) otherMaster.checked = false;
+            const otherBulk = f.querySelector('.bulk-actions');
+            //if (otherBulk) otherBulk.style.display = 'none';
+        }
+    });
+
+    // Apply master checkbox state to row checkboxes
+    form.querySelectorAll('.customer-checkbox').forEach(cb => cb.checked = master.checked);
+
+    updateBulkButtonState(form);
+}
+
+function updateBulkButtonState(elem) {
+    let form = null;
+
+    if (elem) {
+        form = elem.closest('form');
+    }
+    if (!form) return;
+
+    // If a row checkbox was checked then clear selections in all other forms
+    if (elem.classList && elem.classList.contains('customer-checkbox') && elem.checked) {
+        document.querySelectorAll('form').forEach(f => {
+            if (f !== form && f.querySelector('.customer-checkbox')) {
+                f.querySelectorAll('.customer-checkbox').forEach(cb => cb.checked = false);
+                const otherMaster = f.querySelector("input[id^='customer_checkall_']");
+                if (otherMaster) otherMaster.checked = false;
+                const otherBulk = f.querySelector('.bulk-actions');
+                //if (otherBulk) otherBulk.style.display = 'none';
+            }
+        });
+    }
+
+    // Now update current form state
+    const rowCheckboxes = form.querySelectorAll('.customer-checkbox');
+    const checkedCount = form.querySelectorAll('.customer-checkbox:checked').length;
+
+    // Sync master checkbox state
+    const master = form.querySelector("input[id^='customer_checkall_']");
+    if (master) {
+        master.checked = (rowCheckboxes.length > 0 && checkedCount === rowCheckboxes.length);
+    }
+
+    // Show/hide bulk actions
+    const bulk = form.querySelector('.bulk-actions');
+    /*
+    if (bulk) {
+        bulk.style.display = (checkedCount > 0) ? 'flex' : 'none';
+    }
+    */
+}
+
+
+$('body').on('click','.merge_customers',function(e){
+    e.preventDefault();
+    $('#activeCustomersTable').submit();
+});
+
+</script>
+<?php endif; ?>
+
 <?php if ($can_man_customers): ?>
 <div class="right-bar team-create customer" <?php echo hesk_SESSION(array('userdata','errors')) ? 'style="display: block"' : ''; ?>>
     <div class="right-bar__body form" data-step="1">
@@ -596,26 +553,6 @@ EOC;
         </form>
     </div>
 </div>
-    <script>
-        function toggleCheckboxes() {
-            var d = document.customersTable;
-            var setTo = !!document.getElementById('customer_checkall').checked;
-
-            for (var i = 0; i < d.elements.length; i++)
-            {
-                if(d.elements[i].type === 'checkbox' && d.elements[i].name !== 'customer_checkall')
-                {
-                    d.elements[i].checked = setTo;
-                }
-            }
-            updateBulkButtonState();
-        }
-
-        function updateBulkButtonState() {
-            let atLeastOneCheckboxSelected = !!document.querySelectorAll('input[class="customer-checkbox"]:checked').length;
-            document.getElementById('bulk-buttons').style.display = atLeastOneCheckboxSelected ? 'flex' : 'none';
-        }
-    </script>
 <?php
 endif;
 unset($_SESSION['seluser']);
@@ -729,11 +666,8 @@ function edit_user()
                 </a>
             </h3>
             <?php
-            if (!hesk_SESSION(array('userdata', 'errors'))) {
-                /* This will handle error, success and notice messages */
-                echo '<div style="margin: -24px -24px 10px -16px;">';
+            if (hesk_SESSION(array('userdata', 'errors'))) {
                 hesk_handle_messages();
-                echo '</div>';
             }
             ?>
             <form name="form1" method="post" action="manage_customers.php" class="form <?php echo hesk_SESSION(array('userdata','errors')) ? 'invalid' : ''; ?>">
@@ -770,7 +704,7 @@ function new_user()
     if (strlen($myuser['email'])) {
         $result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `email` = '".hesk_dbEscape($myuser['email'])."' LIMIT 1");
         if (hesk_dbNumRows($result) != 0) {
-            hesk_process_messages($hesklang['customer_email_exists'],'manage_customers.php');
+            hesk_process_messages($hesklang['customer_name_email_exists'],'manage_customers.php');
         }
     }
 
@@ -830,7 +764,7 @@ function update_user()
                 AND `id` <> ".intval($myuser['id'])."
             LIMIT 1");
         if (hesk_dbNumRows($result) != 0) {
-            hesk_process_messages($hesklang['customer_email_exists'],'manage_customers.php');
+            hesk_process_messages($hesklang['customer_name_email_exists'],'manage_customers.php');
         }
     }
 
@@ -998,7 +932,7 @@ function remove()
 } // End remove()
 
 function reset_mfa() {
-    global $hesk_settings, $hesklang;
+    global $hesk_settings, $hesklang, $can_man_customers;
 
     /* A security check */
     hesk_token_check();
@@ -1008,9 +942,8 @@ function reset_mfa() {
     $myuser = intval(hesk_GET('id')) or hesk_error($hesklang['no_valid_id']);
 
     // Make sure we have permission to edit this user
-    if ( ! compare_user_permissions($myuser))
-    {
-        hesk_process_messages($hesklang['npea'],'manage_customers.php');
+    if (!$can_man_customers) {
+        hesk_process_messages($hesklang['customer_permission_denied'],'manage_customers.php');
     }
 
     $_SESSION['seluser'] = [$myuser];
@@ -1021,7 +954,7 @@ function reset_mfa() {
         $target_enrollment = 1;
     }
 
-    hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` SET `mfa_enrollment` = {$target_enrollment}, `mfa_secret` = NULL WHERE `id` = {$myuser}");
+    hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` SET `mfa_enrollment` = {$target_enrollment}, `mfa_secret` = NULL WHERE `id` = {$myuser}");
 
     if (hesk_dbAffectedRows() != 1) {
         hesk_process_messages($hesklang['int_error'].': '.$hesklang['user_not_found'],'./manage_customers.php');
@@ -1039,27 +972,34 @@ function approve_registration($redirect = true) {
     hesk_token_check();
 
     $myuser = intval( hesk_GET('id' ) ) or hesk_error($hesklang['no_valid_id']);
-    $_SESSION['seluser'] = [$myuser];
+
     $_SESSION['save_customer_search'] = true;
 
     $user_rs = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id` = ".intval($myuser));
+    
     if (!hesk_dbNumRows($user_rs)) {
         hesk_process_messages($hesklang['int_error'].': '.$hesklang['user_not_found'],'./manage_customers.php');
     }
     $user = hesk_dbFetchAssoc($user_rs);
 
-    // Approve the registration
-    hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` SET `verified` = 1 WHERE `id` = ".intval($myuser));
+    //Only pending customers can be approved
+    if ($user['verified'] == '2') {
 
-    // Send approval email
-    if (!function_exists('hesk_sendCustomerRegistrationApprovedEmail')) {
-        require(HESK_PATH . 'inc/email_functions.inc.php');
-    }
-    hesk_sendCustomerRegistrationApprovedEmail($user);
+        $_SESSION['seluser'] = [$myuser];
 
-    if ($redirect) {
-        hesk_process_messages($hesklang['customer_account_approved'], 'manage_customers.php', 'SUCCESS');
-    }
+        // Approve the registration
+        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` SET `verified` = 1 WHERE `id` = ".intval($myuser));
+
+        // Send approval email
+        if (!function_exists('hesk_sendCustomerRegistrationApprovedEmail')) {
+            require(HESK_PATH . 'inc/email_functions.inc.php');
+        }
+        hesk_sendCustomerRegistrationApprovedEmail($user);
+
+        if ($redirect) {
+            hesk_process_messages($hesklang['customer_account_approved'], 'manage_customers.php', 'SUCCESS');
+        }
+    }    
 
 }
 
@@ -1069,7 +1009,6 @@ function reject_registration($redirect = true, $send_email_notification = true) 
     hesk_token_check();
 
     $myuser = intval( hesk_GET('id' ) ) or hesk_error($hesklang['no_valid_id']);
-    $_SESSION['seluser'] = [$myuser];
     $_SESSION['save_customer_search'] = true;
 
     $user_rs = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id` = ".intval($myuser));
@@ -1078,20 +1017,25 @@ function reject_registration($redirect = true, $send_email_notification = true) 
     }
     $user = hesk_dbFetchAssoc($user_rs);
 
-    // Reject the registration
-    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
-        WHERE `id` = ".intval($myuser));
+    //Only pending customers can be rejected
+    if ($user['verified'] == '2') {
 
-    // Send email notification
-    if ($send_email_notification) {
-        if (!function_exists('hesk_sendCustomerRegistrationRejectedEmail')) {
-            require(HESK_PATH . 'inc/email_functions.inc.php');
+        $_SESSION['seluser'] = [$myuser];
+
+        // Reject the registration
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id` = ".intval($myuser));
+
+        // Send email notification
+        if ($send_email_notification) {
+            if (!function_exists('hesk_sendCustomerRegistrationRejectedEmail')) {
+                require(HESK_PATH . 'inc/email_functions.inc.php');
+            }
+            hesk_sendCustomerRegistrationRejectedEmail($user);
         }
-        hesk_sendCustomerRegistrationRejectedEmail($user);
-    }
 
-    if ($redirect) {
-        hesk_process_messages($hesklang['customer_account_rejected'], 'manage_customers.php', 'SUCCESS');
+        if ($redirect) {
+            hesk_process_messages($hesklang['customer_account_rejected'], 'manage_customers.php', 'SUCCESS');
+        }
     }
 }
 
@@ -1121,16 +1065,31 @@ function handle_bulk_action() {
     $ids = array_unique($ids);
     $ids = array_filter($ids, function ($x) {return $x > 0;});
 
+    if (count($ids) < 1) {
+        hesk_process_messages($hesklang['no_cust_sel'], 'manage_customers.php');
+    }
+
+    $_SESSION['seluser'] = [];
+    $sel_ids = [];
+
     if (isset($_POST['bulk_approve'])) {
         foreach ($ids as $customer_id) {
             $_GET['id'] = $customer_id;
             approve_registration(false);
+
+            if (isset($_SESSION['seluser'][0])) {
+                $sel_ids[] = $_SESSION['seluser'][0];
+            }
         }
         $message = $hesklang['customer_manage_bulk_approve_complete'];
     } elseif (isset($_POST['bulk_reject'])) {
         foreach ($ids as $customer_id) {
             $_GET['id'] = $customer_id;
             reject_registration(false);
+
+            if (isset($_SESSION['seluser'][0])) {
+                $sel_ids[] = $_SESSION['seluser'][0];
+            }
         }
         $message = $hesklang['customer_manage_bulk_reject_complete'];
     } elseif (isset($_POST['bulk_delete'])) {
@@ -1139,11 +1098,65 @@ function handle_bulk_action() {
             delete_registration(false);
         }
         $message = $hesklang['customer_manage_bulk_delete_complete'];
+    } elseif (isset($_POST['merge_customers'])) {
+
+        // Check permissions for this feature
+        hesk_checkPermission('can_merge_customers');
+
+        // A security check
+        hesk_token_check('POST');
+
+        // We need more than 1 valid customer ID selected
+        if ( ! isset($_POST['id'])) {
+            hesk_process_messages($hesklang['merge_customer_err'] . ' ' . $hesklang['merge_more_error'],'manage_customers.php');
+        }
+
+        $merge_these = array();
+        foreach ($_POST['id'] as $id) {
+            $id = intval($id);
+            if ($id > 0) {
+                $merge_these[] = $id;
+            }
+        }
+
+        if ( count($merge_these) < 1 ) {
+            hesk_process_messages($hesklang['merge_customer_err'] . ' ' . $hesklang['merge_more_error'],'manage_customers.php');
+        }
+
+        // Sort IDs, customers will be merged to the lowest ID
+        sort($merge_these, SORT_NUMERIC);
+
+        // Select lowest ID as the target customer
+        $merge_into = array_shift($merge_these);
+
+        // Merge customers or throw an error
+        if ( hesk_mergeCustomers($merge_these , $merge_into) ) {
+            hesk_process_messages($hesklang['customer_merge_complete'],'manage_customers.php','SUCCESS');
+        } else {
+            $hesklang['merge_customer_err'] .= ' ' . $_SESSION['error'];
+            hesk_cleanSessionVars($_SESSION['error']);
+            hesk_process_messages($hesklang['merge_customer_err'],'manage_customers.php');
+        }
     } else {
         hesk_error($hesklang['int_error'].': '.$hesklang['invalid_action']);
     }
 
-    $_SESSION['seluser'] = $ids;
+    //Only pending customers can be approve or reject
+    $total_ids = [];
+    if (isset($_POST['bulk_approve']) || isset($_POST['bulk_reject'])) {
+        $total_ids = $ids;
+        $sel_ids = array_unique($sel_ids);
+    } else {
+        $_SESSION['seluser'] = $ids;
+    }
+    if ((isset($_POST['bulk_approve']) || isset($_POST['bulk_reject'])) && (count($sel_ids) == "0" || count($sel_ids) < count($total_ids))) {
+        if (count($sel_ids) == "0") {
+            hesk_process_messages($hesklang['error_msg_for_approved'],'manage_customers.php', 'ERROR');
+        } else {
+            hesk_process_messages(sprintf($message, count($sel_ids)).' ('.$hesklang['error_msg_for_approved'].')', 'manage_customers.php', 'SUCCESS');
+        }
+    }
+
     hesk_process_messages(sprintf($message, count($ids)), 'manage_customers.php', 'SUCCESS');
 }
 
@@ -1194,4 +1207,213 @@ function build_sort_url($original_url, $current_sort_field, $sort_field, $curren
     $new_url = str_replace("search_sort_direction={$current_sort_direction}", "search_sort_direction=", $new_url);
     return str_replace("search_sort_direction=", "search_sort_direction={$target_sort_direction}", $new_url);
 }
+
+function hesk_render_customer_table($customers,$can_man_customers,$can_merge_customers,$pending_approval_count,$delete_modal_ids,$search_sort_column, $search_sort_direction,$sort_query_url,$url_sort_column,$check_ext) {
+    global $hesklang, $hesk_settings;
+    ?>
+    <div class="table-wrap">
+            <div class="table">
+                <table id="default-table" class="table sindu-table">
+                    <thead>
+                    <tr>
+                        <?php /*if (($pending_approval_count > 0 && $can_man_customers) || ($can_merge_customers && $hesk_settings['customer_accounts']>0)):*/ ?>
+                        <?php if ($pending_approval_count > 0 && $can_man_customers && $check_ext == 'pending'): ?>
+                            <th class="table__first_th sindu_handle">
+                                <div class="checkbox-custom">
+                                    <input type="checkbox" id="customer_checkall_<?php echo $check_ext; ?>" onclick="toggleCheckboxes('customer_checkall_<?php echo $check_ext; ?>')">
+                                    <label for="customer_checkall_<?php echo $check_ext; ?>">&nbsp;</label>
+                                </div>
+                            </th>
+                        <?php elseif ($can_man_customers && $can_merge_customers && $hesk_settings['customer_accounts'] > 0): ?>
+                            <th class="table__first_th sindu_handle">
+                            </th>
+                        <?php endif; ?>
+                        <th class="sindu-handle <?php echo $search_sort_column === 'id' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
+                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'id', $search_sort_direction); ?>">
+                                <div class="sort">
+                                    <span><?php echo $hesklang['id']; ?></span>
+                                    <i class="handle"></i>
+                                </div>
+                            </a>
+
+                        </th>
+                        <th class="sindu-handle <?php echo $search_sort_column === 'name' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
+                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'name', $search_sort_direction); ?>">
+                                <div class="sort">
+                                    <span><?php echo $hesklang['name']; ?></span>
+                                    <i class="handle"></i>
+                                </div>
+                            </a>
+                        </th>
+                        <th class="sindu-handle <?php echo $search_sort_column === 'email' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
+                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'email', $search_sort_direction); ?>">
+                                <div class="sort">
+                                    <span><?php echo $hesklang['email']; ?></span>
+                                    <i class="handle"></i>
+                                </div>
+                            </a>
+                        </th>
+                        <th class="sindu-handle <?php echo $search_sort_column === 'tickets' ? hesk_mb_strtolower($search_sort_direction) : '' ?>">
+                            <a href="<?php echo build_sort_url($sort_query_url, $url_sort_column, 'tickets', $search_sort_direction); ?>">
+                                <div class="sort">
+                                    <span><?php echo $hesklang['not']; ?></span>
+                                    <i class="handle"></i>
+                                </div>
+                            </a>
+                        </th>
+                        <th><?php echo $hesklang['mfa_short']; ?></th>
+                        <?php if ($can_man_customers): ?>
+                            <th></th>
+                        <?php endif; ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach ($customers as $myuser) {
+                        if (defined('HESK_DEMO')) {
+                            $myuser['email'] = 'hidden@demo.com';
+                        }
+
+                        $table_row = '';
+                        if (isset($_SESSION['seluser']) && is_array($_SESSION['seluser']) && in_array($myuser['id'], $_SESSION['seluser'])) {
+                            $table_row = 'class="ticket-new"';
+                            $index = array_search($myuser['id'], $_SESSION['seluser']);
+                            unset($_SESSION['seluser'][$index]);
+                        }
+
+                        //$checkbox_code = ($pending_approval_count > 0 && $can_man_customers) || ($can_merge_customers && $hesk_settings['customer_accounts'] > 0) ? '<td></td>' : '';
+                        $checkbox_code = '';
+                        $approval_code = '';
+                        if ($can_man_customers && intval($myuser['verified']) === 2 || ($can_man_customers && $can_merge_customers && $hesk_settings['customer_accounts'] > 0)) {
+                            if ($can_man_customers && intval($myuser['verified']) === 2){
+                                $table_row = 'class="pending-approval"';
+                            }
+                            $checkbox_code = '<td class="table__first_th sindu_handle"><div class="checkbox-custom">
+                            <input type="checkbox" id="customer_check_'.$myuser['id'].'" name="id[]" value="'.$myuser['id'].'" class="customer-checkbox" onchange="updateBulkButtonState(this)">
+                            <label for="customer_check_'.$myuser['id'].'">&nbsp;</label>
+                        </div></td>';
+                            if ($can_man_customers && intval($myuser['verified']) === 2){
+                                $approval_code = '
+                                <a href="manage_customers.php?a=approve&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip"
+                                    title="'.$hesklang['customer_manage_approve'].'">
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </a>
+                                <a href="manage_customers.php?a=reject&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip" title="'.$hesklang['customer_manage_reject'].'">
+                                    <svg class="icon icon-cross">
+                                        <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-cross"></use>
+                                    </svg>
+                                </a>
+                                <a href="manage_customers.php?a=delete&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip" title="'.$hesklang['customer_manage_delete'].'">
+                                    <svg class="icon icon-cross">
+                                        <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-delete"></use>
+                                    </svg>
+                                </a>';
+                            }   
+                        } else {
+                            $approval_code = '';
+                        }
+
+                        if ($can_man_customers && intval($myuser['verified']) !== 2) {
+                            $edit_code = '
+                            <a href="manage_customers.php?a=edit&amp;id='.$myuser['id'].'" class="edit tooltip" title="'.$hesklang['edit'].'">
+                                <svg class="icon icon-edit-ticket">
+                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-edit-ticket"></use>
+                                </svg>
+                            </a>';
+                        } else {
+                            $edit_code = '';
+                        }
+
+                        if ($can_man_customers && intval($myuser['verified']) !== 2) {
+                            $remove_code = '
+                        <a href="javascript:" data-modal="[data-modal-id=\''.$delete_modal_ids[$myuser['id']].'\']"
+                            title="'.$hesklang['remove'].'"
+                            class="delete tooltip">
+                            <svg class="icon icon-delete">
+                                <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-delete"></use>
+                            </svg>
+                        </a>';
+                        } else {
+                            $remove_code = '';
+                        }
+                        if ($can_man_customers && intval($myuser['verified']) === 0 && $myuser['verification_token'] !== null) {
+                            $resend_email_code = '
+                        <a href="manage_customers.php?a=resend_verification_email&amp;id='.$myuser['id'].'"
+                            title="'.$hesklang['customer_login_resend_verification_email'].'"
+                            class="delete tooltip">
+                            <svg class="icon icon-mail">
+                                <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-mail"></use>
+                            </svg>
+                        </a>';
+                        } else {
+                            $resend_email_code = '';
+                        }
+
+                        echo <<<EOC
+                        <tr $table_row>
+                        $checkbox_code
+                        <td>$myuser[id]</td>
+                        <td>$myuser[name]</td>
+                        <td><a href="mailto:$myuser[email]">$myuser[email]</a></td>
+                        <td><a href="find_tickets.php?what=customer&amp;q={$myuser['id']}&amp;s_my=1&amp;s_ot=1&amp;s_un=1">$myuser[tickets]</a></td>
+
+EOC;
+
+                        $mfa_enrollment = intval($myuser['mfa_enrollment']);
+                        $mfa_status = $hesklang['mfa_method_none'];
+                        $mfa_reset = '';
+                        $modal_id = hesk_generate_old_delete_modal($hesklang['mfa_reset_to_default'],
+                            $hesklang['mfa_reset_confirm'],
+                            'manage_customers.php?a=resetmfa&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0),
+                            $hesklang['mfa_reset_yes']);
+
+                        if ($mfa_enrollment === 1) {
+                            $mfa_status = $hesklang['mfa_method_email'];
+
+                            if (!$hesk_settings['require_mfa'] && $can_man_customers) {
+
+                                $mfa_reset = '<div class="tooltype right out-close">
+                                <a href="javascript:" data-modal="[data-modal-id=\''.$modal_id.'\']"
+                                    title="'.$hesklang['mfa_reset_to_default'].'"
+                                    class="delete tooltip">
+                                    <svg class="icon icon-refresh">
+                                        <use xlink:href="'. HESK_PATH . 'img/sprite.svg#icon-refresh"></use>
+                                    </svg>
+                                </a>
+                            </div>';
+                            }
+                        } elseif ($mfa_enrollment === 2) {
+                            $mfa_status = $hesklang['mfa_method_auth_app_short'];
+
+                            if ($can_man_customers) {
+                                $mfa_reset = '<div class="tooltype right out-close">
+                                    <a href="javascript:" data-modal="[data-modal-id=\''.$modal_id.'\']"
+                                        title="'.$hesklang['mfa_reset_to_default'].'"
+                                        class="delete tooltip">
+                                        <svg class="icon icon-refresh">
+                                            <use xlink:href="'. HESK_PATH . 'img/sprite.svg#icon-refresh"></use>
+                                        </svg>
+                                    </a>
+                                </div>';
+                            }
+                        }
+                        $actions_html = $can_man_customers ? '<td class="nowrap buttons"><p>'.$approval_code.' '.$resend_email_code.' '.$edit_code.' '.$remove_code.'</p></td>' : '';
+                        echo <<<EOC
+                        <td>$mfa_status $mfa_reset</td>
+                        $actions_html
+                        </tr>
+
+EOC;
+                    } // End while
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <p>&nbsp;</p>
+<?php
+    }// End hesk_render_customer_table()
 ?>

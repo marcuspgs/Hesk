@@ -1,0 +1,54 @@
+/*
+All page-specific CSS overwrites, like for ticket, i.e. knowledge base...
+Ideally, they're all prefixed with the specific page_class, so it doesn't cause any conflicts
+*/
+
+/* START my-tickets.php */
+.page-my-tickets #kb_search {
+    width: 60%;
+}
+.page-my-tickets #search-button {
+    width: 20%;
+    margin-left: 10px;
+    height: inherit;
+}
+.page-my-tickets #search-by {
+    height: 56px;
+}
+.page-my-tickets .selectize-input {
+    height: 56px !important;
+}
+/* END my-tickets.php */
+
+/* START create-ticket.php */
+.page-create-ticket .form-footer .btn {
+    margin-top: 20px;
+}
+/* END create-ticket.php */
+
+/* START login.php */
+.page-login #forgot-pw-submit {
+    width: 200px; /* TODO deprecated completely, class not exists anywhere? */
+}
+/* END login.php */
+
+/* START view-category.php */
+.page-view-category .back-link {
+    /*display; -ms-flexbox;*/
+    display: flex;
+    margin-bottom: 16px;
+    text-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+/* END view-category.php */
+
+/* START form.php */
+.page-form #forgot-tid-submit {
+    width: 200px;
+}
+/* END form.php */
+
+

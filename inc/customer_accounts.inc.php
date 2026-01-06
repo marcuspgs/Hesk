@@ -16,6 +16,25 @@ use RobThree\Auth\TwoFactorAuth;
 /* Check if this is a valid include */
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
+// Possible fields to be displayed in ticket list
+$hesk_settings['possible_customer_ticket_list'] = array(
+    'id' => $hesklang['id'],
+    'trackid' => $hesklang['trackID'],
+    'dt' => $hesklang['submitted'],
+    'lastchange' => $hesklang['last_update'],
+    'category' => $hesklang['category'],
+    //'name' => $hesklang['customer'],
+    //'email' => $hesklang['email'],
+    'subject' => $hesklang['subject'],
+    'status' => $hesklang['status'],
+    'owner' => $hesklang['owner'],
+    'replies' => $hesklang['replies'],
+    'staffreplies' => $hesklang['replies'] . ' (' . $hesklang['staff'] .')',
+    //'lastreplier' => $hesklang['last_replier'],
+    'time_worked' => $hesklang['ts'],
+    'due_date' => $hesklang['due_date']
+);
+
 function hesk_get_customer_account_by_name($name) {
     global $hesk_settings;
 
@@ -24,6 +43,22 @@ function hesk_get_customer_account_by_name($name) {
     $sql = "SELECT * FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "customers`
             WHERE `name` = '" . hesk_dbEscape($name) . "'
                 AND TRIM(`email`) = ''";
+
+    $rs = hesk_dbQuery($sql);
+
+    if ($row = hesk_dbFetchAssoc($rs)) {
+        return $row;
+    }
+
+    return null;
+}
+
+function hesk_get_customer_account_by_name_and_email($name, $email) {
+    global $hesk_settings;
+
+    $sql = "SELECT * FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "customers`
+            WHERE `email` = '" . hesk_dbEscape(trim($email)) . "'
+                AND `name` = '". hesk_dbEscape(trim($name)) ."'";
 
     $rs = hesk_dbQuery($sql);
 
@@ -85,8 +120,8 @@ function hesk_get_customer_account_by_id($id) {
 function hesk_get_or_create_customer($name, $email, $create_if_not_found = true) {
     global $hesk_settings, $hesklang;
 
-    $name = $name === null ? '' : trim($name);
-    $email = $email === null ? '' : $email;
+    $name = ($name === null || $name == '') ? '' : trim($name);
+    $email = ($email === null || $email == '') ? '' : trim($email);
 
     // If email is empty just create a new account
     if (empty($email)) {
@@ -99,25 +134,19 @@ function hesk_get_or_create_customer($name, $email, $create_if_not_found = true)
 
     //-- If we already have a customer record based on name and email, return its id
     $existing_customer_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
-        WHERE `email` = '".hesk_dbEscape(trim($email))."'
-            AND `name` = '".hesk_dbEscape(trim($name))."'
+        WHERE `email` = '".hesk_dbEscape($email)."'
+            AND `name` = '".hesk_dbEscape($name)."'
         LIMIT 1");
     if ($row = hesk_dbFetchAssoc($existing_customer_rs)) {
         return $row['id'];
     }
 
-    //-- No match on name+email.  How about email, ignoring the name?
-    $existing_customer_rs = hesk_dbQuery("SELECT `id`, `name`, `verified` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
-        WHERE `email` = '".hesk_dbEscape(trim($email))."'
-        LIMIT 1");
-    if ($row = hesk_dbFetchAssoc($existing_customer_rs)) {
-        if (intval($row['verified']) === 0 && $row['name'] !== $name && $name !== '' && $name !== $hesklang['pde']) {
-            // Name on an unverified account is different. Update it to the name passed in
-            hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
-                SET `name` = '".hesk_dbEscape($name)."' 
-                WHERE `id` = " . intval($row['id']));
-        }
-
+    // Is there a registered user with this email already? If so, return it as we can't create extra customers when one
+    // is already registered with this email.
+    $registered_email_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+            WHERE `email` = '".hesk_dbEscape($email)."'
+                AND `verified` = 1");
+    if ($row = hesk_dbFetchAssoc($registered_email_rs)) {
         return $row['id'];
     }
 
@@ -132,22 +161,38 @@ function hesk_get_or_create_customer($name, $email, $create_if_not_found = true)
     return null;
 }
 
-function hesk_get_or_create_follower($email) {
+function hesk_get_or_create_follower($email, $name = '') {
     global $hesk_settings;
 
-    $email = $email === null ? '' : $email;
+    $name = ($name === null || $name == '') ? '' : trim($name);
+    $email = ($email === null || $email == '') ? '' : trim($email);
 
-    //-- If we already have a customer record based on email, return its id
-    $existing_customer_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` 
-        WHERE `email` = '".hesk_dbEscape(trim($email))."'
+    // If email is empty it's not a valid follower
+    if (empty($email)) {
+        return null;
+    }
+
+    //-- If we already have a customer record based on name and email, return its id
+    $existing_customer_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+        WHERE `email` = '".hesk_dbEscape($email)."'
+            AND `name` = '".hesk_dbEscape($name)."'
         LIMIT 1");
     if ($row = hesk_dbFetchAssoc($existing_customer_rs)) {
         return $row['id'];
     }
 
+    // Is there a registered user with this email already? If so, return it as we can't create extra customers when one
+    // is already registered with this email.
+    $registered_email_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers`
+            WHERE `email` = '".hesk_dbEscape($email)."'
+                AND `verified` = 1");
+    if ($row = hesk_dbFetchAssoc($registered_email_rs)) {
+        return $row['id'];
+    }
+
     //-- No match.  Create a new customer
     hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` (`name`, `email`)
-        VALUES ('', '".hesk_dbEscape(trim($email))."')");
+        VALUES ('".hesk_dbEscape(trim($name))."', '".hesk_dbEscape($email)."')");
 
     return hesk_dbInsertID();
 }

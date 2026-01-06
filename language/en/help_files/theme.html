@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Interactive help for Hesk settings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="help_style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- next: 3 -->
+
+<h3>Interactive help for Hesk settings</h3>
+
+<p>&nbsp;</p>
+
+<a name="2"></a><p class="title">Custom HTML</p>
+<p>This tool lets you add your own HTML code to Hesk directly from the admin panel.</p>
+
+<p>It affects only the <strong>public (customer-facing) side</strong> of your help desk.</p>
+
+<p><strong>&raquo; head.txt</strong></p>
+<p>
+Code placed here is added inside the HTML &lt;head&gt; section, just before &lt;/head&gt;.
+</p>
+<p>Common uses:</p>
+<ul>
+  <li>Custom CSS styles</li>
+  <li>Fonts</li>
+  <li>Meta tags</li>
+  <li>Analytics or verification headers</li>
+</ul>
+
+<p><strong>&raquo; header.txt</strong></p>
+<p>
+Code placed here appears at the very top of the page, right after the &lt;body&gt; tag.
+</p>
+<p>Common uses:</p>
+<ul>
+  <li>Your company logo</li>
+  <li>A custom header or navigation bar</li>
+  <li>Branding elements</li>
+</ul>
+
+<p><strong>&raquo; footer.txt</strong></p>
+<p>
+Code placed here appears at the bottom of the page, just before the page ends.
+</p>
+<p>Common uses:</p>
+<ul>
+  <li>Custom footer content</li>
+  <li>Copyright notices</li>
+  <li>Links or scripts</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="1"></a><p class="title">Customer theme</p>
+<p>This is the (visual only) theme that will be used across all customer-facing HESK pages. All properly installed themes will be displayed in the drop-down box.</p>
+<p>You can create your own additional themes, by copying one of the existing .css theme files that can be found inside "theme/hesk3/customer/css/themes" folder. Simply adjust any CSS color variables there, and name the file as "my_theme_name.css". The theme will then automatically appear in the customer theme selection dropdown.</p>
+<p>*Extra Note: Besides the CSS variables already used in the existing theme files, you can also add any variables that can be found in "theme/hesk3/customer/css/core/0_00_default_theme_vars.css", and add them to your theme file.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<a name="2"></a><p class="title">Theme overrides</p>
+<p>Hesk themes work by utilizing CSS variables for all colors. Some of these colors are distinctly set as a specific color, but the majority of colors are dynamic derivatives of those specific colors (lightened/darkened versions, or an otherwise calculated mix of colors).</p>
+<p>This means that it's super easy to change some of the main colors/variables, and have the whole Hesk color palette dynamically adjust to it. Obviously, this can also cause situations, where the dynamic colors or contrasts, might not work the best with all other colors out of the box, but this is where the option to rewrite any colors comes in. Use the color overrides below to make any more specific adjustments (Note: These adjustments are stored in Hesk settings, so changing them will NOT affect/change the original theme files).</p>
+<p>Note: Derivatives of other colors are marked with a red asterix, and these colors will dynamically adjust if you adjust the colors they derive from. If you override a derivative color, then that color will now be "fixed" - however, there are situations where some derivative colors might be used by other derivatives, so overriding them, might also cause some other colors to change.</p>
+<p>Note: Currently not 100% of all UI edge cases are easily and clearly covered by these color overrides. If you need more specific color overrides where these settings are not enough, we recommend to write additional custom CSS overrides instead where needed.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<a name="main_brand"></a><p class="title">Main Brand</p>
+<p>These define "90%+" of the site look. Most other colors are in some way derived from these automatically.</p>
+
+<a name="main_elements"></a><p class="title">Main Elements</p>
+<p>These define main complementary colors of common elements, such as input background, links colors etc. Most of these are derived from main brand colors, but can be further adjusted separately.</p>
+
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<a name="buttons"></a><p class="title">Buttons</p>
+<p>Use these to override colors of most commonly used buttons.</p>
+
+<a name="navigation"></a><p class="title">Navigation</p>
+<p>Use these to override colors of various navigation UI (header links, breadcrumbs, action boxes...).</p>
+
+<a name="dropdowns"></a><p class="title">Dropdowns</p>
+<p>Use these to override colors of most commonly used dropdowns / selects.</p>
+
+<a name="datepickers"></a><p class="title">Datepickers</p>
+<p>Use these to override colors of datepickers.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<a name="base_colors"></a><p class="title">Base colors</p>
+<p>These colors represent clear/specific colors, that are usually desired to be specific, despite other color palettes. (i.e. warning/error messages, some icons etc.). These are also used as the basis for various information/error notifications.</p>
+
+<a name="notifications"></a><p class="title">Notifications</p>
+<p>Notifications will by default use Base Colors, but can be further adjusted here if needed.</p>
+
+<a name="search"></a><p class="title">Search</p>
+<p>These colors allow you to override the Search input styling on the customer pages.</p>
+
+<a name="article_previews"></a><p class="title">Article Previews</p>
+<p>These control the colors of article previews on home page and in search suggestions.</p>
+
+<a name="misc"></a><p class="title">Miscellaneous</p>
+<p>Other miscellaneous colors of elements you might want to customize.</p>
+
+<p>&nbsp;</p>
+
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+/*
+Put any general buttons-related CSS here
+*/
+:root {
+    /* Defining some general variables from main theme colors, for some easier customization,/future dropoff for potentially separating into more theme settings */
+    --btn_full_bg: var(--btn__bg-clr-pri);
+    --btn_full_clr: var(--btn__clr-pri);
+    --btn_full_border-clr: var(--btn__border-clr-pri);
+    --btn_full__hover_bg: var(--btn__border-clr-pri);
+    --btn_full__disabled_bg: var(--btn__disabled-bg-clr);
+    --btn_full__disabled_clr: var(--btn__disabled-clr);
+    --btn_full__disabled_border-clr: var(--btn__disabled-bg-clr);
+
+    --btn_border__clr: var(--btn__border-clr-pri);
+    --btn_border__border-clr: var(--btn__border-clr-pri);
+    --btn_border__hover-bg: var(--btn__bg-clr-pri);
+    --btn_border__hover-clr: var(--btn__clr-pri);
+    --btn_border__hover-border-clr: var(--btn__border-clr-pri);
+    --btn_border__hover-fill: var(--btn__clr-pri);
+
+    --btn_blue_border__bg: var(--btn__clr-pri);
+    --btn_blue_border__clr: var(--btn__bg-clr-pri);
+    --btn_blue_border__border-clr: var(--btn__bg-clr-pri);
+    --btn_blue_border__hover_bg: var(--btn__bg-clr-pri);
+    --btn_blue_border__hover_clr: var(--btn__clr-pri);
+    --btn_blue_border__hover_border-clr: var(--btn__border-clr-pri);
+}
+
+button {
+    font-family: Lato, Arial, sans-serif;
+    color: var(--gray-7);
+}
+
+.btn {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 32px;
+    padding: 5px 12px;
+    background-color: transparent;
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 400;
+    border-radius: 2px;
+    transition: all var(--transition-speed) ease
+}
+
+.btn>.icon+span, .btn>span+.icon {
+    margin-left: 8px
+}
+
+.btn .icon {
+    fill: currentColor
+}
+
+@media screen and (max-width:900px) {
+    .btn {
+        cursor: default
+    }
+}
+
+.btn-transparent {
+    background-color: var(--surface);
+    border: 1px solid var(--white-9);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: .1px;
+    color: var(--gray-4);
+}
+
+.btn.cancel {
+    width: 120px;
+    height: 40px;
+    border: 1px solid var(--btn_cancel__border-clr);
+    color: var(--btn_border__clr);
+}
+
+.btn-empty {
+    padding: 0
+}
+
+.btn-full {
+    min-width: 152px;
+    height: 40px;
+    background-color: var(--btn_full_bg);
+    color: var(--btn_full_clr);
+    font-weight: 600;
+    transition: all var(--transition-speed) ease;
+    text-decoration: none;
+    border: 1px solid var(--btn_full_border-clr);
+}
+
+.notification a.btn-full {
+    color: var(--btn_full_clr) !important;
+    text-decoration: none!important;
+    width: 152px
+}
+
+.btn-full:hover {
+    background-color: var(--btn_full__hover_bg);
+}
+
+.btn-full.disabled, .btn-full:disabled {
+    width: auto;
+    border-color: var(--btn_full__disabled_border-clr);
+    background-color: var(--btn_full__disabled_bg);
+    color: var(--btn_full__disabled_clr);
+}
+
+.btn--blue {
+    color: var(--secondary);
+}
+
+.btn--blue .icon {
+    fill: currentColor
+}
+
+.btn-border {
+    min-width: 152px;
+    height: 40px;
+    border: 1px solid var(--btn_border__border-clr);
+    color: var(--btn_border__clr);
+    padding: 0
+}
+
+.btn--blue-border {
+    width: auto;
+    padding: 0 16px;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    height: 48px;
+    border: 1px solid var(--btn_blue_border__border-clr);
+    color: var(--btn_blue_border__clr);
+    font-weight: 600;
+    background-color: var(--btn_blue_border__bg);
+}
+
+.btn--blue-border:hover {
+    border-color: var(--btn_blue_border__hover_bg);
+    color: var(--btn_blue_border__hover_clr);
+    background-color: var(--btn_blue_border__hover_bg);
+}
+
+[ripple] {
+    position: relative;
+    overflow: hidden
+}
+
+[ripple]::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10
+}
+
+[ripple] .ripple--container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0
+}
+
+[ripple] .ripple--container span {
+    -ms-transform: scale(0);
+    transform: scale(0);
+    border-radius: 100%;
+    position: absolute;
+    opacity: .23;
+    background-color: var(--surface);
+    animation: ripple .5s
+}
+
+.btn--blue-border .ripple--container span, .btn-border .ripple--container span {
+    --ripple_blue_span__bg: var(--gray-2); /* deprecation fallback */
+    --ripple_blue_span__bg: color-mix(in srgb, var(--gray-2) 95%, var(--white-1));
+    opacity: 1
+}
+
+@keyframes ripple {
+    to {
+        opacity: 0;
+        transform: scale(2)
+    }
+}
+
+@media (max-width:900px) {
+    .btn--blue-border, .btn-full {
+        height: 32px!important
+    }
+}
+.btn-toggler {
+    display: none
+}
+
+.btn-toggler.is-opened {
+    -ms-transform: scaleY(-1);
+    transform: scaleY(-1)
+}
+
+.btn-toggler .icon {
+    width: 10px!important;
+    height: 10px!important
+}
+
+.btn-refresh {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -40px;
+    margin: auto
+}
+
+.btn-refresh .icon {
+    fill: var(--gray-2);
+    font-size: 16px
+}
+.btn-action {
+    padding: 0
+}
+
+.btn-action .icon {
+    fill: var(--gray-2);
+    font-size: 16px
+}
+.btn-border:hover {
+    transition: all var(--transition-time-pri) ease;
+    background: var(--btn_border__hover-bg);
+    color: var(--btn_border__hover-clr);
+    fill: var(--btn_border__hover-fill);
+    border-color: var(--btn_border__hover-border-clr);
+}
+.tickets__mobile_head .btn {
+    transition: all var(--transition-time-pri) ease;
+}

@@ -391,6 +391,11 @@ class OAuthIMAP {
         $this->writeCommannd("A" . $this->tagCounter, "STATUS " . $this->escapeString($folder) . " (UNSEEN)");
         $response = $this->readResponse("A" . $this->tagCounter);
 
+        if ( ! isset($response[0][1])) {
+            $this->errors[] = $response[0][2];
+            return false;
+        }
+
         $line = $response[0][1];
         $splitMessage = explode("(", $line);
         $splitMessage[1] = str_replace("UNSEEN ", "", $splitMessage[1]);

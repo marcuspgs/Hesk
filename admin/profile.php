@@ -397,11 +397,12 @@ function update_profile() {
     $hesk_error_buffer = '';
     $errors = array();
 
-	$_SESSION['new']['name']  = hesk_input( hesk_POST('name') );
+	$_SESSION['new']['name'] = hesk_input( hesk_POST('name') );
 	if (!$_SESSION['new']['name']) {
         $hesk_error_buffer .= '<li>' . $hesklang['enter_your_name'] . '</li>';
         $errors[] = 'name';
     }
+
 	$_SESSION['new']['email'] = hesk_validateEmail( hesk_POST('email'), 'ERR', 0);
 	if (!$_SESSION['new']['email']) {
         $hesk_error_buffer .= '<li>' . $hesklang['enter_valid_email'] . '</li>';
@@ -413,6 +414,10 @@ function update_profile() {
             $hesk_error_buffer .= '<li>' . sprintf($hesklang['profile_duplicate_email'], $_SESSION['new']['email']) . '</li>';
             $errors[] = 'email';
         }
+    }
+
+    if ($hesk_settings['staff_nicknames']) {
+        $_SESSION['new']['nickname'] = hesk_input( hesk_POST('nickname') );
     }
 
 	$_SESSION['new']['signature'] = hesk_input( hesk_POST('signature') );
@@ -505,13 +510,21 @@ function update_profile() {
     }
     else
     {
+
+        if ($hesk_settings['staff_nicknames']) {
+            $nickname_sql = "`nickname`='".hesk_dbEscape($_SESSION['new']['nickname'])."',";
+        } else {
+            $nickname_sql = '';
+        }
+
 		/* Update database */
 		hesk_dbQuery(
 		"UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` SET
 		`name`='".hesk_dbEscape($_SESSION['new']['name'])."',
 		`email`='".hesk_dbEscape($_SESSION['new']['email'])."',
 		`signature`='".hesk_dbEscape($_SESSION['new']['signature'])."',
-		$sql_username
+        {$sql_username}
+        {$nickname_sql}
 		`afterreply`='".($_SESSION['new']['afterreply'])."' ,
 		".($hesk_settings['time_worked'] ? "`autostart`='".($_SESSION['new']['autostart'])."'," : '')."
 		`autoreload`='".($_SESSION['new']['autoreload'])."' ,

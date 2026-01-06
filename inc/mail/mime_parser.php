@@ -2,7 +2,7 @@
 /*
  * mime_parser.php
  *
- * @(#) $Id: mime_parser.php,v 1.96 2021/06/06 10:51:03 mlemos Exp $
+ * @(#) $Id: mime_parser.php,v 1.99 2024/11/03 17:06:57 mlemos Exp $
  *
  */
 
@@ -30,7 +30,7 @@ define('MIME_ADDRESS_FIRST',            2);
 
 	<package>net.manuellemos.mimeparser</package>
 
-	<version>@(#) $Id: mime_parser.php,v 1.96 2021/06/06 10:51:03 mlemos Exp $</version>
+	<version>@(#) $Id: mime_parser.php,v 1.99 2024/11/03 17:06:57 mlemos Exp $</version>
 	<copyright>Copyright (C) Manuel Lemos 2006 - 2020</copyright>
 	<title>MIME parser</title>
 	<author>Manuel Lemos</author>
@@ -460,21 +460,38 @@ class mime_parser_class
 		{
 			$parameter = trim(strtolower($this->Tokenize($p, '=')));
 			$remaining = trim($this->Tokenize(''));
+			$is_quoted = false;
 			if(strlen($remaining)
-			&& !strcmp($remaining[0], '"')
-			&& (GetType($quote = strpos($remaining, '"', 1)) == 'integer'))
+			&& !strcmp($remaining[0], '"'))
 			{
-				$value = substr($remaining, 1, $quote - 1);
-				$p = trim(substr($remaining, $quote + 1));
-				if(strlen($p) > 0
-				&& !strcmp($p[0], ';'))
-					$p = substr($p, 1);
+				for($position = 1; $position < strlen($remaining);)
+				{
+					if(GetType($quote = strpos($remaining, '"', $position)) !== 'integer')
+						break;
+					if($quote === 2
+					|| $remaining[$quote - 1] !== '\\')
+					{
+						$is_quoted = true;
+						break;
+					}
+					$position = $quote + 1;
+				}
+				if($is_quoted)
+				{
+					$value = substr($remaining, 1, $quote - 1);
+					$p = trim(substr($remaining, $quote + 1));
+					if(strlen($p) > 0
+					&& !strcmp($p[0], ';'))
+						$p = substr($p, 1);
+				}
 			}
-			else
+			if(!$is_quoted)
 			{
 				$value = trim($this->Tokenize($remaining, ';'));
 				$p = trim($this->Tokenize(''));
 			}
+			if(strpos($value, '\\') !== 0)
+				$value = preg_replace('/(\\\\)(.)/', '\\2', $value);
 			if(($l=strlen($parameter))
 			&& !strcmp($parameter[$l - 1],'*'))
 			{
@@ -1421,6 +1438,8 @@ class mime_parser_class
 					$data = @fread($this->file, $this->message_buffer_length);
 					if(GetType($data)!='string')
 						return($this->SetPHPError('could not read the message file'));
+					if(substr($data,0,3)==chr(hexdec('EF')).chr(hexdec('BB')).chr(hexdec('BF')))
+						$data = substr($data,3);
 					while(!($end_of_data = feof($this->file))
 					&& substr($data, -1) === "\r")
 					{
@@ -2281,59 +2300,74 @@ class mime_parser_class
 					case 'report':
 						if(IsSet($parameters['report-type']))
 						{
-							switch($parameters['report-type'])
+							$report_type = $parameters['report-type'];
+						}
+						else
+						{
+							$report_type = null;
+							for($p = 1; $p < $lp; ++$p)
 							{
-								case 'delivery-status':
-									for($p = 1; $p < $lp; ++$p)
+								switch($parts[$p]['Type'])
+								{
+									case 'delivery-status':
+									case 'feedback-report':
+										$report_type = $parts[$p]['Type'];
+										break 2;
+								}
+							}
+							if(!IsSet($report_type))
+								return($this->SetError('this '.$content_type.' message is not well formed because it does not define the report type of a multipart report section'));
+						}
+						switch($report_type)
+						{
+							case 'delivery-status':
+								for($p = 1; $p < $lp; ++$p)
+								{
+									if(!strcmp($parts[$p]['Type'], $report_type))
 									{
-										if(!strcmp($parts[$p]['Type'], $parameters['report-type']))
-										{
-											$results = $parts[$p];
-											break;
-										}
-									}
-									if(!$this->ReadMessageBody($parts[0], $body, 'Data'))
-										return(0);
-									if(strlen($body))
-										$results['Response'] = $body;
-									break;
-								case 'feedback-report':
-									$body_part = $results = null;
-									for($p = 1; $p < $lp; ++$p)
-									{
-										if(!strcmp($parts[$p]['Type'], $parameters['report-type']))
-										{
-											$results = $parts[$p];
-											UnSet($results['Data']);
-										}
-										elseif(!strcmp($parts[$p]['Type'], 'message'))
-											$body_part = $p;
-									}
-									if(!IsSet($results))
-									{
-										$this->SetErrorWithContact('the report of type '.$parameters['report-type'].' does not contain the report details part');
-										$results['Response'] = $this->error;
-										$this->error = '';
+										$results = $parts[$p];
 										break;
 									}
-									if(IsSet($body_part))
+								}
+								if(!$this->ReadMessageBody($parts[0], $body, 'Data'))
+									return(0);
+								if(strlen($body))
+									$results['Response'] = $body;
+								break;
+							case 'feedback-report':
+								$body_part = $results = null;
+								for($p = 1; $p < $lp; ++$p)
+								{
+									if(!strcmp($parts[$p]['Type'], $report_type))
 									{
-										if(!$this->ReadMessageBody($parts[$body_part], $body, 'Data'))
-											return false;
-										if(strlen($body))
-											$results['Response'] = $body;
+										$results = $parts[$p];
+										UnSet($results['Data']);
 									}
-									break;
-								default:
-									$this->SetErrorWithContact('the report type is '.$parameters['report-type'].' is not yet supported');
+									elseif(!strcmp($parts[$p]['Type'], 'message'))
+										$body_part = $p;
+								}
+								if(!IsSet($results))
+								{
+									$this->SetErrorWithContact('the report of type '.$report_type.' does not contain the report details part');
 									$results['Response'] = $this->error;
 									$this->error = '';
 									break;
-							}
-							$results['Type'] = $parameters['report-type'];
+								}
+								if(IsSet($body_part))
+								{
+									if(!$this->ReadMessageBody($parts[$body_part], $body, 'Data'))
+										return false;
+									if(strlen($body))
+										$results['Response'] = $body;
+								}
+								break;
+							default:
+								$this->SetErrorWithContact('the report type is '.$report_type.' is not yet supported');
+								$results['Response'] = $this->error;
+								$this->error = '';
+								break;
 						}
-						else
-							return($this->SetError('this '.$content_type.' message is not well formed because it does not define the report type'));
+						$results['Type'] = $report_type;
 						break;
 
 					case 'signed':

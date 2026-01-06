@@ -40,9 +40,8 @@ hesk_checkPermission('can_man_settings');
 require_once(HESK_PATH . 'inc/custom_fields.inc.php');
 
 // Test languages function
-if (isset($_GET['test_languages']))
-{
-	hesk_testLanguage(0);
+if (isset($_GET['test_languages'])) {
+    hesk_testLanguage(0);
 } elseif (isset($_GET['test_themes'])) {
     hesk_testTheme(0);
 }
@@ -322,7 +321,7 @@ hesk_handle_messages();
                     </label>
                 </div>
             </section>
-            <section class="settings__form_block">
+            <section class="settings__form_block is-before-save-button">
                 <h3><?php echo $hesklang['db']; ?></h3>
                 <div class="form-group">
                     <label>
@@ -415,7 +414,10 @@ hesk_handle_messages();
                 </a>
 
                 <?php if (!$enable_save_settings): ?>
-                    <div class="error"><?php echo $hesklang['e_save_settings']; ?></div>
+                    <p>&nbsp;</p>
+                    <div role="alert" class="notification red">
+                        <?php echo $hesklang['e_save_settings']; ?>
+                    </div>
                 <?php endif; ?>
             </div>
             <!-- START MYSQL TEST -->
@@ -646,12 +648,20 @@ function hesk_testTheme($return_options = 1) {
 }
 
 
+
+
 function hesk_testLanguage($return_options = 0)
 {
 	global $hesk_settings, $hesklang;
 
-	/* Get a list of valid emails */
-    include_once(HESK_PATH . 'inc/email_functions.inc.php');
+    // Get a list of valid emails; demo mode needs a trick
+    if ( defined('HESK_DEMO') ) {
+        require(HESK_PATH . 'hesk_settings.inc.php');
+        include_once(HESK_PATH . 'inc/email_functions.inc.php');
+        require(HESK_PATH . 'inc/admin_settings_demo.inc.php');
+    } else {
+        include_once(HESK_PATH . 'inc/email_functions.inc.php');
+    }
     $valid_emails = array_keys( hesk_validEmails() );
 
 	$dir = HESK_PATH . 'language/';
@@ -712,7 +722,7 @@ function hesk_testLanguage($return_options = 0)
 	            }
 
                 /* Check if language file is for current version */
-                if (strpos($tmp,'$hesklang[\'email_authentication_method\']') === false)
+                if (strpos($tmp,'$hesklang[\'purge_cache_done\']') === false)
 	            {
 	            	$err .= "              |---->  WRONG VERSION (not ".$hesk_settings['hesk_version'].")\n";
 	            }

@@ -28,6 +28,7 @@ require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/email_functions.inc.php');
 require(HESK_PATH . 'inc/setup_functions.inc.php');
 require(HESK_PATH . 'inc/oauth_functions.inc.php');
+require(HESK_PATH . 'inc/theme_variables.inc.php');
 hesk_load_database_functions();
 
 hesk_session_start();
@@ -41,14 +42,14 @@ hesk_checkPermission('can_man_settings');
 hesk_token_check('POST');
 
 $section = hesk_input(hesk_POST('section'));
-if (!in_array($section, array('GENERAL', 'HELP_DESK', 'KNOWLEDGEBASE', 'EMAIL', 'TICKET_LIST', 'MISC'))) {
+if (!in_array($section, array('GENERAL', 'HELP_DESK', 'KNOWLEDGEBASE', 'EMAIL', 'TICKET_LIST', 'MISC', 'THEME'))) {
     hesk_process_messages($hesklang['err_no_settings_section'], 'admin_settings_general.php');
 }
 
 // Demo mode
 if ( defined('HESK_DEMO') )
 {
-	hesk_process_messages($hesklang['sdemo'], 'admin_settings_' . strtolower($section) . '.php');
+	hesk_process_messages($hesklang['sdemo'], 'admin_settings_' . strtolower($section) . '.php', 'NOTICE');
 }
 
 $set=array();
@@ -175,6 +176,11 @@ if ($section === 'GENERAL') {
 	$set['debug_mode']		= empty($_POST['s_debug_mode']) ? 0 : 1;
 	$set['short_link']		= empty($_POST['s_short_link']) ? 0 : 1;
     $set['submitting_wait'] = empty($_POST['s_submitting_wait']) ? 0 : 1;
+    $set['remember_custom_field_values'] = empty($_POST['s_remember_custom_field_values']) ? 0 : 1;
+    $set['disable_autofill_admin'] = empty($_POST['s_disable_autofill_admin']) ? 0 : 1;
+    $set['disable_autofill_customer'] = empty($_POST['s_disable_autofill_customer']) ? 0 : 1;
+    $set['extend_admin']    = empty($_POST['s_extend_admin']) ? 0 : 1;
+    $set['extend_customer'] = empty($_POST['s_extend_customer']) ? 0 : 1;
 	$set['select_cat']		= empty($_POST['s_select_cat']) ? 0 : 1;
 	$set['select_pri']		= empty($_POST['s_select_pri']) ? 0 : 1;
 	$set['cat_show_select'] = hesk_checkMinMax( intval( hesk_POST('s_cat_show_select') ) , 0, 999, 10);
@@ -184,6 +190,7 @@ if ($section === 'GENERAL') {
         $set['staff_ticket_formatting'] = 0;
     }
     $set['multi_eml']		= empty($_POST['s_multi_eml']) ? 0 : 1;
+    $set['staff_nicknames'] = empty($_POST['s_staff_nicknames']) ? 0 : 1;
 
     // Barcode
 	$set['barcode']['print'] = empty($_POST['s_barcode_print']) ? 0 : 1;
@@ -428,6 +435,9 @@ if ($section === 'GENERAL') {
         $set['smtp_oauth_provider'] = intval(hesk_POST('tmp_smtp_oauth_provider'));
 	}
 
+    // Sanity-check SMTP timeout to ensure it's greater than 5
+    $set['smtp_timeout']    = $set['smtp_timeout'] > 5 ? $set['smtp_timeout'] : 10;
+
 	/* --> Email piping */
 	$set['email_piping']	= empty($_POST['s_email_piping']) ? 0 : 1;
 
@@ -497,6 +507,8 @@ if ($section === 'GENERAL') {
 	$set['strip_quoted']  = empty($_POST['s_strip_quoted']) ? 0 : 1;
 	$set['eml_req_msg']   = empty($_POST['s_eml_req_msg']) ? 0 : 1;
 	$set['save_embedded'] = empty($_POST['s_save_embedded']) ? 0 : 1;
+    $set['email_include_to'] = empty($_POST['s_email_include_to']) ? 0 : 1;
+    $set['email_include_cc'] = empty($_POST['s_email_include_cc']) ? 0 : 1;
 
     /* --> Ignore emails */
     $set['pipe_block_noreply']   = empty($_POST['s_pipe_block_noreply']) ? 0 : 1;
@@ -607,7 +619,16 @@ if ($section === 'GENERAL') {
 		}
 	}
 
-// We need at least one of these: id, trackid, subject
+    $set['customer_ticket_list'] = array();
+    foreach ($hesk_settings['possible_customer_ticket_list'] as $key => $title)
+    {
+        if ( hesk_POST('c_tl_'.$key, 0) == 1)
+        {
+            $set['customer_ticket_list'][] = $key;
+        }
+    }
+
+    // We need at least one of these: id, trackid, subject
 	if ( ! in_array('id', $set['ticket_list']) && ! in_array('trackid', $set['ticket_list']) && ! in_array('subject', $set['ticket_list']) )
 	{
 		// Non of the required fields are there, add "trackid" as the first one
@@ -616,11 +637,19 @@ if ($section === 'GENERAL') {
 
 	$set['ticket_list'] = count($set['ticket_list']) ?  "'" . implode("','", $set['ticket_list']) . "'" : 'trackid';
 
+    if ( ! in_array('id', $set['customer_ticket_list']) && ! in_array('trackid', $set['customer_ticket_list']) && ! in_array('subject', $set['customer_ticket_list']) )
+    {
+        array_unshift($set['customer_ticket_list'], 'trackid');
+    }
+
+    $set['customer_ticket_list'] = count($set['customer_ticket_list']) ?  "'" . implode("','", $set['customer_ticket_list']) . "'" : 'trackid';
+
 	/* --> Other */
 	$set['submittedformat']	= hesk_checkMinMax( intval( hesk_POST('s_submittedformat') ) , 0, 4, 2);
 	$set['updatedformat']	= hesk_checkMinMax( intval( hesk_POST('s_updatedformat') ) , 0, 4, 2);
     $set['format_submitted'] = hesk_input( hesk_POST('s_format_submitted') ) or $set['format_submitted'] = 'Y-m-d H:i:s';
     $set['format_updated'] = hesk_input( hesk_POST('s_format_updated') ) or $set['format_updated'] = 'Y-m-d H:i:s';
+    $set['email_column'] = empty($_POST['s_email_column']) ? 0 : 1;
 } elseif ($section === 'MISC') {
 	/* --> Date & Time */
 	$set['timezone'] = hesk_input( hesk_POST('s_timezone') );
@@ -660,6 +689,66 @@ if ($section === 'GENERAL') {
 	$set['online']			= empty($_POST['s_online']) ? 0 : 1;
 	$set['online_min']		= hesk_checkMinMax( intval( hesk_POST('s_online_min') ) , 1, 999, 10);
 	$set['check_updates']	= empty($_POST['s_check_updates']) ? 0 : 1;
+} elseif ($section === 'THEME') {
+	/* --> Look & Feel */
+
+    $customer_theme_changed = false;
+    $valid_customer_themes           = hesk_getValidCustomerThemes();
+    $customer_theme         = hesk_input(hesk_POST('s_customer_theme'));
+    if (isset($customer_theme) && in_array($customer_theme, $valid_customer_themes)) {
+        $set['customer_theme'] = $customer_theme;
+        if ($customer_theme !== $hesk_settings['customer_theme']) {
+            // set flag that customer theme has changed, in which case we override any of their overwrites.
+            $customer_theme_changed = true;
+        }
+    } else {
+        hesk_error($hesklang['err_customer_theme']);
+    }
+
+    // By default has to be an empty array, even if no overrides set
+    $set['theme_overrides']  = array();
+    if ( ! empty($_POST['s_theme_overrides']) && ! is_array($_POST['s_theme_overrides']) )
+    {
+        // Read all overriden POSTed settings
+        $theme_overrides = json_decode($_POST['s_theme_overrides'], true);
+        if (is_array($theme_overrides)) {
+            foreach ($theme_overrides as $css_variable => $color) {
+                // Process and save each overridden color
+                // Check if setting exists
+                $color_setting = get_theme_color_setting($css_variable);
+                /*
+                 TODO just an example for @klemen of how you can easily test for fake/wrong data from settings page/console:
+                Just copy this in console:
+                themeOverrides["--primary"] = "#000000"; // you can find legit var names at theme_variables.inc.php. Using any other should throw an error.
+                updateThemeOverrides(); // IMPORTANT to also run after!
+                 */
+                if (!$color_setting) {
+                    // Tried to save some invalid/non-existent/unsupported variable
+                    error_log(sprintf($hesklang['invalid_theme_setting'], $css_variable));
+                    hesk_error(sprintf($hesklang['invalid_theme_setting'], $css_variable));
+                    continue;
+                }
+                $parsed_color = hesk_input($color);
+                if (!hesk_is_valid_color_hex($parsed_color)) {
+                    // Tried to save an invalid HEX color value
+                    error_log(sprintf($hesklang['invalid_hex_color'], $parsed_color, $css_variable));
+                    hesk_error(sprintf($hesklang['invalid_hex_color'], $parsed_color, $css_variable));
+                    continue;
+                }
+
+                // Check if setting override is a valid HTML color ( hex format?)
+                // Store these into a theme_overridess array
+                $set['theme_overrides'][$css_variable] = $parsed_color;
+            }
+        }
+    }
+
+    /*// TODO new change - we actually do NOT remove overrides, anymore, but just show a note to user that they might want to reset them
+    // TODO leaving here for now, in case we change our mind still
+     * if ($customer_theme_changed) {
+        // if customer theme has changed, let's reset the theme overrides, as in most cases likely it would be expected by users?
+        $set['theme_overrides'] = array();
+    }*/
 }
 
 $set['hesk_version'] = $hesk_settings['hesk_version'];
@@ -730,10 +819,16 @@ $hesk_settings[\'list_users\']=' . hesk_getProperty($set, 'list_users') . ';
 $hesk_settings[\'debug_mode\']=' . hesk_getProperty($set, 'debug_mode') . ';
 $hesk_settings[\'short_link\']=' . hesk_getProperty($set, 'short_link') . ';
 $hesk_settings[\'submitting_wait\']=' . hesk_getProperty($set, 'submitting_wait') . ';
+$hesk_settings[\'remember_custom_field_values\']=' . hesk_getProperty($set, 'remember_custom_field_values') . ';
+$hesk_settings[\'disable_autofill_admin\']=' . hesk_getProperty($set, 'disable_autofill_admin') . ';
+$hesk_settings[\'disable_autofill_customer\']=' . hesk_getProperty($set, 'disable_autofill_customer') . ';
+$hesk_settings[\'extend_admin\']=' . hesk_getProperty($set, 'extend_admin') . ';
+$hesk_settings[\'extend_customer\']=' . hesk_getProperty($set, 'extend_customer') . ';
 $hesk_settings[\'select_cat\']=' . hesk_getProperty($set, 'select_cat') . ';
 $hesk_settings[\'select_pri\']=' . hesk_getProperty($set, 'select_pri') . ';
 $hesk_settings[\'cat_show_select\']=' . hesk_getProperty($set, 'cat_show_select') . ';
 $hesk_settings[\'staff_ticket_formatting\']=' . hesk_getProperty($set, 'staff_ticket_formatting') . ';
+$hesk_settings[\'staff_nicknames\']=' . hesk_getProperty($set, 'staff_nicknames') . ';
 
 // --> Barcode
 $hesk_settings[\'barcode\']=array(
@@ -866,6 +961,8 @@ $hesk_settings[\'pop3_oauth_provider\']=' . hesk_getProperty($set, 'pop3_oauth_p
 $hesk_settings[\'strip_quoted\']=' . hesk_getProperty($set, 'strip_quoted') . ';
 $hesk_settings[\'eml_req_msg\']=' . hesk_getProperty($set, 'eml_req_msg') . ';
 $hesk_settings[\'save_embedded\']=' . hesk_getProperty($set, 'save_embedded') . ';
+$hesk_settings[\'email_include_to\']=' . hesk_getProperty($set, 'email_include_to') . ';
+$hesk_settings[\'email_include_cc\']=' . hesk_getProperty($set, 'email_include_cc') . ';
 
 // --> Ignore emails
 $hesk_settings[\'pipe_block_noreply\']=' . hesk_getProperty($set, 'pipe_block_noreply') . ';
@@ -895,12 +992,14 @@ $hesk_settings[\'open_only\']=' . hesk_getProperty($set, 'open_only') . ';
 // ==> TICKET LIST
 
 $hesk_settings[\'ticket_list\']=array(' . hesk_getProperty($set, 'ticket_list') . ');
+$hesk_settings[\'customer_ticket_list\']=array(' . hesk_getProperty($set, 'customer_ticket_list') . ');
 
 // --> Other
 $hesk_settings[\'submittedformat\']=' . hesk_getProperty($set, 'submittedformat') . ';
 $hesk_settings[\'updatedformat\']=' . hesk_getProperty($set, 'updatedformat') . ';
 $hesk_settings[\'format_submitted\']=\'' . hesk_getProperty($set, 'format_submitted') . '\';
 $hesk_settings[\'format_updated\']=\'' . hesk_getProperty($set, 'format_updated') . '\';
+$hesk_settings[\'email_column\']=' . hesk_getProperty($set, 'email_column') . ';
 
 
 // ==> MISC
@@ -922,6 +1021,11 @@ $hesk_settings[\'submit_notice\']=' . hesk_getProperty($set, 'submit_notice') . 
 $hesk_settings[\'online\']=' . hesk_getProperty($set, 'online') . ';
 $hesk_settings[\'online_min\']=' . hesk_getProperty($set, 'online_min') . ';
 $hesk_settings[\'check_updates\']=' . hesk_getProperty($set, 'check_updates') . ';
+
+
+// ==> LOOK & FEEL
+$hesk_settings[\'customer_theme\']=\'' . hesk_getProperty($set, 'customer_theme') . '\';
+$hesk_settings[\'theme_overrides\']=array(' . hesk_getProperty($set, 'theme_overrides', true) . ');
 
 
 #############################
@@ -1176,6 +1280,23 @@ function hesk_getValidThemes() {
 
     return $valid_themes;
 }
+function hesk_getValidCustomerThemes() {
+    global $hesk_settings, $hesklang;
+
+    $path = HESK_PATH . 'theme/' . $hesk_settings['site_theme'] . '/customer/css/themes/';
+
+    $valid_themes = array('');
+
+    $themeCssFiles = glob($path.'*.css');
+    if (is_array($themeCssFiles)) {
+        foreach ($themeCssFiles as $file) {
+            $filename = pathinfo($file, PATHINFO_FILENAME); // Get filename without extension
+            $valid_themes[] = $filename;
+        }
+    }
+
+    return $valid_themes;
+}
 
 
 function hesk_formatUnits($size)
@@ -1197,14 +1318,35 @@ function hesk_formatUnits($size)
     return false;
 } // End hesk_formatBytes()
 
-function hesk_getProperty($set, $property) {
+function hesk_getProperty($set, $property, $returnAsArray = false) {
 	global $hesk_settings;
 
 	if (isset($set[$property])) {
+        if ($returnAsArray && is_array($set[$property])) {
+            $result = array();
+            foreach ($set[$property] as $key => $value) {
+                $result[] = "'" . addslashes($key) . "' => '" . addslashes($value) . "'";
+            }
+            if (count($result) === 0) {
+                return '';
+            }
+            return implode(', ', $result);
+        }
 		return $set[$property];
 	}
 
 	if (is_array($hesk_settings[$property])) {
+        if ($returnAsArray) {
+            if (count($hesk_settings[$property]) === 0) {
+                // For some settings, i.e. like theme_overrides, it is valid for the settings to have an empty array
+                return '';
+            }
+            $result = array();
+            foreach ($hesk_settings[$property] as $key => $value) {
+                $result[] = "'" . addslashes($key) . "' => '" . addslashes($value) . "'";
+            }
+            return implode(', ', $result);
+        }
 		return "'" . implode('\',\'', hesk_slashArray($hesk_settings[$property])) . "'";
 	}
 

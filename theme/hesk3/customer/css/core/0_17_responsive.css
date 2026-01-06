@@ -1,0 +1,116 @@
+/*
+Put any general responsive CSS overrides here.
+ Any module/component specifics responsive CSS can be also put in other files if it makes sense.
+*/
+
+/* ---------------
+ * BEGIN RESPONSIVE LAYOUT IMPROVEMENTS
+ * ---------------
+ *   These css changes below contains additional responsive improvements that override the above original CSS.
+ *   It's kept distinctly separate from above css, for easier decoupling and seeing what was specifically overridden from the original.
+*/
+
+@media screen and (max-width: 900px) {
+    .btn--blue-border, .btn-full { /* don't make them lower, as it looks better if they remain high*/
+        height: 40px !important;
+    }
+    .table-wrap {
+        padding: 5px;
+    }
+    .table-wrap .table {
+        font-size: 12px;
+    }
+    .table-wrap .table tbody td,
+    .table-wrap .table thead th {
+        padding: 7px 5px;
+    }
+    .table-wrap .table tbody td.table__first_th,
+    .table-wrap .table thead th.table__first_th {
+        padding: 7px 5px 7px 10px;
+    }
+
+    .cust-help .contr {
+        padding: 0 10px;
+    }
+
+    .search__form .form-group {
+        flex-wrap: wrap;
+    }
+    .search__form .search__submit {
+        bottom: auto;
+        margin: 0;
+        top: 11px;
+    }
+    #kb_search {
+        flex: 1;
+        width: auto;
+    }
+    #search-button {
+        height: inherit !important;
+        flex: 1;
+    }
+
+    /* MFA */
+    #formNeedValidation div[data-step] {
+        margin: 10px 0;
+    }
+    .step-bar {
+        margin: 0 -10px;
+        padding: 0 10px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .cust-help .contr {
+        padding: 0 5px;
+    }
+
+    #search-button {
+        height: 40px !important;
+        margin-left: 0;
+        margin-top: 10px;
+        flex-basis: 100%;
+    }
+    /* START knoweledgebase */
+    .preview {
+        padding: 20px 10px 10px 10px;
+    }
+    .topics {
+        padding: 15px 10px 0 10px; /* 0 bottom padding is compensated by bottom margin of categories */
+    }
+    .topics__list a {
+        margin: 10px 0; /* extra touch space */
+    }
+
+    /* table tickets page */
+    .ticket__body_block {
+        padding: 10px;
+    }
+    .form-submit-ticket {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #kb_search {
+        flex-basis: 100%;
+    }
+    form[action="my_tickets.php"] #kb_search {
+        /* we only want bottom margin on my_tickets search, not on others */
+        margin-bottom: 10px;
+    }
+    .search__form .form-group .selectize-control .selectize-input {
+        height: 40px !important;
+    }
+    #search-button {
+        margin-left: 10px;
+        margin-top: 0;
+        height: 40px !important;
+        flex-basis: auto;
+    }
+}
+
+/* ---------------
+ * END RESPONSIVE LAYOUT IMPROVEMENTS
+ * ---------------
+*/

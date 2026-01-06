@@ -1,0 +1,11 @@
+/*
+Apply any theme variable overwrites that were set via admin theme settings.
+Note: This file is a placeholder, it will be automatically/dynamically overwritten from the theme settings.
+This will apply to ANY/ALL themes loaded, and before any of the core files are loaded.
+*/
+/* test overwrite:
+:root {
+    --link__pri-clr: red;
+    --main-background: yellow;
+    --font__pri-clr: black;
+}*/

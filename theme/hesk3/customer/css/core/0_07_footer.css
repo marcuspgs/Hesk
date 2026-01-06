@@ -1,0 +1,16 @@
+/*
+Put any general footer related CSS here.
+*/
+.footer a {
+    text-decoration: underline!important;
+    color: var(--footer__link-clr);
+}
+
+.footer a:hover {
+    text-decoration: none!important
+}
+.footer {
+    margin-top: 16px;
+    padding: 10px 16px 16px;
+    color: var(--font__pri-clr);
+}

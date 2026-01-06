@@ -71,7 +71,9 @@ class PJ_SecurityImage
 				die("GD was not compiled with JPEG or PNG support");
 			}
 
-            imagedestroy($im);
+            if (PHP_VERSION_ID < 80500) {
+                imagedestroy($im);
+            }
         } // End printImage
 
         function get()

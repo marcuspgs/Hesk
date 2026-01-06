@@ -143,12 +143,12 @@ if ( isset($_POST['action-type']) && $_POST['action-type'] == 'assi')
 		hesk_process_messages($hesklang['assign_1'],$referer,'SUCCESS');
 	}
 
-	$res = hesk_dbQuery("SELECT `id`,`user`,`name`,`email`,`isadmin`,`categories`,`notify_assigned` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$owner}' LIMIT 1");
+	$res = hesk_dbQuery("SELECT `id`,`user`,`name`,`email`,`isadmin`,`categories`,`notify_assigned` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$owner}' AND `active` = 1 LIMIT 1");
 	$owner_data = hesk_dbFetchAssoc($res);
 
 	if ( ! $owner_data['isadmin'])
 	{
-		$owner_data['categories']=explode(',',$owner_data['categories']);
+		$owner_data['categories'] = hesk_getCategoriesForUser($owner);
 	}
 
 	require(HESK_PATH . 'inc/email_functions.inc.php');
@@ -209,7 +209,7 @@ if ( isset($_POST['action-type']) && $_POST['action-type'] == 'assi')
             'due_date'      => hesk_format_due_date($ticket['due_date']),
             'id'			=> $ticket['id'],
             'time_worked'   => $ticket['time_worked'],
-            'last_reply_by' => hesk_getReplierName($ticket),
+            'last_reply_by' => hesk_getReplierNameArray($ticket),
             );
 
             // 2. Add custom fields to the array
@@ -391,6 +391,10 @@ elseif ($_POST['a']=='export')
     /* A security check */
     hesk_token_check('POST');
 
+    if (defined('HESK_DEMO')) {
+        hesk_process_messages($hesklang['ddemo'], 'admin_main.php', 'NOTICE');
+    }
+
     $ids_to_export = array();
 
     foreach ($_POST['id'] as $this_id)
@@ -437,6 +441,10 @@ elseif ($_POST['a']=='anonymize')
 
     /* A security check */
     hesk_token_check('POST');
+
+    if (defined('HESK_DEMO')) {
+        hesk_process_messages($hesklang['ddemo'], 'admin_main.php', 'NOTICE');
+    }    
 
     require(HESK_PATH . 'inc/privacy_functions.inc.php');
 
@@ -539,7 +547,7 @@ elseif ($_POST['a']=='print')
         // All good, continue...
         $customers = hesk_get_customers_for_ticket($ticket['id']);
 
-// Demo mode
+        // Demo mode
         if ( defined('HESK_DEMO') )
         {
             foreach ($customers as $customer) {
@@ -589,6 +597,82 @@ elseif ($_POST['a']=='print')
 	flush();
 
     exit();
+}
+/* Linked Selected Tickets */
+elseif ($_POST['a'] == 'link_tickets') {
+
+    // Check permissions for this feature
+    hesk_checkPermission('can_link_tickets');
+
+    // A security check
+    hesk_token_check('POST');
+
+    $ticket_ids = $_POST['id'];
+
+    // Need at least two tickets to link
+    if (count($ticket_ids) < 2) {
+        hesk_process_messages($hesklang['at_least_two_more'], $referer, 'NOTICE');
+    }
+
+    $link_created = 0;
+    $link_already_exists = 0;
+
+    // Loop through all combinations and insert links
+    foreach ($ticket_ids as $ticket_id) {
+        if (is_array($ticket_id)) {
+            continue;
+        }
+
+        if (count($ticket_ids) < 2) {
+            continue;
+        }
+
+        $ticket_id = intval($ticket_id) or hesk_error($hesklang['id_not_valid']);
+
+        // Get ticket tracking ID for the log
+        $result = hesk_dbQuery("SELECT `trackid` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`={$ticket_id}");
+        $ticket_track_id = hesk_dbResult($result) or hesk_error($hesklang['id_not_valid']);
+
+        foreach ($ticket_ids as $linked_ticket_id) {
+            if (is_array($linked_ticket_id)) {
+                continue;
+            }
+
+            $linked_ticket_id = intval($linked_ticket_id) or hesk_error($hesklang['id_not_valid']);
+
+            // Prevent self linking
+            if ($ticket_id === $linked_ticket_id) {
+                continue;
+            }
+
+            // Check for linked data in table
+            $result = hesk_dbQuery("SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."linked_tickets` WHERE (`ticket_id1` = {$ticket_id} AND `ticket_id2` = {$linked_ticket_id}) OR (`ticket_id1` = {$linked_ticket_id} AND `ticket_id2` = {$ticket_id})");
+            $already_linked = hesk_dbResult($result);
+
+            if (empty($already_linked)) {
+                // Get linked ticket tracking ID for the log
+                $result = hesk_dbQuery("SELECT `trackid` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`={$linked_ticket_id}");
+                $linked_ticket_track_id = hesk_dbResult($result) or hesk_error($hesklang['id_not_valid']);
+
+                // Insert ticket relation into database
+                hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."linked_tickets` (`ticket_id1`, `ticket_id2`, `dt_created`) VALUES ('".hesk_dbEscape($ticket_id)."', '".hesk_dbEscape($linked_ticket_id)."',NOW())");
+
+                // Update insert history log
+                $link_ticket_log = sprintf($hesklang['link_history'], hesk_date(), $linked_ticket_track_id, addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');;
+                hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `history`=CONCAT(`history`,'".hesk_dbEscape($link_ticket_log)."') WHERE `id`='".intval($ticket_id)."'");
+
+                $link_created++;
+            } else {
+                $link_already_exists++;
+            }
+        }
+
+        // No need for duplicate checks with this $ticket_id, remove it
+        if (($key = array_search($ticket_id, $ticket_ids)) !== false) {
+            unset($ticket_ids[$key]);
+        }
+    }
+    hesk_process_messages(sprintf($hesklang['selected_link_success'], $link_created, $link_already_exists), $referer, 'SUCCESS');
 }
 /* JUST CLOSE */
 else
@@ -640,7 +724,7 @@ else
 
             $ticket['email'] = implode(';', $customer_emails);
             $ticket['name'] = implode(';', $customer_names);
-            $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+            $ticket['last_reply_by'] = hesk_getReplierNameArray($ticket);
 
 			$ticket = hesk_ticketToPlain($ticket, 1, 0);
 

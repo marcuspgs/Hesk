@@ -74,6 +74,11 @@ hesk_dbConnect();
 // Do we require logged-in customers to view the help desk?
 $customer = hesk_isCustomerLoggedIn($hesk_settings['customer_accounts'] && $hesk_settings['customer_accounts_required']);
 
+// Fix a bug before we find a better way to do it :)
+if ($customer === true) {
+    $customer = hesk_isCustomerLoggedIn();
+}
+
 $hesk_error_buffer = array();
 
 // Check anti-SPAM question
@@ -541,11 +546,16 @@ if ($hesk_settings['kb_enable'] && $hesk_settings['kb_recommendanswers'] && isse
 	$tmpvar['articles'] = implode(',', array_unique( array_map('intval', $_POST['suggested']) ) );
 }
 
-// All good now, continue with ticket creation
-$tmpvar['owner']   = 0;
-$tmpvar['history'] = sprintf($hesklang['thist15'], hesk_date(), $hesklang['customer']);
+// Log ticket submission in ticket history
+if ( ! empty($tmpvar['name'])) {
+    $customer_name = $tmpvar['name'];
+} else {
+    $customer_name = $hesklang['customer'];
+}
+$tmpvar['history'] = sprintf($hesklang['thist15'], hesk_date(), $customer_name);
 
 // Auto assign tickets if aplicable
+$tmpvar['owner'] = 0;
 $autoassign_owner = hesk_autoAssignTicket($tmpvar['category']);
 if ($autoassign_owner)
 {
@@ -640,6 +650,12 @@ hesk_cleanSessionVars('c_question');
 hesk_cleanSessionVars('c_attachments');
 hesk_cleanSessionVars('c_followers');
 hesk_cleanSessionVars('img_verified');
+
+if ( ! $hesk_settings['remember_custom_field_values']) {
+    foreach ($hesk_settings['custom_fields'] as $k=>$v) {
+        hesk_cleanSessionVars("c_$k");
+    }
+}
 
 $messages = hesk_get_messages();
 $user_context = hesk_isCustomerLoggedIn(false);

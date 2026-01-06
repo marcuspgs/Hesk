@@ -1,0 +1,1205 @@
+
+/* START tickets-related styling */
+/* TODO note that most of these seem to be admin only, but are also on customer. */
+.ticket__body {
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    margin-right: 24px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+}
+
+.ticket__body_block {
+    background-color: var(--ticket_body__bg);
+    margin-bottom: 24px;
+    border-radius: 2px;
+    box-shadow: var(--shadow_smaller) var(--shadow-1-10);
+    padding: 15px 24px 24px;
+    text-align: justify
+}
+
+.ticket__body_block.response {
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--ticket_response__bg);
+}
+
+.ticket__body_block h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.17;
+    letter-spacing: .12px;
+    color: var(--primary);
+    padding-bottom: 14px
+}
+
+.ticket__body_block h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.17;
+    letter-spacing: .12px;
+    color: var(--primary)
+}
+
+/* Note by Andraz: h1-h3 are the same size here, as they're different h1 for semantic reasons, but should display the same */
+.ticket:not(.ticket--article) .ticket__body_block h1,
+.ticket:not(.ticket--article) .ticket__body_block h2,
+.ticket__body_block h3 {
+    font-family: Lato, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22;
+    letter-spacing: .1px
+}
+
+.ticket__body_block p>a {
+    color: var(--secondary);
+}
+
+.ticket__body_block p>a:hover {
+    color: var(--primary) !important;
+}
+
+.ticket__body_block .block--head {
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 0;
+    -ms-flex-align: center;
+    align-items: center;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+}
+
+.ticket__body_block.original-message .block--head {
+    margin-top: 16px!important
+}
+
+.ticket__body_block .block--head .contact {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+}
+
+.ticket__body_block .block--head .contact.grid {
+    display: grid;
+    row-gap: 10px;
+}
+
+.ticket__body_block .block--head .contact.grid .requester-header {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+}
+
+.ticket__body_block .block--head .contact.grid .requester-header span {
+    vertical-align: middle;
+}
+
+.ticket__body_block .block--head .contact.grid .requester {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.ticket__body_block .block--head .contact.grid .cc-header {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: right;
+}
+
+.ticket__body_block .block--head .contact.grid .cc-header span {
+    vertical-align: middle;
+}
+
+.ticket__body_block .block--head .contact.grid .cc {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.ticket__body_block .block--head .contact>span {
+    color: var(--secondary);
+}
+
+.ticket__body_block .block--head .contact b {
+    margin: 0 4px;
+    font-weight: 700;
+    color: var(--gray-7); /* deprecation fallback */
+    color: color-mix(in srgb, var(--gray-7) 90%, var(--black-1));
+}
+
+.ticket__body_block .block--head .contact time {
+    margin: 0 4px
+}
+
+.ticket__body_block .block--head .contact .dropdown {
+    margin-left: 8px;
+    cursor: pointer;
+    position: static
+}
+
+.ticket__body_block .block--head .contact .dropdown.customer {
+    margin-left: 8px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: var(--shadow_smaller) rgb(38 40 42 / 30%);
+}
+
+.ticket__body_block .block--head .contact .dropdown.customer label {
+    padding: 5px;
+}
+
+.ticket__body_block .block--head .contact .dropdown span {
+    font-weight: 700
+}
+
+.ticket__body_block .block--head .contact .dropdown .dropdown-list li {
+    padding: 0 12px;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px
+}
+
+.ticket__body_block .block--head .contact .dropdown .dropdown-list li:nth-child(1), .ticket__body_block .block--head .contact .dropdown .dropdown-list li:nth-child(2) {
+    background-color: transparent!important;
+    cursor: auto
+}
+
+.ticket__body_block .block--head .contact .dropdown .dropdown-list li .title {
+    color: var(--gray-2);
+    margin-right: 8px;
+    min-width: 36px
+}
+
+.ticket__body_block .block--head .contact .dropdown .dropdown-list li .value {
+    font-weight: 400;
+    color: var(--gray-7);
+}
+
+.ticket__body_block .block--head .contact .dropdown .dropdown-list li a {
+    color: var(--theme-color-dark-2) !important;
+}
+
+.ticket__body_block .block--head .contact .icon-chevron-down {
+    width: 8px;
+    height: 8px
+}
+
+.ticket__body_block .block--head time {
+    margin: 0 10px;
+    color: var(--font__sec-clr);
+}
+
+.ticket__body_block .block--head .more {
+    margin-left: auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: default;
+    margin-right: -24px;
+    padding-right: 24px
+}
+
+.ticket__body_block .block--head .more span {
+    color: var(--gray-2);
+}
+
+.ticket__body_block .block--head .more .icon-chevron-down {
+    fill: var(--gray-2);
+    width: 8px;
+    height: 8px
+}
+
+.ticket__body_block .block--head .more a {
+    color: var(--gray-2);
+}
+
+.ticket__body_block .block--head .more a svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-2);
+    margin-right: 10px;
+    vertical-align: text-bottom
+}
+
+.ticket__body_block .block--head .more a:hover {
+    color: var(--theme-color-dark-2) !important;
+}
+
+.ticket__body_block .block--head .more a:hover svg {
+    fill: var(--theme-color-dark-2);
+}
+
+.ticket__body_block .block--head .more label:hover>span {
+    color: var(--theme-color-dark-2);
+}
+
+.ticket__body_block .block--head .more label:hover>svg {
+    fill: var(--theme-color-dark-2);
+}
+
+.ticket__body_block .block--head .more .dropdown-list a {
+    color: var(--theme-color-dark-2);
+    -ms-flex-pack: normal;
+    justify-content: normal
+}
+
+.ticket__body_block .block--description {
+    margin: 16px 0;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.71;
+    letter-spacing: .1px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+}
+
+.ticket__body_block .block--description p, .ticket__body_block .block--description ul {
+    margin: 0 0 28px
+}
+
+.ticket__body_block .block--description p:last-child, .ticket__body_block .block--description ul:last-child {
+    margin: 0
+}
+
+.ticket__body_block .block--description ul.list {
+    list-style-type: disc;
+    padding-left: 30px
+}
+
+.ticket__body_block .block--uploads {
+    color: var(--gray-3);
+    margin-top: 26px;
+    display: block;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px
+}
+
+.ticket__body_block .block--uploads+.block--uploads {
+    margin-top: 16px
+}
+
+.ticket__body_block .block--uploads .icon-attach {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-3);
+    margin: 0 3px;
+    vertical-align: text-bottom
+}
+
+.ticket__body_block .block--uploads a {
+    color: var(--secondary);
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__body_block .block--uploads a:hover {
+    color: var(--primary);
+}
+
+.ticket__body_block .block--suggested {
+    margin-top: 32px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    -ms-flex-align: baseline;
+    align-items: baseline
+}
+
+.ticket__body_block .block--suggested b {
+    font-weight: 700;
+    margin-bottom: 8px
+}
+
+.ticket__body_block .block--suggested a {
+    color: var(--secondary);
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__body_block .block--suggested a:hover {
+    color: var(--primary) !important;
+}
+
+.ticket__body_block .block--timer {
+    height: 48px;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.ticket__body_block .block--timer span {
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--gray-2);
+}
+
+.ticket__body_block .block--timer b {
+    margin: 0 26px 0 8px;
+    font-weight: 700
+}
+
+.ticket__body_block .block--timer a {
+    width: 32px;
+    height: 32px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-right: 8px
+}
+
+.ticket__body_block .block--timer a svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-2);
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__body_block .block--timer a:hover svg {
+    fill: var(--primary);
+}
+
+.ticket__body_block .block--message {
+    margin-top: 16px;
+    height: 119px;
+    border-radius: 2px;
+    border: solid 1px var(--white-8);
+    background-color: var(--surface);
+    position: relative;
+    overflow: hidden
+}
+
+.ticket__body_block .block--message .scroll-textarea {
+    width: 100%;
+    height: 119px
+}
+
+.ticket__body_block .block--message textarea {
+    outline: 0;
+    border: none;
+    width: 100%;
+    min-height: 100%;
+    background: 0 0;
+    padding: 8px 12px;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.71;
+    letter-spacing: .1px;
+    resize: none
+}
+
+.ticket__body_block .block--message .placeholder {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    z-index: 0;
+    letter-spacing: .1px;
+    color: var(--gray-2);
+}
+
+.ticket__body_block .block--message .placeholder a {
+    color: var(--secondary);
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__body_block .block--message .placeholder a:hover {
+    color: var(--primary) !important;
+}
+
+.ticket__body_block .block--attach-list {
+    margin-top: 16px
+}
+
+.ticket__body_block .block--attach-list div {
+    width: 284px;
+    height: 32px;
+    padding-left: 8px;
+    border-radius: 2px;
+    background-color: var(--white-2);
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    position: relative;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 4px
+}
+
+.ticket__body_block .block--attach-list div i {
+    width: 32px;
+    height: 32px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer
+}
+
+.ticket__body_block .block--attach-list div i svg {
+    width: 7px;
+    height: 7px;
+    fill: var(--white-9);
+}
+
+.ticket__body_block .block--attach-list div i:hover svg {
+    width: 7px;
+    height: 7px;
+    fill: var(--gray-2);
+}
+
+.ticket__body_block .block--checkboxs {
+    margin-top: 24px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    border-bottom: 1px solid var(--white-7);
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom {
+    margin-bottom: 16px;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    margin-right: 40px
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom .dropdown-select {
+    margin-left: 6px
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom .dropdown-select li, .ticket__body_block .block--checkboxs .checkbox-custom .dropdown-select>span {
+    color: var(--gray-2);
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom .dropdown-select svg {
+    fill: var(--gray-2);
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom label {
+    color: var(--gray-2);
+    transition: all var(--transition-speed) ease;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom input[type=checkbox]:checked+label {
+    color: var(--primary);
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom input[type=checkbox]:checked+label::before {
+    border-color: var(--primary);
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom input[type=checkbox]:checked+label svg {
+    fill: var(--primary);
+}
+
+.ticket__body_block .block--checkboxs .checkbox-custom.checked .dropdown-select li, .ticket__body_block .block--checkboxs .checkbox-custom.checked .dropdown-select>span {
+    color: var(--primary);
+}
+
+.ticket__body_block .block--submit {
+    margin-top: 24px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.ticket__body_block .block--submit button {
+    margin-right: 24px
+}
+
+.ticket__body_block .block--submit .submit-us {
+    margin-left: auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--secondary);
+}
+
+.ticket__body_block .block--submit .submit-us span {
+    margin-left: 6px;
+    color: var(--secondary);
+}
+
+.ticket__body_block .block--submit .submit-us .icon-chevron-down {
+    width: 8px;
+    height: 8px;
+    margin-left: 4px;
+    fill: var(--secondary);
+}
+
+.ticket__body_block .block--submit .submit-us .dropdown-list {
+    left: calc(100% + 8px);
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
+
+.ticket__replies {
+    margin: -8px 0 16px
+}
+
+.ticket__replies .ticket__replies_link {
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--secondary);
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-left: 24px;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__replies .ticket__replies_link:hover {
+    color: var(--primary);
+}
+
+.ticket__replies .ticket__replies_link:hover .icon-chevron-down {
+    fill: var(--primary);
+}
+
+.ticket__replies .ticket__replies_link b {
+    font-weight: 700;
+    margin-left: 6px
+}
+
+.ticket__replies .ticket__replies_link .icon-chevron-down {
+    margin-left: 8px;
+    width: 8px;
+    height: 8px;
+    fill: var(--secondary);
+    transition: all var(--transition-speed) ease
+}
+
+.ticket__replies .ticket__replies_link.visible .icon-chevron-down {
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+.ticket__replies .ticket__replies_list {
+    padding-top: 16px;
+    display: none
+}
+
+.ticket__params {
+    width: 320px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+}
+
+.ticket__params .params--bar {
+    height: 48px;
+    border-radius: 2px;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding-left: 16px
+}
+
+.ticket__params .params--bar a {
+    width: 48px;
+    height: 48px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.ticket__params .params--bar a svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-2);
+}
+
+.ticket__params .params--bar a:hover svg {
+    fill: var(--primary);
+}
+
+.ticket__params .params--bar .dropdown {
+    width: 65px;
+    height: 48px;
+    box-sizing: content-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-left: 1px solid var(--white-7);
+}
+
+.ticket__params .params--bar .dropdown label {
+    width: 100%;
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.ticket__params .params--bar .dropdown label svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-2);
+    transition: all var(--transition-speed) ease;
+    margin: 0
+}
+
+.ticket__params .params--bar .dropdown:hover svg {
+    fill: var(--primary);
+}
+
+.ticket__params .params--bar .dropdown .dropdown-list li a {
+    -ms-flex-pack: start;
+    justify-content: flex-start
+}
+
+.ticket__params .params--bar .dropdown .dropdown-list li svg {
+    margin-right: 8px
+}
+
+.ticket__params .params--block {
+    border-radius: 2px;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+    margin-top: 16px
+}
+
+.ticket__params .params--block.params {
+    padding: 25px 16px
+}
+
+.ticket__params .params--block.params .title {
+    width: 135px
+}
+
+.ticket__params .params--block.params .icon-label {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px
+}
+
+.ticket__params .params--block.params [data-value=low] .icon-label {
+    fill: var(--gray-2);
+}
+
+.ticket__params .params--block.contacts .title, .ticket__params .params--block.details .title, .ticket__params .params--block.history .title {
+    width: 106px
+}
+
+.ticket__params .params--block .row {
+    display: -ms-flexbox;
+    display: flex;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    margin-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gray-2);
+}
+
+.ticket__params .params--block .row:last-child {
+    margin-bottom: 0
+}
+
+.ticket__params .params--block .row .title {
+    color: var(--font__sec-clr);
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+/* h2 same visual as h4, as it was reworked for SEO/semantic reasons */
+.ticket__params .params--block h2,
+.ticket__params .params--block h4 {
+    height: 40px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    margin: 0;
+    padding: 8px 16px 0
+}
+/* h2 same visual as h4, as it was reworked for SEO/semantic reasons */
+.ticket__params .params--block h2 .icon-chevron-down,
+.ticket__params .params--block h4 .icon-chevron-down {
+    width: 8px;
+    height: 8px;
+    fill: var(--white-9);
+}
+
+.ticket__params .params--block .accordion-body {
+    padding: 16px
+}
+
+@media screen and (max-width:768px) {
+    .ticket--article .ticket__body {
+        -ms-flex-order: 1;
+        order: 1
+    }
+    .ticket--article .ticket__params {
+        -ms-flex-order: 2;
+        order: 2;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-flow: column-reverse;
+        flex-flow: column-reverse
+    }
+    .ticket--article .ticket__params .params--block {
+        margin-top: 32px
+    }
+    .btn-toggler {
+        display: -ms-inline-flexbox;
+        display: inline-flex
+    }
+    .params--block.collapsed-on-xs .accordion-title>span {
+        display: none
+    }
+    .params--block.collapsed-on-xs .accordion-body {
+        display: none
+    }
+    .block--head>.d-flex {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap
+    }
+}
+
+.ticket__body_block .block--head {
+    margin-top: 0
+}
+
+@media screen and (max-width:768px) {
+    .ticket {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-pack: end;
+        justify-content: flex-end
+    }
+    .ticket__body {
+        width: 100%;
+        margin-right: 0;
+        -ms-flex-order: 2;
+        order: 2
+    }
+    .ticket__params {
+        width: 100%;
+        margin-bottom: 32px
+    }
+}
+
+.block--head {
+    -ms-flex-pack: justify;
+    justify-content: space-between
+}
+
+.block--head .contact {
+    margin-right: 16px
+}
+
+.block--head .contact span+* {
+    margin-left: 8px
+}
+
+.block--head .contact span+span {
+    color: var(--gray-7) !important;
+}
+.custom-field-title {
+    color: var(--gray-2);
+}
+
+.ticket--profile {
+    gap: 0 20px;
+}
+
+.ticket--profile .ticket__body_block {
+    flex-grow: 1;
+    width: 50%;
+}
+
+.ticket--profile .profile__control {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.ticket--profile .profile__info .subtext {
+    margin-top: 8px;
+}
+
+.ticket--profile .profile__control .profile__edit:not(:first-child) {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.ticket__body_block.naked {
+    box-shadow: none
+}
+
+.ticket__block-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    margin-top: 10px;
+    letter-spacing: .1px;
+    color: var(--secondary); /* deprecation fallback */
+    color: color-mix(in srgb, var(--secondary) 70%, var(--white-1));
+    padding-top: 5px;
+    border-top: 1px solid var(--gray-2);
+}
+
+.ticket__block-footer>* {
+    margin-left: 12px
+}
+
+.ticket {
+    display: -ms-flexbox;
+    display: flex
+}
+
+.ticket__params .params--block {
+    margin: 0
+}
+
+.ticket__params .params--block .accordion-title .link {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.ticket__params .params--block .accordion-title .link .icon {
+    fill: currentColor
+}
+
+.ticket__params .params--block+.params--block {
+    margin-top: 32px
+}
+
+.ticket__params .params--block .accordion-body {
+    padding-top: 0
+}
+
+.ticket__params .params--block .list {
+    color: var(--secondary);
+    padding-left: 10px
+}
+
+.ticket__params .params--block .list a {
+    line-height: 1.57;
+    letter-spacing: .1px
+}
+
+.ticket__params .params--block .list li {
+    position: relative;
+    margin-top: 16px
+}
+
+.ticket__params .params--block .list li:before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: .7em;
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: currentColor
+}
+
+.ticket__params .params--block .list li:first-child {
+    margin-top: 0
+}
+.form--reply {
+    margin: 24px 0
+}
+
+.form--reply textarea {
+    height: 200px!important
+}
+
+.form__submit {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.with-label {
+    cursor: default
+}
+/* END tickets-related styling */
+/* START submit support request */
+#cc-link {
+    min-width: 152px;
+    height: 40px;
+    background-color: var(--secondary);
+    color: var(--surface);
+    font-weight: 600;
+    transition: all var(--transition-time-pri) ease;
+    text-decoration: none;
+    border: 1px solid var(--primary);
+    width: max-content;
+
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+}
+#cc-link:hover {
+    background-color: var(--btn_full__hover_bg);
+}
+#cc-link a {
+    color: var(--surface);
+    /* Fix for full-button click taking effect */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-submit-ticket .form-group,
+.form-submit-ticket .param {
+    margin-bottom: 20px;
+}
+.wrapper .dropzone {
+    padding: 0 20px; /* side padding looks better*/
+    background: var(--surface);
+}
+
+/* START my_tickets */
+.table-wrap .pager {
+    margin-top: 10px;
+}
+
+/* START ticket */
+.ticket__body,
+.ticket__params {
+    min-width: 0; /* this helps prevents default flex behaviour where flex items will automatically fit their minimal content, possibly overflowing their parent */
+}
+.ticket__body_block {
+    padding: 15px 24px 15px;
+}
+.ticket__body_block .block--head .contact.grid .cc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 0;
+}
+.ticket__body_block .block--head .contact.grid .requester-header {
+    min-width: max-content;
+}
+.ticket__body_block .block--head .contact.grid .cc-header {
+    min-width: max-content;
+}
+.ticket__body_block h1 {
+    margin-bottom: 1em;
+    padding-bottom: 0;
+}
+.ticket--article .ticket__body_block h1 {
+    /* need to re-overwrite to make them work properly inside Articles */
+    margin-bottom: 0;
+    padding-bottom: 14px;
+}
+.ticket__body_block .browser-default h1 {
+    /* need to re-overwrite to make them work properly inside Articles */
+    font-size: 2em;
+    margin: .67em 0;
+    padding-bottom: 14px;
+}
+.ticket__body_block h2 {
+    margin-bottom: 1em;
+    padding-bottom: 0;
+}
+.ticket__body_block .browser-default h2 {
+    /* need to re-overwrite to make them work properly inside Articles */
+    margin: .83em 0;
+    font-size: 1.5em;
+    color: inherit;
+}
+.ticket__body_block h3 {
+    margin-bottom: 1em;
+}
+.ticket__body_block .browser-default h3 {
+    /* need to re-overwrite to make them work properly inside Articles */
+    font-size: 1.17em;
+}
+.ticket__body_block .block--head .contact .dropdown.customer {
+    box-shadow: none;
+    border-radius: 3px; /* required due to hover background, as label has box shadow and is rounded a bit */
+}
+.ticket__body_block .block--head .contact .dropdown.customer .label,
+.ticket__body_block .block--head .contact .dropdown.customer label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    padding: 0 12px 0 12px !important; /* exception to make it narrower, as label no longer had 5px extra padding in original design */
+
+    border: none;
+    box-shadow: var(--shadow_dropdown_label) var(--white-3), var(--shadow_dropdown_label_invert) var(--white-3);
+}
+.ticket__body_block .block--head .contact .dropdown.customer:hover .label,
+.ticket__body_block .block--head .contact .dropdown.customer:hover label {
+    box-shadow: var(--shadow_dropdown_label) var(--shadow-2), var(--shadow_dropdown_label_invert) var(--shadow-2);
+}
+.ticket .ticket__params .dropdown-select {
+    border-radius: 3px; /* required due to hover background, as label has box shadow and is rounded a bit */
+}
+.ticket .ticket__params .dropdown-select .label,
+.ticket .ticket__params .dropdown-select label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+    padding: 0 12px 0 12px !important; /* exception to make it narrower, as label no longer had 5px extra padding in original design */
+
+    border: none;
+    box-shadow: var(--shadow_dropdown_label) var(--white-3), var(--shadow_dropdown_label_invert) var(--white-3);
+}
+.checkbox-custom .dropdown-select:not(.right) .label,
+.checkbox-custom .dropdown-select:not(.right) label {
+    min-height: 2em !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+}
+.ticket .ticket__params .dropdown-select:hover .label,
+.ticket .ticket__params .dropdown-select:hover label {
+    box-shadow: var(--shadow_dropdown_label) var(--shadow-2), var(--shadow_dropdown_label_invert) var(--shadow-2);
+}
+.ticket__body_block:not(.original-message) .block--head .contact {
+    display: flex;
+}
+.ticket__body_block .block--head .contact .requester time {
+    margin-left: 0;
+}
+.ticket__body_block .block--head .contact time {
+    margin-left: 2px;
+}
+/* h2 same visual as h4, as it was reworked for SEO/semantic reasons */
+.ticket__params .params--block h2,
+.ticket__params .params--block h4 {
+    padding: 8px 16px 8px 16px;
+}
+.ticket__body_block .block--description:last-child {
+    margin-bottom: 0;
+}
+.ticket__body_block .block--head .btn.btn-action {
+    align-self: flex-start;
+}
+.custom-field-title {
+    line-height: 1.8;
+}

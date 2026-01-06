@@ -17,6 +17,7 @@ define('HESK_PATH','./');
 // Get all the required files and functions
 require(HESK_PATH . 'hesk_settings.inc.php');
 require(HESK_PATH . 'inc/common.inc.php');
+require(HESK_PATH . 'inc/customer_accounts.inc.php');
 
 // Are we in maintenance mode?
 hesk_check_maintenance();
@@ -35,6 +36,18 @@ $status = intval( hesk_GET('s', 0) );
 
 $locked = 0;
 
+// Connect to database
+hesk_dbConnect();
+
+// Verify email address match if needed
+hesk_verifyEmailMatch($trackingID);
+
+// Can we get customer name for history?
+$customer_name = $hesklang['customer'];
+if (hesk_isCustomerLoggedIn(false)) {
+    $customer_name = strlen($_SESSION['customer']['name']) ? $_SESSION['customer']['name'] : (strlen($_SESSION['customer']['email']) ? $_SESSION['customer']['email'] : $hesklang['customer']);
+}
+
 if ($status == 3) // Closed
 {
 	// Is customer closing tickets enabled?
@@ -44,7 +57,7 @@ if ($status == 3) // Closed
 	}
 
 	$action = $hesklang['closed'];
-    $revision = sprintf($hesklang['thist3'],hesk_date(),$hesklang['customer']);
+    $revision = sprintf($hesklang['thist3'],hesk_date(),$customer_name);
 
     if ($hesk_settings['custopen'] != 1)
     {
@@ -63,7 +76,7 @@ elseif ($status == 2) // Opened
 	}
 
 	$action = $hesklang['opened'];
-    $revision = sprintf($hesklang['thist4'],hesk_date(),$hesklang['customer']);
+    $revision = sprintf($hesklang['thist4'],hesk_date(),$customer_name);
 
 	// We will ask the customer why is the ticket being reopened
 	$_SESSION['force_form_top'] = true;
@@ -75,12 +88,6 @@ else
 {
 	die("$hesklang[int_error]: $hesklang[status_not_valid].");
 }
-
-// Connect to database
-hesk_dbConnect();
-
-// Verify email address match if needed
-hesk_verifyEmailMatch($trackingID);
 
 // Setup required session vars
 $_SESSION['t_track'] = $trackingID;

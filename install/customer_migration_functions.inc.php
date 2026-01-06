@@ -66,9 +66,9 @@ function customer_migration_get_customers_to_migrate() {
         SELECT `user_info`.`id`, TRIM(`u_name`), TRIM(`u_email`), `user_info`.`language`, 0
         FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `user_info`
         INNER JOIN (
-            SELECT MAX(`id`) AS id, TRIM(`u_email`)
+            SELECT MAX(`id`) AS id, TRIM(`u_name`), TRIM(`u_email`)
             FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`
-            GROUP BY TRIM(`u_email`)
+            GROUP BY TRIM(`u_name`), TRIM(`u_email`)
         ) AS `newest_ticket`
             ON `user_info`.`id` = `newest_ticket`.`id`
         WHERE (`u_email` NOT LIKE '%,%' AND TRIM(`u_email`) <> '')
@@ -78,9 +78,9 @@ function customer_migration_get_customers_to_migrate() {
     $multi_rs = hesk_dbQuery("SELECT `user_info`.`id`, TRIM(`u_name`) AS `name`, TRIM(`u_email`) AS `email`, `language`
         FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `user_info`
         INNER JOIN (
-            SELECT MAX(`id`) AS id, TRIM(`u_email`)
+            SELECT MAX(`id`) AS id, TRIM(`u_name`), TRIM(`u_email`)
             FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`
-            GROUP BY TRIM(`u_email`)
+            GROUP BY TRIM(`u_name`), TRIM(`u_email`)
         ) AS `newest_ticket`
             ON `user_info`.`id` = `newest_ticket`.`id`
         WHERE `u_email` LIKE '%,%'
@@ -89,18 +89,13 @@ function customer_migration_get_customers_to_migrate() {
         $split_emails = explode(',', $row['email']);
         $first = true;
         foreach ($split_emails as $email) {
+            $name = $first ? $row['name'] : '';
             $customer_exists_rs = hesk_dbQuery("SELECT `fake_customer_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."temp_customers`
-             WHERE `email` = '".hesk_dbEscape($email)."'");
-            if ($existing_customer = hesk_dbFetchAssoc($customer_exists_rs)) {
-                if (($first && $existing_customer['fake_customer_id'] < $row['id']) || $row['name'] === '') {
-                    // Use this name instead as it's newer or because the current one is blank
-                    hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."temp_customers` 
-                        SET `name` = '".hesk_dbEscape($row['name'])."' 
-                        WHERE `fake_customer_id` = ".intval($existing_customer['fake_customer_id']));
-                }
-            } else {
+             WHERE `email` = '".hesk_dbEscape($email)."' 
+             AND `name` = '".hesk_dbEscape($name)."'");
+
+            if (hesk_dbNumRows($customer_exists_rs) === 0) {
                 // No customer record; insert one
-                $name = $first ? $row['name'] : '';
                 $language = $row['language'] ? "'".hesk_dbEscape($row['language'])."'" : 'NULL';
                 hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."temp_customers` (`fake_customer_id`, `name`, `email`, `language`, `processed`)
                     VALUES (".intval($row['id']).", '".hesk_dbEscape($name)."', '".hesk_dbEscape($email)."', ".$language.", 0)");

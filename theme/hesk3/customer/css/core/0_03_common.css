@@ -1,0 +1,522 @@
+/*
+Put any very common purpose CSS in here, i.e. main elements styling, correction classes, margins, not-displayed etc.
+*/
+/* START general basic elements styling */
+html {
+    box-sizing: border-box
+}
+
+*, ::after, ::before {
+    box-sizing: inherit
+}
+
+:root {
+    font-family: Lato, Arial, sans-serif;
+    line-height: 1.57
+}
+
+:root * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch
+}
+
+img {
+    max-width: 100%
+}
+
+picture img, picture source {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center
+}
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline
+}
+
+body, html {
+    height: 100%
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block
+}
+
+body {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column
+}
+
+ol, ul {
+    list-style: none
+}
+
+blockquote, q {
+    quotes: none
+}
+
+blockquote:after, blockquote:before {
+    content: '';
+    content: none
+}
+
+q:after, q:before {
+    content: '';
+    content: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+a {
+    text-decoration: none;
+    color: var(--link__pri-clr);
+    transition: color var(--transition-time-pri) ease;
+}
+
+a:hover {
+    color: var(--link__pri-hover-clr);
+    text-decoration: none;
+}
+
+img {
+    border: 0
+}
+
+img:not([src]):not([srcset]) {
+    visibility: hidden
+}
+sup {
+    vertical-align: super;
+    font-size: smaller
+}
+
+sub {
+    vertical-align: sub;
+    font-size: smaller
+}
+/* END general basic elements styling */
+
+
+/* START general correction class styling styling */
+.m0 {
+    margin: 0!important
+}
+
+.mt0 {
+    margin-top: 0!important
+}
+
+.mr0 {
+    margin-right: 0!important
+}
+
+.mb0 {
+    margin-bottom: 0!important
+}
+
+.ml0 {
+    margin-left: 0!important
+}
+
+.p0 {
+    padding: 0!important
+}
+
+.pt0 {
+    padding-top: 0!important
+}
+
+.pr0 {
+    padding-right: 0!important
+}
+
+.pb0 {
+    padding-bottom: 0!important
+}
+
+.pl0 {
+    padding-left: 0!important
+}
+
+.mt2 {
+    margin-top: 24px
+}
+
+.ml1 {
+    margin-left: 12px
+}
+/* TODO bg-absolute deprecated/not used anywhere ? */
+.bg-absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-color: var(--white-2);
+}
+
+.bg-absolute img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom
+}
+.lazyload {
+    animation-name: fade;
+    animation-duration: 1s
+}
+
+@keyframes fade {
+    from {
+        opacity: 0
+    }
+    to {
+        opacity: 1
+    }
+}
+
+.overflow-y-scroll {
+    overflow-y: auto
+}
+
+.overflow-x-scroll {
+    overflow-x: auto;
+    overflow-y: hidden
+}
+.link {
+    text-decoration: underline !important;
+    color: var(--link__sec-clr);
+}
+
+.link:hover {
+    text-decoration: none !important;
+    color: var(--link__sec-hover-clr);
+}
+
+.underline {
+    text-decoration: underline !important;
+}
+
+.underline:hover {
+    text-decoration: none !important;
+}
+.font-weight-bold {
+    font-weight: 700
+}
+.nowrap {
+    white-space: nowrap
+}
+.cust-help .lightgrey {
+    color: var(--font__sec-clr);
+}
+
+.cust-help .highlighted {
+    background-color: var(--white-6); /* deprecation fallback) */
+    background-color: color-mix(in srgb, var(--white-6) 95%, var(--green-1));
+}
+
+.cust-help .italic {
+    font-style: italic
+}
+
+.cust-help .ml-1 {
+    margin-left: 8px
+}
+
+.cust-help .h-3 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.22;
+    letter-spacing: .13px;
+    color: var(--primary);
+}
+.cust-help .text-center {
+    text-align: center
+}
+
+.cust-help .text-bold {
+    font-weight: 700
+}
+
+.cust-help .wrapper {
+    margin: 0!important;
+    background-color: var(--surface);
+}
+
+.cust-help .header {
+    border-bottom: 1px solid var(--header_border__clr);
+    background-color: var(--header__bg);
+}
+
+.cust-help .header .dropdown-select .label {
+    color: var(--header_nav__clr);
+    letter-spacing: .1px
+}
+
+.cust-help .header .dropdown-select .label .icon {
+    fill: currentColor
+}
+.cust-help .header .header__inner .dropdown-select:hover .label span {
+    color: var(--link__pri-hover-clr);
+}
+.cust-help .header .header__inner .dropdown-select:hover .label .icon {
+    fill: var(--link__pri-hover-clr);
+}
+
+.cust-help .header__logo {
+    font-size: 18px;
+    font-weight: 900;
+    line-height: normal;
+    color: var(--header_logo__clr);
+}
+
+.cust-help .header__inner {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 13px 0;
+}
+
+.cust-help .header__inner .header__nav {
+    display: -ms-flexbox;
+    display: flex;
+    flex-grow: 1;
+    margin: 0 20px;
+    justify-content: flex-end;
+}
+
+.cust-help .header__inner .header__nav .nav-item {
+    color: var(--header_nav__clr)
+}
+
+.cust-help .header__inner .header__nav .nav-item.text-only {
+    color: var(--header_nav__clr);
+}
+
+.cust-help .header__inner .header__nav .nav-item:not(:first-child) {
+    margin-left: 20px;
+}
+
+.cust-help .header__inner .header__nav .nav-item a {
+    color: var(--header_nav__clr);
+}
+.cust-help .header__inner .header__nav .nav-item a:hover {
+    color: var(--header_nav__hover_clr);
+}
+.cust-help .header__inner .header__lang .dropdown-select {
+    vertical-align: top;
+}
+.cust-help .header__inner .header__lang .dropdown-select .label {
+    min-height: 22px;
+    line-height: inherit;
+}
+.cust-help .contr {
+    max-width: 1070px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 15px
+}
+
+.cust-help .btn:hover .icon {
+    fill: var(--primary);
+}
+.divider {
+    display: block;
+    margin: 30px;
+    height: 0;
+    background-color: var(--secondary);
+}
+.main__content.notice-flash {
+    margin-top: 20px
+}
+.browser-default p {
+    display: block;
+    margin: 0 0 1em!important
+}
+
+.browser-default p:last-child {
+    margin-bottom: 0!important
+}
+
+.browser-default h1 {
+    display: block;
+    font-size: 2em;
+    font-weight: 700;
+    margin: .67em 0
+}
+
+.browser-default h2 {
+    display: block;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: .83em 0
+}
+
+.browser-default h3 {
+    display: block;
+    font-size: 1.17em;
+    font-weight: 700;
+    margin: 1em 0
+}
+
+.browser-default h4 {
+    display: block;
+    font-size: 1em;
+    font-weight: 700;
+    margin: 1.33em 0
+}
+
+.browser-default h5 {
+    display: block;
+    font-size: .83em;
+    font-weight: 700;
+    margin: 1.67em 0
+}
+
+.browser-default h6 {
+    display: block;
+    font-size: .67em;
+    font-weight: 700;
+    margin: 2.33em 0
+}
+
+.browser-default a {
+    text-decoration: underline;
+    color: var(--secondary);
+    transition: color var(--transition-speed) ease
+}
+
+.browser-default a:hover {
+    text-decoration: none
+}
+
+.browser-default ul {
+    display: block;
+    list-style-type: disc!important;
+    padding-left: 40px!important;
+    margin: 1em 0 1px em 0
+}
+
+.browser-default ol {
+    display: block;
+    list-style-type: decimal!important;
+    padding-left: 40px!important;
+    margin: 1em 0
+}
+
+.browser-default p>b, strong {
+    font-weight: 700
+}
+
+.browser-default table {
+    display: table;
+    border: 1px solid var(--gray-1);
+}
+
+.browser-default tr {
+    padding: 2px;
+    border: 1px solid var(--gray-1);
+}
+
+.browser-default td {
+    padding: 4px;
+    border: 1px solid var(--gray-1);
+}
+
+.browser-default blockquote {
+    border-left: 2px solid var(--gray-1) !important;
+    margin-left: 1.5rem!important;
+    padding-left: 1rem!important;
+    font-style: normal!important
+}
+
+.browser-default pre {
+    display: block;
+    font-family: monospace;
+    margin: 1em 0;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word
+}
+
+.browser-default em {
+    font-style: italic
+}
+
+.browser-default code {
+    font-family: monospace;
+    margin: 1em 0;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    background-color: var(--white-5);
+    border-radius: 3px;
+    padding: .1rem .2rem
+}
+.text-bold {
+    font-weight: bold;
+}
+.isErrorStr {
+    color: var(--error) ! important;
+    font-style: normal;
+}
+.text-danger {
+    color: var(--error-3);
+}
+
+.text-success {
+    color: var(--success);
+}
+/* Classes for ADA/screen-reading purposes: I.e. to keep elements in DOM available for screen readers, but hiding them visually
+Here is a style that will hide the text off screen so that it is only found by screen reading software: */
+.screen-reader-text, .skiplink {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    word-wrap: normal !important;
+}
+.screen-reader-text:focus, .skiplink:focus {
+    background-color: var(--white-3);
+    clip: auto !important;
+    clip-path: none;
+    color: var(--gray-5);
+    display: block;
+    font-size: 1em;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+.grecaptcha-badge { /* Recaptcha should be hidden from screen readers */
+    visibility:hidden;
+}
+/* END general correction class styling styling */

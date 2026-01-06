@@ -80,7 +80,7 @@ if (hesk_dbNumRows($res) != 1)
 $category = hesk_dbFetchAssoc($res);
 
 /* Get replies */
-$res  = hesk_dbQuery("SELECT `replies`.*, `reply_customer`.`name` AS `customer_name`, `reply_staff`.`name` AS `staff_name` 
+$res  = hesk_dbQuery("SELECT `replies`.*, `reply_customer`.`name` AS `customer_name`, `reply_customer`.`email` AS `customer_email`, `reply_staff`.`name` AS `staff_name`
 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `replies`
 LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `reply_customer`
     ON `replies`.`customer_id` = `reply_customer`.`id`
@@ -93,7 +93,7 @@ while ($row = hesk_dbFetchAssoc($res)) {
     if (intval($row['staffid']) > 0) {
         $row['name'] = $row['staff_name'];
     } else {
-        $row['name'] = $row['customer_name'];
+        $row['name'] = strlen($row['customer_name']) ? $row['customer_name'] : ( ! empty($row['customer_email']) ? $row['customer_email'] : $hesklang['pde']);
     }
     $replies[] = $row;
 }

@@ -1,0 +1,949 @@
+/*
+Put any general dropdowns related CSS here.
+*/
+:root {
+    /* Defining some general variables from main theme colors, for some easier customization,/future dropoff for potentially separating into more theme settings */
+    --dropdown_chevron__fill: var(--dropdown__clr); /* changed from theme dark 1 for simplicity */
+
+    --dropdown_label__clr: var(--dropdown__clr);
+    --dropdown_label__border-clr: var(--dropdown__border-clr);
+    --dropdown_label__hover-clr: var(--dropdown__hover-clr);
+
+    --dropdown_list__bg: var(--dropdown__bg);
+    --dropdown_list__border-clr: var(--dropdown__hover-border-clr);
+
+    --dropdown_list_item__clr: var(--dropdown__clr);
+    --dropdown_list_item__hover_clr: var(--dropdown__hover-clr);
+    --dropdown_list_item__hover_bg: var(--dropdown__hover-bg);
+
+    --dropdown_list_item_link__clr: var(--dropdown__clr);
+    --dropdown_list_item_link__hover-clr: var(--dropdown__hover-clr);
+
+    --dropdown_list_item_icon__fill: var(--gray-2);
+    --dropdown_list_item_icon__hover_fill: var(--dropdown__hover-clr);
+
+    /* TODO maybe make dropdowns colors settable as well? */
+
+    --dropdown_input__clr: var(--dropdown__clr);
+    --dropdown_input__full-bg-clr: var(--dropdown__bg);
+    --dropdown_input__active-bg-clr: var(--dropdown__bg);
+    --dropdown_input__disabled-bg-clr: var(--white-2);
+    --dropdown_input__error-border-clr: var(--error); /* TODO use regular common red ?*/
+    --dropdown_input__border-clr: var(--dropdown__border-clr);
+    --dropdown_input__active-border--clr: var(--dropdown__border-clr);
+
+    --dropdown_input__hover-clr: var(--dropdown__hover-clr);
+    --dropdown_input__hover-bg-clr: var(--dropdown__hover-bg);
+    --dropdown_input__hover-border-clr: var(--dropdown__hover-border-clr);
+    --dropdown_input__hover-after-clr: var(--dropdown__hover-clr);
+    --dropdown_input__hover-after-fill: var(--dropdown__hover-clr);
+    --dropdown_input__hover-placeholder-clr: var(--dropdown__hover-clr);
+    --dropdown_input_read_write__hover-clr: var(--dropdown_ver2__hover-border-clr);
+    --dropdown_input_read_write__bg-clr: var(--dropdown__bg);
+    --dropdown_input_read_write__nofocus-hover-bg: var(--dropdown__hover-bg);
+    --dropdown_input_read_write__nofocus-hover-clr: var(--dropdown__hover-clr);
+    --dropdown_input_read_write__nofocus-hover-border-clr: var(--dropdown_ver2__hover-border-clr);
+
+    --dropdown_input_multi__div-disabled-bg: var(--surface);
+    --dropdown_input_multi__div-disabled-border-clr: var(--surface);
+
+
+    --dropdown_option__clr: var(--dropdown__clr);
+    --dropdown_option__active-bg: var(--dropdown__hover-bg);
+    --dropdown_option__active-clr: var(--dropdown__hover-clr);
+}
+
+/* START Selectize.js dropdowns */
+.selectize-control.plugin-drag_drop.multi>.selectize-input>div.ui-sortable-placeholder {
+    visibility: visible!important;
+    background: hsla(var(--black--hsl), .06) !important;
+    border: 0 none!important;
+    box-shadow: inset 0 0 12px 4px var(--white-1);
+}
+
+.selectize-control.plugin-drag_drop .ui-sortable-placeholder::after {
+    content: '!';
+    visibility: hidden
+}
+
+.selectize-control.plugin-drag_drop .ui-sortable-helper {
+    box-shadow: 0 2px 5px hsla(var(--black--hsl), .2);
+}
+
+.selectize-dropdown-header {
+    position: relative;
+    padding: 5px 8px;
+    border-bottom: 1px solid  var(--gray-1); /* deprecation fallback */
+    border-bottom: 1px solid  color-mix(in srgb, var(--gray-1) 90%, var(--white-1));
+    background: var(--white-3);
+    border-radius: 3px 3px 0 0
+}
+
+.selectize-dropdown-header-close {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    color: var(--gray-6);
+    opacity: .4;
+    margin-top: -12px;
+    line-height: 20px;
+    font-size: 20px!important
+}
+
+.selectize-dropdown-header-close:hover {
+    color: var(--black-1);
+}
+
+.selectize-dropdown.plugin-optgroup_columns .optgroup {
+    border-right: 1px solid var(--white-5);
+    border-top: 0 none;
+    float: left;
+    box-sizing: border-box
+}
+
+.selectize-dropdown.plugin-optgroup_columns .optgroup:last-child {
+    border-right: 0 none
+}
+
+.selectize-dropdown.plugin-optgroup_columns .optgroup:before {
+    display: none
+}
+
+.selectize-dropdown.plugin-optgroup_columns .optgroup-header {
+    border-top: 0 none
+}
+
+.selectize-control.plugin-remove_button [data-value] {
+    position: relative;
+    padding-right: 24px!important
+}
+
+.selectize-control.plugin-remove_button [data-value] .remove {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 17px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: inherit;
+    text-decoration: none;
+    vertical-align: middle;
+    display: inline-block;
+    padding: 2px 0 0;
+    border-left: 1px solid var(--gray-1); /* deprecation fallback */
+    border-left: 1px solid color-mix(in srgb, var(--gray-1) 90%, var(--white-1));
+    border-radius: 0 2px 2px 0;
+    box-sizing: border-box
+}
+
+.selectize-control.plugin-remove_button [data-value] .remove:hover {
+    background: hsla(var(--black--hsl), .05);
+}
+
+.selectize-control.plugin-remove_button [data-value].active .remove {
+    border-left-color: var(--gray-1);
+}
+
+.selectize-control.plugin-remove_button .disabled [data-value] .remove:hover {
+    background: 0 0;
+}
+
+.selectize-control.plugin-remove_button .disabled [data-value] .remove {
+    border-left-color: var(--surface);
+}
+
+.selectize-control.plugin-remove_button .remove-single {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 23px
+}
+
+.selectize-control {
+    position: relative
+}
+
+.selectize-dropdown, .selectize-input, .selectize-input input {
+    color: var(--dropdown_input__clr);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 18px;
+    -webkit-font-smoothing: inherit;
+}
+
+.selectize-control.single .selectize-input.input-active, .selectize-input {
+    background: var(--dropdown_input__active-bg-clr);
+    cursor: text;
+    display: inline-block
+}
+
+.selectize-input {
+    border: 1px solid var(--dropdown_input__border-clr);
+    padding: 8px;
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 1px hsla(var(--black--hsl), .1);
+    border-radius: 3px
+}
+
+.selectize-input.full {
+    background-color: var(--dropdown_input__full-bg-clr);
+}
+
+.selectize-input.disabled, .selectize-input.disabled * {
+    cursor: default!important
+}
+
+.selectize-input.focus {
+    box-shadow: inset 0 1px 2px hsla(var(--black--hsl), .15);
+}
+
+.selectize-input.dropdown-active {
+    border-radius: 3px 3px 0 0
+}
+
+.selectize-input>* {
+    vertical-align: baseline;
+    display: -moz-inline-stack;
+    display: inline-block;
+    zoom: 1
+}
+
+.selectize-control.multi .selectize-input>div {
+    cursor: pointer;
+    margin: 0 3px 3px 0;
+    padding: 2px 6px;
+    background: var(--white-5);
+    color: var(--gray-6);
+    border: 0 solid var(--gray-1); /* deprecation fallback */
+    border: 0 solid color-mix(in srgb, var(--gray-1) 90%, var(--white-1));
+}
+
+.selectize-control.multi .selectize-input>div.active {
+    background: var(--white-5);
+    color: var(--gray-4);
+    border: 0 solid var(--gray-1);
+}
+
+.selectize-control.multi .selectize-input.disabled>div, .selectize-control.multi .selectize-input.disabled>div.active {
+    color: var(--gray-7);
+    background: var(--dropdown_input_multi__div-disabled-bg);
+    border: 0 solid var(--dropdown_input_multi__div-disabled-border-clr);
+}
+
+.selectize-input>input {
+    display: inline-block!important;
+    padding: 0!important;
+    min-height: 0!important;
+    max-height: none!important;
+    max-width: 100%!important;
+    margin: 0 2px 0 0!important;
+    text-indent: 0!important;
+    border: 0 none!important;
+    background: 0 0!important;
+    line-height: inherit!important;
+    -webkit-user-select: auto!important;
+    box-shadow: none!important
+}
+
+.selectize-input>input::-ms-clear {
+    display: none
+}
+
+.selectize-input>input:focus {
+    outline: 0!important
+}
+
+.selectize-input::after {
+    content: ' ';
+    display: block;
+    clear: left;
+}
+
+.selectize-input.dropdown-active::before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    background: var(--white-5);
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.selectize-dropdown {
+    position: absolute;
+    z-index: 10;
+    border: 1px solid var(--dropdown_input__border-clr); /* TODO unnecessary repeat CSS from above ?*/
+    background: var(--dropdown_input__full-bg-clr);
+    margin: -1px 0 0;
+    border-top: 0 none;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px 0 var(--shadow-1-30); /* NOT same as drodown_input in selectize */
+    border-radius: 0 0 3px 3px
+}
+
+.selectize-dropdown [data-selectable] {
+    cursor: pointer;
+    overflow: hidden
+}
+
+.selectize-dropdown [data-selectable] .highlight {
+    background: var(--gray-2); /* deprecation fallback */
+    background: color-mix(in srgb, var(--secondary) 20%, var(--white-1));
+    border-radius: 1px
+}
+.selectize-dropdown [data-selectable] .highlight.extra-space-infront::before {
+    /* handling situations where multi word searches would break a word and remove a space*/
+    content: ' ';
+}
+.selectize-dropdown .optgroup-header, .selectize-dropdown .option {
+    padding: 5px 8px
+}
+
+.selectize-dropdown .option, .selectize-dropdown [data-disabled], .selectize-dropdown [data-disabled] [data-selectable].option {
+    cursor: inherit;
+    opacity: .5
+}
+
+.selectize-dropdown [data-selectable].option {
+    opacity: 1
+}
+
+.selectize-dropdown .optgroup:first-child .optgroup-header {
+    border-top: 0 none
+}
+
+.selectize-dropdown .optgroup-header {
+    color: var(--gray-6);
+    background: var(--surface);
+    cursor: default
+}
+
+.selectize-dropdown .active {
+    background-color: var(--dropdown_option__active-bg);
+    color: var(--dropdown_option__active-clr);
+}
+
+.selectize-dropdown .active.create {
+    color: var(--gray-4); /* deprecation fallback */
+    color: color-mix(in srgb, var(--primary) 70%, var(--white-1));
+}
+
+.selectize-dropdown .create {
+    color: hsla(var(--gray-6-hsl), .5);
+}
+
+.selectize-dropdown-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 200px;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--dropdown_list__border-clr);
+}
+
+.selectize-control.single .selectize-input, .selectize-control.single .selectize-input input {
+    cursor: pointer
+}
+
+.selectize-control.single .selectize-input.input-active, .selectize-control.single .selectize-input.input-active input {
+    cursor: text
+}
+
+.selectize-control.single .selectize-input:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin-top: -3px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5px 0;
+    border-color: var(--gray-1) transparent transparent;
+}
+
+.selectize-control.single .selectize-input.dropdown-active:after {
+    margin-top: -4px;
+    border-width: 0 5px 5px;
+    border-color: transparent transparent var(--gray-1);
+}
+
+.selectize-control.rtl.single .selectize-input:after {
+    left: 15px;
+    right: auto
+}
+
+.selectize-control.rtl .selectize-input>input {
+    margin: 0 4px 0 -2px!important
+}
+
+.selectize-control .selectize-input.disabled {
+    opacity: .5;
+    background-color: var(--dropdown_input__disabled-bg-clr);
+}
+
+.selectize-input {
+    padding: 11px 12px;
+    width: auto!important;
+    transition: all var(--transition-speed) ease;
+}
+
+.selectize-input.input-active {
+    border: solid 1px var(--dropdown_input__active-border--clr) !important
+}
+
+.selectize-input:not(.read-write):hover, .selectize-input:not(.read-write).dropdown-active:hover {
+    border: solid 1px var(--dropdown_input__hover-border-clr) !important;
+    background-color: var(--dropdown_input__hover-bg-clr) !important;
+    color: var(--dropdown_input__hover-clr);
+}
+
+.selectize-control.read-write .selectize-input:hover, .selectize-control.read-write .selectize-input.dropdown-active:hover {
+    background: var(--dropdown_input_read_write__bg-clr) !important;
+    color: var(--dropdown_input_read_write__hover-clr);
+}
+.selectize-control.input-tags {
+    line-height: 1;
+    margin-left: 24px
+}
+
+.selectize-control.multi .selectize-input>div {
+    margin: 0 6px 0 0;
+    padding: 0;
+    background: 0 0;
+    color: var(--gray-7);
+    border: none
+}
+
+.selectize-control {
+    display: -ms-flexbox;
+    display: flex
+}
+
+.selectize-control .selectize-input {
+    border-radius: 2px;
+    border: solid 1px var(--dropdown_input__border-clr);
+    box-shadow: none;
+    min-width: 100px;
+    padding: 0 30px 0 12px;
+    height: 40px;
+    display: -ms-flexbox!important;
+    display: flex!important;
+    -ms-flex-align: center;
+    align-items: center;
+    transition: all var(--transition-speed) ease;
+    z-index: 8
+}
+
+.selectize-control .selectize-input:after {
+    border: none!important;
+    background: transparent url(../../img/chevron-down.svg) no-repeat center;
+    width: 8px!important;
+    height: 8px!important;
+    opacity: .25!important;
+    transition: all var(--transition-speed) ease;
+}
+
+.selectize-control .selectize-input.focus::after {
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+.selectize-control .selectize-dropdown {
+    box-shadow: var(--gray-2); /* deprecation fallback */
+    box-shadow: color-mix(in srgb, var(--secondary) 20%, var(--white-1));
+    border: none;
+}
+
+.selectize-control .selectize-dropdown .option {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 40px;
+    padding: 0 32px 0 16px;
+    color: var(--dropdown_option__clr);
+    white-space: pre;
+}
+
+.selectize-control .selectize-dropdown .option.active {
+    background-color: var(--dropdown_option__active-bg);
+    color: var(--dropdown_option__active-clr);
+}
+
+.selectize-dropdown {
+    width: auto!important
+}
+
+.selectize-dropdown .optgroup-header, .selectize-dropdown [data-selectable] {
+    white-space: nowrap
+}
+
+.selectize-control.isError .selectize-input {
+    border: solid 1px var(--dropdown_input__error-border-clr) !important;
+}
+.selectize-dropdown .option, .selectize-input.input-active {
+    cursor: pointer!important
+}
+@media screen and (min-width:900px) {
+    .cat-select .selectize-input {
+        min-width: 200px!important;
+        height: 56px!important;
+        font-size: 18px!important
+    }
+    .cat-select .selectize-dropdown {
+        font-size: 17px!important
+    }
+}
+
+.selectize-input {
+    transition: all var(--transition-time-pri) ease
+}
+.selectize-control .selectize-input {
+    transition: all var(--transition-time-pri) ease
+}
+.selectize-control .selectize-input:after {
+    transition: all var(--transition-time-pri) ease
+}
+/* END Selectize.js dropdowns */
+
+
+/* START Hesk custom dropdown select */
+.dropdown, .dropdown-select, .with-label {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer
+}
+
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down, .with-label .icon-chevron-down {
+    fill: var(--dropdown_chevron__fill);
+}
+
+.dropdown label, .dropdown-select label, .with-label label {
+    cursor: pointer;
+    color: var(--dropdown_label__clr);
+    white-space: nowrap
+}
+
+.dropdown .label, .dropdown-select .label, .with-label .label {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    color: var(--dropdown_label__clr);
+    cursor: pointer;
+}
+
+.dropdown .label .icon-chevron-down, .dropdown-select .label .icon-chevron-down, .with-label .label .icon-chevron-down {
+    -ms-flex-preferred-size: 8px;
+    flex-basis: 8px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+.dropdown-select.active .icon-chevron-down, .dropdown.active .icon-chevron-down, .with-label.active .icon-chevron-down {
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
+.dropdown-select.left .dropdown-list, .dropdown.left .dropdown-list, .with-label.left .dropdown-list {
+    left: 0
+}
+
+.dropdown-select.center .dropdown-list, .dropdown.center .dropdown-list, .with-label.center .dropdown-list {
+    left: 50%;
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%)
+}
+
+.dropdown-select.right .dropdown-list, .dropdown.right .dropdown-list, .with-label.right .dropdown-list {
+    right: 0
+}
+
+.dropdown-select.priority[data-value=low] span, .dropdown.priority[data-value=low] span, .with-label.priority[data-value=low] span {
+    padding-left: 24px;
+    background: url(../../img/label-low.svg) no-repeat left center
+}
+
+.dropdown-select.priority[data-value=medium] span, .dropdown.priority[data-value=medium] span, .with-label.priority[data-value=medium] span {
+    padding-left: 24px;
+    background: url(../../img/label-medium.svg) no-repeat left center
+}
+
+.dropdown-select.priority[data-value=high] span, .dropdown.priority[data-value=high] span, .with-label.priority[data-value=high] span {
+    padding-left: 24px;
+    background: url(../../img/label-high.svg) no-repeat left center
+}
+
+.dropdown-select.priority[data-value=critical] span, .dropdown.priority[data-value=critical] span, .with-label.priority[data-value=critical] span {
+    padding-left: 24px;
+    background: url(../../img/label-critical.svg) no-repeat left center
+}
+
+.dropdown-select.priority [data-option=low], .dropdown.priority [data-option=low], .with-label.priority [data-option=low] {
+    padding-left: 47px;
+    background: url(../../img/label-low.svg) no-repeat 21px center
+}
+
+.dropdown-select.priority [data-option=medium], .dropdown.priority [data-option=medium], .with-label.priority [data-option=medium] {
+    padding-left: 47px;
+    background: url(../../img/label-medium.svg) no-repeat 21px center
+}
+
+.dropdown-select.priority [data-option=high], .dropdown.priority [data-option=high], .with-label.priority [data-option=high] {
+    padding-left: 47px;
+    background: url(../../img/label-high.svg) no-repeat 21px center
+}
+
+.dropdown-select.priority [data-option=critical], .dropdown.priority [data-option=critical], .with-label.priority [data-option=critical] {
+    padding-left: 47px;
+    background: url(../../img/label-critical.svg) no-repeat 21px center
+}
+
+.dropdown-select>span, .dropdown>span, .with-label>span {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.dropdown select, .dropdown-select select, .with-label select {
+    display: none
+}
+
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down, .with-label .icon-chevron-down {
+    margin-top: 1px;
+    width: 8px;
+    height: 8px;
+    margin-left: 8px;
+    transition: all var(--transition-speed-low) ease
+}
+
+.dropdown .dropdown-list, .dropdown-select .dropdown-list, .with-label .dropdown-list {
+    display: none;
+    border-radius: 2px;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--dropdown_list__bg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    z-index: 100;
+    border: 1px solid var(--dropdown_list__border-clr);
+}
+
+.dropdown .dropdown-list .separator, .dropdown-select .dropdown-list .separator, .with-label .dropdown-list .separator {
+    height: 1px;
+    background-color: var(--white-7);
+}
+
+.dropdown .dropdown-list>li, .dropdown-select .dropdown-list>li, .with-label .dropdown-list>li {
+    height: 40px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    white-space: nowrap;
+    padding: 0 16px;
+    color: var(--dropdown_list_item__clr);
+}
+
+.dropdown .dropdown-list>li {
+    padding: 0
+}
+.dropdown .dropdown-list>li.selected, .dropdown-select .dropdown-list>li.selected, .with-label .dropdown-list>li.selected {
+    /*display: none*/
+}
+
+.dropdown .dropdown-list>li a, .dropdown-select .dropdown-list>li a, .with-label .dropdown-list>li a {
+    width: 100%;
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    color: var(--dropdown_list_item_link__clr);
+}
+
+.dropdown .dropdown-list>li a {
+    padding: 0 16px!important
+}
+
+.dropdown .dropdown-list>li:hover a, .dropdown-select .dropdown-list>li:hover a, .with-label .dropdown-list>li:hover a {
+    color: var(--dropdown_list_item_link__hover-clr);
+}
+
+.dropdown .dropdown-list>li a:hover, .dropdown-select .dropdown-list>li a:hover, .with-label .dropdown-list>li a:hover {
+    color: var(--dropdown_list_item_link__hover-clr) !important;
+}
+
+.dropdown .dropdown-list>li svg, .dropdown-select .dropdown-list>li svg, .with-label .dropdown-list>li svg {
+    transition: all var(--transition-speed-low) ease;
+    fill: var(--dropdown_list_item_icon__fill);
+    margin-right: 8px;
+    width: 16px;
+    height: 16px
+}
+
+.dropdown .dropdown-list>li:hover, .dropdown-select .dropdown-list>li:hover, .with-label .dropdown-list>li:hover {
+    background-color: var(--dropdown_list_item__hover_bg);
+    color: var(--dropdown_list_item__hover_clr) !important;
+}
+
+.dropdown .dropdown-list>li:hover svg, .dropdown-select .dropdown-list>li:hover svg, .with-label .dropdown-list>li:hover svg {
+    fill: var(--dropdown_list_item_icon__hover_fill) !important;
+}
+.dropdown.priority .low {
+    fill: var(--gray-2) !important
+}
+
+.dropdown.priority .medium {
+    fill: var(--success) !important
+}
+
+.dropdown.priority .hight {
+    fill: var(--yellow-2) !important
+}
+
+.dropdown.priority .critical {
+    fill: var(--red-1) !important
+}
+.select-custom {
+    position: relative;
+    height: 32px;
+    color: inherit
+}
+
+.select-custom select {
+    display: none
+}
+
+.select-selected {
+    max-width: 200px
+}
+
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 12px;
+    right: 10px;
+    width: 10px;
+    height: 6px;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath fill='%2326282A' fill-rule='evenodd' d='M4.303 5.07l3.553-3.552a.434.434 0 0 0 .128-.309A.434.434 0 0 0 7.856.9L7.595.64a.437.437 0 0 0-.618 0L3.994 3.622 1.007.635a.434.434 0 0 0-.618 0L.128.897A.434.434 0 0 0 0 1.206c0 .117.045.226.128.309L3.684 5.07a.434.434 0 0 0 .31.127.434.434 0 0 0 .31-.127z'/%3E%3C/svg%3E");
+    background-size: 10px 6px;
+    background-repeat: no-repeat
+}
+
+.select-selected.select-arrow-active:after {
+    -ms-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipY;
+    -ms-filter: FlipY
+}
+
+.select-items div, .select-selected {
+    padding: 8px;
+    line-height: 1;
+    cursor: pointer
+}
+
+.select-items {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    padding: 6px 0 12px;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+}
+
+.select-hide {
+    display: none
+}
+
+.same-as-selected, .select-items div:hover {
+    color: var(--secondary);
+}
+
+.select-custom--stretched {
+    box-shadow: none
+}
+
+.select-custom--stretched .select-selected {
+    width: 100%
+}
+
+.select--priority .select-selected {
+    padding-left: 24px
+}
+
+.select--priority .select-selected[data-value=critical]+div+select+.priority-label {
+    background-color: var(--error);
+}
+
+.select--priority .select-selected[data-value=low]+div+select+.priority-label {
+    background-color: var(--info-3);
+}
+
+.select--priority .select-selected[data-value=medium]+div+select+.priority-label {
+    background-color: var(--success);
+}
+
+.select--priority .select-selected[data-value=high]+div+select+.priority-label {
+    background-color: var(--yellow-2);
+}
+
+.priority-label {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    left: 0;
+    display: inline-block;
+    width: 16px;
+    height: 12px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px
+}
+
+.priority-label:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 4px 6px 0;
+    border-color: transparent var(--surface) transparent transparent;
+}
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down {
+    transition: all var(--transition-time-pri) ease
+}
+.dropdown .dropdown-list>li svg, .dropdown-select .dropdown-list>li svg {
+    transition: all var(--transition-time-pri) ease
+}
+/* END Hesk custom dropdown select */
+
+/* style dropdown the same, exception for "right edge ones", like on ticket view */
+.dropdown:not(.right),
+.dropdown-select:not(.right) {
+    vertical-align: middle;
+}
+.dropdown:not(.right):hover,
+.dropdown-select:not(.right):hover {
+    border-color: var(--dropdown__hover-border-clr);
+    background-color: var(--dropdown__hover-bg) !important;
+    color: var(--dropdown__hover-clr);
+    transition: all var(--transition-time-pri) ease;
+}
+.dropdown:not(.right):hover label,
+.dropdown:not(.right):hover .label,
+.dropdown-select:not(.right):hover label,
+.dropdown-select:not(.right):hover .label,
+.dropdown:not(.right):hover label span,
+.dropdown:not(.right):hover .label span,
+.dropdown-select:not(.right):hover label span,
+.dropdown-select:not(.right):hover .label span {
+    color: var(--dropdown_label__hover-clr) !important;
+}
+/* only change color for 1-level down icons, not i.e. for within <li> elements*/
+.dropdown:not(.right):hover > * > .icon,
+.dropdown:not(.right):hover > * > .icon,
+.dropdown-select:not(.right):hover > * > .icon,
+.dropdown-select:not(.right):hover > * > .icon {
+    transition: all var(--transition-time-sec) ease;
+    color: var(--dropdown_label__hover-clr) !important;
+    fill: var(--dropdown_label__hover-clr) !important;
+}
+/* we're applying the dropdown style on labels, as the click events work on them, so this ensures they work over the whole area properly
+ Note 1: Generally we need only 2 selectors, BUT we have to account for an edge case with .priority fields, which shouldn't be treated as selectso in tables,
+ but SHOULD be when in form-group (i.e. not on listing tickets, but yes when creating)
+ Note 2: We actually have to double those selectors AS WELL, as some HTML uses .label class, and some <label> elements
+ Note 3: as label in prev design had 5px padding, we have to give it 5 more side padding (i.e. 17px instead of 12px) to make it the same spacing
+*/
+.dropdown:not(.right) .label,
+.dropdown-select:not(.right) .label,
+.form-group .dropdown:not(.right) .label,
+.form-group .dropdown-select:not(.right) .label,
+.dropdown:not(.right) label,
+.dropdown-select:not(.right) label,
+.form-group .dropdown:not(.right) label,
+.form-group .dropdown-select:not(.right) label {
+    display: inline-flex;
+    border-radius: 2px;
+    border: solid 1px var(--dropdown_label__border-clr);
+    box-shadow: none;
+    padding: 0 11px 0 17px !important; /* unfortunately !important necessary to easily overwrite some broader selectors */
+
+    /* use dynamic combo of height + min-height + line-height to ensure that the selects can scale & fit any content inside them (i.e. multiple rows) */
+    height: max-content;
+    min-height: 40px;
+    line-height: 1.7;
+    -ms-flex-align: center;
+    align-items: center;
+    transition: all var(--transition-time-pri) ease;
+    vertical-align: middle;
+}
+
+.dropdown:not(.right) .dropdown-list .label,
+.dropdown-select:not(.right) .dropdown-list .label,
+.form-group .dropdown:not(.right) .dropdown-list .label,
+.form-group .dropdown-select:not(.right) .dropdown-list .label,
+.dropdown:not(.right) .dropdown-list label,
+.dropdown-select:not(.right) .dropdown-list label,
+.form-group .dropdown:not(.right) .dropdown-list label,
+.form-group .dropdown-select:not(.right) .dropdown-list label {
+    min-width: calc(100% + 2px); /* make it at least wide as parent, + 2extra px for parent's border*/
+}
+
+.dropdown .icon-chevron-down, .dropdown-select .icon-chevron-down {
+    margin-left: 12px; /* account for a bit extra margin, as with label being flex, it now removes the whitespace*/
+}
+.selectize-control:not(.read-write) .selectize-input:hover,
+.selectize-control:not(.read-write) .selectize-input:focus-visible {
+    color: var(--dropdown_input__hover-clr);
+    border-color: var(--dropdown_input__hover-border-clr);
+    background-color: var(--dropdown_input__hover-bg-clr) !important;
+}
+.selectize-control .selectize-input:hover::after,
+.selectize-control .selectize-input:focus-visible::after {
+    transition: all var(--transition-time-sec) ease;
+    color: var(--dropdown_input__hover-after-clr);
+    fill: var(--dropdown_input__hover-after-fill);
+    filter: brightness(0%) invert(100%); /* use filter, as it's using a greyish background image for chevron*/
+    opacity: 1 !important;
+}
+.selectize-control .selectize-input:hover ::placeholder,
+.selectize-control .selectize-input:focus-visible ::placeholder{
+    color: var(--dropdown_input__hover-placeholder-clr);
+    opacity: 1;
+}
+.selectize-control.read-write .selectize-input:not(.focus):hover,
+.selectize-control.read-write .selectize-input:not(.focus).dropdown-active:hover {
+    /* have to have this one as extra to ensure it overwrites app.css */
+    color: var(--dropdown_input_read_write__nofocus-hover-clr);
+    border-color: var(--dropdown_input_read_write__nofocus-hover-border-clr);
+    background-color: var(--dropdown_input_read_write__nofocus-hover-bg) !important;
+}
+.selectize-dropdown-content .no-results {
+    padding: 5px 10px;
+    white-space: nowrap;
+}
+.dropdown-select .label {
+    margin-right: 0;
+}

@@ -27,6 +27,10 @@ hesk_session_start();
 hesk_dbConnect();
 hesk_isLoggedIn();
 
+if (defined('HESK_DEMO')) {
+    hesk_process_messages($hesklang['ddemo'], 'manage_customers.php', 'NOTICE');
+}
+
 // Are customer accounts enabled?
 if (empty($hesk_settings['customer_accounts'])) {
     hesk_error($hesklang['customer_accounts_disabled']);

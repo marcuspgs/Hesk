@@ -168,7 +168,9 @@ if ($imap->login())
 {
     echo $hesk_settings['debug_mode'] ? "<pre>Connected to the IMAP server &quot;" . $imap->host . ":" . $imap->port . "&quot;.</pre>\n" : '';
 
-    if ($imap->hasUnseenMessages())
+    $has_unseen_message = $imap->hasUnseenMessages();
+
+    if (is_int($has_unseen_message) && $has_unseen_message > 0)
     {
         $emails = $imap->getUnseenMessageIDs();
         $emails_found = count($emails);
@@ -232,6 +234,15 @@ if ($imap->login())
                 echo "<pre>Ticket NOT inserted: " . $hesk_settings['DEBUG_LOG']['PIPE'] . "</pre>\n";
             }
 
+            // Any additional notices?
+            if ($hesk_settings['debug_mode'] && isset($hesk_settings['DEBUG_LOG']['NOTICES'])) {
+                echo "<pre>";
+                foreach ($hesk_settings['DEBUG_LOG']['NOTICES'] as $notice) {
+                    echo "$notice\n";
+                }
+                echo "</pre>\n";
+            }
+
             // Queue message to be deleted on connection close
             if ( ! $hesk_settings['imap_keep'])
             {
@@ -246,6 +257,10 @@ if ($imap->login())
             $imap->expunge();
             echo $hesk_settings['debug_mode'] ? "<pre>Expunged mail folder.</pre>\n" : '';
         }
+    }
+    elseif ($has_unseen_message === false)
+    {
+        echo "<pre>Error: User is authenticated but not connected.</pre>\n";
     }
     else
     {

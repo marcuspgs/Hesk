@@ -104,7 +104,7 @@ $info = array(
 'due_date'      => hesk_format_due_date($ticket['due_date']),
 'id'			=> $ticket['id'],
 'time_worked'   => $ticket['time_worked'],
-'last_reply_by' => hesk_getReplierName($ticket),
+'last_reply_by' => hesk_getReplierNameArray($ticket),
 'language'      => $ticket['language'],
 );
 
@@ -167,17 +167,15 @@ if ($opened_by) {
 }
 
 // Notify staff?
-if ($ticket['owner'])
-{
+if ($ticket['owner']) {
     hesk_notifyAssignedStaff(false, 'ticket_assigned_to_you');
-
     if ($ticket['collaborators']) {
         hesk_notifyCollaborators($ticket['collaborators'], 'collaborator_added', 'notify_collaborator_added');
     }
-}
-else
-{
+} elseif (count($ticket['collaborators'])) {
     hesk_notifyStaff('new_ticket_staff', "`notify_new_unassigned`='1' OR (`notify_collaborator_added`='1' AND `id` IN (".implode(",", $ticket['collaborators'])."))", 1);
+} else {
+    hesk_notifyStaff('new_ticket_staff', "`notify_new_unassigned`='1'", 1);
 }
 
 hesk_process_messages($hesklang['tns'],'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'SUCCESS');

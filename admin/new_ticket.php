@@ -200,12 +200,13 @@ else
 }
 
 // List of users whom this ticket can be assigned to
+$accessible_users = hesk_getUserIdsWithAccessToFeatureAndCategory('can_view_tickets', $category);
 $admins = array();
-$res = hesk_dbQuery("SELECT `id`,`name`,`isadmin`,`categories`,`heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `name` ASC");
+$res = hesk_dbQuery("SELECT `id`,`name`,`isadmin`,`categories`,`heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `active` = 1 ORDER BY `name` ASC");
 while ($row = hesk_dbFetchAssoc($res))
 {
-    // Is this an administrator?
-    if ($row['isadmin'])
+    // Is this an administrator or have access via permission group?
+    if ($row['isadmin'] || in_array($row['id'], $accessible_users))
     {
         $admins[$row['id']]=$row['name'];
         continue;
@@ -269,7 +270,7 @@ if ($predefined_name !== '') {
         <h3 style="font-size: 1.3rem; margin-top: 10px"><?php echo $hesklang['nti2']; ?></h3>
         <h4><?php echo $hesklang['req_marked_with']; ?> <span class="important">*</span></h4>
 
-        <form method="post" class="form <?php echo isset($_SESSION['iserror']) && count($_SESSION['iserror']) ? 'invalid' : ''; ?>" action="admin_submit_ticket.php" name="form1" id="submit-ticket" enctype="multipart/form-data">
+        <form method="post" class="form <?php echo isset($_SESSION['iserror']) && count($_SESSION['iserror']) ? 'invalid' : ''; ?>" action="admin_submit_ticket.php" name="form1" id="submit-ticket" enctype="multipart/form-data" <?php echo $hesk_settings['disable_autofill_admin'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>>
 
             <?php if ($number_of_categories > 1): ?>
             <div class="form-group" style="margin-bottom: 0px;">
@@ -904,7 +905,7 @@ if ($predefined_name !== '') {
             ?>
             <div class="form-group">
                 <label><?php echo $hesklang['subject'] . ': ' . ($hesk_settings['require_subject']==1 ? '<span class="important">*</span>' : '') ; ?></label>
-                <span id="HeskSub"><input class="form-control <?php if (in_array('subject',$_SESSION['iserror'])) {echo 'isError';} ?>" type="text" name="subject" id="subject" maxlength="70" value="<?php if (isset($_SESSION['as_subject'])) {echo stripslashes(hesk_input($_SESSION['as_subject']));} ?>"></span>
+                <span id="HeskSub"><input class="form-control <?php if (in_array('subject',$_SESSION['iserror'])) {echo 'isError';} ?>" type="text" name="subject" id="subject" maxlength="70" value="<?php if (isset($_SESSION['as_subject'])) {echo stripslashes(hesk_input($_SESSION['as_subject']));} ?>" <?php echo $hesk_settings['disable_autofill_admin'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>></span>
             </div>
             <div class="form-group">
                 <label><?php echo $hesklang['message'] . ': ' . ($hesk_settings['require_message']==1 ? '<span class="important">*</span>' : '') ; ?></label>
@@ -1348,7 +1349,7 @@ if ($predefined_name !== '') {
                            name="email" id="email" maxlength="1000">
                     <div class="form-control__error"></div>
                 </div>
-                <div id="email_suggestions"></div>
+                <div id="email_suggestions" class="email-suggestion"></div>
             </div>
         </div>
         <div class="modal__buttons">
@@ -1383,6 +1384,7 @@ if ($predefined_name !== '') {
                 let clearEmailError = (!$email.parent().hasClass('error') && emailIsEmpty)
                 updateValidation(false, clearEmailError);
             });
+            let fireCreateCustomerCallbackAfterEmailCheck = false;
             var debouncedEmailCheck = hesk_debounce(function() {
                 /* If other/name field is empty, ignore always showing its error,
                 UNLESS it was already shown (user interacted with that field since opening the modal)
@@ -1397,6 +1399,13 @@ if ($predefined_name !== '') {
                 if (emailIsEmpty) {
                     emailValid = true;
                     updateValidation(clearNameError, false);
+
+                    if (fireCreateCustomerCallbackAfterEmailCheck) {
+                        // Even in this case we call the callback, just with success : false.
+                        // Reason is to ensure updateValidation logic is 100% the same as it was before the async request handling.
+                        createCustomerOnValidationCallback(false);
+                        fireCreateCustomerCallbackAfterEmailCheck = false;
+                    }
                     return true;
                 }
                 <?php endif; ?>
@@ -1407,23 +1416,34 @@ if ($predefined_name !== '') {
                 if (emailIsEmpty) {
                     emailFailureReason = '<?php echo hesk_makeJsString($hesklang['this_field_is_required']); ?>';
                     updateValidation(clearNameError, false);
+
+                    if (fireCreateCustomerCallbackAfterEmailCheck) {
+                        // Even in this case we call the callback, just with success : false.
+                        // Reason is to ensure updateValidation logic is 100% the same as it was before the async request handling.
+                        createCustomerOnValidationCallback(false);
+                        fireCreateCustomerCallbackAfterEmailCheck = false;
+                    }
                     return;
                 }
 
                 $.ajax({
-                    url: 'ajax/check_email.php',
+                    url: 'ajax/check_customer.php',
                     type: 'GET',
                     data: {
-                        email: $email.val()
+                        email: $email.val(),
+                        name: $name.val()
                     },
                     dataType: 'json',
                     success: function(data) {
                         if (!data.emailValid) {
                             emailValid = false;
                             emailFailureReason = '<?php echo hesk_makeJsString($hesklang['enter_valid_email']); ?>';
-                        } else if (!data.emailAvailable) {
+                        } else if (data.customerAvailable === 'NOT_AVAILABLE_REGISTERED') {
                             emailValid = false;
-                            emailFailureReason = '<?php echo hesk_makeJsString($hesklang['customer_email_exists']); ?>';
+                            emailFailureReason = '<?php echo hesk_makeJsString($hesklang['customer_email_exists_already_registered']); ?>';
+                        } else if (data.customerAvailable === 'NOT_AVAILABLE_IDENTICAL') {
+                            emailValid = false;
+                            emailFailureReason = '<?php echo hesk_makeJsString($hesklang['customer_name_email_exists']); ?>';
                         } else {
                             emailValid = true;
                             emailFailureReason = '';
@@ -1433,22 +1453,39 @@ if ($predefined_name !== '') {
                             <?php endif; ?>
                         }
                         updateValidation(clearNameError, false);
+
+                        if (fireCreateCustomerCallbackAfterEmailCheck) {
+                            createCustomerOnValidationCallback(true);
+                            fireCreateCustomerCallbackAfterEmailCheck = false;
+                        }
                     },
                     error: function(err) {
                         console.error(err);
                         emailValid = false;
                         emailFailureReason = '<?php echo hesk_makeJsString($hesklang['an_error_occurred_validating_email']); ?>';
                         updateValidation(clearNameError, false);
+
+                        if (fireCreateCustomerCallbackAfterEmailCheck) {
+                            // Even in this case we call the callback, just with success : false.
+                            // Reason is to ensure updateValidation logic is 100% the same as it was before the async request handling.
+                            createCustomerOnValidationCallback(false);
+                            fireCreateCustomerCallbackAfterEmailCheck = false;
+                        }
                     }
                 });
             }, 300);
+            $name.keyup(debouncedEmailCheck);
             $email.keyup(debouncedEmailCheck);
             $saveButton.click(function() {
-                // Make sure our fields are valid
-                $name.keyup();
-                $email.keyup();
+                // As the debounceEmail check is async, we can only call the createCustomer AFTER the email check has completed.
+                // While we could do it with async function it would require a bigger rework,
+                // so this simple flag checking & callback from debouncedEmailCheck does the trick on ensuring it works on all browsers.
+                fireCreateCustomerCallbackAfterEmailCheck = true;
+                debouncedEmailCheck();
+            });
 
-                if (!nameValid || !emailValid) {
+            function createCustomerOnValidationCallback(validationSuccessful = false) {
+                if (!nameValid || !emailValid || !validationSuccessful) {
                     //-- Fix validation state messages
                     updateValidation();
                     return;
@@ -1464,15 +1501,15 @@ if ($predefined_name !== '') {
                     dataType: 'json',
                     success: function(data) {
                         <?php if ($hesk_settings['multi_eml']): ?>
-                            var selectize = $('input[name="customer_type"]').val() === 'CUSTOMER' ?
-                                createCustomerSelectize :
-                                createFollowerSelectize;
+                        var selectize = $('input[name="customer_type"]').val() === 'CUSTOMER' ?
+                            createCustomerSelectize :
+                            createFollowerSelectize;
 
-                            createCustomerSelectize[0].selectize.addOption(data);
-                            createFollowerSelectize[0].selectize.addOption(data);
+                        createCustomerSelectize[0].selectize.addOption(data);
+                        createFollowerSelectize[0].selectize.addOption(data);
                         <?php else: ?>
-                            var selectize = createCustomerSelectize;
-                            createCustomerSelectize[0].selectize.addOption(data);
+                        var selectize = createCustomerSelectize;
+                        createCustomerSelectize[0].selectize.addOption(data);
                         <?php endif; ?>
 
                         if (typeof selectize[0].selectize.getValue() === 'string') {
@@ -1492,7 +1529,7 @@ if ($predefined_name !== '') {
                         updateValidation();
                     }
                 });
-            });
+            };
 
             function updateValidation(forceClearNameError = false, forceClearEmailError = false) {
                 var anyFailure = false;

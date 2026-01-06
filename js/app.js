@@ -877,7 +877,44 @@ $(document).ready(function () {
         $('.bulk-actions select').selectize();
     }
     if ($('.search-options select').length) {
-        $('.search-options select').selectize();
+        // Loop through each of the selects, and then run selectize
+        // If attribute auto-load-plugins is present, then parse it as an array (it's a comma separate string)
+        // In that case, pass those custom plugin loads to selectize, but otherwise run it as default
+
+        // New way, that can read a new auto-load-plugins attribute, to load extra plugins for specific selects
+        $('.search-options select').each(function() {
+            let $select = $(this);
+
+            let selectizeParams = {};
+            let autoLoadPlugins = $select.attr('auto-load-plugins');
+
+            if (autoLoadPlugins) {
+                // Parse the comma-separated string into an array
+                let plugins = autoLoadPlugins.split(',').map(function(plugin) {
+                    return plugin.trim();
+                }).filter(function(plugin) {
+                    return plugin.length > 0;
+                });
+
+                // Initialize selectize with custom plugins
+                selectizeParams.plugins = plugins;
+            }
+
+            /* Note by Andraz:
+            There was a weird case edge here, where if clickign a selected item would mark it as active,
+            and then removing it and re-adding would keep it marked as active.
+            I have no idea why this happened (as it doesn't happen i.e. in new_ticket -> followers),
+            But simply force-clearing the active class on removal solve the issue.
+             */
+            // Add event handlers to manage active state
+            selectizeParams.onItemRemove = function(value, $item) {
+                // Clear active state when item is removed
+                $item.removeClass('active');
+            };
+
+            // Initialize Selectize with any custom configs
+            $select.selectize(selectizeParams);
+        });
     }
 
     $('[data-action="add-filters"], [data-action="ticket-mobile-filters"]').click(function (e) {

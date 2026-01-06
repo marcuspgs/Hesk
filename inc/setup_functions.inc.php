@@ -708,8 +708,8 @@ function hesk_testIMAP($check_old_settings=false)
         $emails_found = 0;
         echo $hesk_settings['debug_mode'] ? "<pre>Connected to the IMAP server &quot;" . $imap->host . ":" . $imap->port . "&quot;.</pre>\n" : '';
 
-        if ($imap->hasUnseenMessages())
-        {
+        $has_unseen_message = $imap->hasUnseenMessages();
+        if (is_int($has_unseen_message)) {
             $emails = $imap->getUnseenMessageIDs();
             $emails_found = count($emails);
         }

@@ -103,14 +103,6 @@ function hesk_newTicket($ticket)
     $closedat = isset($ticket['closedat']) ? 'NOW()' : 'NULL';
     $closedby = isset($ticket['closedby']) ? intval($ticket['closedby']) : 'NULL';
 
-    if ( ! empty($ticket['email_id'])) {
-        $eid_where = ", `eid` ";
-        $eid_what  = ", '" . hesk_dbEscape($ticket['email_id']) . "' ";
-    } else {
-        $eid_where = '';
-        $eid_what  = '';
-    }
-
 	// Insert ticket into database
 	hesk_dbQuery("
 	INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`
@@ -140,7 +132,6 @@ function hesk_newTicket($ticket)
 		`due_date`
 		{$custom_where}
         {$ab_where}
-        {$eid_where}
 	)
 	VALUES
 	(
@@ -169,7 +160,6 @@ function hesk_newTicket($ticket)
 		{$due_date}
 		{$custom_what}
         {$ab_what}
-        {$eid_what}
 	)
 	");
     $ticket_id = hesk_dbInsertID();
@@ -185,6 +175,11 @@ function hesk_newTicket($ticket)
 
         hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` (`ticket_id`, `customer_id`, `customer_type`)
         VALUES (".intval($ticket_id).", ".intval($follower_id).", 'FOLLOWER')");
+    }
+
+    // Save the email ID map to ticket for later use
+    if ( ! empty($ticket['email_id'])) {
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (`email_id`, `ticket_id`, `from_hesk`) VALUES ('".hesk_dbEscape($ticket['email_id'])."', {$ticket_id}, 0)");
     }
 
 	// Generate the array with ticket info that can be used in emails

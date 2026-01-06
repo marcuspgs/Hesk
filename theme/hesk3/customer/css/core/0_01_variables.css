@@ -1,0 +1,99 @@
+@charset "UTF-8";
+/*
+    TODO NOTE on this file:
+        This file contains all "non theme variables", that define colors for various elements, based on theme colors.
+        In a sense, they are not technically necessary (and it would be generally clearer for CSS to simply use the theme colors directly),
+        but due to complexity & size of Hesk codebase, as we work on improving modularity of CSS and ability to make themes easily,
+        it is sort of a "transitional helper file", that helps ensure we are not messing up a ton of UI edge cases.
+
+        I.e. there are a lot of cases of repeat/similar variable names (i.e. for dropdowns, inputs...),
+        which essentially do a similar thing, but due to some deprecated coding practices,
+        for the time being, they are rather all collected here, even if repeated and potentially redundant.
+
+        As we will work on improving Hesk CSS and layout structure, we expect to make these variables clearer, and more concise over time.
+*/
+/*
+    IMPORTANT: Variables naming & usage style guide for Hesk:
+    - do NOT define custom colors here. Any variables should ideally reuse theme variable colors in some way:
+        - usually with color-mix() - but CAREFUL as color-mix is supported by ~93% browser users,
+        these should always have a regular css property defined as fallback, and marked with "deprecation fallback" comment
+
+    Please adhere to these as much as possible, and try to implement any new css with variables where it makes sense,
+     PARTICULARLY those properties that describe:
+     - color
+     - background (color)
+        + when it makes sense (i.e. for major elements that are likely to be themed):
+        - font family/type
+        - border styling/radius
+        - animations/transitions
+        - border/shadows
+
+    🛠 Additional notes:
+    - Please implement all of these variables inside of this file. While it could sometimes makes sense
+    to define them in specific decouple CSS files, for theming purposes, it's best all are defined here,
+    so they can easily be overwritten and referred to later in one place.
+
+
+    🎨 CSS Variable Naming Style Guide
+    🔹 Structure:
+
+    --[scope]_[sub-scope]__[element]-[state]-[property]-[subproperty];
+        scope (optional) → Main area (e.g., header, sidebar, form).
+        sub-scope (optional) → Specific section within scope (e.g., menu, footer, nav).
+        element (optional) → The target element (e.g., button, link, input, icon).
+        state (optional) → Interaction state (e.g., hover, focus, disabled, active).
+        property (required) → Styling category (e.g., clr, bg, border, radius).
+        subproperty (optional) → More detail (e.g., primary, width, shadow).
+
+    🔹 Examples:
+    ✅ Basic (No sub-scope or element)
+    --header__bg: #333;  // Background color of header
+    --sidebar__txt-clr: #ddd;  //Text color inside sidebar
+
+    ✅ With sub-scope
+    --header_menu__bg: #222; // Background of menu inside header
+    --sidebar_menu__item-bg: #444; // Background of sidebar menu item
+
+    ✅ With element & state
+    --header_menu__link-clr: #ffffff; // Link color inside header menu
+    --header_menu__link-hover-clr: #cccccc; // Link color on hover
+    --form__input--focus-border-clr: #007bff; //  Input border color on focus
+
+    🛠 Best Practices
+    ✔ Keep names clear but concise.
+    ✔ Avoid unnecessary nesting—use only needed scopes.
+    ✔ Always use __ to separate scopes and - for states & properties.
+    ✔ Use short, predictable property names (clr for color, bg for background, border-radius for border radius, etc.).
+
+*/
+
+:root {
+    --transition-time-pri: 50ms; /* i.e. hover over icons, buttons ... */
+    --transition-time-sec: 150ms; /* secondary element within an element, i.e. icon anim delay within buttons */
+
+    /* TODO could probably join these with above ones together, but for now keeping them separate as @klemen wanted just some buttons affected */
+    --transition-speed-low: 50ms;
+    --transition-speed: 50ms;
+
+    /* Note, these calculated theme colors aren't as important, seem to just be used in some datepickers or shadows,
+     and even then mostly overwritten. So even if fallback is not accurate if deprecated,
+     no big deal really, as it's unlikely to cause an issue */
+    --theme-color-light-1: var(--tertiary); /* deprecation fallback */
+    --theme-color-light-1: color-mix(in srgb, color-mix(in srgb, var(--tertiary) 71%, var(--green-1)), 70% white);
+
+    --theme-color-dark-2: color-mix(in srgb, var(--primary) 80%, var(--tertiary));
+    --shadow-2: color-mix(in srgb, var(--secondary) 90%, var(--black-1)); /* used in some dropdown hovers */
+
+    --header_border__clr: var(--gray-2);
+
+    /*
+    TODO NOTE: For now left some remaining vars here, that might possibly be also godo to add as part of main theme options/settings.
+    Moved all the rest that are "definitely" not needed as settings,
+    to their respective CSS files for clarity (i.e. calendar-related went into datepicker.css)
+    */
+
+    /* START article */
+    --article__head-bg: var(--secondary);
+    --article__head-clr: var(--surface);
+    --article__head-border-clr: var(--secondary);
+}

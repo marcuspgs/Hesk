@@ -60,9 +60,13 @@ elseif ($test_type == 'pop3')
 {
 	if ( hesk_testPOP3() )
 	{
-        hesk_show_success($hesklang['conok'] . '<br><br>' . sprintf($hesklang['tst_cnt'], $emails_found) );
-        if ($emails_found > 10) {
-            hesk_show_notice( sprintf($hesklang['wrn_pop3'], $emails_found, $hesklang['pop3']), ' ', false);
+        if (is_numeric($emails_found)) {
+            hesk_show_success($hesklang['conok'] . '<br><br>' . sprintf($hesklang['tst_cnt'], $emails_found) );
+            if ($emails_found > 10) {
+                hesk_show_notice( sprintf($hesklang['wrn_pop3'], $emails_found, $hesklang['pop3']), $hesklang['warn']);
+            }
+        } else {
+            hesk_show_notice(sprintf($hesklang['conok_but_no_count'], 'https://www.hesk.com/knowledgebase/?article=116'), ' ', false);
         }
 	}
 	else
@@ -95,13 +99,21 @@ elseif ($test_type == 'imap')
 {
 	if ( hesk_testIMAP() )
 	{
-        hesk_show_success($hesklang['conok'] . '<br><br>' . sprintf($hesklang['tst_cnt'], $emails_found) );
-        if ($emails_found > 10) {
-            hesk_show_notice( sprintf($hesklang['wrn_imap'], $emails_found, $hesklang['imap']), ' ', false);
+        if (is_numeric($emails_found)) {
+            hesk_show_success($hesklang['conok'] . '<br><br>' . sprintf($hesklang['tst_cnt'], $emails_found) );
+            if ($emails_found > 10) {
+                hesk_show_notice( sprintf($hesklang['wrn_imap'], $emails_found, $hesklang['imap']), $hesklang['warn']);
+            }
+        } else {
+            hesk_show_notice(sprintf($hesklang['conok_but_no_count'], 'https://www.hesk.com/knowledgebase/?article=116'), ' ', false);
         }
 	}
 	else
 	{
+        // Give clues about a Microsoft 365 specific issue
+        if ($imap_error == 'User is authenticated but not connected.') {
+            $imap_error .= '<br><br>' . sprintf($hesklang['imap_test_bad'], 'https://www.hesk.com/knowledgebase/?article=116');
+        }
 		hesk_show_error( $imap_error . '<br /><br /><textarea name="imap_log" rows="10" cols="60">' . $imap_log . '</textarea>' );
 	}
 }

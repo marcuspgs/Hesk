@@ -1,5 +1,5 @@
 <?php
-// Settings file for HESK 3.6.4
+// Settings file for HESK 3.7.0
 
 // ==> GENERAL
 
@@ -64,10 +64,16 @@ $hesk_settings['list_users']=0;
 $hesk_settings['debug_mode']=1;
 $hesk_settings['short_link']=0;
 $hesk_settings['submitting_wait']=1;
+$hesk_settings['remember_custom_field_values']=1;
+$hesk_settings['disable_autofill_admin']=0;
+$hesk_settings['disable_autofill_customer']=0;
+$hesk_settings['extend_admin']=0;
+$hesk_settings['extend_customer']=0;
 $hesk_settings['select_cat']=0;
 $hesk_settings['select_pri']=0;
 $hesk_settings['cat_show_select']=15;
 $hesk_settings['staff_ticket_formatting']=0;
+$hesk_settings['staff_nicknames']=0;
 
 // --> Barcode
 $hesk_settings['barcode']=array(
@@ -200,6 +206,8 @@ $hesk_settings['pop3_oauth_provider']=0;
 $hesk_settings['strip_quoted']=1;
 $hesk_settings['eml_req_msg']=0;
 $hesk_settings['save_embedded']=1;
+$hesk_settings['email_include_to']=1;
+$hesk_settings['email_include_cc']=1;
 
 // --> Ignore emails
 $hesk_settings['pipe_block_noreply']=1;
@@ -230,12 +238,14 @@ $hesk_settings['open_only']=1;
 // ==> TICKET LIST
 
 $hesk_settings['ticket_list']=array('trackid','lastchange','name','subject','status','lastreplier');
+$hesk_settings['customer_ticket_list']=array('id','trackid','lastchange','subject','status');
 
 // --> Other
 $hesk_settings['submittedformat']=2;
 $hesk_settings['updatedformat']=2;
 $hesk_settings['format_submitted']='Y-m-d g:i a';
 $hesk_settings['format_updated']='Y-m-d g:i a';
+$hesk_settings['email_column']=0;
 
 
 // ==> MISC
@@ -259,10 +269,15 @@ $hesk_settings['online_min']=10;
 $hesk_settings['check_updates']=1;
 
 
+// ==> LOOK & FEEL
+$hesk_settings['customer_theme']='';
+$hesk_settings['theme_overrides']=array();
+
+
 #############################
 #     DO NOT EDIT BELOW     #
 #############################
-$hesk_settings['hesk_version']='3.6.4';
+$hesk_settings['hesk_version']='3.7.0';
 if ($hesk_settings['debug_mode'])
 {
     error_reporting(E_ALL);

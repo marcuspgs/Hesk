@@ -13,7 +13,7 @@ hesk_dbConnect();
 // Demo mode?
 if ( defined('HESK_DEMO') )
 {
-    hesk_show_notice($hesklang['ddemo']);
+    http_response_code(400);
     exit();
 }
 $hesk_settings['db_failure_response'] = 'json';

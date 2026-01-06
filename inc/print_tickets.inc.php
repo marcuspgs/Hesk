@@ -87,11 +87,11 @@ $sql_collaborator = ''; // SQL that runs a quick count of collaborated tickets
 
 $sql_customer_count = "SELECT COUNT(1) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer_names`
     INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` `customer_names`
-        ON `ticket_to_customer_names`.`customer_id` = `customer_names`.`id` 
+        ON `ticket_to_customer_names`.`customer_id` = `customer_names`.`id`
     WHERE `ticket_id` = `ticket`.`id`";
 $sql_email_count = "SELECT COUNT(1) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer_emails`
     INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` `customer_emails`
-        ON `ticket_to_customer_emails`.`customer_id` = `customer_emails`.`id` 
+        ON `ticket_to_customer_emails`.`customer_id` = `customer_emails`.`id`
     WHERE `ticket_id` = `ticket`.`id`
         AND COALESCE(`customer_emails`.`email`, '') <> ''";
 
@@ -230,10 +230,27 @@ elseif ($is_quick_link == 'cbm')
 }
 
 // --> TICKET CATEGORY
-$category = intval( hesk_GET('category', 0) );
-if ( ! $ignore_category && $category && hesk_okCategory($category, 0) )
-{
-    $sql .= " AND `category`='{$category}' ";
+if (isset($_GET['c']) && is_array($_GET['c'])) {
+    $categories = [];
+    foreach ($_GET['c'] as $category) {
+        $category = intval($category);
+        if ($category && hesk_okCategory($category, 0) ) {
+            $categories[] = $category;
+        }
+    }
+    if ( ! $ignore_category && count($categories)) {
+        $sql .= " AND `category` IN (".implode(',', $categories).") ";
+    }
+} elseif (isset($_GET['category'])) {
+    // Legacy, select a single category
+    $category = intval( hesk_GET('category', 0) );
+    $categories = array($category);
+    if ( ! $ignore_category && $category && hesk_okCategory($category, 0) ) {
+        $sql .= " AND `category`='{$category}' ";
+    }
+} else {
+    $category = 0;
+    $categories = [0];
 }
 
 // Show only tagged tickets?

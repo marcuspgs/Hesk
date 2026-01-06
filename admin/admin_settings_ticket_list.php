@@ -27,6 +27,7 @@ $hesk_settings['language_default'] = $hesk_settings['language'];
 require(HESK_PATH . 'inc/common.inc.php');
 require(HESK_PATH . 'inc/admin_functions.inc.php');
 require(HESK_PATH . 'inc/setup_functions.inc.php');
+require(HESK_PATH . 'inc/customer_accounts.inc.php');
 hesk_load_database_functions();
 
 hesk_session_start();
@@ -103,6 +104,26 @@ hesk_handle_messages();
             </div>
         </section>
         <section class="settings__form">
+            <h3>
+                <?php echo $hesklang['fictl']; ?>
+                <a onclick="hesk_window('<?php echo $help_folder; ?>ticket_list.html#1','400','500')">
+                    <div class="tooltype right">
+                        <svg class="icon icon-info">
+                            <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                        </svg>
+                    </div>
+                </a>
+            </h3>
+            <div class="checkbox-group list">
+                <?php foreach ($hesk_settings['possible_customer_ticket_list'] as $key => $title): ?>
+                    <div class="checkbox-custom">
+                        <input type="checkbox" name="c_tl_<?php echo $key; ?>" id="c_tl_<?php echo $key; ?>1" value="1" <?php echo in_array($key, $hesk_settings['customer_ticket_list']) ? 'checked' : ''; ?>>
+                        <label for="c_tl_<?php echo $key; ?>1"><?php echo $title; ?></label>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <section class="settings__form">
             <h3><?php echo $hesklang['other']; ?></h3>
             <div class="radio-group">
                 <h5>
@@ -174,6 +195,21 @@ hesk_handle_messages();
                     </div>
                 </div>
             </div>
+            <div class="radio-group">
+                <h5>
+                    <span><?php echo $hesklang['email_column_display']; ?></span>
+                </h5>
+                <div class="radio-list">
+                    <div class="radio-custom">
+                        <input type="radio" id="s_email_column0" name="s_email_column" value="0" <?php echo $hesk_settings['email_column'] == 0 ? 'checked' : ''; ?>>
+                        <label for="s_email_column0"><?php echo $hesklang['email_show_view']; ?></label>
+                    </div>
+                    <div class="radio-custom">
+                        <input type="radio" id="s_email_column1" name="s_email_column" value="1" <?php echo $hesk_settings['email_column'] == 1 ? 'checked' : ''; ?>>
+                        <label for="s_email_column1"><?php echo $hesklang['email_show_full']; ?></label>
+                    </div>
+                </div>
+            </div>
         </section>
         <div class="settings__form form" style="padding-top: 30px">
             <div class="settings__form_submit">
@@ -185,7 +221,10 @@ hesk_handle_messages();
                 </button>
 
                 <?php if (!$enable_save_settings): ?>
-                    <div class="error"><?php echo $hesklang['e_save_settings']; ?></div>
+                    <p>&nbsp;</p>
+                    <div role="alert" class="notification red">
+                        <?php echo $hesklang['e_save_settings']; ?>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

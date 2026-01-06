@@ -39,6 +39,8 @@ if ( $action = hesk_REQUEST('a') ) {
 	elseif ($action == 'type')       {toggle_type();}
 	elseif ($action == 'priority')   {change_priority();}
 	elseif ($action == 'due-date')   {change_default_due_date();}
+    elseif ($action == 'order_name') {order_categories_by_name();}
+    elseif ($action == 'order_id')   {order_categories_by_id();}
 }
 
 /* Print header */
@@ -329,6 +331,64 @@ if (!hesk_SESSION('error')) {
             </table>
         </div>
     </div>
+
+    <br>
+    <br>
+    <?php if ($can_man_cat && count($keyed_categories) > 3): ?>
+    <div>
+        <section class="categories__head">
+            <h2><?php echo $hesklang['tools']; ?></h2>
+        </section>
+        <div>
+             <?php
+                $m_body = $hesklang['warning_order_cat_by_name'];
+                $m_body .= '<input type="hidden" name="a" value="order_name">
+                <input type="hidden" name="token" value="'.hesk_token_echo(0).'">';
+
+                $mid = hesk_generate_delete_modal([
+                    'title' => $hesklang['confirm_ordering_title'],
+                    'body' => $m_body,
+                    'confirm_action' => 'manage_categories.php',
+                    'use_form' => true,
+                    'form_method' => 'GET',
+                    'delete_text' => $hesklang['yes_title_case'],
+                    'cancel_text' => $hesklang['no_title_case']
+                ]);
+            ?>
+            <a href="javascript:" data-modal="[data-modal-id='<?php echo $mid; ?>']"
+                title="<?php echo $hesklang['remove']; ?>"
+                class="btn btn btn--blue-border">
+                <?php echo $hesklang['order_cat_by_name']; ?>
+            </a>
+        </div>
+        <br>
+        <div>
+             <?php
+                $m_body = $hesklang['warning_order_cat_by_id'];
+                $m_body .= '<input type="hidden" name="a" value="order_id">
+                <input type="hidden" name="token" value="'.hesk_token_echo(0).'">';
+
+                $mid = hesk_generate_delete_modal([
+                    'title' => $hesklang['confirm_ordering_title'],
+                    'body' => $m_body,
+                    'confirm_action' => 'manage_categories.php',
+                    'use_form' => true,
+                    'form_method' => 'GET',
+                    'delete_text' => $hesklang['yes_title_case'],
+                    'cancel_text' => $hesklang['no_title_case']
+                ]);
+            ?>
+            <a href="javascript:" data-modal="[data-modal-id='<?php echo $mid; ?>']"
+                title="<?php echo $hesklang['remove']; ?>"
+                class="btn btn btn--blue-border">
+                <?php echo $hesklang['order_cat_by_id']; ?>
+            </a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <?php endif; ?>
+
 </div>
 <div class="notification-flash green" data-type="link-generate-message">
     <i class="close">
@@ -409,4 +469,42 @@ function order_cat()
     header('Location: manage_categories.php');
     exit();
 } // End order_cat()
-?>
+
+
+function order_categories_by_name() {
+    global $hesk_settings, $hesklang;
+    order_categories_by('name');
+    hesk_process_messages($hesklang['success_order_cat_by_name'],$_SERVER['PHP_SELF'],'SUCCESS');
+} // End order_categories_by_name()
+
+
+function order_categories_by_id() {
+    global $hesk_settings, $hesklang;
+    order_categories_by('id');
+    hesk_process_messages($hesklang['success_order_cat_by_id'],$_SERVER['PHP_SELF'],'SUCCESS');
+} // End order_categories_by_id()
+
+
+function order_categories_by($column='name') {
+    global $hesk_settings, $hesklang;
+
+    // A security check
+    hesk_token_check();
+
+    // Validate the column value
+    $valid_columns = array('id', 'name');
+    if ( ! in_array($column, $valid_columns)) {
+        hesk_error($hesklang['invalid_action']);
+    }
+
+    // Get categories by asccending order to update order
+    $result = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` ORDER BY `{$column}` ASC");
+
+    // Sorted all category order field with category by name
+    $i = 10;
+    while ($cat = hesk_dbFetchAssoc($result)) {
+        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` SET `cat_order`={$i} WHERE `id`='".intval($cat['id'])."'");
+        $i += 10;
+    }
+} // End order_categories_by()
+

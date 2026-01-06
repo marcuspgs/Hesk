@@ -66,7 +66,7 @@ foreach ($tickets as $ticket) {
 
             $customers = hesk_get_customers_for_ticket($ticket['id']);
             $customer_names = array_map(function($customer) { return $customer['name']; }, $customers);
-            $ticket['repliername'] = $last_reply['name'];
+            $ticket['repliername'] = (strlen($last_reply['name']) ? $last_reply['name'] : ( ! empty($last_reply['email']) ? $last_reply['email'] : $hesklang['pde'] ));
         } else {
             $ticket['repliername'] = '';
         }
@@ -80,9 +80,9 @@ foreach ($tickets as $ticket) {
 
     $ticket['status'] = hesk_get_status_name($ticket['status']);
 
-    if ($ticket['owner'] && ! empty($_SESSION['id']) )
-    {
-        $ticket['owner'] = hesk_getOwnerName($ticket['owner']);
+    if ($ticket['owner'] && ! empty($_SESSION['id'])) {
+        $owner_array = hesk_getStaffNameArray($ticket['owner']);
+        $ticket['owner'] = $owner_array['name'];
     } else {
         $ticket['owner'] = '';
     }

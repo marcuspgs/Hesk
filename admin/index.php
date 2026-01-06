@@ -156,7 +156,7 @@ function do_login()
 	/* User entered all required info, now lets limit brute force attempts */
 	hesk_limitBfAttempts();
 
-	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($user)."' LIMIT 1");
+	$result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($user)."' AND `active` = 1 LIMIT 1");
 	if (hesk_dbNumRows($result) != 1)
 	{
         hesk_session_stop();
@@ -253,7 +253,7 @@ function do_mfa_verification() {
 function set_session_and_process_login() {
     global $hesk_settings;
 
-    $result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($_SESSION['HESK_USER'])."' LIMIT 1");
+    $result = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `user` = '".hesk_dbEscape($_SESSION['HESK_USER'])."' AND `active` = 1 LIMIT 1");
     $res = hesk_dbFetchAssoc($result);
     process_successful_login($res);
 }
@@ -365,7 +365,7 @@ function process_successful_login($user_row) {
 
                     $ticket['email'] = implode(';', $customer_emails);
                     $ticket['name'] = implode(';', $customer_names);
-                    $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+                    $ticket['last_reply_by'] = hesk_getReplierNameArray($ticket);
 
                     $ticket = hesk_ticketToPlain($ticket, 1, 0);
                     hesk_notifyCustomer('ticket_closed');
@@ -485,14 +485,20 @@ function print_login()
                                 }
 
                                 if ($hesk_settings['list_users']) {
-                                    echo '<select name="user" class="'.$cls.'">';
-                                    $res = hesk_dbQuery('SELECT `user` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` ORDER BY `user` ASC');
+                                    echo '<select name="user" class="'.$cls.'" id="select_user">';
+                                    $res = hesk_dbQuery('SELECT `user` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'users` WHERE `active` = 1 ORDER BY `user` ASC');
                                     while ($row=hesk_dbFetchAssoc($res))
                                     {
                                         $sel = (hesk_mb_strtolower($savedUser) == hesk_mb_strtolower($row['user'])) ? 'selected="selected"' : '';
                                         echo '<option value="'.$row['user'].'" '.$sel.'>'.$row['user'].'</option>';
                                     }
-                                    echo '</select>';
+                                    echo '</select>
+                                        <script>
+                                        $(document).ready(function() {
+                                        $(\'#select_user\').selectize();
+                                        });
+                                        </script>
+                                    ';
 
                                 } else {
                                     echo '<input type="text" class="form-control '.$cls.'" id="regInputUsername" name="user" value="'.$savedUser.'" autocomplete="off" required>';

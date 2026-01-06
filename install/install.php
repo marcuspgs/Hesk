@@ -534,6 +534,19 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 ");
 
+// -> Email ID to ticket mapping
+hesk_dbQuery("
+CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `email_id` varchar(1000) NOT NULL,
+  `ticket_id` mediumint UNSIGNED NOT NULL,
+  `reply_id` mediumint UNSIGNED DEFAULT NULL,
+  `from_hesk` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `email_id` (`email_id`(100))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+");
+
 // -> KB Articles
 hesk_dbQuery("
 CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."kb_articles` (
@@ -684,6 +697,20 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."mfa_backup_codes` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ");
 
+//-> Muted emails
+hesk_dbQuery("
+CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."muted_emails` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `type` tinyint UNSIGNED NOT NULL DEFAULT '1',
+  `muted_by` smallint(5) unsigned NOT NULL,
+  `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`),
+  KEY `type` (`type`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8
+");
+
 // -> Notes
 hesk_dbQuery("
 CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."notes` (
@@ -740,6 +767,45 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."online` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 ");
 
+// -> Permission groups
+hesk_dbQuery("
+CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_groups` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+");
+
+hesk_dbQuery("
+CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` mediumint(8) unsigned NOT NULL,
+  `category_id` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id_category_id` (`group_id`, `category_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+");
+
+hesk_dbQuery("
+CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` mediumint(8) unsigned NOT NULL,
+  `feature` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id_feature` (`group_id`, `feature`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+");
+
+hesk_dbQuery("
+CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` mediumint(8) unsigned NOT NULL,
+  `user_id` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id_user_id` (`group_id`, `user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+");
+
 // -> Pipe loops
 hesk_dbQuery("
 CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."pipe_loops` (
@@ -777,7 +843,6 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (
   `customer_id` mediumint(5) unsigned NULL DEFAULT NULL,
   `rating` enum('1','5') COLLATE utf8_unicode_ci DEFAULT NULL,
   `read` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `eid` varchar(1000) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `replyto` (`replyto`),
   KEY `dt` (`dt`),
@@ -984,7 +1049,6 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` (
   `overdue_email_sent` tinyint(1) DEFAULT '0',
   `satisfaction_email_sent` tinyint(1) DEFAULT '0',
   `satisfaction_email_dt` timestamp NULL DEFAULT NULL,
-  `eid` varchar(1000) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `trackid` (`trackid`),
   KEY `archive` (`archive`),
@@ -1027,8 +1091,10 @@ CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` (
   `user` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `pass` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `isadmin` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `active` smallint NOT NULL DEFAULT 1,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `nickname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `signature` varchar(1000) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `language` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `categories` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',

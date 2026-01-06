@@ -29,17 +29,22 @@ will void all support and may result in unexpected behavior.
 To purchase a HESK license and support future HESK development please visit:
 https://www.hesk.com/buy.php
 *******************************************************************************/
-$hesk_settings['hesk_license']('Qo8Zm9vdGVyIGNsYXNzPSJmb290ZXIiPg0KICAgIDxwIGNsY
-XNzPSJ0ZXh0LWNlbnRlciI+UG93ZXJlZCBieSA8YSBocmVmPSJodHRwczovL3d3dy5oZXNrLmNvbSIgY
-2xhc3M9ImxpbmsiPkhlbHAgRGVzayBTb2Z0d2FyZTwvYT4gPHNwYW4gY2xhc3M9ImZvbnQtd2VpZ2h0L
-WJvbGQiPkhFU0s8L3NwYW4+PGJyPk1vcmUgSVQgZmlyZXBvd2VyPyBUcnkgPGEgaHJlZj0iaHR0cHM6L
-y93d3cuc3lzYWlkLmNvbS8/dXRtX3NvdXJjZT1IZXNrJmFtcDt1dG1fbWVkaXVtPWNwYyZhbXA7dXRtX
-2NhbXBhaWduPUhlc2tQcm9kdWN0X1RvX0hQIiBjbGFzcz0ibGluayI+U3lzQWlkPC9hPjwvcD4NCjwvZ
-m9vdGVyPg0K',"\104", "a809404e0adf9823405ee0b536e5701fb7d3c969");
+$hesk_settings['hesk_license']('GZvb3RlciBjbGFzcz0iZm9vdGVyIiBzdHlsZT0iZGlzcGxhe
+TpibG9jayAhaW1wb3J0YW50OyI+PHAgY2xhc3M9InRleHQtY2VudGVyIiBzdHlsZT0iZGlzcGxheTpib
+G9jayAhaW1wb3J0YW50OyI+UG93ZXJlZCBieSA8YSBocmVmPSJodHRwczovL3d3dy5oZXNrLmNvbSIgY
+2xhc3M9ImxpbmsiIHN0eWxlPSJkaXNwbGF5OmlubGluZSAhaW1wb3J0YW50OyI+SGVscCBEZXNrIFNvZ
+nR3YXJlPC9hPiA8c3BhbiBjbGFzcz0iZm9udC13ZWlnaHQtYm9sZCIgc3R5bGU9ImRpc3BsYXk6aW5sa
+W5lICFpbXBvcnRhbnQ7Ij5IRVNLPC9zcGFuPjxicj4mbmJzcDs8L3A+PC9mb290ZXI+',"\120",
+"2c6d33b92c7068eed222cfc904a0e6019a579a8d");
 /*******************************************************************************
 END LICENSE CODE
 *******************************************************************************/
 ?>
+
+<?php if ($hesk_settings['extend_admin'] && isset($_SESSION['id'])): ?>
+    <iframe src="<?php echo HESK_PATH . $hesk_settings['admin_dir'] . '/admin_extend_session.php'; ?>" height="10" width="10" style="border:none;"></iframe>
+<?php endif; ?>
+
 </main> <!-- End main -->
 <?php
 if (isset($login_wrapper)) {

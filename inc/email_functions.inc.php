@@ -21,9 +21,9 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
 // Load required includes if not already
+require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 require_once(HESK_PATH . 'inc/custom_fields.inc.php');
 require_once(HESK_PATH . 'inc/statuses.inc.php');
-require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
 require_once(HESK_PATH . 'inc/priorities.inc.php');
 
 function hesk_notifyCustomer($email_template = 'new_ticket')
@@ -39,6 +39,9 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
     if ($email_template == 'ticket_closed') {
         $ticket['attachments'] = '';
     }
+
+    $ticket['email_original'] = $ticket['email'];
+    $hesk_settings['EMAIL_IDS'] = array();
 
     $customers = hesk_get_customers_for_ticket($ticket['id']);
     $ticket['customers'] = $customers;
@@ -65,16 +68,42 @@ function hesk_notifyCustomer($email_template = 'new_ticket')
 
     foreach ($language_to_customers as $language => $customers) {
         hesk_setLanguage($language);
-        $subject = hesk_getEmailSubject($email_template, $ticket);
-        list($message, $html_message, $mail_direct_attachment) = hesk_getEmailMessage($email_template, $ticket);
 
+        $subject = hesk_getEmailSubject($email_template, $ticket);
         $customer_emails = hesk_getEmailsForCustomers($customers);
-        hesk_mail($customer_emails['requester'], $customer_emails['followers'], $subject, $message, $html_message, $ticket['trackid'], $mail_direct_attachment);
+
+        // Customers will have to login to reply, no need to complicate
+        if ($hesk_settings['customer_accounts_required'] && $hesk_settings['customer_accounts']) {
+            list($message, $html_message, $mail_direct_attachment) = hesk_getEmailMessage($email_template, $ticket);
+            hesk_mail($customer_emails['requester'], $customer_emails['followers'], $subject, $message, $html_message, $ticket['trackid'], $mail_direct_attachment);
+        } else {
+            // Customers do not have to log in to reply.
+            // To make sure the correct replier is used, send each customer an email with a unique ticket tracking URL address with their own email address
+            $ticket['email'] = $customer_emails['requester'];
+            list($message, $html_message, $mail_direct_attachment) = hesk_getEmailMessage($email_template, $ticket);
+            hesk_mail($customer_emails['requester'], array(), $subject, $message, $html_message, $ticket['trackid'], $mail_direct_attachment);
+
+            foreach ($customer_emails['followers'] as $email) {
+                $ticket['email'] = $email;
+                list($message, $html_message, $mail_direct_attachment) = hesk_getEmailMessage($email_template, $ticket);
+                hesk_mail($email, array(), $subject, $message, $html_message, $ticket['trackid'], $mail_direct_attachment);
+            }
+        }
 
         // Reset language if needed
         hesk_resetLanguage();
     }
 
+    $ticket['email'] = $ticket['email_original'];
+
+    if (count($hesk_settings['EMAIL_IDS'])) {
+        $sql_values = array();
+        foreach ($hesk_settings['EMAIL_IDS'] as $eid) {
+            $sql_values[] = "('".hesk_dbEscape($eid)."', ".$ticket['id'].", 1)";
+        }
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (`email_id`, `ticket_id`, `from_hesk`) VALUES " . implode(', ', $sql_values));
+    }
+    unset($hesk_settings['EMAIL_IDS']);
 
     return true;
 
@@ -120,7 +149,7 @@ function hesk_notifyCollaborators($collaborator_ids, $email_template, $type = 'n
     }
 
     $admins = array();
-    $res = hesk_dbQuery("SELECT * FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `id` IN (".implode(',', $collaborator_ids).") ORDER BY `language`");
+    $res = hesk_dbQuery("SELECT * FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `active` = 1 AND `id` IN (".implode(',', $collaborator_ids).") ORDER BY `language`");
     while ($user = hesk_dbFetchAssoc($res)) {
         if (empty($user[$type])) {
             continue;
@@ -223,7 +252,7 @@ function hesk_notifyAssignedStaff($autoassign_owner, $email_template, $type = 'n
 
     // Get user info from the DB if we need it
     if (count($lookup)) {
-        $res = hesk_dbQuery("SELECT * FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `id` IN (".implode(',', $lookup).") ORDER BY `language`");
+        $res = hesk_dbQuery("SELECT * FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `active` = 1 AND `id` IN (".implode(',', $lookup).") ORDER BY `language`");
 
         while ($user = hesk_dbFetchAssoc($res)) {
             $hesk_settings['user_data'][$user['id']] = $user;
@@ -327,7 +356,7 @@ function hesk_notifyStaff($email_template, $sql_where, $is_ticket = 1, $exclude_
 
     $admins = array();
 
-    $res = hesk_dbQuery("SELECT `id`,`email`,`language`,`isadmin`,`categories` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE $sql_where ORDER BY `language`");
+    $res = hesk_dbQuery("SELECT `id`,`email`,`language`,`isadmin`,`categories` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `active` = 1 AND ( $sql_where ) ORDER BY `language`");
     while ($myuser = hesk_dbFetchAssoc($res)) {
         /* Is this an administrator? */
         if ($myuser['isadmin']) {
@@ -414,7 +443,7 @@ function hesk_notifyStaffOfPendingApprovals($num)
     }
 
     $admins = array();
-    $res = hesk_dbQuery("SELECT `email`,`language` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `notify_customer_approval` = '1' AND (`isadmin` = '1' OR `heskprivileges` LIKE '%can_man_customers%') ORDER BY `language`");
+    $res = hesk_dbQuery("SELECT `email`,`language` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `active` = 1 AND (`notify_customer_approval` = '1' AND (`isadmin` = '1' OR `heskprivileges` LIKE '%can_man_customers%')) ORDER BY `language`");
     while ($myuser = hesk_dbFetchAssoc($res)) {
         $admins[] = array('email' => $myuser['email'], 'language' => $myuser['language']);
     }
@@ -663,6 +692,9 @@ function hesk_validEmails()
         // --> Ticket closed
         'ticket_closed' => $hesklang['ticket_closed'],
 
+        // --> Follow-up survey email
+        'survey' => $hesklang['follow_up_email'],
+
         // --> Customer password reset email
         'customer_reset_password' => $hesklang['customer_reset_password'],
 
@@ -794,6 +826,65 @@ function hesk_mail($to, $cc, $subject, $message, $html_message, $tracking_ID = n
     }
     $cc_arr = array_unique($cc);
 
+    // Lowercase all emails
+    $to_arr = array_map('strtolower', $to_arr);
+    $cc_arr = array_map('strtolower', $cc_arr);
+
+    // Remove muted emails
+    $muted = hesk_get_muted_emails();
+
+    if (count($muted['emails'])) {
+        $to_arr = array_diff($to_arr, $muted['emails']);
+        $cc_arr = array_diff($cc_arr, $muted['emails']);
+    }
+
+    if (count($muted['domains'])) {
+        $to_arr_copy = $to_arr;
+        $to_arr = [];
+
+        foreach ($to_arr_copy as $to) {
+            $is_muted = false;
+
+            foreach ($muted['domains'] as $domain) {
+                if (hesk_str_ends_with($to, $domain)) {
+                    $is_muted = true;
+                    break;
+                }
+            }
+
+            if ($is_muted == false) {
+                $to_arr[] = $to;
+            }
+        }
+
+        $cc_arr_copy = $cc_arr;
+        $cc_arr = [];
+
+        foreach ($cc_arr_copy as $to) {
+            $is_muted = false;
+
+            foreach ($muted['domains'] as $domain) {
+                if (hesk_str_ends_with($to, $domain)) {
+                    $is_muted = true;
+                    break;
+                }
+            }
+
+            if ($is_muted == false) {
+                $cc_arr[] = $to;
+            }
+        }
+    }
+
+    // Let's check our recipients again after muted check
+    if (empty($to_arr)) {
+         if (empty($cc_arr)) {
+            return true;
+         } else {
+            $to_arr[] = array_shift($cc_arr);
+         }
+    }
+
     // Check the number of email recipients
     if ($hesk_settings['email_max_recipients']) {
         $to_num = count($to_arr);
@@ -917,6 +1008,9 @@ function hesk_mail($to, $cc, $subject, $message, $html_message, $tracking_ID = n
     try {
         ob_start();
         $mailer->send();
+        if (isset($hesk_settings['EMAIL_IDS'])) {
+            $hesk_settings['EMAIL_IDS'][] = $mailer->getLastMessageID();
+        }
         ob_end_clean();
     } catch (Exception $e) {
         if ($hesk_settings['debug_mode']) {
@@ -1061,11 +1155,12 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
             $msg = str_replace('%%MESSAGE%%', $ticket['message'], $msg);
             $html_msg = str_replace('%%MESSAGE%%', $ticket['message_html'], $html_msg);
         }
-
         return array($msg, $html_msg);
     }
 
-    $hesk_settings['e_param'] = $hesk_settings['email_view_ticket'] ? '&e=' . rawurlencode($ticket['email']) : '';
+    $is_customer_email = in_array(basename($eml_file, '.txt'), hesk_getCustomerEmailFilenames());
+
+    $hesk_settings['e_param'] = $hesk_settings['email_view_ticket'] && ! $hesk_settings['customer_accounts_required'] ? '&e=' . rawurlencode($ticket['email']) : '';
 
     /* Generate the ticket URLs */
     $trackingURL = $hesk_settings['hesk_url'];
@@ -1079,14 +1174,22 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
     $ticket['priority'] = hesk_get_priority_name($ticket['priority']);
 
     /* Get owner name */
-    $ticket['owner'] = hesk_msgToPlain(hesk_getOwnerName($ticket['owner']), 1, 0);
+    if ($owner_array = hesk_getStaffNameArray($ticket['owner'])) {
+        if ($is_customer_email) {
+            $ticket['owner'] = hesk_msgToPlain($owner_array['nickname'], 1, 0);
+        } else {
+            $ticket['owner'] = hesk_msgToPlain($owner_array['name'], 1, 0);
+        }
+    } else {
+        $ticket['owner'] = $hesklang['unas'];
+    }
 
     /* Set status */
     $ticket['status'] = hesk_get_status_name($ticket['status']);
 
     // Get name of the person who posted the last message
     if (!isset($ticket['last_reply_by'])) {
-        $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+        $ticket['last_reply_by'] = hesk_getReplierNameArray($ticket);
     }
 
     /* Replace all special tags */
@@ -1122,7 +1225,14 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
     list($msg, $html_msg) = hesk_replace_email_tag('%%DUE_DATE%%', $ticket['due_date'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%ID%%', $ticket['id'], $msg, $html_msg);
     list($msg, $html_msg) = hesk_replace_email_tag('%%TIME_WORKED%%', $ticket['time_worked'], $msg, $html_msg);
-    list($msg, $html_msg) = hesk_replace_email_tag('%%LAST_REPLY_BY%%', $ticket['last_reply_by'], $msg, $html_msg);
+
+    if (is_string($ticket['last_reply_by'])) {
+        list($msg, $html_msg) = hesk_replace_email_tag('%%LAST_REPLY_BY%%', $ticket['last_reply_by'], $msg, $html_msg);
+    } elseif ($is_customer_email) {
+        list($msg, $html_msg) = hesk_replace_email_tag('%%LAST_REPLY_BY%%', $ticket['last_reply_by']['nickname'], $msg, $html_msg);
+    } else {
+        list($msg, $html_msg) = hesk_replace_email_tag('%%LAST_REPLY_BY%%', $ticket['last_reply_by']['name'], $msg, $html_msg);
+    }
 
     // These fields are deprecated, but keeping them for backwards compatibility
     // %%NAME%% can be set to Staff name is some cases
@@ -1169,8 +1279,7 @@ function hesk_getEmailMessage($eml_file, $ticket, $is_admin = 0, $is_ticket = 1,
     if (strpos($msg, '%%MESSAGE%%') !== false || strpos($html_msg, '%%MESSAGE%%') !== false) {
         if ($hesk_settings['attachments']['use'] && isset($ticket['attachments']) && strlen($ticket['attachments'])) {
             $att = explode(',', substr($ticket['attachments'], 0, -1));
-            $is_customer_email = in_array(basename($eml_file, '.txt'), hesk_getCustomerEmailFilenames());
-            
+
             if ($hesk_settings['attachments']['attachment_in_email_type'] == '1') {
                 //get all attachment id,name and size
 
@@ -1380,3 +1489,26 @@ function hesk_PMtoMainAdmin($landmark)
     return true;
 
 } // END hesk_PMtoMainAdmin()
+
+
+function hesk_get_muted_emails() {
+    global $hesk_settings;
+
+    $muted = array(
+        'emails' => array(),
+        'domains' => array(),
+    );
+
+    $res = hesk_dbQuery("SELECT `email`,`type` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."muted_emails`");
+
+    while ($row=hesk_dbFetchAssoc($res)) {
+        if ($row['type']) {
+            $muted['emails'][] = $row['email'];
+        } else {
+            $muted['domains'][] = $row['email'];
+        }
+    }
+
+    return $muted;
+} // END hesk_get_muted_emails()
+

@@ -1,0 +1,109 @@
+/*
+Put any general tooltips related CSS here.
+*/
+.tooltype {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    vertical-align: middle;
+    cursor: pointer;
+    position: relative
+}
+
+.tooltype .icon-info {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-2);
+    transition: all var(--transition-speed) ease
+}
+
+.tooltype:hover .icon-info {
+    fill: var(--primary);
+}
+
+.tooltype:hover .tooltype__content {
+    display: block
+}
+
+.tooltype .tooltype__content {
+    position: absolute;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    z-index: 10;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: .1px;
+    color: var(--gray-4);
+    text-transform: initial;
+    width: 260px;
+    display: none
+}
+
+.tooltype .tooltype__content .tooltype__wrapper {
+    background-color: var(--surface);
+    padding: 12px 24px 14px 14px;
+    position: relative;
+    z-index: 1;
+    white-space: normal
+}
+
+.tooltype .tooltype__content a {
+    color: var(--secondary);
+    transition: all var(--transition-speed) ease
+}
+
+.tooltype .tooltype__content a:hover {
+    color: var(--primary) !important;
+}
+
+.tooltype .tooltype__content::before {
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--surface);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    z-index: 0
+}
+
+@media screen and (max-width:900px) {
+    .tooltype .tooltype__content {
+        position: fixed!important;
+        top: 50%!important;
+        left: 50%!important;
+        -ms-transform: translate(-50%, -50%)!important;
+        transform: translate(-50%, -50%)!important
+    }
+    .tooltype .tooltype__content::before {
+        display: none
+    }
+}
+
+.tooltype.right .tooltype__content {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: calc(100% + 4px)
+}
+
+.tooltype.right .tooltype__content::before {
+    top: calc(50% - 4px);
+    left: -4px
+}
+
+.tooltype.top .tooltype__content {
+    left: 50%;
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    bottom: calc(100% + 4px)
+}
+
+.tooltype.top .tooltype__content::before {
+    left: calc(50% - 4px);
+    bottom: -4px
+}

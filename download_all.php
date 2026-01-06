@@ -58,6 +58,8 @@ if (hesk_dbNumRows($res) != count($att_ids)) {
     hesk_error($hesklang['id_not_valid'].' (att_id)');
 }
 
+$file_names = array();
+
 while ($file = hesk_dbFetchAssoc($res))
 {
     // Is ticket ID valid for this attachment?
@@ -83,6 +85,14 @@ while ($file = hesk_dbFetchAssoc($res))
         hesk_error($hesklang['attdel']);
     }
 
+    // Rename if files have the same names
+    if (isset($file_names[$file['real_name']])) {
+        $file_names[$file['real_name']]++;
+        $file['real_name'] = substr_replace($file['real_name'], ' ('.$file_names[$file['real_name']].').', strpos($file['real_name'], '.'), 1);
+    } else {
+        $file_names[$file['real_name']] = 1;
+    }
+
     $files_to_download[$file['real_name']] = $realpath;
 }
 
@@ -99,7 +109,7 @@ register_shutdown_function('unlink', $zip_full_path);
 
 $zip = new ZipArchive;
 $res = $zip->open($save_to_zip, ZipArchive::CREATE);
-if ($res === TRUE) {
+if ($res === true) {
     foreach ($files_to_download as $name => $file) {
         $zip->addFile($file, $tic_id . '/' . $name);
     }

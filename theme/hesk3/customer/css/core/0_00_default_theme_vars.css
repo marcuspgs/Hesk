@@ -1,0 +1,290 @@
+:root {
+    /*
+
+    IMPORTANT NOTE ON USAGE OF CSS VARIABLES IN HESK (usage, naming conventions etc.):
+        Before adding/changing any variables, please see file comments in:
+        theme/hesk3/customer/css/core/0_01_variables.css
+
+    1) Breakdown/info on theme CSS variables:
+
+    Primary (--primary) → The most important color, often used for main interactive elements like buttons, links, or accents.
+        Primary is usually the strongest brand or interactive color.
+
+    Secondary (--secondary) → A supporting color, often used for less prominent elements like secondary buttons or highlights.
+        Secondary/Tertiary support the primary color but are not the background.
+
+    Tertiary (--tertiary) → An additional supporting color, often used for accents or decorative elements.
+        Surface is different from the background and is used for floating elements like cards.
+
+    General Theme Color Guidelines:
+        Primary (--primary):
+        → Dark, muted base color.
+        → About 20–30% darker than the base hue.
+        → Feels strong, serious, used for main backgrounds and accents.
+
+        Secondary (--secondary):
+        → Medium, softer version of primary.
+        → Lighten primary by ~20–30%.
+        → Used for hover states, lighter sections, or secondary buttons.
+
+        Tertiary (--tertiary):
+        → Bright accent within the same hue family.
+        → Increase saturation, make it lighter by ~30–40% from primary.
+        → Used for highlights, links, calls-to-action.
+
+    ----------------------------------------------------------------
+
+    Main Background (--main-background) → The main page background of content holder
+
+    Surface (--surface) → Used for elevated elements like cards, modals, or div boxes on top of the background.
+    Foreground (--foreground) → Text and icons that contrast with the background or surface.
+        Note: These two are currently not really used as much as they should be. Ideally CSS should be separated even more to use these,
+            as it would then be easier to handle things like dark/light theme switching etc.
+
+    Note: The rest of variables are more specific, but usually clearly named to represent their purpose.
+    Unfortunately due to the complexity of HESK UI, the variables can't be further simplified by a lot (not without simplifying/changing the default UI look at least).
+
+    2) Note on deprecation handling:
+    For most of theme logic we are using CSS color-mix() function. This has very decent support these days (~92%+) so we generally don't need to worry about deprecation fallbacks.
+    Still, in most places where color-mix is used, we still add a rough fallback approximation without it before it, that older browser can fallback to.
+    */
+
+    /* START general specific color definitions.
+    NEED to be defined, before other theme colors, as they might be using these in calculations!
+    These are typically colors that are "theme colors in-dependant",
+    Like commonly used notification colors, shades of white/black/gray, shadow colors, etc.
+    */
+    --black-1: #000000; /* need hsl variations for 0.06, 0.05, 0.08, , 0.1, 0.15, 0.16, 0.2, 0.5*/
+    --black--hsl: 0, 0%, 0%;
+
+    --white--hsl: 0, 0%, 100%;
+
+    /* from lightest to darkest variants */
+    --white-1: #ffffff;
+    --white-2: #f5f8ff;
+    --white-3: #f3f4f4;
+    --white-4: #f0f2f5;
+    --white-5: #f0f0f0; /* some btn backgrounds / disabled ? */
+    --white-6: #edf6fb; /* used on some hovers ? */
+    --white-7: #dfe4ec;
+    --white-8: #d4d6e3; /* some border clr ?*/
+    --white-9: #c5cad4;
+
+    /* darker to lighter */
+    --gray-1: #cccccc;
+    --gray-2: #959eb0;
+    --gray-3: #9c9c9c;
+    --gray-4: #6b7480;
+    --gray-5: #4a4a4a;
+    --gray-6: #303030;
+    --gray-6-hsl: 0, 0%, 19%;
+    --gray-7: #26282a;
+    /* END general specific color definitions */
+
+
+    /*
+    NOTE: The theme variables are already near the 100 mark, so we should avoid expanding this way too far beyond this number.
+    We can add more variables if really needed, but if possible we should try reusing one of the existing/main theme colors if possible.
+    */
+
+    /* START theme colors - these are colors, which admins can adjust from the Admin "Look & Feel" UI.
+    When adding new theme colors/variables, make sure to alo:
+        - add them in theme_variables.inc.php  (in 2 places!)
+        - add them in text.php language file
+    */
+    --yellow-1: #eeb707;
+    --yellow-2: #ffc200;
+
+    --green-1: #38bc7d;
+
+    --red-1: #e64342;
+    --red-2: #e02020;
+
+    /* START secondary theme colors (usually they read from above ones)
+        Success (--success) → Green, used for positive messages.
+        Error (--error) → Red, used for errors or warnings.
+        Warning (--warning) → Yellow, used for cautionary messages.
+        Info (--info) → Blue, used for informational messages.
+    */
+    --success: var(--green-1);
+    --success-2: #f0fff4;
+    --error: var(--red-1);
+    --error-2: #fff5f5;
+    --error-3: #ea0000;
+    --warning: var(--yellow-1);
+    --warning-2: #ffffcc;
+    --info: #00a6ec;
+    --info-2: #e2f2fd;
+    --info-3: var(--gray-2);
+
+    /* START MAIN theme colors:
+        These are THE MAIN color that really define a theme's look.
+        Usually, changing these, will affect "90%" of the look, as most other colors are in some way derived from these.
+    */
+    --primary: #133e5e;
+    --secondary: #2b6d9e;
+    --tertiary: #1673e5;
+
+    --surface: #ffffff; /* TODO ideally surface should be reserved for box backgrounds only, and any texts/icons should rather use somehting like --light */
+     --foreground: #133e5e; /* TODO currently not really used in any way */
+
+    --main-background: #e9f0f3;
+    /*--main-background: color-mix(in srgb, var(--tertiary) 5%, var(--white-1));*/ /* TODO Use this if you want to automatically base it off main theme colors */
+
+    --font__pri-clr: #133e5e; /* primary font color used by wrapper/body */
+    --font__sec-clr: #2b6d9e; /* secondary (lighter) font color used by wrapper/body */
+        /* END MAIN theme colors */
+
+
+        /* START header & Navigation */
+    --header__bg: var(--primary); /* header background color */
+    --header_logo__clr: var(--white-6);
+    --header_nav__clr: var(--surface);
+    --header_nav__hover_clr: var(--white-9);
+
+    --header_profile__clr: var(--surface);
+    --header_profile__menu-bg: var(--surface);
+    --header_profile__user-avatar-bg: var(--secondary);
+    --header_profile__mobile-user-avatar-bg: var(--gray-2);
+
+    --icon_circle__clr: var(--white-1);
+    --icon_circle__bg: var(--secondary);
+    --navlink_icon_hover__clr: var(--white-1);
+    --navlink_icon_hover__bg: var(--primary);
+
+    --navlink__bg: var(--surface);
+    --navlink__clr: var(--font__sec-clr);
+    --navlink__hover-bg: var(--surface);
+    --navlink__title-clr: var(--secondary);
+
+    --notification__clr: var(--font__pri-clr);
+
+    --input-bg: #f3faff; /* default background for input, textarea fields*/
+    /*--input-bg: color-mix(in srgb, white 94%, var(--tertiary));*/ /* TODO Use this if you want to automatically base it off main theme colors */
+    --input-clr: #0e212f; /* default clr for input, text area fields */
+
+    --radio__bg: var(--white-1);
+    --radio__fill-clr: var(--primary);
+    --radio__hover-bg: var(--white-8); /* deprecation fallback */
+    --radio__hover-bg: color-mix(in srgb, var(--white-8) 85%, var(--tertiary));
+    --radio__hover-fill-clr: var(--radio__fill-clr);
+
+        /* Note we can't easily control color of checkbox as it's an icon */
+    --checkbox__bg: var(--radio__bg);
+    --checkbox__hover-bg: var(--radio__hover-bg);
+
+        /* Regular links, used pretty much everywhere, all <a> in breadcrumbs, most places...*/
+    --link__pri-clr: var(--secondary);
+    --link__pri-hover-clr: var(--primary);
+
+        /* More standout links, like on view tickets page, refresh.... */
+    --link__sec-clr: var(--tertiary);
+    --link__sec-hover-clr: var(--secondary);
+
+    --footer__link-clr: var(--link__pri-clr);
+    --ticket_body__bg: var(--surface);
+    --ticket_response__bg: var(--white-1); /* deprecation fallback TODO is it even necessary? */
+    --ticket_response__bg: color-mix(in srgb, white 96.5%, var(--green-1));
+
+    --preview__clr: var(--font__sec-clr);
+    --preview__bg: var(--surface);
+    --preview__border-clr: var(--primary); /* deprecation fallback */
+    --preview__border-clr: color-mix(in srgb, var(--tertiary) 50%, var(--white-1));
+    --preview__hover-bg: color-mix(in srgb, var(--tertiary) 8%, var(--white-1)); /* used in article previews on hover */
+    --preview__hover-bg: var(--white-6); /* Now using this one specifically, to make the preview bg super specific */
+    --preview__hover-icon-fill: var(--white-1);
+    --preview__title-clr: var(--secondary);
+
+    --suggest_preview__bg: var(--preview__bg);
+    --suggest_preview__clr: var(--gray-7);
+    --suggest_preview__border-clr: color-mix(in srgb, var(--tertiary) 5%, var(--white-1));
+    --suggest_preview__hover-bg: var(--preview__hover-bg);
+    --suggest_preview__hover-icon-fill: var(--preview__hover-icon-fill);
+    --suggest_preview__title-clr: var(--tertiary);
+
+    --article_preview__hover-clr: var(--link__pri-hover-clr);
+    --article_preview_suggestion_clr: var(--gray-7);
+
+    --table_row__bg: var(--white-6); /* deprecation fallback */
+    --table_row__bg: color-mix(in srgb, var(--primary) 5%, var(--white-1) 95%);
+    --table_row__bg: var(--main-background); /* TODO just use main content Bg, as it seems to work well? */
+    --table_row__bg-even:  var(--white-6);  /* deprecation fallback */
+    --table_row__bg-even: color-mix(in srgb, var(--white-6) 90%, 5% var(--tertiary), var(--secondary));
+    --table_row__bg-even: #d5ebf7; /* TODO just use this, calculated ones can't easily get to the original */
+    --table_row__bg-hover: var(--white-1);
+
+    --step_bar__item-clr: var(--tertiary); /* deprecation fallback */
+    --step_bar__item-clr: color-mix(in srgb, var(--tertiary) 77%, var(--white-1));
+
+    --breadcrumbs__a-clr: var(--secondary);
+    --breadcrumbs__a-hover-clr: var(--primary);
+
+    --search__clr: var(--black-1);
+    --search__bg: var(--secondary);
+    --search__title-clr: var(--font__pri-clr);
+    --search__input-placeholder-clr: var(--gray-4); /* deprecation fallback */
+    --search__input-placeholder-clr: color-mix(in srgb, var(--secondary) 25%, var(--gray-4));
+    --search__icon-fill: var(--secondary);
+    --search__input-bg: var(--surface);
+
+    --modal_body__bg: var(--surface);
+
+    --btn__bg-clr-pri: var(--secondary);
+    --btn__clr-pri: var(--surface);
+    --btn__border-clr-pri: var(--primary);
+    --btn__disabled-bg-clr: var(--white-4);
+    --btn__disabled-clr: var(--gray-2);
+
+        /* START MAIN DROPDOWN COLORS!!! */
+    --dropdown__bg: var(--surface);
+    --dropdown__clr: var(--primary);
+    --dropdown__border-clr: var(--secondary);
+    --dropdown_ver1__border-clr: transparent;
+    --dropdown_ver2__border-clr: var(--primary);
+
+    --dropdown__hover-bg: var(--secondary);
+    --dropdown__hover-clr: var(--surface);
+    --dropdown__hover-border-clr: var(--secondary);
+    --dropdown_ver2__hover-border-clr: var(--primary);
+        /* END MAIN DROPDOWN COLORS!!! */
+
+        /* START MAIN DATEPICKER COLORS!!! */
+    --datepicker_btn__bg: var(--secondary);
+    --datepicker_btn__clr: var(--surface);
+
+    --datepicker__bg: var(--surface);
+    --datepicker__clr: var(--primary);
+        /* END MAIN DATEPICKER COLORS!!! */
+    /* END MAIN theme colors */
+
+
+    /* START secondary theme variables (usually they read from above ones)
+    Additional non-color helper variables (i.e. these are currently NOT in admin theme settings,
+    but might still be useful in theme css files to change certain look across the site easily.
+    FUTURE TODO NOTE: As we ended up using color-mix for variables anyway, we could probably go away from the older support of hsla for shadows.
+    */
+    --shadow-1: var(--gray-7); /* main shadow color */
+    --shadow-1-hsla: 210, 5%, 16%; /* RGB: #26282a */ /* main shadow color but in HSLA; so it can be calculated dynamically */
+    /* variants of main shadow opacity */
+    --shadow-1-90: hsla(var(--shadow-1-hsla), 0.9);
+    --shadow-1-80: hsla(var(--shadow-1-hsla), 0.8);
+    --shadow-1-70: hsla(var(--shadow-1-hsla), 0.7);
+    --shadow-1-60: hsla(var(--shadow-1-hsla), 0.6);
+    --shadow-1-50: hsla(var(--shadow-1-hsla), 0.5);
+    --shadow-1-40: hsla(var(--shadow-1-hsla), 0.4);
+    --shadow-1-30: hsla(var(--shadow-1-hsla), 0.3);
+    --shadow-1-20: hsla(var(--shadow-1-hsla), 0.2);
+    --shadow-1-10: hsla(var(--shadow-1-hsla), 0.1);
+
+    --dark-text: var(--gray-7); /* used in inputs texts, buttons sometimes */
+
+    --shadow_smaller: 0 2px 4px 0;
+    --shadow_smaller_invert: 0 -2px 4px 0;
+    --shadow_small: 0 2px 8px 0;
+    --shadow_med: 0 4px 8px 0;
+    --shadow_blur-only: 0 0 10px 0;
+
+    --shadow_dropdown_label: inset 2px 1px 2px;
+    --shadow_dropdown_label_invert:  inset -2px -1px 2px;
+    /* END secondary theme colors */
+}

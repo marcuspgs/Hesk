@@ -179,7 +179,7 @@ function handle_login_request() {
 
     $user = hesk_dbFetchAssoc($res);
 
-    if (!hesk_password_verify($_POST['password'], $user['pass'])) {
+    if ( ! is_string($user['pass']) || ! strlen($user['pass']) || ! hesk_password_verify($_POST['password'], $user['pass'])) {
         hesk_process_messages($hesklang['customer_wrong_pass'], 'login.php');
     }
 

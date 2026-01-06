@@ -27,7 +27,7 @@ hesk_isLoggedIn();
 
 /* List of staff */
 $admins = array();
-$res = hesk_dbQuery("SELECT `id`,`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `name` ASC");
+$res = hesk_dbQuery("SELECT `id`,`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `active` = 1 ORDER BY `name` ASC");
 while ($row=hesk_dbFetchAssoc($res))
 {
 	$admins[$row['id']]=$row['name'];
@@ -310,7 +310,7 @@ function mail_send()
 	}
 	else
 	{
-		$res = hesk_dbQuery("SELECT `name`,`email`,`notify_pm` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='".intval($_SESSION['mail']['to'])."' LIMIT 1");
+		$res = hesk_dbQuery("SELECT `name`,`email`,`notify_pm` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='".intval($_SESSION['mail']['to'])."' AND `active` = 1 LIMIT 1");
 		$num = hesk_dbNumRows($res);
 		if (!$num)
 		{

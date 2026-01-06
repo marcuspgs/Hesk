@@ -34,10 +34,11 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 
+// Hesk free version
 hesk_show_notice(sprintf($hesklang['modules_demo'], '<a href="https://www.hesk.com/get/hesk3-escalate">HESK Cloud</a>'), ' ', false);
 ?>
 <div class="main__content reports">
-    <form action="module_escalate.php" method="get" name="form1">
+    <form>
         <div class="reports__head">
             <h2>
                 <?php echo $hesklang['escalate']['page_title']; ?>

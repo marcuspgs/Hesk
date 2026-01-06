@@ -1,0 +1,111 @@
+/*
+Put any general modal related CSS here.
+*/
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    background-color: var(--shadow-1-80);
+    text-align: center;
+    display: none;
+    color: var(--font__pri-clr);
+}
+
+.modal::before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    margin-left: -.05em;
+    vertical-align: middle
+}
+
+.modal .modal__body {
+    padding: 40px 24px;
+    box-shadow: 0 8px 16px 0 var(--shadow-1-10);
+    background-color: var(--modal_body__bg);
+    margin: auto;
+    display: inline-block;
+    position: relative;
+    width: 440px;
+    vertical-align: middle
+}
+
+.modal .modal__body .modal__close {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    top: 0;
+    right: 0;
+    cursor: pointer
+}
+
+.modal .modal__body .modal__close .icon-close {
+    width: 8px;
+    height: 8px
+}
+
+.modal .modal__body .modal__close:hover .icon-close {
+    fill: var(--theme-color-dark-2);
+}
+
+.modal .modal__body h3 {
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22;
+    letter-spacing: .1px;
+    text-align: center
+}
+
+.modal .modal__body .modal__description {
+    margin-top: 24px;
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    text-align: center
+}
+
+.modal .modal__body .modal__buttons {
+    margin-top: 32px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between
+}
+
+.modal .modal__body .modal__buttons button {
+    min-width: 176px
+}
+
+@media screen and (max-width: 899px) {
+    .modal .modal__body {
+        width: 90%
+    }
+    .modal .modal__body .btn {
+        height: 40px!important
+    }
+    .modal .modal__body .modal__buttons {
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap
+    }
+    .modal .modal__body .modal__buttons .btn {
+        margin: 0 8px 16px
+    }
+}

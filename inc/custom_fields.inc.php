@@ -20,15 +20,11 @@ hesk_load_custom_fields();
 // Save number of custom fields
 $hesk_settings['num_custom_fields'] = count($hesk_settings['custom_fields']);
 
-// Load custom fields for admin functions
-if (function_exists('hesk_checkPermission'))
-{
-	foreach ($hesk_settings['custom_fields'] as $k => $v)
-	{
-		$hesk_settings['possible_ticket_list'][$k] = $hesk_settings['custom_fields'][$k]['title'];
-	}
+// Append custom fields to the possible ticket table list
+foreach ($hesk_settings['custom_fields'] as $k => $v) {
+    $hesk_settings['possible_ticket_list'][$k] = $hesk_settings['custom_fields'][$k]['title'];
+    $hesk_settings['possible_customer_ticket_list'][$k] = $hesk_settings['custom_fields'][$k]['title'];
 }
-
 
 /*** FUNCTIONS ***/
 

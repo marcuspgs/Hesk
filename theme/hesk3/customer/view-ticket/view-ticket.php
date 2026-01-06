@@ -19,91 +19,40 @@ global $hesk_settings, $hesklang;
 if (!defined('IN_SCRIPT')) {
     die();
 }
+define('EXTRA_PAGE_CLASSES','page-view-ticket');
 
-require_once(TEMPLATE_PATH . 'customer/util/alerts.php');
-require_once(TEMPLATE_PATH . 'customer/util/custom-fields.php');
-require(TEMPLATE_PATH . 'customer/view-ticket/partial/add-reply.php');
-require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
+define('ALERTS',1);
+define('CUSTOM_FIELDS',1);
+define('ADD_REPLY',1);
+define('LOAD_CSS_DROPZONE',1);
+define('LOAD_CSS_ZEBRA',1);
+define('LOAD_PRISM_OPTIONAL',1); // TODO absolutelyRework - actually just double check if it makes sense
+
+
+define('RENDER_COMMON_ELEMENTS',1);
+define('RENDER_HIDDEN_TICKET_FIELDS',1);
+
+define('LOAD_JS_DROPZONE',1);
+define('LOAD_JS_ZEBRA',1);
+
+define('FOOTER_DONT_CLOSE_HTML',1);
+
+global $BREADCRUMBS;
+$BREADCRUMBS = array(
+    array('url' => $hesk_settings['site_url'], 'title' => $hesk_settings['site_title']),
+    array('url' => $hesk_settings['hesk_url'], 'title' => $hesk_settings['hesk_title']),
+    array('url' => ($customerUserContext !== null ? 'my_tickets.php' : 'ticket.php'), 'title' => $hesklang['customer_my_tickets_heading']),
+    array('title' => ($hesk_settings['new_top'] && $ticket['replies'] ? $ticket['subject'] : $hesklang['your_ticket']))
+);
+
+// Note: we need to pass this data to login-navbar-elements.php for an edge case rendering
+$hesk_settings['hidden_data'] = array(
+    'ticket' => $ticket,
+    'email' => $email
+);
+/* Print header */
+require_once(TEMPLATE_PATH . 'customer/inc/header.inc.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <title><?php echo $hesk_settings['hesk_title']; ?></title>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
-    <meta name="format-detection" content="telephone=no" />
-    <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/dropzone.min.css?<?php echo $hesk_settings['hesk_version']; ?>" />
-    <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
-    <link rel="stylesheet" href="./css/zebra_tooltips.css">
-    <?php if ($hesk_settings['staff_ticket_formatting'] == 2): ?>
-        <script type="text/javascript" src="<?php echo HESK_PATH; ?>js/prism.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-        <link rel="stylesheet" media="all" href="<?php echo HESK_PATH; ?>css/prism.css?<?php echo $hesk_settings['hesk_version']; ?>">
-    <?php endif; ?>
-    <?php include(TEMPLATE_PATH . '../../head.txt'); ?>
-</head>
-
-<body class="cust-help">
-<?php include(TEMPLATE_PATH . '../../header.txt'); ?>
-<?php renderCommonElementsAfterBody(); ?>
-<div class="wrapper">
-    <main class="main" id="maincontent">
-        <header class="header">
-            <div class="contr">
-                <div class="header__inner">
-                    <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
-                        <?php echo $hesk_settings['hesk_title']; ?>
-                    </a>
-                    <?php renderLoginNavbarElements($customerUserContext); ?>
-                    <?php if ($hesk_settings['can_sel_lang']): ?>
-                        <div class="header__lang">
-                            <form method="get" action="" aria-label="<?php echo $hesklang['set_lang']; ?>" style="margin:0;padding:0;border:0;white-space:nowrap;">
-                                <input type="hidden" name="track" value="<?php echo $ticket['trackid']; ?>">
-                                <input type="hidden" name="e" value="<?php echo $email; ?>">
-                                <div class="dropdown-select center out-close">
-                                    <select name="language" onchange="this.form.submit()">
-                                        <?php hesk_listLanguages(); ?>
-                                    </select>
-                                </div>
-                                <?php foreach (hesk_getCurrentGetParameters() as $key => $value): ?>
-                                    <input type="hidden" name="<?php echo hesk_htmlentities($key); ?>"
-                                           value="<?php echo hesk_htmlentities($value); ?>">
-                                <?php endforeach; ?>
-                            </form>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </header>
-        <div class="breadcrumbs">
-            <div class="contr">
-                <div class="breadcrumbs__inner">
-                    <a href="<?php echo $hesk_settings['site_url']; ?>">
-                        <span><?php echo $hesk_settings['site_title']; ?></span>
-                    </a>
-                    <svg class="icon icon-chevron-right">
-                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
-                    </svg>
-                    <a href="<?php echo $hesk_settings['hesk_url']; ?>">
-                        <span><?php echo $hesk_settings['hesk_title']; ?></span>
-                    </a>
-                    <?php if ($customerUserContext): ?>
-                    <svg class="icon icon-chevron-right">
-                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
-                    </svg>
-                    <a href="my_tickets.php">
-                        <span><?php echo $hesklang['customer_my_tickets_heading']; ?></span>
-                    </a>
-                    <?php endif; ?>
-                    <svg class="icon icon-chevron-right">
-                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
-                    </svg>
-                    <div class="last"><?php echo ($hesk_settings['new_top'] && $ticket['replies'] ? $ticket['subject'] : $hesklang['your_ticket']); ?></div>
-                </div>
-            </div>
-        </div>
         <div class="main__content">
             <div class="contr">
                 <div style="margin-bottom: 20px;">
@@ -123,7 +72,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                             displayReplies($replies, $trackingID);
                         }
                         ?>
-                        <article class="ticket__body_block">
+                        <article class="ticket__body_block original-message">
                             <h1><?php echo $ticket['subject']; ?></h1>
                             <div class="block--head">
                                 <div class="d-flex">
@@ -153,7 +102,7 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                                             <svg class="icon icon-person">
                                                                 <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-person"></use>
                                                             </svg>
-                                                            <span><?php echo $requester['name']; ?></span>
+                                                            <span><?php echo (strlen($requester['name']) ? $requester['name'] : ( ! empty($requester['email']) ? $requester['email'] : $hesklang['pde'] )) ; ?></span>
                                                             <svg class="icon icon-chevron-down">
                                                                 <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-down"></use>
                                                             </svg>
@@ -244,11 +193,6 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
                                     </svg>
                                     <span class="ml-1"><?php echo $hesklang['refresh_page']; ?></span>
                                 </a>
-                                <button class="btn btn-toggler">
-                                    <svg class="icon icon-chevron-down">
-                                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-down"></use>
-                                    </svg>
-                                </button>
                             </h2>
                             <div class="accordion-body">
                                 <div class="row">
@@ -316,56 +260,24 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
             </div>
         </div>
 <?php
-/*******************************************************************************
-The code below handles HESK licensing and must be included in the template.
+/* Print Footer */
+require_once(TEMPLATE_PATH . 'customer/inc/footer.inc.php');
 
-Removing this code is a direct violation of the HESK End User License Agreement,
-will void all support and may result in unexpected behavior.
-
-To purchase a HESK license and support future HESK development please visit:
-https://www.hesk.com/buy.php
-*******************************************************************************/
-$hesk_settings['hesk_license']('Qo8Zm9vdGVyIGNsYXNzPSJmb290ZXIiPg0KICAgIDxwIGNsY
-XNzPSJ0ZXh0LWNlbnRlciI+UG93ZXJlZCBieSA8YSBocmVmPSJodHRwczovL3d3dy5oZXNrLmNvbSIgY
-2xhc3M9ImxpbmsiPkhlbHAgRGVzayBTb2Z0d2FyZTwvYT4gPHNwYW4gY2xhc3M9ImZvbnQtd2VpZ2h0L
-WJvbGQiPkhFU0s8L3NwYW4+PGJyPk1vcmUgSVQgZmlyZXBvd2VyPyBUcnkgPGEgaHJlZj0iaHR0cHM6L
-y93d3cuc3lzYWlkLmNvbS8/dXRtX3NvdXJjZT1IZXNrJmFtcDt1dG1fbWVkaXVtPWNwYyZhbXA7dXRtX
-2NhbXBhaWduPUhlc2tQcm9kdWN0X1RvX0hQIiBjbGFzcz0ibGluayI+U3lzQWlkPC9hPjwvcD4NCjwvZ
-m9vdGVyPg0K',"\104", "a809404e0adf9823405ee0b536e5701fb7d3c969");
-/*******************************************************************************
-END LICENSE CODE
-*******************************************************************************/
-?>
-    </main>
-</div>
-<?php include(TEMPLATE_PATH . '../../footer.txt'); ?>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/jquery-3.5.1.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/hesk_functions.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/svg4everybody.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/selectize.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/dropzone.min.js"></script>
-<script src="<?php echo TEMPLATE_PATH; ?>customer/js/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-<?php if ($hesk_settings['time_display']): ?>
+/*
+ * Note: In this case, we have to make sure we load all footer scripts first, as otherwise it breaks some of the custom JS page code
+ */
+if ($hesk_settings['time_display']): ?>
     <script src="./js/timeago/jquery.timeago.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
     <?php if ($hesklang['TIMEAGO_LANG_FILE'] != 'jquery.timeago.en.js'): ?>
         <script type="text/javascript" src="./js/timeago/locales/<?php echo $hesklang['TIMEAGO_LANG_FILE']; ?>?<?php echo $hesk_settings['hesk_version']; ?>"></script>
     <?php endif; ?>
     <script type="text/javascript">
-    jQuery(document).ready(function() {
-        $("time.timeago").timeago();
-    });
+        document.addEventListener("DOMContentLoaded", function() {
+            $("time.timeago").timeago();
+        });
     </script>
-<?php endif; ?>
-<script src="./js/zebra_tooltips.min.js?<?php echo $hesk_settings['hesk_version']; ?>"></script>
-<?php if (function_exists('hesk3_output_drag_and_drop_script')) hesk3_output_drag_and_drop_script('r_attachments'); ?>
-<script>
-$(document).ready(function() {
-    new $.Zebra_Tooltips($('.tooltip'), {animation_offset: 0, animation_speed: 100, hide_delay: 0, show_delay: 0, vertical_alignment: 'above', vertical_offset: 5});
-});
-</script>
-</body>
-</html>
-<?php
+<?php endif;
+
 // Helper functions
 function displayReplies($replies, $trackingId) {
     global $hesklang, $hesk_settings;

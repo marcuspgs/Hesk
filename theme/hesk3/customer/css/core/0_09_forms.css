@@ -1,0 +1,718 @@
+/*
+Put any general forms related CSS here.
+*/
+.form {
+    font-size: 14px
+}
+
+.form .checkbox-custom {
+    padding: 0
+}
+
+.form textarea.form-control {
+    height: 155px;
+    resize: none;
+    font-family: Lato, Arial, sans-serif
+}
+
+.form.invalid .error-message {
+    display: block
+}
+
+.form.invalid .form-control.isError {
+    border-color: var(--error);
+}
+
+.form__title {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.33
+}
+.input-group {
+    position: relative
+}
+
+.input-group-append--icon {
+    position: absolute;
+    right: 17px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    z-index: 3;
+    cursor: pointer
+}
+
+.input-group-append--icon:hover .icon {
+    fill: var(--secondary);
+}
+
+.input-group-append--icon .icon {
+    fill: var(--white-9);
+    font-size: 12px
+}
+
+.input-group-append--icon .icon-eye-close {
+    font-size: 12px
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 16px
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--font__sec-clr);
+}
+
+.isError > label {
+    color: var(--error);
+}
+
+.form-group .form-control__error {
+    display: none;
+    margin-top: 12px;
+    padding: 9px;
+    color: var(--error);
+    text-align: center;
+    background-color: color-mix(in srgb, var(--error) 5%, var(--white-1));
+}
+
+.form-group.error .form-control__error {
+    display: block
+}
+
+.form-group.error input {
+    border-color: var(--error);
+}
+
+.form input.form-control, .form textarea.form-control {
+    height: 40px;
+    width: 100%;
+    padding: 4px 12px;
+    font-size: 14px;
+    border-radius: 2px;
+    border: solid 1px var(--secondary);
+    background-color: var(--input-bg);
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: .1px;
+    -webkit-appearance: none;
+    outline: 0;
+    color: var(--input-clr);
+    transition: all var(--transition-speed) ease
+}
+
+.form input.form-control:-ms-input-placeholder, .form textarea.form-control:-ms-input-placeholder {
+    color: var(--gray-2);
+}
+
+.form input.form-control::placeholder, .form textarea.form-control::placeholder {
+    color: var(--gray-2);
+}
+
+.form input.form-control:hover, .form textarea.form-control:hover {
+    border-color: var(--gray-2);
+}
+
+.form input.form-control:focus, .form textarea.form-control:focus {
+    color: var(--input-clr) !important;
+    border-color: var(--primary);
+    outline: 0;
+    box-shadow: none
+}
+
+/* TODO are these 2 below error/invalid deprecated, ? */
+.error-message {
+    display: none;
+    padding: 9px;
+    color: var(--error);
+    text-align: center;
+    background-color: color-mix(in srgb, var(--error) 5%, var(--white-1));
+}
+
+.invalid-feedback {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: .2rem;
+    font-size: 12px
+}
+.invalid .form-control {
+    border-color: var(--error);
+}
+
+.invalid .invalid-feedback {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    color: var(--error);
+}
+
+.form__submit {
+    margin-top: 24px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+.form__search {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 16px 0 32px;
+    position: relative;
+    background-color: var(--surface);
+    position: relative;
+    box-sizing: border-box
+}
+
+.form__search .search--type {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--gray-2);
+    margin-right: 4px;
+    display: none;
+    text-transform: capitalize;
+    cursor: pointer
+}
+
+.form__search .form__search_type {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+    padding: 9px 16px 24px;
+    z-index: 1;
+    display: none
+}
+
+.form__search .form__search_type h5 {
+    margin-left: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--gray-7);
+}
+
+.form__search .form__search_type .type--list {
+    margin: 8px -16px 0
+}
+
+.form__search .form__search_type .type--list li {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--primary);
+    height: 40px;
+    transition: all var(--transition-speed) ease;
+    padding: 0 16px;
+    cursor: pointer
+}
+
+.form__search .form__search_type .type--list li:hover {
+    background-color: var(--white-2);
+}
+
+.form__search .form__search_type .type--list li:last-child {
+    margin-bottom: 0
+}
+
+.form__search .form__search_type .type--list li .icon {
+    margin-right: 8px;
+    fill: var(--gray);
+    transition: all var(--transition-speed) ease;
+}
+
+.form__search .form__search_results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+    padding: 8px 24px 0;
+    z-index: 1;
+    display: none
+}
+
+.form__search .form__search_results h5 {
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: .1px;
+    color: var(--gray-4);
+}
+
+.form__search .form__search_results .results--list {
+    margin: 0 -24px
+}
+
+.form__search .form__search_results .results--list li {
+    height: 40px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--gray-7);
+    transition: all var(--transition-speed) ease;
+    padding: 0 24px
+}
+
+.form__search .form__search_results .results--list li>:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 0
+}
+
+.form__search .form__search_results .results--list li:hover {
+    background-color: var(--white-2);
+}
+
+.form__search .form__search_results .results--list li a, .form__search .form__search_results .results--list li span {
+    margin-right: 16px;
+    white-space: nowrap
+}
+
+.form__search .form__search_results .results--list li a {
+    color: var(--secondary);
+    transition: all var(--transition-speed) ease;
+}
+
+.form__search .form__search_results .results--list li a:hover {
+    color: var(--primary) !important;
+}
+
+.form__search .form__search_results .results--list li b {
+    background-color: var(--white-6); /* deprecation fallback */
+    background-color: color-mix(in srgb, var(--white-6) 70%, var(--yellow-1));
+}
+
+.form__search.focus .icon-search {
+    fill: var(--primary) !important
+}
+
+.form__search.value .icon-search {
+    fill: var(--primary) !important
+}
+
+.form__search.value .search-clear {
+    opacity: 1!important
+}
+
+.form__search input {
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--gray-7);
+}
+
+.form__search button[type=submit] {
+    margin-right: 8px
+}
+
+.form__search .icon-search {
+    font-size: 19.7px
+}
+
+.form__search .form__control {
+    background-color: transparent;
+    width: 100%;
+    border: none;
+    height: 70%;
+    cursor: pointer
+}
+
+.form__search .form__control::-webkit-input-placeholder,
+.form__search .form__control::-moz-placeholder,
+.form__search .form__control:-ms-input-placeholder,
+.form__search .form__control:-moz-placeholder {
+    color: var(--gray-2);
+    transition: all var(--transition-speed) ease
+}
+.form__search .form__control:hover::-webkit-input-placeholder,
+.form__search .form__control:hover::-moz-placeholder,
+.form__search .form__control:hover:-ms-input-placeholder,
+.form__search .form__control:hover:-moz-placeholder{
+    color: var(--gray-4);
+}
+
+.form__search.type .form__control {
+    cursor: initial
+}
+/* TODO note - check block-attach seems to only be used on admin side ??*/
+.block--attach {
+    margin-top: 8px;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--secondary);
+    transition: all var(--transition-speed) ease;
+    cursor: pointer!important
+}
+
+.block--attach input[type=file] {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer!important
+}
+
+.block--attach .icon-attach {
+    width: 16px;
+    height: 16px;
+    fill: var(--secondary);
+    margin-right: 8px
+}
+
+.block--attach:hover {
+    color: var(--primary);
+}
+
+.block--attach:hover .icon-attach {
+    fill: var(--primary);
+}
+
+@media screen and (max-width:900px) {
+    .form__search .form__search_results .results--list li {
+        font-size: 13px
+    }
+}
+.search__title {
+    margin: 20px 0 16px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.17;
+    letter-spacing: .12px;
+    color: var(--search__title-clr);
+    text-align: center
+}
+
+.search__form {
+    background-color: var(--search__bg);
+    padding: 16px
+}
+
+.search__form .form-group {
+    position: relative;
+    margin: 0 auto;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    max-width: 752px
+}
+
+.search__form .form-group input {
+    width: 100%;
+    height: 56px;
+    padding: 17px 16px 17px 56px;
+    background-color: var(--search__input-bg);
+    border-color: transparent;
+    font-size: 14px;
+    transition: all .3s ease;
+    color: var(--search__clr); /* seems to be needed to properly overwrite it */
+}
+
+.search__form .form-group input:-ms-input-placeholder {
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--search__input-placeholder-clr);
+}
+
+.search__form .form-group input::placeholder {
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--search__input-placeholder-clr);
+}
+
+.search__form .form-group input:focus, .search__form .form-group input:hover {
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+}
+
+.search__form .form-group .icon-search {
+    font-size: 20px;
+    fill: var(--search__icon-fill);
+}
+
+.search__form .search__submit {
+    padding: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 24px;
+    margin: auto
+}
+
+.form-group {
+    position: relative
+}
+
+.form-group .search-clear {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: calc(50% - 16px);
+    right: 12px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0;
+    transition: all var(--transition-speed) ease
+}
+
+.form-group .search-clear .icon {
+    width: 16px;
+    height: 16px;
+    fill: var(--white-9);
+}
+
+.form-group .search-clear:hover .icon {
+    fill: var(--primary);
+}
+.form-group.required .label:after, .form-group.required label:after, .label.required:after, label.required:after {
+    content: "*";
+    position: absolute;
+    right: -.5em;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.22;
+    color: var(--red-2);
+}
+
+.label {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    position: relative;
+    color: var(--font__sec-clr);
+}
+.form-submit-ticket {
+    margin-bottom: 24px;
+    padding: 24px 32px 56px;
+    border-radius: 2px;
+    box-shadow: var(--shadow_small) var(--shadow-1-30);
+    background-color: var(--surface);
+}
+
+.form-submit-ticket .form-groups {
+    max-width: 320px
+}
+
+.form-submit-ticket .form-groups.centered {
+    margin: auto
+}
+
+.form-submit-ticket .form-group, .form-submit-ticket .param {
+    max-width: 570px;
+    margin-bottom: 32px
+}
+
+.form-submit-ticket textarea.form-control {
+    height: 200px
+}
+
+.captcha-block {
+    margin: 24px auto;
+    max-width: 300px;
+    text-align: center
+}
+
+.captcha-block .label {
+    margin-top: 4px
+}
+
+.captcha-block .form-captcha {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin: 16px 0
+}
+
+.captcha-block .form-captcha img {
+    width: 100%
+}
+.captcha-remind {
+    max-width: 288px;
+}
+
+.form .label {
+    display: -ms-inline-flexbox;
+    display: inline-flex
+}
+
+.form h3 {
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.38;
+    letter-spacing: .1px
+}
+
+.attach .block--attach {
+    margin-top: 0
+}
+
+.attach .attach-tooltype {
+    margin-top: 8px
+}
+
+.attach .attach-tooltype>span {
+    font-size: 12px;
+    font-weight: 400;
+    font-style: italic;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: .1px;
+    color: var(--secondary);
+    margin-right: 4px
+}
+
+.attach .tooltype ul li {
+    margin-bottom: 8px;
+    padding-left: 12px;
+    position: relative
+}
+
+.attach .tooltype ul li:last-child {
+    margin-bottom: 0
+}
+
+.attach .tooltype ul li::before {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--gray-4);
+    position: absolute;
+    top: 6px;
+    left: 0
+}
+.param {
+    display: block
+}
+
+.param .checkbox-custom {
+    margin-top: 16px
+}
+
+.param .label {
+    margin-right: 8px
+}
+
+.param .label.required {
+    margin-right: 16px
+}
+.param--attach .label {
+    margin-right: 22px
+}
+
+.form-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+.form-footer .btn {
+    min-width: 240px;
+    height: 56px
+}
+
+.form-footer .link {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 40px;
+    margin-top: 32px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--secondary);
+}
+.form-footer .link:hover {
+    color: var(--link__sec-hover-clr);
+}
+.form input.form-control, .form textarea.form-control {
+    transition: all var(--transition-time-pri) ease
+}
+.form select.form-control {
+    transition: all var(--transition-time-pri) ease;
+}
+.form__search .form__search_type .type--list li {
+    transition: all var(--transition-time-pri) ease;
+}
+.form__search .form__search_type .type--list li .icon {
+    transition: all var(--transition-time-pri) ease;
+}
+.form input.form-control,
+.form textarea.form-control {
+    vertical-align: middle;
+}

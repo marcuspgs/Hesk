@@ -18,6 +18,7 @@ require(HESK_PATH . 'hesk_settings.inc.php');
 define('TEMPLATE_PATH', HESK_PATH . "theme/{$hesk_settings['site_theme']}/");
 require(HESK_PATH . 'inc/common.inc.php');
 require_once(HESK_PATH . 'inc/customer_accounts.inc.php');
+require_once(HESK_PATH . 'inc/custom_fields.inc.php');
 require_once(HESK_PATH . 'inc/statuses.inc.php');
 require_once(HESK_PATH . 'inc/priorities.inc.php');
 
@@ -51,16 +52,41 @@ if (!in_array($order_direction, ['asc','desc'])) {
 }
 
 $sql_order_by = '`status_sort`, `lastchange`';
-if (!in_array($order_by, ['id','trackid','lastchange','subject','status','priority'])) {
+
+if ($order_by == 'priority') {
+    $sql_order_by = "`priority_order`";
+} elseif (! in_array($order_by, $hesk_settings['customer_ticket_list'])) {
     // If no sort or an invalid sort is requested, revert to the default order direction
     $order_by = '';
     $order_direction = 'desc';
 } else {
-    if ($order_by == 'priority') {
-        $sql_order_by = "`priority_order`";
+    if ($order_by == 'name') {
+        $sql_order_by = "`tickets`.`u_name`";
+    } elseif ($order_by == 'email') {
+        $sql_order_by = "`tickets`.`u_email`";
     } else {
         $sql_order_by = "`{$order_by}`";
     }
+}
+
+// Do we need category names?
+if (in_array('category', $hesk_settings['customer_ticket_list']) && ! isset($hesk_settings['categories'])) {
+    $hesk_settings['categories'] = array();
+    $res2 = hesk_dbQuery('SELECT `id`, `name` FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'categories` ORDER BY `cat_order` ASC');
+    while ($row=hesk_dbFetchAssoc($res2)) {
+        $hesk_settings['categories'][$row['id']] = $row['name'];
+    }
+}
+
+// Do we need staff names?
+if (array_intersect(array('owner', 'lastreplier'), $hesk_settings['customer_ticket_list'])) {
+    $admins = array();
+    $res2 = hesk_dbQuery("SELECT `id`,`name`,`nickname` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users`");
+    while ($row = hesk_dbFetchAssoc($res2)) {
+        $admins[$row['id']] = ($hesk_settings['staff_nicknames'] && $row['nickname'] != '') ? $row['nickname'] : $row['name'];
+    }
+} else {
+    $admins = array();
 }
 
 if ($search_criteria !== '') {
@@ -94,12 +120,29 @@ if ($status !== 'ALL') {
 // Fetch tickets
 $offset = ($page_number - 1) * $page_size;
 
+// Get last replier name
+if (in_array('lastreplier', $hesk_settings['customer_ticket_list'])) {
+    $sql_lastreplier = "LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `lastreplier_customer`
+        ON `tickets`.`lastreplier` = '0'
+        AND `lastreplier_customer`.`id` = (
+            SELECT `customer_id`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies`
+            WHERE `replyto` = `tickets`.`id`
+                AND `customer_id` IS NOT NULL
+            ORDER BY `id` DESC
+            LIMIT 1)
+            ";
+} else {
+    $sql_lastreplier = '';
+}
+
 $sql_format = "SELECT %s,`priority_order` AS `vv`
  FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `tickets`
     INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_customers`
         ON `tickets`.`id` = `ticket_customers`.`ticket_id`
     LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."custom_priorities` AS `custom_priorities`
         ON `priority` = `custom_priorities`.`id`
+    $sql_lastreplier
     WHERE `customer_id` = ".intval($user_context['id'])." "
     .$additional_sql_filters;
 
@@ -130,14 +173,40 @@ if ($row = hesk_dbFetchAssoc($open_vs_closed_count_rs)) {
 }
 //endregion
 
+$sql_customer_count = '';
+$sql_email_count = '';
+
+/*
+// Get customer count
+if (in_array('name', $hesk_settings['customer_ticket_list'])) {
+    $sql_customer_count = "SELECT COUNT(1) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer_names`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` `customer_names`
+            ON `ticket_to_customer_names`.`customer_id` = `customer_names`.`id`
+        WHERE `ticket_id` = `tickets`.`id`";
+}
+
+// Get email count
+if (in_array('email', $hesk_settings['customer_ticket_list'])) {
+    $sql_email_count = "SELECT COUNT(1) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer_emails`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` `customer_emails`
+            ON `ticket_to_customer_emails`.`customer_id` = `customer_emails`.`id`
+        WHERE `ticket_id` = `tickets`.`id`
+            AND COALESCE(`customer_emails`.`email`, '') <> ''";
+}
+*/
+
 //region Search Results
 $tickets_rs = hesk_dbQuery(sprintf($sql_format,
-    "CASE 
+    "CASE
         WHEN `status` = 2 THEN 1
         WHEN `status` = 3 THEN 999
         ELSE 2
     END AS `status_sort`,
-    `tickets`.*").
+    `tickets`.*
+    ".($sql_customer_count ? ", ({$sql_customer_count}) AS `customer_count`" : '')."
+    ".($sql_email_count ? ", ({$sql_email_count}) AS `email_count`" : '')."
+    ".($sql_lastreplier ? ", `lastreplier_customer`.`name` AS `lastreplier_customername`" : '')."
+    ").
     "ORDER BY {$sql_order_by} {$order_direction} LIMIT {$page_size} OFFSET {$offset}");
 $tickets = [];
 while ($ticket = hesk_dbFetchAssoc($tickets_rs)) {
@@ -176,6 +245,7 @@ $hesk_settings['render_template'](TEMPLATE_PATH . 'customer/my-tickets.php', arr
     'serviceMessages' => hesk_get_service_messages('c-main'),
     'tickets' => $tickets,
     'ticketCounts' => $ticket_counts,
+    'admins' => $admins,
     'searchCriteria' => $search_criteria,
     'searchType' => $search_by,
     'status' => $status,

@@ -56,7 +56,7 @@ if (empty($user)) {
 }
 
 // Verify the user has access to the ticket category
-$res = hesk_dbQuery("SELECT `id`,`user`,`name`,`email`,`isadmin`,`language`,`categories`,`notify_collaborator_added` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$user}' LIMIT 1");
+$res = hesk_dbQuery("SELECT `id`,`user`,`name`,`email`,`isadmin`,`language`,`categories`,`notify_collaborator_added` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$user}' AND `active` = 1 LIMIT 1");
 $row = hesk_dbFetchAssoc($res);
 if ( ! $row['isadmin'])
 {
@@ -100,7 +100,7 @@ if ($collaborator) {
         'due_date'      => hesk_format_due_date($ticket['due_date']),
         'id'            => $ticket['id'],
         'time_worked'   => $ticket['time_worked'],
-        'last_reply_by' => hesk_getReplierName($ticket),
+        'last_reply_by' => hesk_getReplierNameArray($ticket),
         );
 
         // 2. Add custom fields to the array

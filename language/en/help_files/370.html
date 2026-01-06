@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Interactive help for Hesk settings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="help_style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- next: 8 -->
+
+<h3>Interactive help for Hesk settings</h3>
+
+<p>&nbsp;</p>
+
+<a name="1"></a><p class="title">Email followers</p>
+<p>When enabled, Hesk will include people copied on the email (in either "To" or "Cc" email header) as ticket followers.</p>
+
+<p style="color:red">For this function to work, you must also enable the "Ticket followers" option in Hesk Settings &gt; Help desk &gt; Features.</p>
+
+<p style="color:red">If you are using Email piping, make sure you ban your incoming email address (email used to convert emails into tickets) in Hesk Tools &gt; Ban email to avoid creating email loops.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="2"></a><p class="title">Extend sessions</p>
+
+<p>Sometimes your support staff takes a long time to resolve a support ticket, and when they submit their response, they find they are logged out of the help desk and must write it again.</p>
+
+<p>This is usually prevented by extending session timeout in your server settings and/or allowing your staff to log in to Hesk automatically.</p>
+
+<p>If you continue to have problems with users being logged out of the help desk, you may enable this feature. What it will do is include a hidden iframe at the bottom of the help desk that automatically reloads every 5 minutes and attempts to keep the user session active until they log out or close the browser window.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="3"></a><p class="title">Nicknames</p>
+<p>Allow staff to set a nickname. If set, the nickname will be shown to customers instead of the staff's real name.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="4"></a><p class="title">Purge the cache</p>
+<p>Purge all cache related items, this includes any cached template files or queries.</p>
+
+<p>This function does NOT delete temporary uploads (for example, uploaded attachments waiting for a ticket or reply to be submitted).</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="5"></a><p class="title">Rebuild Production Assets</p>
+<p><strong>Advanced users only.</strong> This tool rebuilds Hesk's core production assets.</p>
+
+<p>You usually only need to run this after making changes to core CSS files.</p>
+
+<p>When used, the tool combines and minifies all files from the <strong>/css/core</strong> directory into a single file: <strong>/dist/app.min.css</strong></p>
+
+<p><strong>Note:</strong> This tool is visible in the admin panel only when <strong>Debug mode</strong> is enabled.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="6"></a><p class="title">Remember custom field values</p>
+<p>If enabled, Hesk will remember values entered in the customer-side "Submit a ticket" form for the duration of the browser sessio.</p>
+
+<p>This allows customers to submit several support tickets in the same browser session, without having to fill in custom fields again.</p>
+
+<p>When all browser windows are closed, the saved values are cleared.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<a name="7"></a><p class="title">Disable autocomplete</p>
+<p>When enabled, Hesk will add <i>autocomplete="off" aria-autocomplete="none"</i> attributes to "Submit a ticket" forms.</p>
+
+<p>This should turn off the browser's built-in autocomplete (form fill) function when submitting a ticket.</p>
+
+<p>Note that some browsers do not obey the autocomplete="off" attribute.</p>
+
+<p>&nbsp;</p>
+
+<p align="center"><a href="#" onclick="Javascript:window.close()">Close window</a></p>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

@@ -320,11 +320,22 @@ if (hesk_checkPermission('can_assign_others',0))
     else
     {
 	    // Has the new owner access to the selected category?
-		$res = hesk_dbQuery("SELECT `name`,`user`,`isadmin`,`categories` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$tmpvar['owner']}' LIMIT 1");
+		$res = hesk_dbQuery("SELECT `name`,`user`,`isadmin`,`categories`,
+            CASE WHEN EXISTS (
+                SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` AS `inner_category`
+                INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `inner_member`
+                    ON `inner_category`.`group_id` = `inner_member`.`group_id`
+                WHERE `inner_member`.`user_id` = {$tmpvar['owner']}
+                    AND `inner_category`.`category_id` = ".intval($tmpvar['category'])."
+            ) THEN 1 ELSE 0 END AS `category_access_via_permission_group`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` 
+            WHERE `id`='{$tmpvar['owner']}' 
+                AND `active` = 1 
+            LIMIT 1");
 	    if (hesk_dbNumRows($res) == 1)
 	    {
 	    	$row = hesk_dbFetchAssoc($res);
-	        if (!$row['isadmin'])
+	        if (!$row['isadmin'] && !$row['category_access_via_permission_group'])
 	        {
 				$row['categories']=explode(',',$row['categories']);
 				if (!in_array($tmpvar['category'],$row['categories']))

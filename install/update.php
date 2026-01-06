@@ -96,6 +96,21 @@ if ($_SESSION['step'] == 3)
 		hesk_iDatabase(4);
     }
 
+    // Do we need to update languages?
+    if ($hesk_settings['language_backup'] != 'English' || count($hesk_settings['languages_backup']) > 1) {
+        $hesk_settings['language'] = $hesk_settings['language_backup'];
+        $hesk_settings['languages'] = $hesk_settings['languages_backup'];
+
+        ob_start();
+        $_SESSION['language_updated'] = hesk_iUpdateLangauges();
+        ob_end_clean();
+
+        if ( ! $_SESSION['language_updated']) {
+            $hesk_settings['language'] = 'English';
+            $hesk_settings['languages'] = array('English' => array('folder'=>'en','hr'=>'------ Reply above this line ------'));
+       }
+    }
+
 	// All ok, let's save settings
 	hesk_iSaveSettings();
 
@@ -169,6 +184,15 @@ function hesk_iFinish()
     if (defined('RECAPTCHA_V1'))
     {
         hesk_show_notice('reCaptcha V1 is no longer supported and has been disabled.<br /><br />Please enable a different anti-SPAM measure in HESK settings.');
+    }
+
+    if (isset($_SESSION['language_updated'])) {
+        if ($_SESSION['language_updated']) {
+            hesk_show_success('Language files updated');
+        } else {
+            hesk_show_notice('Could not automatically update language files.<br /><br />Your language has been reset to English.<br /><br />Login to your Hesk admin panel &gt; Settings &gt; General and update your language installations there.');
+        }
+        unset($_SESSION['language_updated']);
     }
     ?>
 
@@ -1671,6 +1695,83 @@ function hesk_iUpdateTables()
     // 3.6.3 no changes
     // 3.6.4 no changes
 
+    // Updating 3.6.0 to 3.7.0
+    if ($update_all_next || $hesk_settings['update_from'] == '3.6.0') {
+        //-> Muted emails
+        hesk_dbQuery("
+        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."muted_emails` (
+          `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+          `email` varchar(255) NOT NULL,
+          `type` tinyint UNSIGNED NOT NULL DEFAULT '1',
+          `muted_by` smallint(5) unsigned NOT NULL,
+          `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (`id`),
+          KEY `email` (`email`),
+          KEY `type` (`type`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8
+        ");
+
+        hesk_dbQuery("
+        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_groups` (
+            `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+            `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+            PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ");
+
+        hesk_dbQuery("
+        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` (
+            `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+            `group_id` mediumint(8) unsigned NOT NULL,
+            `category_id` smallint(5) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `group_id_category_id` (`group_id`, `category_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ");
+
+        hesk_dbQuery("
+        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` (
+            `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+            `group_id` mediumint(8) unsigned NOT NULL,
+            `feature` varchar(255) NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `group_id_feature` (`group_id`, `feature`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ");
+
+        hesk_dbQuery("
+        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` (
+            `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+            `group_id` mediumint(8) unsigned NOT NULL,
+            `user_id` smallint(5) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `group_id_user_id` (`group_id`, `user_id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ");
+
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ADD `nickname` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `email`");
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ADD `active` SMALLINT NOT NULL DEFAULT 1 AFTER `isadmin`");
+
+        hesk_dbQuery("
+        CREATE TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (
+            `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+            `email_id` varchar(1000) NOT NULL,
+            `ticket_id` mediumint UNSIGNED NOT NULL,
+            `reply_id` mediumint UNSIGNED DEFAULT NULL,
+            `from_hesk` tinyint UNSIGNED NOT NULL DEFAULT '1',
+            PRIMARY KEY (`id`),
+            KEY `email_id` (`email_id`(100))
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ");
+
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (`email_id`, `ticket_id`, `from_hesk`) SELECT `eid`, `id`, 0 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `eid` IS NOT NULL");
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (`email_id`, `ticket_id`, `reply_id`, `from_hesk`) SELECT `eid`, `replyto`, `id`, 0 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` WHERE `eid` IS NOT NULL");
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` DROP `eid`");
+        hesk_dbQuery("ALTER TABLE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` DROP `eid`");
+
+        $update_all_next = 1;
+    }
+
 	// Insert the "HESK updated to latest version" mail for the administrator
     $offer_license = file_exists(HESK_PATH.'hesk_license.php') ? "" : "<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n";
     hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."mail` (`id`, `from`, `to`, `subject`, `message`, `dt`, `read`, `deletedby`) VALUES (NULL, 9999, 1, 'Hesk updated to version ".HESK_NEW_VERSION."', '".hesk_dbEscape("</p><div style=\"text-align:justify; padding-left: 10px; padding-right: 10px;\">\r\n\r\n<h2 style=\"padding-left:0px\">Congratulations, your Hesk has been successfully updated! Now is your chance to:</h2>\r\n\r\n<h3>&raquo; Rate us</h3>\r\n\r\n<p>Positive ratings and reviews motivate us to continue developing Hesk. Please take a moment to:</p>\r\n\r\n<ul>\r\n<li>rate or review Hesk at <a href=\"https://softaculous.com/rate/HESK\" rel=\"nofollow\">Softaculous</a></li>\r\n<li>rate or review Hesk at <a href=\"https://alternativeto.net/software/hesk/about/\" rel=\"nofollow\">AlternativeTo</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Stay updated</h3>\r\n\r\n<p>Hesk regularly receives improvements and bug fixes; make sure you know about them!</p>\r\n<ul>\r\n<li>for fast notifications, <a href=\"https://x.com/HESKdotCOM\" rel=\"nofollow\">follow Hesk on <b>X</b></a></li>\r\n<li>for email notifications, subscribe to our low-volume, zero-spam <a href=\"https://www.hesk.com/newsletter.php\">newsletter</a></li>\r\n</ul>\r\n\r\n<h3>&raquo; Look professional</h3>\r\n\r\n<p><a href=\"https://www.hesk.com/get/hesk3-license\">Remove &quot;Powered by&quot; links</a> to support Hesk development and make it look more professional.</p>\r\n\r\n&nbsp;\r\n\r\n<h3>&raquo; Tired of manual updates? Upgrade to Hesk Cloud!</h3>\r\n\r\n<p>Experience the best of Hesk by moving your help desk into the Hesk Cloud:</p>\r\n<ul>\r\n<li>exclusive advanced modules,</li>\r\n<li>automated updates,</li>\r\n<li>free migration of your existing Hesk tickets and settings,</li>\r\n<li>we take care of maintenance, server setup and optimization, backups, and more!</li>\r\n</ul>\r\n\r\n<p>&nbsp;<br><a href=\"https://www.hesk.com/get/hesk3-cloud\" class=\"btn btn--blue-border\" style=\"text-decoration:none\">Click here to learn more about Hesk Cloud</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Best regards,</p>\r\n\r\n<p>Klemen Stirn<br>\r\nFounder<br>\r\n<a href=\"https://www.hesk.com\">https://www.hesk.com</a></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n</div><p>")."', NOW(), '0', 9999)");
@@ -1729,6 +1830,9 @@ function hesk_iSaveSettings()
 	// Assign all required values
     foreach ($hesk_default as $k => $v)
     {
+        if (in_array($k, array('language', 'languages'))) {
+            continue;
+        }
     	if (is_array($v))
         {
         	// Arrays will be processed separately
@@ -1746,6 +1850,8 @@ function hesk_iSaveSettings()
     $hesk_settings['email_providers'] = isset($hesk_settings['email_providers']) ? array_unique(array_merge($hesk_settings['email_providers'], $hesk_default['email_providers'])) : $hesk_default['email_providers'];
     $hesk_settings['notify_spam_tags'] = isset($hesk_settings['notify_spam_tags']) ? $hesk_settings['notify_spam_tags'] : $hesk_default['notify_spam_tags'];
     $hesk_settings['ticket_list'] = isset($hesk_settings['ticket_list']) ? $hesk_settings['ticket_list'] : $hesk_default['ticket_list'];
+    $hesk_settings['customer_ticket_list'] = isset($hesk_settings['customer_ticket_list']) ? $hesk_settings['customer_ticket_list'] : $hesk_default['customer_ticket_list'];
+    $hesk_settings['theme_overrides'] = isset($hesk_settings['theme_overrides']) ? $hesk_settings['theme_overrides'] : $hesk_default['theme_overrides'];
 
     // Attachments max size must be multiplied by 1024 since version 2.4
     if ($hesk_settings['attachments']['max_size'] < 102400)
@@ -1775,6 +1881,9 @@ function hesk_iSaveSettings()
         $set['recaptcha_use'] = 0;
         define('RECAPTCHA_V1', true);
     }
+
+    // Some installations have smtp_timeout erroneously set to 0. Ensure it is at least 5.
+    $set['smtp_timeout'] = $set['smtp_timeout'] > 5 ? $set['smtp_timeout'] : 10;
 
 	hesk_iSaveSettingsFile($set);
 
@@ -1854,10 +1963,16 @@ function hesk_defaultSettings()
 	$hesk_settings['debug_mode']=0;
 	$hesk_settings['short_link']=0;
     $hesk_settings['submitting_wait']=1;
+    $hesk_settings['remember_custom_field_values']=1;
+    $hesk_settings['disable_autofill_admin']=0;
+    $hesk_settings['disable_autofill_customer']=0;
+    $hesk_settings['extend_admin']=0;
+    $hesk_settings['extend_customer']=0;
 	$hesk_settings['select_cat']=0;
 	$hesk_settings['select_pri']=0;
 	$hesk_settings['cat_show_select']=15;
 	$hesk_settings['staff_ticket_formatting']=0;
+    $hesk_settings['staff_nicknames']=0;
 
     // --> Barcode
     $hesk_settings['barcode']=array(
@@ -1990,6 +2105,8 @@ function hesk_defaultSettings()
 	$hesk_settings['strip_quoted']=1;
 	$hesk_settings['eml_req_msg']=0;
 	$hesk_settings['save_embedded']=1;
+    $hesk_settings['email_include_to']=0;
+    $hesk_settings['email_include_cc']=0;
 
     // --> Ignore emails
     $hesk_settings['pipe_block_noreply']=1;
@@ -2018,12 +2135,14 @@ function hesk_defaultSettings()
 	// ==> TICKET LIST
 
 	$hesk_settings['ticket_list']=array('trackid','lastchange','name','subject','status','lastreplier');
+	$hesk_settings['customer_ticket_list']=array('id','trackid','lastchange','subject','status');
 
 	// --> Other
 	$hesk_settings['submittedformat']=2;
 	$hesk_settings['updatedformat']=2;
     $hesk_settings['format_submitted']='Y-m-d H:i:s';
     $hesk_settings['format_updated']='Y-m-d H:i:s';
+    $hesk_settings['email_column']=0;
 
 
 	// ==> MISC
@@ -2046,6 +2165,11 @@ function hesk_defaultSettings()
 	$hesk_settings['online_min']=10;
 	$hesk_settings['check_updates']=1;
 
+
+    // ==> LOOK & FEEL
+    $hesk_settings['customer_theme']='';
+    $hesk_settings['theme_overrides']=array();
+
 	return $hesk_settings;
 } // END hesk_defaultSettings()
 
@@ -2066,6 +2190,12 @@ function hesk_iDetectVersion()
     if ( ! in_array($hesk_settings['db_pfix'].'categories', $tables) || ! in_array($hesk_settings['db_pfix'].'replies', $tables) || ! in_array($hesk_settings['db_pfix'].'tickets', $tables) || ! in_array($hesk_settings['db_pfix'].'users', $tables) )
     {
         hesk_iDatabase(3);
+    }
+
+    // Version 3.7.0 tables installed?
+    if (in_array($hesk_settings['db_pfix'].'muted_emails', $tables))
+    {
+        return '3.7.0';
     }
 
     // Version 3.6.0 tables installed?
@@ -2225,5 +2355,132 @@ function hesk_iDetectVersion()
 	}
 
 } // END hesk_iDetectVersion()
-?>
 
+
+function hesk_iUpdateLangauges()
+{
+    global $hesk_settings, $hesklang;
+
+    $version = preg_replace('/[^a-zA-Z0-9\.]/', '', HESK_NEW_VERSION);
+    $action = 'upgrade';
+
+    foreach ($hesk_settings['languages'] as $language) {
+        // Language tag, like "en" or "de"
+        $tag = preg_replace('/[^a-zA-Z0-9\-]/', '', $language['folder']);
+
+        // No need to update English language pack, it's included
+        if ($tag == 'en') {
+            continue;
+        }
+
+        $lang_path = HESK_PATH . 'language/';
+        $dir_path = $lang_path . $tag;
+        $zip_path = $dir_path . '.zip';
+        $upgrade_path = $dir_path.'_old';
+
+        try {
+            // Let's do some cleanup first in case there are files/folders from previous installs
+            hesk_unlink($zip_path);
+            hesk_rrmdir($upgrade_path);
+
+            // Here is where we will download the languge pack from
+            $download_url = 'https://www.hesk.com/language/download.php?tag='.urlencode($tag).'&version='.urlencode($version);
+
+            // Try using cURL
+            if ( function_exists('curl_init') ) {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $download_url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
+                $zip_data = curl_exec($ch);
+                hesk_curl_close($ch);
+            }
+
+            // Try using a simple PHP function instead
+            if (empty($zip_data)) {
+                $zip_data = @file_get_contents($download_url);
+            }
+
+            // Unsuccessful download
+            if (empty($zip_data)) {
+                return false;
+            }
+
+            // Save the zip file and check that it exists
+            file_put_contents($zip_path, $zip_data);
+            if ( ! file_exists($zip_path)) {
+                return false;
+            }
+
+            // We need to preserve old data for upgrades
+            if ($action == 'upgrade') {
+                rename($dir_path, $upgrade_path);
+                if ( ! is_dir($upgrade_path)) {
+                    return false;
+                }
+            }
+
+            hesk_extractZip($zip_path, $lang_path);
+            hesk_unlink($zip_path);
+
+            if ( ! file_exists($dir_path . '/text.php')) {
+                if ($action == 'upgrade') {
+                    hesk_rrmdir($dir_path);
+                    rename($upgrade_path, $dir_path);
+                }
+                return false;
+            }
+
+            // Copy custom-text.php
+            if (file_exists($upgrade_path . '/custom-text.php')) {
+                rename($upgrade_path . '/custom-text.php', $dir_path . '/custom-text.php');
+            }
+            // Copy plain text and html email templates in case they were modified
+            $emails = array_diff(scandir($upgrade_path . '/emails/'), array('.','..','index.htm'));
+            foreach ($emails as $email) {
+                hesk_unlink($dir_path . '/emails/' . $email);
+                rename($upgrade_path . '/emails/' . $email, $dir_path . '/emails/' . $email);
+            }
+            $emails = array_diff(scandir($upgrade_path . '/html_emails/'), array('.','..','index.htm'));
+            foreach ($emails as $email) {
+                hesk_unlink($dir_path . '/html_emails/' . $email);
+                rename($upgrade_path . '/html_emails/' . $email, $dir_path . '/html_emails/' . $email);
+            }
+            // Remove the backup
+            hesk_rrmdir($upgrade_path);
+            hesk_purge_cache();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    return true;
+} // END hesk_iUpdateLangauges()
+
+
+function hesk_extractZip($zip_file, $destination_dir) {
+
+    if ( ! is_dir($destination_dir)) {
+        @mkdir($destination_dir, 0777, true);
+    }
+
+    if ( ! is_writable($destination_dir)) {
+        @chmod($destination_dir, 0777);
+    }
+
+    if (class_exists('ZipArchive')) {
+        $zip = new ZipArchive;
+        if ($zip->open($zip_file) === true) {
+            $zip->extractTo($destination_dir);
+            $zip->close();
+            return true;
+        }
+    } else {
+        require(HESK_PATH . 'inc/zip/pclzip.lib.php');
+        $zip = new PclZip($zip_file);
+        $result = $zip->extract(PCLZIP_OPT_PATH, $destination_dir);
+        return true;
+    }
+
+    return false;
+} // END hesk_extractZip()

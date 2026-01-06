@@ -1,0 +1,299 @@
+/*
+Put any general input related CSS here.
+*/
+/* START general input elements */
+::-webkit-input-placeholder,
+::-moz-placeholder,
+:-ms-input-placeholder,
+:-moz-placeholder
+{
+    color: var(--gray-2);
+}
+
+input {
+    outline: 0
+}
+
+input::-ms-clear {
+    display: none
+}
+/* END general input elements */
+
+/* START checkbox input elements */
+.checkbox-custom {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    min-height: 16px
+}
+
+.checkbox-custom [type=checkbox]:checked, .checkbox-custom [type=checkbox]:not(:checked) {
+    position: absolute;
+    left: -9999px
+}
+
+.checkbox-custom [type=checkbox]+label {
+    transition: all var(--transition-speed) ease;
+}
+
+.checkbox-custom [type=checkbox]:not(:checked)+label {
+    position: relative;
+    padding-left: 24px;
+    cursor: pointer;
+    line-height: 1.2;
+    letter-spacing: normal;
+    color: var(--secondary);
+}
+
+.checkbox-custom [type=checkbox]:checked+label {
+    position: relative;
+    padding-left: 24px;
+    cursor: pointer;
+    line-height: 1.2;
+    letter-spacing: normal;
+    color: var(--primary);
+}
+
+.checkbox-custom [type=checkbox]:checked+label:before, .checkbox-custom [type=checkbox]:not(:checked)+label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    background: var(--checkbox__bg);
+    border: 1px solid var(--secondary);
+}
+
+.checkbox-custom [type=checkbox]:checked+label:after, .checkbox-custom [type=checkbox]:not(:checked)+label:after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: all .2s ease;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='8' viewBox='0 0 11 8'%3E%3Cpath fill='%23133e5e' fill-rule='evenodd' d='M9.043 0L3.246 5.128 1.623 3.692 0 5.128 3.246 8l7.42-6.564z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center
+}
+
+.checkbox-custom [type=checkbox]:not(:checked)+label:after {
+    opacity: 0;
+    -ms-transform: scale(0);
+    transform: scale(0)
+}
+
+.checkbox-custom [type=checkbox]:checked+label:after {
+    opacity: 1;
+    -ms-transform: scale(1);
+    transform: scale(1)
+}
+
+.checkbox-custom [type=checkbox]:disabled:checked+label:before, .checkbox-custom [type=checkbox]:disabled:not(:checked)+label:before {
+    border-color: var(--gray-1);
+    background-color: var(--white-3);
+}
+
+.checkbox-custom [type=checkbox]:disabled:checked+label:after {
+    background: var(--gray-3); /* deprecation fallback */
+    background: color-mix(in srgb, var(--gray-3) 75%, var(--white-1));
+}
+
+.invalid .checkbox-custom [type=checkbox]:not(:checked):required+label:before {
+    border-color: var(--error);
+}
+.checkbox-custom [type='checkbox']+label {
+    transition: all var(--transition-time-pri) ease;
+}
+.checkbox-custom [type="checkbox"] + label:hover::before {
+    background: var(--checkbox__hover-bg);
+}
+/* END checkbox input elements */
+
+
+/* START radio input elements */
+.radio-custom {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    min-height: 16px
+}
+
+.radio-custom [type=radio]:checked, .radio-custom [type=radio]:not(:checked) {
+    position: absolute;
+    left: -9999px
+}
+
+.radio-custom [type=radio]:checked+label, .radio-custom [type=radio]:not(:checked)+label {
+    position: relative;
+    padding-left: 24px;
+    cursor: pointer;
+    line-height: 1.2;
+    letter-spacing: normal;
+    color: var(--font__sec-clr);
+}
+
+.radio-custom [type=radio]:checked+label:before, .radio-custom [type=radio]:not(:checked)+label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    background: var(--radio__bg);
+    border-radius: 50%;
+    border: 1px solid var(--primary);
+}
+
+.radio-custom [type=radio]:checked+label:after, .radio-custom [type=radio]:not(:checked)+label:after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    transition: all .2s ease;
+    background-color: var(--radio__fill-clr);
+    border-radius: 50%;
+}
+
+.radio-custom [type=radio]:not(:checked)+label:after {
+    opacity: 0;
+    -ms-transform: scale(0);
+    transform: scale(0)
+}
+
+.radio-custom [type=radio]:checked+label:after {
+    opacity: 1;
+    -ms-transform: scale(1);
+    transform: scale(1)
+}
+
+.radio-custom [type=radio]:disabled:checked+label:before, .radio-custom [type=radio]:disabled:not(:checked)+label:before {
+    border-color: var(--gray-1);
+    background-color: var(--white-3);
+}
+
+.radio-custom [type=radio]:disabled:checked+label:after {
+    background: var(--gray-3); /* deprecation fallback */
+    background: color-mix(in srgb, var(--gray-3) 80%, var(--white-1));
+}
+
+.invalid .radio-custom [type=radio]:not(:checked):required+label:before {
+    border-color: var(--error);
+}
+.radio-custom [type=radio]:checked+label {
+    color: var(--primary);
+}
+.radio-custom [type="radio"] + label:hover::before,
+.radio-custom [type="radio"] + label:hover::before {
+     background: var(--radio__hover-bg);
+}
+/* END radio input elements */
+
+
+/* START switch checkbox elements (TODO what is this, can it be simplified?) */
+.switch-checkbox {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.switch-checkbox input[type=checkbox] {
+    display: none
+}
+
+.switch-checkbox .switch-checkbox__bullet {
+    width: 32px;
+    height: 16px;
+    background-color: var(--white-1);
+    border: 1px solid var(--white-7);
+    border-radius: 8px;
+    transition: all var(--transition-speed) ease;
+    position: relative
+}
+
+.switch-checkbox .switch-checkbox__bullet i {
+    display: block;
+    width: 14px;
+    height: 14px;
+    box-shadow: 0 1px 2px 0 hsla(var(--black--hsl), .16);
+    background-color: var(--white-1);
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: initial;
+    transition: all var(--transition-speed) ease
+}
+
+.switch-checkbox .switch-checkbox__bullet i svg {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    transition: all var(--transition-speed) ease
+}
+
+.switch-checkbox .switch-checkbox__bullet i svg.icon-tick {
+    opacity: 0
+}
+
+.switch-checkbox input[type=checkbox]:checked+.switch-checkbox__bullet {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.switch-checkbox input[type=checkbox]:checked+.switch-checkbox__bullet i {
+    left: 100%;
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%)
+}
+
+.switch-checkbox input[type=checkbox]:checked+.switch-checkbox__bullet i .icon-close {
+    opacity: 0
+}
+
+.switch-checkbox input[type=checkbox]:checked+.switch-checkbox__bullet i .icon-tick {
+    opacity: 1
+}
+
+.switch-checkbox span {
+    margin-left: 16px;
+    transition: all var(--transition-speed) ease;
+    line-height: 1.2
+}
+
+.switch-checkbox a {
+    margin-left: 16px;
+    transition: all var(--transition-speed) ease;
+    color: var(--secondary);
+    line-height: 1.2
+}
+
+.switch-checkbox a:hover {
+    color: var(--primary) !important;
+}
+/* END switch checkbox elements (TODO what is this, can it be simplified?) */
+
+
+input.form-control.as-text {
+    border: none;
+    background: transparent;
+}
+
+/* Email suggestion */
+.email-suggestion > .alert {
+    background: var(--warning-2) !important;
+}

@@ -57,7 +57,7 @@ hesk_verifyEmailMatch($trackingID, $my_email);
 hesk_cleanSessionVars( array('p_track', 'p_email') );
 
 /* Get ticket info */
-$res = hesk_dbQuery("SELECT `t1`.* , `t2`.name AS `repliername`
+$res = hesk_dbQuery("SELECT `t1`.* , `t2`.name AS `repliername`, `t2`.`nickname`
 					FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `t1` LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `t2` ON `t1`.`replierid` = `t2`.`id`
 					WHERE `trackid`='".hesk_dbEscape($trackingID)."' LIMIT 1");
 
@@ -67,6 +67,11 @@ if (hesk_dbNumRows($res) != 1)
 }
 $ticket = hesk_dbFetchAssoc($res);
 $customers = hesk_get_customers_for_ticket($ticket['id']);
+
+// Does staff have a nickname set? Use it.
+if ($ticket['lastreplier'] && $hesk_settings['staff_nicknames'] && $ticket['nickname'] != '') {
+    $ticket['repliername'] = $ticket['nickname'];
+}
 
 // Demo mode
 if ( defined('HESK_DEMO') )
@@ -88,7 +93,7 @@ if (hesk_dbNumRows($res) != 1)
 $category = hesk_dbFetchAssoc($res);
 
 /* Get replies */
-$res  = hesk_dbQuery("SELECT `replies`.*, `reply_customer`.`name` AS `customer_name`, `reply_staff`.`name` AS `staff_name` 
+$res  = hesk_dbQuery("SELECT `replies`.*, `reply_customer`.`name` AS `customer_name`, `reply_customer`.`email` AS `customer_email`, `reply_staff`.`name` AS `staff_name`, `reply_staff`.`nickname`
 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `replies`
 LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `reply_customer`
     ON `replies`.`customer_id` = `reply_customer`.`id`
@@ -99,9 +104,11 @@ WHERE `replyto`='{$ticket['id']}' ORDER BY `replies`.`id` ASC");
 $replies = [];
 while ($row = hesk_dbFetchAssoc($res)) {
     if (intval($row['staffid']) > 0) {
-        $row['name'] = $row['staff_name'];
+        $row['name'] = $row['staff_name'] === null ?
+            $hesklang['staff_deleted'] :
+            (($hesk_settings['staff_nicknames'] && $row['nickname'] != '') ? $row['nickname'] : $row['staff_name']);
     } else {
-        $row['name'] = $row['customer_name'];
+        $row['name'] = strlen($row['customer_name']) ? $row['customer_name'] : ( ! empty($row['customer_email']) ? $row['customer_email'] : $hesklang['pde']);
     }
     $replies[] = $row;
 }

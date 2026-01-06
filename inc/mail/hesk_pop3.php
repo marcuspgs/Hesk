@@ -212,6 +212,15 @@ if(($error=$pop3->Open())=="")
                         echo "<pre>Ticket NOT inserted: " . $hesk_settings['DEBUG_LOG']['PIPE'] . "</pre>\n";
                     }
 
+                    // Any additional notices?
+                    if ($hesk_settings['debug_mode'] && isset($hesk_settings['DEBUG_LOG']['NOTICES'])) {
+                        echo "<pre>";
+                        foreach ($hesk_settings['DEBUG_LOG']['NOTICES'] as $notice) {
+                            echo "$notice\n";
+                        }
+                        echo "</pre>\n";
+                    }
+
 					// Queue message to be deleted on connection close
 					if ( ! $hesk_settings['pop3_keep'])
                     {

@@ -17,7 +17,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 // List of staff and check their permissions
 $admins = array();
 $can_assign_to = array();
-$res2 = hesk_dbQuery("SELECT `id`,`name`,`isadmin`,`heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `name` ASC");
+$res2 = hesk_dbQuery("SELECT `id`,`name`,`isadmin`,`heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `active` = 1 ORDER BY `name` ASC");
 while ($row = hesk_dbFetchAssoc($res2))
 {
     $admins[$row['id']] = $row['name'];
@@ -197,7 +197,7 @@ if (true)
         $query .= 's' . implode('=1&amp;s',array_keys($status)) . '=1';
         $query .= '&amp;p' . implode('=1&amp;p',array_keys($priority)) . '=1';
 
-		$query .= '&amp;category='.$category;
+		$query .= (count($categories) ? '&amp;c[]=' . implode('&amp;c[]=', $categories) : '&amp;c[]=0');
 		$query .= '&amp;sort='.$sort;
 		$query .= '&amp;asc='.$asc;
 		$query .= '&amp;limit='.$maxresults;
@@ -218,7 +218,7 @@ if (true)
 	{
 		$query  = 'q='.$q;
 	    $query .= '&amp;what='.$what;
-		$query .= '&amp;category='.$category;
+		$query .= (count($categories) ? '&amp;c[]=' . implode('&amp;c[]=', $categories) : '&amp;c[]=0');
         $query .= '&amp;owner='.$owner_input;
 		$query .= '&amp;dt='.urlencode($date_input);
 		$query .= '&amp;sort='.$sort;
@@ -265,7 +265,7 @@ if (true)
         $query .= 's' . implode('=1&amp;s',array_keys($status)) . '=1';
         $query .= '&amp;p' . implode('=1&amp;p',array_keys($priority)) . '=1';
 
-		$query .= '&amp;category='.$category;
+		$query .= (count($categories) ? '&amp;c[]=' . implode('&amp;c[]=', $categories) : '&amp;c[]=0');
 		#$query .= '&amp;asc='.(isset($is_default) ? 1 : $asc_rev);
 		$query .= '&amp;limit='.$maxresults;
 		$query .= '&amp;archive='.$archive[1];
@@ -288,7 +288,7 @@ if (true)
 	{
 		$query  = 'q='.$q;
 	    $query .= '&amp;what='.$what;
-		$query .= '&amp;category='.$category;
+		$query .= (count($categories) ? '&amp;c[]=' . implode('&amp;c[]=', $categories) : '&amp;c[]=0');
         $query .= '&amp;owner='.$owner_input;
 		$query .= '&amp;dt='.urlencode($date_input);
 		#$query .= '&amp;asc='.$asc;
@@ -504,6 +504,14 @@ if (true)
 		// Print customer name
 		if ( hesk_show_column('name') )
 		{
+            if ($ticket['name'] == '') {
+                if (strlen($ticket['email']) && $ticket['email'] != $hesklang['anon_email']) {
+                    $ticket['name'] = $ticket['email'];
+                } else {
+                    $ticket['name'] = $hesklang['anon_name'];
+                }
+            }
+
             echo '<td>'.$ticket['name'];
 
             if (intval($ticket['customer_count']) > 1) {
@@ -516,7 +524,7 @@ if (true)
 		// Print customer email
 		if ( hesk_show_column('email') )
 		{
-			echo '<td>' . (strlen($ticket['email']) ? '<a href="mailto:'.$ticket['email'].'">'.$hesklang['clickemail'].'</a>' : '');
+			echo '<td>' . (strlen($ticket['email']) ? '<a href="mailto:'.$ticket['email'].'">'.($hesk_settings['email_column'] ? $ticket['email'] : $hesklang['clickemail']).'</a>' : '');
 
             if (intval($ticket['email_count']) > 1) {
                 $subtraction_amount = strlen($ticket['email']) ? 1 : 0;
@@ -610,7 +618,7 @@ if (true)
 		}
 
 		// End ticket row
-        echo '<td><div class="td-flex">' . hesk_get_admin_ticket_priority_for_list($ticket['priority']) . '&nbsp;</div></td>';
+        echo '<td class="has-flex-item"><div class="td-flex">' . hesk_get_admin_ticket_priority_for_list($ticket['priority']) . '&nbsp;</div></td>';
 
 	} // End while
 
@@ -775,11 +783,16 @@ if (true)
 
                     if ( ! defined('HESK_DEMO') )
                     {
-
                         if ( hesk_checkPermission('can_merge_tickets', 0) )
                         {
                             ?>
                             <option value="merge"><?php echo $hesklang['mer_selected']; ?></option>
+                            <?php
+                        }
+                        if ( hesk_checkPermission('can_link_tickets', 0) )
+                        {
+                            ?>
+                            <option value="link_tickets"><?php echo $hesklang['link_selected_tickets']; ?></option>
                             <?php
                         }
                         if ( hesk_checkPermission('can_export', 0) )
@@ -800,7 +813,6 @@ if (true)
                             <option value="delete"><?php echo $hesklang['del_selected']; ?></option>
                             <?php
                         }
-
                     } // End demo
                     ?>
                 </select>

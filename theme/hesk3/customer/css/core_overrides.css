@@ -1,0 +1,7 @@
+/*
+This file should only be used by hesk clients to apply any custom overwrites to core files,
+and ensure these changes are included in the bundled css.
+
+Please only change this file if you know what you are doing.
+Any general thematic changes should rather be done as part of /theme changes of theme_overrides.css
+*/

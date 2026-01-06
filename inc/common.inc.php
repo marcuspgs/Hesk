@@ -298,6 +298,19 @@ function hesk_isBannedEmail($email)
 } // END hesk_isBannedEmail()
 
 
+function hesk_isMutedEmail($email)
+{
+    global $hesk_settings, $hesklang, $hesk_db_link;
+
+    $email = strtolower($email);
+
+    $res = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."muted_emails` WHERE `email` IN ('".hesk_dbEscape($email)."', '".hesk_dbEscape( substr($email, strrpos($email, "@") ) )."') LIMIT 1");
+
+    return ( hesk_dbNumRows($res) == 1 ) ? hesk_dbResult($res) : false;
+
+} // END hesk_isMutedEmail()
+
+
 function hesk_clean_utf8($in)
 {
 	//reject overly long 2 byte sequences, as well as characters above U+10000 and replace with ?
@@ -730,7 +743,7 @@ function hesk_getCountOfActiveUsersByIds($ids) {
 function hesk_getActiveAutoassignUsersForIds($ids) {
     global $hesk_settings;
 
-    $res = hesk_dbQuery("SELECT `id` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `id` IN (" . implode(',', $ids) . ")");
+    $res = hesk_dbQuery("SELECT `id` FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `active` = 1 AND `id` IN (" . implode(',', $ids) . ")");
     $ids = array();
 
     while ($row = hesk_dbFetchAssoc($res)) {
@@ -779,17 +792,50 @@ function hesk_autoAssignTicket($ticket_category)
 	$autoassign_owner = array();
 
 	/* Get all possible auto-assign staff, order by number of open tickets */
-	$res = hesk_dbQuery("SELECT `t1`.`id`,`t1`.`user`,`t1`.`name`, `t1`.`autoassign`, `t1`.`email`, `t1`.`language`, `t1`.`isadmin`, `t1`.`categories`, `t1`.`notify_assigned`, `t1`.`heskprivileges`,
+	$res = hesk_dbQuery("SELECT `t1`.`id`,`t1`.`user`,`t1`.`name`, `t1`.`autoassign`, `t1`.`email`, `t1`.`nickname`, `t1`.`language`, `t1`.`isadmin`, `t1`.`categories`, `t1`.`notify_assigned`, `t1`.`heskprivileges`,
 					    (SELECT COUNT(*) FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` FORCE KEY (`statuses`) WHERE `owner`=`t1`.`id` AND `status` <> '3' ) as `open_tickets`
 						FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `t1`
+						WHERE `t1`.`active` = 1
 						ORDER BY `open_tickets` ASC, RAND()");
 	$autoassign_config_res = hesk_dbQuery("SELECT `autoassign_config` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."categories` WHERE `id` = ".intval($ticket_category));
 	$autoassign_config = hesk_dbFetchAssoc($autoassign_config_res);
 	$parsed_autoassign_config = hesk_parseAutoAssignConfig($autoassign_config['autoassign_config']);
 
+    // Fetch categories / features assigned via permission group
+    $permission_groups_rs = hesk_dbQuery("SELECT `member`.`user_id` AS `user_id`, `category`.`category_id` AS `category_feature_value`, 'CATEGORY' AS `category_feature_type` 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `member`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` AS `category`
+            ON `member`.`group_id` = `category`.`group_id`
+        UNION ALL
+        SELECT `member`.`user_id` AS `user_id`, `feature`.`feature` AS `category_feature_value`, 'FEATURE' AS `category_feature_type` 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `member`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` AS `feature`
+            ON `member`.`group_id` = `feature`.`group_id`");
+    $user_to_pg_features = [];
+    $user_to_pg_categories = [];
+    while ($row = hesk_dbFetchAssoc($permission_groups_rs)) {
+        $user_id = intval($row['user_id']);
+        if (!key_exists($user_id, $user_to_pg_categories)) {
+            $user_to_pg_categories[$user_id] = [];
+            $user_to_pg_features[$user_id] = [];
+        }
+
+        if ($row['category_feature_type'] === 'CATEGORY') {
+            $user_to_pg_categories[$user_id][] = intval($row['category_feature_value']);
+        } else {
+            $user_to_pg_features[$user_id][] = $row['category_feature_value'];
+        }
+    }
+
 	/* Loop through the rows and return the first appropriate one */
 	while ($myuser = hesk_dbFetchAssoc($res))
 	{
+        $int_myuser_id = intval($myuser['id']);
+        if (!key_exists($int_myuser_id, $user_to_pg_features)) {
+            $user_to_pg_features[$int_myuser_id] = [];
+            $user_to_pg_categories[$int_myuser_id] = [];
+        }
+
 	    /*
 	    If "On - Select Users": Is the user allowed to be selected for this category?
 	    If "On - All Users": Does the user have autoassign enabled on their user record?
@@ -812,13 +858,16 @@ function hesk_autoAssignTicket($ticket_category)
 		/* Not and administrator, check two things: */
 
         /* --> can view and reply to tickets */
-		if (strpos($myuser['heskprivileges'], 'can_view_tickets') === false || strpos($myuser['heskprivileges'], 'can_reply_tickets') === false)
+        $can_view_tickets = strpos($myuser['heskprivileges'], 'can_view_tickets') !== false || in_array('can_view_tickets', $user_to_pg_features[$int_myuser_id]);
+        $can_reply_tickets = strpos($myuser['heskprivileges'], 'can_reply_tickets') !== false || in_array('can_reply_tickets', $user_to_pg_features[$int_myuser_id]);
+		if (!$can_view_tickets || !$can_reply_tickets)
 		{
 			continue;
 		}
 
         /* --> has access to ticket category */
-		$myuser['categories']=explode(',',$myuser['categories']);
+		$myuser['categories'] = explode(',',$myuser['categories']);
+        $myuser['categories'] = array_merge($myuser['categories'], $user_to_pg_categories[$int_myuser_id]);
 		if (in_array($ticket_category,$myuser['categories']))
 		{
 			$autoassign_owner = $myuser;
@@ -1228,41 +1277,38 @@ function hesk_getCategoryDueDateInfo($id) {
 }
 
 
-function hesk_getReplierName($ticket)
+function hesk_getReplierNameArray($ticket)
 {
 	global $hesk_settings, $hesklang;
 
     // Already have this info?
-    if (isset($ticket['last_reply_by']))
-    {
+    if (isset($ticket['last_reply_by'])) {
         return $ticket['last_reply_by'];
     }
 
     // Last reply by staff
-    if ( ! empty($ticket['lastreplier']))
-    {
+    if ( ! empty($ticket['lastreplier'])) {
+
         // We don't know who from staff so just send "Staff"
-        if (empty($ticket['replierid']))
-        {
-            return $hesklang['staff'];
+        if (empty($ticket['replierid'])) {
+            return array('name' => $hesklang['staff'], 'nickname' => $hesklang['staff']);
         }
 
         // Get the name using another function
-        $replier = hesk_getOwnerName($ticket['replierid']);
+        $replier = hesk_getStaffNameArray($ticket['replierid']);
 
         // If replier comes back as "unassigned", default to "Staff"
-        if ($replier == $hesklang['unas'])
-        {
-            return $hesklang['staff'];
+        if ($replier === false) {
+            return array('name' => $hesklang['staff'], 'nickname' => $hesklang['staff']);
         }
 
-        return $replier;
+        return $hesk_settings['user_data'][$ticket['replierid']];
     }
 
     // Last reply by customer
     if ($ticket['replies'] > 0) {
         // Get latest customer reply
-        $replier_rs = hesk_dbQuery("SELECT `customer`.`name` AS `name`
+        $replier_rs = hesk_dbQuery("SELECT `customer`.`name` AS `name`, `customer`.`email` AS `email`
                 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `reply`
                 LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customer`
                     ON `reply`.`customer_id` = `customer`.`id`
@@ -1272,12 +1318,15 @@ function hesk_getReplierName($ticket)
                 LIMIT 1");
 
         if ($row = hesk_dbFetchAssoc($replier_rs)) {
-            return $row['name'] !== null ? $row['name'] : $hesklang['anon_name'];
+            if ($row['name'] === null || $row['name'] == '') {
+                $row['name'] = empty($row['email']) ? $hesklang['anon_name'] : $row['email'];
+            }
+            return array('name' => $row['name'], 'nickname' => $row['name']);
         }
     }
 
     // No replies, grab the requester from the main ticket
-    $requester_name_rs = hesk_dbQuery("SELECT `customer`.`name`
+    $requester_name_rs = hesk_dbQuery("SELECT `customer`.`name`, `customer`.`email` AS `email`
         FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` AS `ticket_to_customer`
         LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customer`
             ON `ticket_to_customer`.`customer_id` = `customer`.`id`
@@ -1285,36 +1334,44 @@ function hesk_getReplierName($ticket)
             AND `customer_type` = 'REQUESTER'");
 
     if ($row = hesk_dbFetchAssoc($requester_name_rs)) {
-        return $row['name'] !== null ? $row['name'] : $hesklang['anon_name'];
+        if ($row['name'] === null || $row['name'] == '') {
+            $row['name'] = empty($row['email']) ? $hesklang['anon_name'] : $row['email'];
+        }
+        return array('name' => $row['name'], 'nickname' => $row['name']);
     }
-} // END hesk_getReplierName()
 
-function hesk_getOwnerName($id)
+    // Nothing found, return default name
+    return array('name' => $hesklang['anon_name'], 'nickname' => $hesklang['anon_name']);
+
+} // END hesk_getReplierNameArray()
+
+function hesk_getStaffNameArray($id)
 {
 	global $hesk_settings, $hesklang;
 
-	if (empty($id))
-	{
-		return $hesklang['unas'];
-	}
+    if (empty($id)) {
+        return false;
+    }
 
-	// If we already have the name no need to query DB another time
-	if ( isset($hesk_settings['user_data'][$id]['name']) )
-	{
-		return $hesk_settings['user_data'][$id]['name'];
-	}
+    $id = intval($id);
 
-	$res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='".intval($id)."' LIMIT 1");
+    // If we already have the name no need to query DB another time
+    if ( isset($hesk_settings['user_data'][$id]) ) {
+        return $hesk_settings['user_data'][$id];
+    }
 
-	if (hesk_dbNumRows($res) != 1)
-	{
-		return $hesklang['unas'];
-	}
+    $res = hesk_dbQuery("SELECT `name`, `nickname` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`={$id} LIMIT 1");
 
-	$hesk_settings['user_data'][$id]['name'] = hesk_dbResult($res,0,0);
+    if (hesk_dbNumRows($res) != 1) {
+        return false;
+    }
 
-	return $hesk_settings['user_data'][$id]['name'];
-} // END hesk_getOwnerName()
+    $user = hesk_dbFetchAssoc($res);
+    $hesk_settings['user_data'][$id]['name'] = $user['name'];
+    $hesk_settings['user_data'][$id]['nickname'] = ($hesk_settings['staff_nicknames'] && $user['nickname'] != '') ? $user['nickname'] : $user['name'];
+
+	return $hesk_settings['user_data'][$id];
+} // END hesk_getStaffNameArray()
 
 
 function hesk_cleanSessionVars($arr)
@@ -2790,7 +2847,9 @@ function hesk_error($error,$showback=1) {
         $hesk_settings['hesk_url'] :
         HESK_PATH . $hesk_settings['admin_dir'] . '/admin_main.php';
 
-    if (defined('TEMPLATE_PATH')) {
+    // We ONLY load the customer header, is it's not an admin page, as otherwise it can mess the layout etc.
+    // TODO note andraz - now it breaks the layout and error shows in the very bottom
+    if (!defined('IS_ADMIN_PAGE') && defined('TEMPLATE_PATH')) {
         $hesk_settings['render_template'](TEMPLATE_PATH . 'customer/error.php', array(
             'showDebugWarning' => $hesk_settings['debug_mode'],
             'error' => $error,
@@ -2986,7 +3045,8 @@ function hesk_generate_delete_modal($modal_config) {
         'body' => 'MISSING BODY',
         'confirm_action' => 'MISSING CONFIRM ACTION',
         'use_form' => false,
-        'delete_text' => $hesklang['delete']
+        'delete_text' => $hesklang['delete'],
+        'cancel_text' => $hesklang['cancel']
     ];
     $options = array_merge($defaults, $modal_config);
     $random_id = hesk_generate_random_id();
@@ -3006,13 +3066,13 @@ function hesk_generate_delete_modal($modal_config) {
                     <p style="display: block; min-width: 172px; width: auto"><?php echo $options['body']; ?></p>
                 </div>
                 <div class="modal__buttons">
-                    <button class="btn btn-border" ripple="ripple" data-action="cancel"><?php echo $hesklang['cancel']; ?></button>
+                    <button class="btn btn-border" ripple="ripple" data-action="cancel"><?php echo $options['cancel_text']; ?></button>
                     <?php if ($options['use_form']): ?>
                     <button type="submit" class="btn btn-full text-white" ripple="ripple" style="width: 152px; height: 40px;">
                         <?php echo $options['delete_text']; ?>
                     </button>
                     <?php else: ?>
-                    <a data-confirm-button href="<?php echo $options['confirm_action']; ?>" class="btn btn-full text-white" ripple="ripple" style="width: 152px; height: 40px;"><?php echo $options['delete_text']; ?></a>
+                    <a data-confirm-button href="<?php echo $options['confirm_action']; ?>" class="btn btn-full text-white <?php echo $options['custom_class']; ?>" ripple="ripple" style="width: 152px; height: 40px;"><?php echo $options['delete_text']; ?></a>
                     <?php endif; ?>
                 </div>
                 <?php if ($options['use_form']): ?>
@@ -3085,7 +3145,7 @@ function hesk_maskEmailAddress($email_address) {
 function hesk_isThereAnotherAdmin($current_admin_id) {
     global $hesk_settings;
 
-    $res = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `isadmin` = '1' AND `id` <> ".intval($current_admin_id));
+    $res = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `active` = 1 AND `isadmin` = '1' AND `id` <> ".intval($current_admin_id));
 
     return hesk_dbNumRows($res) > 0;
 }
@@ -3187,6 +3247,7 @@ function hesk_verifyGoto($login_type = 'STAFF')
             'admin_settings_email.php' => '',
             'admin_settings_general.php' => '',
             'admin_settings_help_desk.php' => '',
+            'admin_settings_theme.php' => '',
             'admin_settings_knowledgebase.php' => '',
             'admin_settings_misc.php' => '',
             'admin_settings_save.php' => 'admin_settings_general.php',
@@ -3225,6 +3286,7 @@ function hesk_verifyGoto($login_type = 'STAFF')
             'reports.php' => '',
             'service_messages.php' => '',
             'show_tickets.php' => '',
+            'muted_emails.php' => '',
         );
     }
 
@@ -3532,4 +3594,24 @@ function hesk_getTicketsCollaboratorIDs($ticket_id)
     }
 
     return $collaborators;
-} // END hesk_getTicketsCollaboratorIDs()   */
+} // END hesk_getTicketsCollaboratorIDs()
+
+
+function hesk_str_ends_with($haystack, $needle)
+{
+    if (function_exists('str_ends_with')) {
+        return str_ends_with($haystack, $needle);
+    }
+
+    $needle_len = strlen($needle);
+    return ($needle_len === 0 || 0 === substr_compare($haystack, $needle, - $needle_len));
+} // END hesk_str_ends_with()
+
+
+function hesk_curl_close($handle)
+{
+    if (PHP_VERSION_ID < 80500) {
+        curl_close($handle);
+    }
+    return true;
+} // END hesk_curl_close()

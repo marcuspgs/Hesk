@@ -358,7 +358,7 @@ function display_dropzone_field($url, $is_admin, $id = 'filedrop', $max_files_ov
         dictDefaultMessage: ".json_encode($hesklang['attachment_viewer_message']).",
         dictFallbackMessage: '',
         dictInvalidFileType: ".json_encode($hesklang['attachment_invalid_type_message']).",
-        dictResponseError: ".json_encode($hesklang['attachment_upload_error']).",
+        dictResponseError: ".json_encode(defined('HESK_DEMO') ? $hesklang['ddemo'] : $hesklang['attachment_upload_error']).",
         dictFileTooBig: ".json_encode($hesklang['attachment_too_large']).",
         dictCancelUpload: ".json_encode($hesklang['attachment_cancel']).",
         dictCancelUploadConfirmation: ".json_encode($hesklang['attachment_confirm_cancel']).",

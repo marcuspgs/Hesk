@@ -1,0 +1,170 @@
+/*
+Put any deprecated css here, to be kept for safe-keeping and a final double-check when all else is done
+*/
+/* TODO Main-content  ticket seems to not be loaded anywhere on custom side ? */
+.main__content.ticket {
+    padding: 23px 32px 50px 16px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between
+}
+
+.main__content.ticket .icon-chevron-down {
+    margin-top: 1px
+}
+
+@media screen and (max-width:900px) {
+    .main__content.ticket {
+        padding: 16px 12px 24px;
+        -ms-flex-direction: column;
+        flex-direction: column
+    }
+    .main__content.ticket .ticket__body {
+        margin: 0 0 16px;
+        padding-top: 72px
+    }
+    .main__content.ticket .ticket__body .block--head {
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-align: start;
+        align-items: flex-start
+    }
+    .main__content.ticket .ticket__body .block--head time {
+        margin-left: 0;
+        margin-bottom: 8px
+    }
+    .main__content.ticket .ticket__body .block--head .more {
+        margin-left: 0
+    }
+    .main__content.ticket .block--submit {
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap
+    }
+    .main__content.ticket .block--submit .btn {
+        height: 40px!important;
+        margin: 0 auto 16px
+    }
+    .main__content.ticket .block--submit .btn-full {
+        -ms-flex-order: 1;
+        order: 1
+    }
+    .main__content.ticket .block--submit .btn-border {
+        -ms-flex-order: 2;
+        order: 2
+    }
+    .main__content.ticket .block--submit::before {
+        content: "";
+        -ms-flex-order: 3;
+        order: 3;
+        width: 100%;
+        height: 0
+    }
+    .main__content.ticket .block--submit .submit-us {
+        -ms-flex-order: 4;
+        order: 4;
+        margin: 0 auto
+    }
+    .main__content.ticket .block--submit .submit-us .dropdown-list {
+        top: calc(100% + 8px);
+        left: 50%;
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%)
+    }
+    .main__content.ticket .ticket__params {
+        width: 100%
+    }
+    .main__content.ticket .ticket__params .params--bar {
+        position: absolute;
+        top: 72px;
+        left: 12px;
+        right: 12px
+    }
+}
+
+/* TODO this seems deprecated, especially on custoemr side? There's one use on admin somewhere, but not elsewhere ? */
+.notification-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: none;
+    background-color: var(--secondary);
+}
+
+.notification-bar .close {
+    display: block;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 40px;
+    top: calc(50% - 12px);
+    cursor: pointer
+}
+
+.notification-bar .close:hover svg {
+    fill: var(--white-7);
+}
+
+.notification-bar .close svg {
+    width: 8px;
+    height: 8px;
+    fill: var(--white-1);
+}
+
+.notification-bar .notification--text {
+    color: var(--surface);
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    min-height: 48px
+}
+
+.notification-bar .btn {
+    color: var(--surface);
+    border-color: var(--surface);
+    width: 96px;
+    height: 32px;
+    margin-left: 32px
+}
+
+.notification-bar.green {
+    background-color: var(--success);
+}
+
+.notification-bar.red {
+    background-color: var(--error);
+}
+
+.notification-bar.orange {
+    background-color: var(--warning);
+}
+
+.notification-bar.blue {
+    background-color: var(--primary);
+}
+
+.notification-bar.white {
+    background-color: var(--surface);
+    border-top: solid 1px var(--white-8);
+    border-bottom: solid 1px var(--white-8);
+}
+
+.notification-bar.white .notification--text {
+    color: var(--gray-7);
+}
+
+.notification-bar.white .btn {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.notification-bar.white svg {
+    fill: var(--white-9);
+}

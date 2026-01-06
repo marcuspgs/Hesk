@@ -204,12 +204,27 @@ $s_ot = array(1=>1,2=>1);
 $s_un = array(1=>1,2=>1);
 
 // --> TICKET CATEGORY
-$category = intval( hesk_GET('category', 0) );
-
-// Make sure user has access to this category
-if ($category && hesk_okCategory($category, 0) )
-{
-    $sql .= " AND `category`='{$category}' ";
+if (isset($_GET['c']) && is_array($_GET['c'])) {
+    $categories = [];
+    foreach ($_GET['c'] as $category) {
+        $category = intval($category);
+        if ($category && hesk_okCategory($category, 0) ) {
+            $categories[] = $category;
+        }
+    }
+    if (count($categories)) {
+        $sql .= " AND `category` IN (".implode(',', $categories).") ";
+    }
+} elseif (isset($_GET['category'])) {
+    // Legacy, select a single category
+    $category = intval( hesk_GET('category', 0) );
+    $categories = array($category);
+    if ($category && hesk_okCategory($category, 0) ) {
+        $sql .= " AND `category`='{$category}' ";
+    }
+} else {
+    $category = 0;
+    $categories = [0];
 }
 
 // Show only tagged tickets?

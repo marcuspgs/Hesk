@@ -1,0 +1,791 @@
+/*
+Put more specific/smaller-scoped layout related  CSS in here, i.e. like wrappers, holders, or forms/commonly used structures... etc.
+*/
+.main__content.notifications {
+    padding: 40px 32px 32px 16px
+}
+
+.main__content.notifications h2 {
+    padding-left: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22;
+    letter-spacing: .1px
+}
+
+.main__content.notifications .notifications__list {
+    margin-top: 16px;
+    width: 100%;
+    max-width: 496px;
+    box-shadow: var(--shadow_small) var(--shadow-1-10);
+    background-color: var(--surface);
+    padding: 8px
+}
+
+.main__content.notifications .notifications__list li {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 16px
+}
+
+.main__content.notifications .notifications__list li:nth-child(odd) {
+    background-color: var(--white-2);
+}
+
+.main__content.notifications .notifications__list li.new {
+    border-left: 2px solid var(--secondary);
+}
+
+.main__content.notifications .notifications__list li.new h5 {
+    font-weight: 700
+}
+
+.main__content.notifications .notifications__list li h5 {
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    margin-right: 16px
+}
+
+.main__content.notifications .notifications__list li h5 a {
+    color: var(--primary);
+}
+
+.main__content.notifications .notifications__list li time {
+    font-size: 10px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: .1px;
+    text-align: right;
+    color: var(--gray-4);
+}
+
+.main__content.notifications .pagination-wrap {
+    width: 100%;
+    max-width: 496px;
+    margin: 24px 0 0
+}
+.pagination-wrap {
+    margin: 24px auto 16px
+}
+
+.pagination {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+.pagination a {
+    color: var(--primary);
+    transition: all var(--transition-speed) ease
+}
+
+.pagination a:hover {
+    background-color: var(--white-4);
+}
+
+.pagination__nav-btn {
+    margin: 0 5px
+}
+
+.pagination__list {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.pagination__item.is-current .pagination__link {
+    background-color: var(--white-7);
+}
+
+.pagination__stroke {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: normal;
+    text-align: center;
+    color: var(--primary);
+}
+
+.pagination__link {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: normal;
+    text-align: center;
+    color: var(--primary);
+}
+
+.pagination__amount {
+    margin-top: 24px;
+    text-align: center;
+    font-weight: 700
+}
+.alert {
+    margin-top: 24px;
+    border: solid 1px var(--secondary);
+    background-color: var(--white-2);
+}
+
+.alert .icon-warning {
+    fill: var(--secondary);
+    font-size: 22px
+}
+
+.alert.warning {
+    border: solid 1px var(--warning); /* deprecation fallback */
+    border: solid 1px color-mix(in srgb, var(--warning) 40%, var(--white-1));
+    background-color: var(--secondary);
+}
+
+.alert.warning .icon-warning {
+    fill: var(--warning);
+}
+
+.alert.success {
+    border: solid 1px var(--success); /* deprecation fallback) */
+    border: solid 1px color-mix(in srgb, var(--success) 50%, var(--white-1));
+    background-color: var(--white-6); /* deprecation fallback) */
+    background-color: color-mix(in srgb, var(--white-6) 90%, var(--success));
+}
+
+.alert.success .icon-warning {
+    fill: var(--warning);
+}
+
+.alert.danger {
+    border: solid 1px var(--error); /* deprecation fallback */
+    border: solid 1px color-mix(in srgb, var(--error) 55%, var(--white-1));
+    background-color: var(--white-3);
+}
+
+.alert.danger .icon-warning {
+    fill: var(--error);
+}
+
+.alert.danger .alert__title {
+    color: var(--error);
+}
+
+.alert.none {
+    border: none;
+    background-color: var(--surface);
+}
+
+.alert.none .icon-warning {
+    fill: var(--black-1);
+}
+
+.alert__inner {
+    padding: 24px
+}
+
+.alert__head {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.alert__head .icon+.alert__title {
+    margin-left: 12px
+}
+
+.alert__title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .1px;
+    color: var(--gray-7);
+}
+
+.alert__descr {
+    margin-top: 12px
+}
+#loader {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--surface);
+    z-index: 100
+}
+
+.wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    flex: 1 0 auto;
+    width: 100%;
+    font-family: Lato, Arial, sans-serif;
+    color: var(--font__pri-clr);
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    background-color: var(--surface);
+}
+
+@media screen and (max-width:900px) {
+    .wrapper {
+        margin-top: 48px
+    }
+}
+
+.main {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    /* Required as parent has display: flex, and it can cause an issue if any of the children is wider than the remaining parent space,
+    it would cause .main to expand to fit for that. BUT adding a flexed item min-width: 0, overrides the unset value which causes above behaviour. */
+    min-width: 0;
+}
+
+.main__content {
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    background-color: var(--main-background);
+}
+.notification {
+    background-color: var(--surface);
+    box-shadow: var(--shadow_med) var(--shadow-1-30); /* deprecation fallback */
+    padding: 20px 28px;
+    font-family: Lato, Arial, sans-serif;
+    position: relative;
+    display: block;
+    margin-bottom: 24px;
+}
+.notification:not(.white) {
+    color: var(--notification__clr);
+}
+
+.notification::before {
+    content: "";
+    width: 8px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.notification.red {
+    background-color: var(--error-2);
+}
+
+.notification.red::before {
+    background-color: var(--error);
+}
+
+.notification.orange {
+    background-color: var(--warning-2);
+}
+
+.notification.orange::before {
+    background-color: var(--warning);
+}
+
+.notification.green {
+    background-color: var(--success-2);
+}
+
+.notification.green::before {
+    background-color: var(--success);
+}
+
+.notification.blue {
+    background-color: var(--info-2);
+}
+
+.notification.blue::before {
+    background-color: var(--info);
+}
+
+.notification-flash {
+    width: 320px;
+    z-index: 20;
+    background-color: var(--surface);
+    box-shadow: var(--shadow_med) var(--shadow-1-10);
+    padding: 24px 32px 16px;
+    font-family: Lato, Arial, sans-serif;
+    position: absolute;
+    top: 144px;
+    right: 32px;
+    display: none
+}
+
+.notification-flash::before {
+    content: "";
+    width: 8px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.notification-flash.red::before {
+    background-color: var(--error);
+}
+
+.notification-flash.orange::before {
+    background-color: var(--warning);
+}
+
+.notification-flash.green::before {
+    background-color: var(--success);
+}
+
+.notification-flash.blue::before {
+    background-color: var(--primary);
+}
+
+.notification-flash .close {
+    width: 16px;
+    height: 16px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer
+}
+
+.notification-flash .close svg {
+    width: 8px;
+    height: 8px;
+    fill: var(--white-9)
+}
+
+.notification-flash .notification--title {
+    font-size: 14px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--gray-7);
+}
+
+.notification-flash .notification--text {
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: .1px;
+    color: var(--gray-4);
+}
+
+.notification-flash .btn {
+    margin-top: 16px;
+    width: 96px
+}
+
+.notification-flash .notification--title.error-title {
+    display: none;
+}
+.notification-flash.display-error .notification--title.error-title {
+    display: block;
+}
+.notification-flash.display-error .notification--title:not(.error-title),
+.notification-flash.display-error .notification--text {
+    display: none;
+}
+
+
+@media screen and (max-width:900px) {
+    .notification-flash {
+        top: 0!important;
+        right: 0;
+        width: 100%;
+        position: fixed
+    }
+    .notification-flash .close {
+        width: 32px;
+        height: 32px;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%)
+    }
+}
+.star-rate {
+    position: relative;
+    width: 84px;
+    height: 15px
+}
+
+.star-rate .icon-star-stroke {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 84px;
+    height: 15px
+}
+
+.star-rate .star-filled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 15px;
+    overflow: hidden;
+    line-height: 1
+}
+
+.star-rate .star-filled .icon-star-filled {
+    width: 84px;
+    height: 15px
+}
+
+.star-rate.rate-05 .star-filled, .star-rate.rate-5 .star-filled {
+    z-index: 2;
+    width: 10%
+}
+
+.star-rate.rate-10 .star-filled {
+    z-index: 2;
+    width: 20%
+}
+
+.star-rate.rate-15 .star-filled {
+    z-index: 2;
+    width: 30%
+}
+
+.star-rate.rate-20 .star-filled {
+    z-index: 2;
+    width: 40%
+}
+
+.star-rate.rate-25 .star-filled {
+    z-index: 2;
+    width: 50%
+}
+
+.star-rate.rate-30 .star-filled {
+    z-index: 2;
+    width: 60%
+}
+
+.star-rate.rate-35 .star-filled {
+    z-index: 2;
+    width: 70%
+}
+
+.star-rate.rate-40 .star-filled {
+    z-index: 2;
+    width: 80%
+}
+
+.star-rate.rate-45 .star-filled {
+    z-index: 2;
+    width: 90%
+}
+
+.star-rate.rate-50 .star-filled {
+    z-index: 2;
+    width: 100%
+}
+
+/* region Drag-and-Drop Attachments */
+.wrapper .dropzone {
+    min-height: inherit;
+    border: 1px solid var(--white-8);
+    padding: 0;
+}
+
+.attachment-row > .name-size-delete {
+    display: flex;
+}
+
+.attachment-row > .name-size-delete > .name-size {
+    display: flex;
+    flex-grow: 1;
+}
+
+.attachment-row > .name-size-delete > .name-size > .size {
+    margin-left: 5px;
+}
+
+.attachment-row > .name-size-delete > .delete-button {
+    display: flex;
+    align-items: flex-end;
+}
+
+.attachment-row > div {
+    padding: 5px 10px;
+}
+
+.attachment-row > .upload-progress {
+    width: 100%;
+}
+
+.attachment-row svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--gray-3);
+}
+
+.attachment-row svg:hover,
+.attachment-row svg > use:hover {
+    cursor: pointer;
+}
+
+.attachment-row svg:hover {
+    fill: var(--theme-color-dark-2);
+}
+
+.dz-error div.error {
+    padding: 0 10px;
+}
+
+.wrapper .dropzone > .file-row:nth-child(even) {
+    background: var(--surface);
+}
+.dropzone .dz-message .dz-button {
+    color: var(--font__pri-clr);
+}
+/* endregion */
+/* region My Tickets */
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 24px;
+    padding: 12px;
+    border-radius: 2px;
+    box-shadow: var(--shadow_smaller) rgb(38 40 42 / 10%);
+    background-color: var(--surface);
+}
+
+.table-wrap .pager {
+    text-align: center;
+}
+
+.table-wrap .pager .pagination__list {
+    justify-content: center;
+}
+
+.table-wrap .table {
+    width: 100%;
+}
+
+.table-wrap .table thead {
+    height: 48px;
+    background-color: var(--secondary);
+    color: var(--surface);
+}
+
+.table-wrap .table thead a {
+    color: var(--surface);
+}
+
+.table-wrap .table thead a:hover {
+    text-decoration: none;
+    color: inherit !important;
+}
+
+.table-wrap .table thead th:not(:first-child) {
+    border-left: 1px solid var(--white-7);
+}
+
+.table thead th.desc .handle {
+    height: 4px
+}
+
+.table thead th.desc .handle::before {
+    display: none
+}
+
+.table thead th.asc .handle {
+    height: 4px
+}
+
+.table thead th.asc .handle::after {
+    display: none
+}
+
+.table thead th .handle {
+    margin-left: 8px;
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 12px;
+    vertical-align: middle;
+}
+
+.table thead th .handle::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 4px solid var(--surface);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.table thead th .handle::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    width: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 4px solid var(--surface);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.table-wrap .table thead th {
+    padding: 18px 16px;
+    text-align: left;
+}
+
+.table thead th.table__first_th {
+    padding: 21px 0 21px 16px;
+    width: 40px;
+    border-right: none;
+    vertical-align: middle
+}
+
+.table-wrap .table tbody tr {
+    transition: all var(--transition-speed-low) ease;
+    background-color: var(--table_row__bg);
+    border-bottom: 1px solid var(--white-8); /* deprecation fallback */
+    border-bottom: 1px solid color-mix(in srgb, var(--white-8) 87%, var(--tertiary));
+}
+
+.table-wrap .table tbody tr:hover {
+    background-color: var(--table_row__bg-hover) !important;
+}
+
+.table-wrap .table tbody tr:nth-child(even) {
+    background-color: var(--table_row__bg-even);
+}
+
+.table-wrap .table tbody tr.new {
+    font-weight: bolder;
+}
+
+.table-wrap .table tbody tr.new td:first-child {
+    position: relative
+}
+
+.table-wrap .table tbody tr.new td:first-child::before {
+    content: "";
+    width: 3px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--secondary);
+    border-top: 1px solid  var(--white-9); /* deprecation fallback */
+    border-top: 1px solid  color-mix(in srgb, var(--white-8) 85%, var(--tertiary));
+}
+
+.table-wrap .table tbody td:not(:first-child) {
+    border-left: 1px solid var(--gray-2);
+}
+
+.table-wrap .table tbody td {
+    padding: 21px 16px;
+}
+.table-wrap .table tbody td.has-flex-item {
+    /* Extremely weird case, where if a td has a flex item, i.e. container for a "with-label",
+     we need to force it's alignment to top, aso otherwise flex baseline alignment will push all other cells downs */
+    vertical-align: top;
+}
+.table-wrap {
+}
+.table-wrap.ignore-overflow {
+    overflow-x: auto;
+}
+.table-wrap td a {
+    text-decoration: underline;
+}
+.table-wrap td a:hover {
+    text-decoration: none;
+}
+/* endregion */
+
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: hsla(var(--black--hsl), 0.5);
+    z-index: 9999;
+}
+
+.loading-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--surface);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: var(--shadow_blur-only) hsla(var(--black--hsl), 0.1);
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid hsla(var(--white--hsl), 0.3);
+    border-radius: 50%;
+    border-top: 4px solid var(--secondary); /* deprecation fallback */
+    border-top: 4px solid color-mix(in srgb, var(--secondary) 90%, var(--white-1));
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

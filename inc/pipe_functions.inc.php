@@ -76,16 +76,13 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 	}
 	else
 	{
-   		$tmpvar['name'] = isset($results['from'][0]['name']) ? $results['from'][0]['name'] : $hesklang['pde'];
+   		$tmpvar['name'] = isset($results['from'][0]['name']) ? $results['from'][0]['name'] : '';
 		if ( ! empty($results['from'][0]['encoding']) )
 		{
 			$tmpvar['name'] = hesk_encodeUTF8($tmpvar['name'], $results['from'][0]['encoding']);
 		}
 	}
-	$tmpvar['name'] = hesk_input($tmpvar['name'],'','',1,50) or $tmpvar['name'] = $hesklang['pde'];
-
-	// Process "To:" email (not yet implemented, for future use)
-	// $tmpvar['to_email']	= hesk_validateEmail($results['to'][0]['address'],'ERR',0);
+	$tmpvar['name'] = hesk_input($tmpvar['name'],'','',1,50) or $tmpvar['name'] = '';
 
 	// Process email subject, convert to UTF-8, set to "[Piped email]" if none set
 	$tmpvar['subject'] = isset($results['subject']) ? $results['subject'] : $hesklang['pem'];
@@ -154,6 +151,14 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
     $tmpvar['email_id'] = isset($results['Message-ID']) ? preg_replace('[^a-zA-Z0-9!#$%&\'*+/=?^_`{|}~-]', '', $results['Message-ID']) : '';
     $tmpvar['email_reply_to'] = isset($results['In-Reply-To']) ? preg_replace('[^a-zA-Z0-9!#$%&\'*+/=?^_`{|}~-]', '', $results['In-Reply-To']) : '';
 
+    // Has an email with this exact email ID been processed before?
+    if (strlen($tmpvar['email_id'])) {
+        $res = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` WHERE `email_id`='".hesk_dbEscape($tmpvar['email_id'])."' LIMIT 1");
+        if (hesk_dbNumRows($res)) {
+            return hesk_cleanExit('Email with this message ID has already been processed');
+        }
+    }
+
 	// Check for email loops
 	if (($reason = hesk_isEmailLoop($tmpvar['email'], $message_hash)) !== false)
 	{
@@ -176,14 +181,89 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
         }
     }
 
+    // Process followers (additional people listed in To or Cc)
+    $tmpvar['followers'] = array();
+    $tmpvar['follower_ids'] = array();
+    if ($hesk_settings['multi_eml']) {
+        $copied = array();
+
+        // Process "To:" recipients
+        if ($hesk_settings['email_include_to']) {
+            foreach ($results['to'] as $key => $recipient) {
+                $recipient = hesk_processEmailContact($recipient, $protocol);
+                if (is_array($recipient)) {
+                    $copied[] = $recipient;
+                } elseif (is_string($recipient)) {
+                    if ($hesk_settings['debug_mode']) {
+                        $hesk_settings['DEBUG_LOG']['NOTICES'][] = $recipient;
+                    }
+                    continue;
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        // Process "Cc:" recipients
+        if ($hesk_settings['email_include_cc']) {
+            foreach ($results['cc'] as $key => $recipient) {
+                $recipient = hesk_processEmailContact($recipient, $protocol);
+                if (is_array($recipient)) {
+                    $copied[] = $recipient;
+                } elseif (is_string($recipient)) {
+                    if ($hesk_settings['debug_mode']) {
+                        $hesk_settings['DEBUG_LOG']['NOTICES'][] = $recipient;
+                    }
+                    continue;
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        foreach ($copied as $c) {
+            // Remove duplicate recipients
+            if (in_array($c['customer_id'], $tmpvar['follower_ids'])) {
+                continue;
+            }
+
+            // Remove "From" email address, it's already included
+            if ($c['email'] == $sender_lowercase) {
+                continue;
+            }
+
+            $tmpvar['followers'][] = $c['email'];
+            $tmpvar['follower_ids'][] = $c['customer_id'];
+        }
+    } // END if $hesk_settings['multi_eml']
+
 	// OK, everything seems OK. Now determine if this is a reply to a ticket or a new ticket
     $tmpvar['trackid'] = '';
     if (isset($results['X-Hesk-Tracking_ID']) && preg_match('/([A-Z0-9]{3}\-[A-Z0-9]{3}\-[A-Z0-9]{4})/', $results['X-Hesk-Tracking_ID'])) {
         // Tracking ID found in custom X-Hesk-Tracking_ID email header
         $tmpvar['trackid'] = $results['X-Hesk-Tracking_ID'];
+        if ($hesk_settings['debug_mode']) {
+            $hesk_settings['DEBUG_LOG']['NOTICES'][] = 'Tracking ID found in the X-Hesk-Tracking_ID email header';
+        }
     } elseif ( preg_match('/\[#([A-Z0-9]{3}\-[A-Z0-9]{3}\-[A-Z0-9]{4})\]/', str_replace(' ', '', $tmpvar['subject']), $matches) ) {
         // Tracking ID found in email subject
         $tmpvar['trackid'] = $matches[1];
+        if ($hesk_settings['debug_mode']) {
+            $hesk_settings['DEBUG_LOG']['NOTICES'][] = 'Tracking ID found in the email subject';
+        }
+    } elseif (strlen($tmpvar['email_reply_to'])) {
+        // Can we find the ticket ID by email "In-Reply-To" header?
+        $res = hesk_dbQuery("SELECT `ticket_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` WHERE `email_id`='".hesk_dbEscape($tmpvar['email_reply_to'])."' LIMIT 1");
+        if (hesk_dbNumRows($res)) {
+            $ticket_id = hesk_dbResult($res);
+            $res = hesk_dbQuery("SELECT `trackid` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `id`=".intval($ticket_id)." LIMIT 1");
+            if (hesk_dbNumRows($res)) {
+                $tmpvar['trackid'] = hesk_dbResult($res);
+                if ($hesk_settings['debug_mode']) {
+                    $hesk_settings['DEBUG_LOG']['NOTICES'][] = 'Tracking ID found by email message ID lookup';
+                }
+            }
+        }
     }
 
 	if ($tmpvar['trackid'] != '')
@@ -294,7 +374,7 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 	if ($is_reply)
 	{
 		// Set last replier name to customer name
-		$ticket['lastreplier'] = ($tmpvar['name'] == $hesklang['pde']) ? $tmpvar['email'] : $tmpvar['name'];;
+		$ticket['lastreplier'] = ($tmpvar['name'] == '') ? $tmpvar['email'] : $tmpvar['name'];
         $ticket['customer_id'] = hesk_get_or_create_customer($tmpvar['name'], $tmpvar['email']);
 
 		// If staff hasn't replied yet, keep ticket status "New", otherwise set it to "Waiting reply from staff"
@@ -307,7 +387,13 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 		hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` SET `read` = '1' WHERE `replyto` = '".intval($ticket['id'])."' AND `staffid` != '0' ");
 
 		// Insert reply into database
-		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`customer_id`,`message`,`message_html`,`dt`,`attachments`,`eid`) VALUES ('".intval($ticket['id'])."','".intval($ticket['customer_id'])."','".hesk_dbEscape($tmpvar['message'])."','".hesk_dbEscape($tmpvar['message'])."',NOW(),'".hesk_dbEscape($tmpvar['attachments'])."', " . (!empty($tmpvar['email_id']) ? "'" . hesk_dbEscape($tmpvar['email_id']) . "'" : "NULL") . ")");
+		hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` (`replyto`,`customer_id`,`message`,`message_html`,`dt`,`attachments`) VALUES ('".intval($ticket['id'])."','".intval($ticket['customer_id'])."','".hesk_dbEscape($tmpvar['message'])."','".hesk_dbEscape($tmpvar['message'])."',NOW(),'".hesk_dbEscape($tmpvar['attachments'])."')");
+
+        // Save the email ID map to ticket for later use
+        if ( ! empty($tmpvar['email_id'])) {
+            $reply_id = hesk_dbInsertID();
+            hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` (`email_id`, `ticket_id`, `reply_id`, `from_hesk`) VALUES ('".hesk_dbEscape($tmpvar['email_id'])."', ".intval($ticket['id']).", {$reply_id}, 0)");
+        }
 
 		// --> Prepare reply message
         $customers = hesk_get_customers_for_ticket($ticket['id']);
@@ -427,9 +513,6 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
         }
     }
 
-	// Insert ticket to database
-    $tmpvar['follower_ids'] = [];
-
     // Create ticket
 	$ticket = hesk_newTicket($tmpvar);
 
@@ -472,6 +555,71 @@ function hesk_email2ticket($results, $protocol = 0, $set_category = 1, $set_prio
 
     return $ticket['trackid'];
 } // END hesk_email2ticket()
+
+
+function hesk_processEmailContact($contact, $protocol)
+{
+    global $hesk_settings, $hesklang;
+
+    // Validate email
+    $contact['email'] = hesk_validateEmail($contact['address'], 'ERR', 0);
+
+    // Email missing?
+    if ( ! $contact['email']) {
+        return false;
+    }
+
+    $contact['email'] = strtolower($contact['email']);
+
+    // Ignore emails sent from the same email address we fetch tickets from or we will create a loop
+    // -> email sender matches Hesk's "From email"
+    if ($contact['email'] == strtolower($hesk_settings['noreply_mail'])) {
+        return 'Removed ' . $contact['email'] . ' (set as "From email" in Hesk settings, ignoring to prevent email loops)';
+    }
+
+    // -> email sender matches Hesk's "SMTP user"
+    if ($hesk_settings['smtp'] && $contact['email'] == strtolower($hesk_settings['smtp_user'])) {
+        return 'Removed ' . $contact['email'] . ' (set as "SMTP user" in Hesk settings, ignoring to prevent email loops)';
+    }
+
+    // -> email sender matches Hesk's "IMAP user"
+    if ($protocol == 2 && $contact['email'] == strtolower($hesk_settings['imap_user'])) {
+        return 'Removed ' . $contact['email'] . ' (set as "IMAP user" in Hesk settings, ignoring to prevent email loops)';
+    }
+
+    // -> email sender matches Hesk's "POP3 user"
+    if ($protocol == 1 && $contact['email'] == strtolower($hesk_settings['pop3_user'])) {
+        return 'Removed ' . $contact['email'] . ' (set as "POP3 user" in Hesk settings, ignoring to prevent email loops)';
+    }
+
+    // Email banned?
+    if (hesk_isBannedEmail($contact['email'])) {
+        return 'Removed ' . $contact['email'] . ' (banned email address)';
+    }
+
+    // Contact name
+    if (strlen($contact['name'])) {
+        if ( ! empty($contact['encoding']) ) {
+            $contact['name'] = hesk_encodeUTF8($contact['name'], $contact['encoding']);
+        }
+        $contact['name'] = hesk_input($contact['name'], '', '', 1, 50) or $contact['name'] = '';
+    } else {
+        $contact['name'] = '';
+    }
+
+    // Retrieve (or create) followers
+    if ($hesk_settings['customer_accounts'] === 0 || ($hesk_settings['customer_accounts'] === 1 && $hesk_settings['customer_accounts_required'] === 0)) {
+        $contact['customer_id'] = hesk_get_or_create_follower($contact['email'], $contact['name']);
+    } else {
+        // Only allow existing customers to email their tickets/replies
+        $contact['customer_id'] = hesk_get_customer_id_by_email($contact['email'], true);
+        if ($contact['customer_id'] === null) {
+            return 'Removed ' . $contact['email'] . ' (doesn\'t have a customer account)';
+        }
+    }
+
+    return $contact;
+} // END hesk_processEmailContact()
 
 
 function hesk_encodeUTF8($in, $encoding)

@@ -1,1 +1,2 @@
-<!-- Custom code to be included before </body> tag -->
+<!-- Custom code to be included before the </body> tag -->
+

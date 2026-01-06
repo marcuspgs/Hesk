@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	else
 	{
 		// Get user data from the database
-		$res = hesk_dbQuery("SELECT `id`, `name`, `pass` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($email)."' LIMIT 1");
+		$res = hesk_dbQuery("SELECT `id`, `name`, `pass` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($email)."' AND `active` = 1 LIMIT 1");
 		if (hesk_dbNumRows($res) != 1)
 		{
 			hesk_process_messages($hesklang['noace'],'NOREDIRECT');
@@ -213,7 +213,7 @@ elseif ( isset($_GET['h']) )
 			require(HESK_PATH . 'inc/admin_functions.inc.php');
 
 			// Get user details
-			$res = hesk_dbQuery('SELECT * FROM `'.$hesk_settings['db_pfix']."users` WHERE `id`=".intval($row['user'])." LIMIT 1");
+			$res = hesk_dbQuery('SELECT * FROM `'.$hesk_settings['db_pfix']."users` WHERE `id`=".intval($row['user'])." AND `active` = 1 LIMIT 1");
 			$row = hesk_dbFetchAssoc($res);
 			foreach ($row as $k=>$v)
 			{

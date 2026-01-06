@@ -849,6 +849,117 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                 </div>
                 <div class="checkbox-group row">
                     <h5>
+                        <span><?php echo $hesklang['remember_custom_field_values']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>370.html#6','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </h5>
+                    <label class="switch-checkbox">
+                        <input type="checkbox" name="s_remember_custom_field_values" value="1" <?php if ($hesk_settings['remember_custom_field_values']) { echo 'checked'; } ?>>
+                        <div class="switch-checkbox__bullet">
+                            <i>
+                                <svg class="icon icon-close">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                </svg>
+                                <svg class="icon icon-tick">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                </svg>
+                            </i>
+                        </div>
+                    </label>
+                </div>
+                <div class="checkbox-group row">
+                    <h5>
+                        <span><?php echo $hesklang['disable_autocomplete']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>370.html#7','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </h5>
+                    <div style="display:block;">
+                        <label class="switch-checkbox">
+                            <input type="checkbox" name="s_disable_autofill_admin" value="1" <?php if ($hesk_settings['disable_autofill_admin']) { echo 'checked'; } ?>>
+                            <div class="switch-checkbox__bullet">
+                                <i>
+                                    <svg class="icon icon-close">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                    </svg>
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </i>
+                            </div>
+                            <span><?php echo $hesklang['disable_autofill_admin']; ?></span>
+                        </label>
+                        <br>
+                        <label class="switch-checkbox">
+                            <input type="checkbox" name="s_disable_autofill_customer" <?php if ($hesk_settings['disable_autofill_customer']) { echo 'checked'; } ?>>
+                            <div class="switch-checkbox__bullet">
+                                <i>
+                                    <svg class="icon icon-close">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                    </svg>
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </i>
+                            </div>
+                            <span><?php echo $hesklang['disable_autofill_customer']; ?></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="checkbox-group row">
+                    <h5>
+                        <span><?php echo $hesklang['setting_extend']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>370.html#2','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </h5>
+                    <div style="display:block;">
+                        <label class="switch-checkbox">
+                            <input type="checkbox" name="s_extend_admin" value="1" <?php if ($hesk_settings['extend_admin']) { echo 'checked'; } ?>>
+                            <div class="switch-checkbox__bullet">
+                                <i>
+                                    <svg class="icon icon-close">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                    </svg>
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </i>
+                            </div>
+                            <span><?php echo $hesklang['extend_admin']; ?></span>
+                        </label>
+                        <br>
+                        <label class="switch-checkbox">
+                            <input type="checkbox" name="s_extend_customer" <?php if ($hesk_settings['extend_customer']) { echo 'checked'; } ?>>
+                            <div class="switch-checkbox__bullet">
+                                <i>
+                                    <svg class="icon icon-close">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                    </svg>
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </i>
+                            </div>
+                            <span><?php echo $hesklang['extend_customer']; ?></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="checkbox-group row">
+                    <h5>
                         <span><?php echo $hesklang['select']; ?></span>
                         <a onclick="hesk_window('<?php echo $help_folder; ?>helpdesk.html#65','400','500')">
                             <div class="tooltype right">
@@ -955,6 +1066,22 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                     <div class="checkbox-custom">
                         <input type="checkbox" id="s_multi_eml1" name="s_multi_eml" value="1" <?php if ($hesk_settings['multi_eml']) {echo 'checked';} ?>>
                         <label for="s_multi_eml1"><?php echo $hesklang['ticket_followers2']; ?></label>
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <h5>
+                        <span><?php echo $hesklang['nicknames']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>370.html#3','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </h5>
+                    <div class="checkbox-custom">
+                        <input type="checkbox" id="s_staff_nicknames" name="s_staff_nicknames" value="1" <?php if ($hesk_settings['staff_nicknames']) {echo 'checked';} ?>>
+                        <label for="s_staff_nicknames"><?php echo $hesklang['staff_nicknames']; ?></label>
                     </div>
                 </div>
             </section>
@@ -1881,7 +2008,10 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') ) {
                 </button>
 
                 <?php if (!$enable_save_settings): ?>
-                    <div class="error"><?php echo $hesklang['e_save_settings']; ?></div>
+                    <p>&nbsp;</p>
+                    <div role="alert" class="notification red">
+                        <?php echo $hesklang['e_save_settings']; ?>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

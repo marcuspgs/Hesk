@@ -54,7 +54,7 @@ function hesk_oauth_fetch_and_store_initial_token($provider, $code, $redirect_to
         $error = curl_error($ch);
         die("cURL {$hesklang['error']}: $http_status<br>\n{$hesklang['error']}: $error");
     }
-    curl_close($ch);
+    hesk_curl_close($ch);
 
     $decoded_response = json_decode($response, true);
 
@@ -183,7 +183,7 @@ function hesk_retrieve_new_access_token($provider_id, $refresh_token) {
         $error = curl_error($ch);
         die("cURL {$hesklang['error']}: $http_status<br>\n{$hesklang['error']}: $error");
     }
-    curl_close($ch);
+    hesk_curl_close($ch);
 
     $decoded_response = json_decode($response, true);
 

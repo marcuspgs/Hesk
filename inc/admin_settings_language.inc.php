@@ -78,6 +78,15 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
     // Install a Language
     $("body").on("click",".install_language",function(){
+
+        <?php if (defined('HESK_DEMO')): ?>
+            $(".lan-msg").removeClass("warning-msg");
+            $(".lan-msg").html("").fadeOut(300);
+            $(".lan-msg").html("<?php echo str_replace('"', '\"', $hesklang['sdemo']); ?>");
+            $(".lan-msg").addClass("warning-msg").fadeIn(300);
+            return false;
+        <?php endif; ?>
+
         $("#overlay_loader").fadeIn(300);
         var tag = $(this).attr("data-tag");
         var title = $(this).attr("data-description");
@@ -116,7 +125,15 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
     });
     // Remove Language
     $("body").on("click",".remove_language",function(){
-        
+
+        <?php if (defined('HESK_DEMO')): ?>
+            $(".lan-msg").removeClass("warning-msg");
+            $(".lan-msg").html("").fadeOut(300);
+            $(".lan-msg").html("<?php echo str_replace('"', '\"', $hesklang['sdemo']); ?>");
+            $(".lan-msg").addClass("warning-msg").fadeIn(300);
+            return false;
+        <?php endif; ?>
+
         var tag = $(this).attr("data-tag");
         var title = $(this).attr("data-description");
         var tl = $(this).attr("data-title");
@@ -171,6 +188,15 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
     });
     //Upgrade Language
     $("body").on("click",".upgrade_language",function(){
+
+        <?php if (defined('HESK_DEMO')): ?>
+            $(".lan-msg").removeClass("warning-msg");
+            $(".lan-msg").html("").fadeOut(300);
+            $(".lan-msg").html("<?php echo str_replace('"', '\"', $hesklang['sdemo']); ?>");
+            $(".lan-msg").addClass("warning-msg").fadeIn(300);
+            return false;
+        <?php endif; ?>
+
         $("#overlay_loader").fadeIn(300);
         var tag = $(this).attr("data-tag");
         var title = $(this).attr("data-description");
@@ -206,6 +232,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
             $(".lan-msg").html("");
             $(".lan-msg").removeClass("success-msg");
             $(".lan-msg").removeClass("error-msg");
+            $(".lan-msg").removeClass("warning-msg");
         });
     }
 

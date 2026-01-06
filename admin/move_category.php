@@ -76,6 +76,10 @@ if (hesk_dbNumRows($res) != 1)
 }
 $ticket = hesk_dbFetchAssoc($res);
 
+if ($ticket['category'] == $category) {
+    hesk_process_messages(sprintf($hesklang['ticket_already_in_category'], $row['name']),'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'NOTICE');
+}
+
 /* Log that ticket is being moved */
 $history = sprintf($hesklang['thist1'],hesk_date(),addslashes($row['name']),addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
 
@@ -89,7 +93,7 @@ if ($ticket['owner'])
     }
     else
     {
-		$res = hesk_dbQuery("SELECT `isadmin`,`categories` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='".intval($ticket['owner'])."' LIMIT 1");
+		$res = hesk_dbQuery("SELECT `isadmin`,`categories` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='".intval($ticket['owner'])."' AND `active` = 1 LIMIT 1");
 		if (hesk_dbNumRows($res) != 1)
 		{
 			$need_to_reassign = 1;
@@ -148,7 +152,7 @@ $info = array(
 'due_date'      => hesk_format_due_date($ticket['due_date']),
 'id'			=> $ticket['id'],
 'time_worked'   => $ticket['time_worked'],
-'last_reply_by' => hesk_getReplierName($ticket),
+'last_reply_by' => hesk_getReplierNameArray($ticket),
 );
 
 // 2. Add custom fields to the array

@@ -155,11 +155,46 @@ if (hesk_SESSION('iserror')) {
                 <hr>
                 <div class="form-group">
                     <?php
-                    $users_all = hesk_dbQuery("SELECT COUNT(*) FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` WHERE `isadmin` = '1' OR FIND_IN_SET('can_view_tickets', `heskprivileges`) > 0");
+                    $users_all = hesk_dbQuery("SELECT COUNT(*) FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` AS `user`
+                        WHERE `active` = 1
+                        AND (
+                            `isadmin` = '1' 
+                            OR FIND_IN_SET('can_view_tickets', `heskprivileges`) > 0
+                            OR EXISTS (
+                                SELECT 1 FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "permission_group_features` AS `inner_feature`
+                                INNER JOIN `" . hesk_dbEscape($hesk_settings['db_pfix']) . "permission_group_members` AS `inner_member`
+                                    ON `inner_feature`.`group_id` = `inner_member`.`group_id`
+                                WHERE `inner_feature`.`feature` = 'can_view_tickets'
+                                    AND `inner_member`.`user_id` = `user`.`id`
+                            )
+                        )");
                     $users_num = hesk_dbResult($users_all);
                     $users_res = hesk_dbQuery("SELECT `id`, `name`
-                                                  FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users`
-                                                  WHERE (`isadmin` = '1' OR (FIND_IN_SET(".intval($category['id']).", `categories`) > 0) AND FIND_IN_SET('can_view_tickets', `heskprivileges`) > 0)");
+                                                  FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users` AS `user`
+                                                  WHERE `active` = 1
+                                                  AND (
+                                                      (
+                                                        `isadmin` = '1' 
+                                                        OR (FIND_IN_SET(".intval($category['id']).", `categories`) > 0
+                                                        OR EXISTS (
+                                                            SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` AS `inner_category`
+                                                            INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `inner_member`
+                                                                ON `inner_category`.`group_id` = `inner_member`.`group_id`
+                                                            WHERE `inner_category`.`category_id` = ".intval($category['id'])."
+                                                                AND `inner_member`.`user_id` = `user`.`id`
+                                                        )
+                                                      ) 
+                                                      AND (
+                                                        FIND_IN_SET('can_view_tickets', `heskprivileges`) > 0)
+                                                        OR EXISTS (
+                                                            SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` AS `inner_feature`
+                                                            INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `inner_member`
+                                                                ON `inner_feature`.`group_id` = `inner_member`.`group_id`
+                                                            WHERE `inner_feature`.`feature` = 'can_view_tickets'
+                                                                AND `inner_member`.`user_id` = `user`.`id`
+                                                        )
+                                                      )
+                                                  )");
                     $users_found = hesk_dbNumRows($users_res);
 
                     if ($users_num > $users_found): ?>
@@ -487,15 +522,50 @@ function build_autoassign_config($catid, $selected_users, $operator) {
     $user_verification_clause = array_map(function($x) {
         return intval($x);
     }, $selected_users);
-    $user_verification_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` 
-        WHERE (`isadmin` = '1' OR FIND_IN_SET(".intval($catid).", `categories`) > 0) AND `id` IN (".implode(',', $user_verification_clause).")");
+    $user_verification_rs = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `user`
+        WHERE (
+            `isadmin` = '1' 
+            OR FIND_IN_SET('can_view_tickets', `heskprivileges`) > 0
+            OR EXISTS (
+                SELECT 1 FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "permission_group_features` AS `inner_feature`
+                INNER JOIN `" . hesk_dbEscape($hesk_settings['db_pfix']) . "permission_group_members` AS `inner_member`
+                    ON `inner_feature`.`group_id` = `inner_member`.`group_id`
+                WHERE `inner_feature`.`feature` = 'can_view_tickets'
+                    AND `inner_member`.`user_id` = `user`.`id`
+            )
+        )
+        AND `active` = 1
+        AND `id` IN (".implode(',', $user_verification_clause).")");
     while ($user = hesk_dbFetchAssoc($user_verification_rs)) {
         $formatted_users[] = $user['id'];
     }
 
     // Make sure we're not including/excluding the entire list of possible users, as we can simplify
-    $users_with_category_access = hesk_dbQuery("SELECT 1 AS `cnt` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users`
-        WHERE (`isadmin` = '1' OR FIND_IN_SET(".intval($catid).", `categories`) > 0)");
+    $users_with_category_access = hesk_dbQuery("SELECT 1 AS `cnt` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `user`
+        WHERE `active` = 1
+        AND (
+            (
+                `isadmin` = '1' 
+                OR (FIND_IN_SET(".intval($catid).", `categories`) > 0
+                OR EXISTS (
+                    SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` AS `inner_category`
+                    INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `inner_member`
+                        ON `inner_category`.`group_id` = `inner_member`.`group_id`
+                    WHERE `inner_category`.`category_id` = ".intval($catid)."
+                        AND `inner_member`.`user_id` = `user`.`id`
+                )
+            ) 
+            AND (
+                FIND_IN_SET('can_view_tickets', `heskprivileges`) > 0)
+                OR EXISTS (
+                    SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` AS `inner_feature`
+                    INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `inner_member`
+                        ON `inner_feature`.`group_id` = `inner_member`.`group_id`
+                    WHERE `inner_feature`.`feature` = 'can_view_tickets'
+                        AND `inner_member`.`user_id` = `user`.`id`
+                )
+            )
+        )");
     if (hesk_dbNumRows($users_with_category_access) === count($formatted_users)) {
         return $operator === '=' ? 'ALL_INCLUDED' : 'ALL_EXCLUDED';
     }

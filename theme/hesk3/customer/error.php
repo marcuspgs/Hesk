@@ -10,56 +10,27 @@ global $hesk_settings, $hesklang;
 if (!defined('IN_SCRIPT')) {
     die();
 }
+define('EXTRA_PAGE_CLASSES','page-error');
 
-require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
+define('RENDER_COMMON_ELEMENTS',1);
+define('IGNORE_NAVBAR_RENDER',1);
+
+define('IGNORE_LOAD_JQUERY',1);
+define('IGNORE_LOAD_HESK_FUNC',1);
+define('IGNORE_LOAD_SVG4',1);
+define('IGNORE_LOAD_SELECTIZE',1);
+define('IGNORE_LOAD_APP',1);
+
+global $BREADCRUMBS;
+$BREADCRUMBS = array(
+    array('url' => $hesk_settings['site_url'], 'title' => $hesk_settings['site_title']),
+    array('url' => $breadcrumbLink, 'title' => $hesk_settings['hesk_title']),
+    array('title' => $hesklang['error'])
+);
+
+/* Print header */
+require_once(TEMPLATE_PATH . 'customer/inc/header.inc.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <title><?php echo $hesk_settings['hesk_title']; ?></title>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
-    <?php include(HESK_PATH . 'inc/favicon.inc.php'); ?>
-    <meta name="format-detection" content="telephone=no" />
-    <link rel="stylesheet" media="all" href="<?php echo TEMPLATE_PATH; ?>customer/css/app<?php echo $hesk_settings['debug_mode'] ? '' : '.min'; ?>.css?<?php echo $hesk_settings['hesk_version']; ?>" />
-    <?php include(TEMPLATE_PATH . '../../head.txt'); ?>
-</head>
-
-<body class="cust-help">
-<?php include(TEMPLATE_PATH . '../../header.txt'); ?>
-<?php renderCommonElementsAfterBody(); ?>
-<div class="wrapper">
-    <main class="main" id="maincontent">
-        <header class="header">
-            <div class="contr">
-                <div class="header__inner">
-                    <a href="<?php echo $hesk_settings['hesk_url']; ?>" class="header__logo">
-                        <?php echo $hesk_settings['hesk_title']; ?>
-                    </a>
-                </div>
-            </div>
-        </header>
-        <div class="breadcrumbs">
-            <div class="contr">
-                <div class="breadcrumbs__inner">
-                    <a href="<?php echo $hesk_settings['site_url']; ?>">
-                        <span><?php echo $hesk_settings['site_title']; ?></span>
-                    </a>
-                    <svg class="icon icon-chevron-right">
-                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
-                    </svg>
-                    <a href="<?php echo $breadcrumbLink; ?>">
-                        <span><?php echo $hesk_settings['hesk_title']; ?></span>
-                    </a>
-                    <svg class="icon icon-chevron-right">
-                        <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-chevron-right"></use>
-                    </svg>
-                    <div class="last"><?php echo $hesklang['error']; ?></div>
-                </div>
-            </div>
-        </div>
         <div class="main__content">
             <div class="contr">
                 <div class="main__content notice-flash">
@@ -78,28 +49,6 @@ require_once(TEMPLATE_PATH . 'customer/partial/login-navbar-elements.php');
             </div>
         </div>
 <?php
-/*******************************************************************************
-The code below handles HESK licensing and must be included in the template.
-
-Removing this code is a direct violation of the HESK End User License Agreement,
-will void all support and may result in unexpected behavior.
-
-To purchase a HESK license and support future HESK development please visit:
-https://www.hesk.com/buy.php
-*******************************************************************************/
-$hesk_settings['hesk_license']('Qo8Zm9vdGVyIGNsYXNzPSJmb290ZXIiPg0KICAgIDxwIGNsY
-XNzPSJ0ZXh0LWNlbnRlciI+UG93ZXJlZCBieSA8YSBocmVmPSJodHRwczovL3d3dy5oZXNrLmNvbSIgY
-2xhc3M9ImxpbmsiPkhlbHAgRGVzayBTb2Z0d2FyZTwvYT4gPHNwYW4gY2xhc3M9ImZvbnQtd2VpZ2h0L
-WJvbGQiPkhFU0s8L3NwYW4+PGJyPk1vcmUgSVQgZmlyZXBvd2VyPyBUcnkgPGEgaHJlZj0iaHR0cHM6L
-y93d3cuc3lzYWlkLmNvbS8/dXRtX3NvdXJjZT1IZXNrJmFtcDt1dG1fbWVkaXVtPWNwYyZhbXA7dXRtX
-2NhbXBhaWduPUhlc2tQcm9kdWN0X1RvX0hQIiBjbGFzcz0ibGluayI+U3lzQWlkPC9hPjwvcD4NCjwvZ
-m9vdGVyPg0K',"\104", "a809404e0adf9823405ee0b536e5701fb7d3c969");
-/*******************************************************************************
-END LICENSE CODE
-*******************************************************************************/
+/* Print Footer */
+require_once(TEMPLATE_PATH . 'customer/inc/footer.inc.php');
 ?>
-    </main>
-</div>
-<?php include(TEMPLATE_PATH . '../../footer.txt'); ?>
-</body>
-</html>

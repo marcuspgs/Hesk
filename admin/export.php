@@ -353,10 +353,13 @@ while ($row=hesk_dbFetchAssoc($res2))
 }
 
 // Generate export file
-if (isset($_GET['w']))
-{
-    require_once(HESK_PATH . 'inc/export_functions.inc.php');
-    list($success_msg, $tickets_exported) = hesk_export_to_XML($sql, false, $history);
+if (isset($_GET['w'])) {
+    if (defined('HESK_DEMO')) {
+        hesk_process_messages($hesklang['ddemo'], 'export.php', 'NOTICE');
+    } else {
+        require_once(HESK_PATH . 'inc/export_functions.inc.php');
+        list($success_msg, $tickets_exported) = hesk_export_to_XML($sql, false, $history, $replies);
+    }
 }
 
 /* Print header */
@@ -571,6 +574,10 @@ if (isset($success_msg))
             <div class="checkbox-custom">
                 <input type="checkbox" name="history" id="history" value="1" <?php if ($history) echo 'checked'; ?>>
                 <label for="history"><?php echo $hesklang['ex_history']; ?></label>
+            </div>
+            <div class="checkbox-custom">
+                <input type="checkbox" name="replies" id="replies" value="1" <?php if ($replies) echo 'checked'; ?>>
+                <label for="replies"><?php echo $hesklang['ex_replies']; ?></label>
             </div>
         </section>
         <div class="reports__export">

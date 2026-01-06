@@ -34,6 +34,7 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 
+// Hesk free version
 hesk_show_notice(sprintf($hesklang['modules_demo'], '<a href="https://www.hesk.com/get/hesk3-satisfaction">HESK Cloud</a>'), ' ', false);
 ?>
 <div class="main__content reports">

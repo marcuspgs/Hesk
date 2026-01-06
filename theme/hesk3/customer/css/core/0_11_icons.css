@@ -1,0 +1,502 @@
+/*
+Put any general icons related CSS here.
+*/
+.icon-01-normal-knowledge-b {
+    width: 1.2em;
+    height: 1em;
+    fill: none
+}
+
+.icon-01-normal-team {
+    width: 1.41em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-01-normal-tickets {
+    width: .82em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-actions {
+    width: 1.23em;
+    height: 1em;
+    fill: var(--secondary);
+}
+
+.icon-add {
+    width: 1em;
+    height: 1em;
+    fill: var(--secondary);
+}
+
+.icon-anonymize {
+    width: .88em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-assign-no {
+    width: .96em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-assign-plus {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-assign {
+    width: .86em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-attach {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-back {
+    width: 3.33em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-calendar {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-categories {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-chevron-down {
+    width: 1.33em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-chevron-left {
+    width: 1em;
+    height: 1em;
+    fill: initial
+}
+
+.icon-chevron-right {
+    width: 1em;
+    height: 1em;
+    fill: initial
+}
+
+.icon-close-mobile {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-close {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-cross {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-delete {
+    width: .94em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-dismiss {
+    width: 1em;
+    height: 1em;
+    fill: var(--secondary);
+}
+
+.icon-document {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-down {
+    width: 1.33em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-edit-ticket {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-edit {
+    width: 1em;
+    height: 1em;
+    fill: var(--secondary);
+}
+
+.icon-export {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-eye-close {
+    width: 1.33em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-eye-open {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-filters {
+    width: 1em;
+    height: 1em;
+    fill: var(--secondary);
+}
+
+.icon-folder {
+    width: 1.22em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-info {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-inquiries {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-knowledge {
+    width: 1.2em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-label {
+    width: 1.33em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-lock {
+    width: .88em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-log-out {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-mail-small {
+    width: 1.14em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-mail {
+    width: 1.22em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-menu-mobile {
+    width: 1.14em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-menu {
+    width: 1.43em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-merge {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-modules {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-move-to {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-no-photo {
+    width: .68em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-note {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-notes-2 {
+    width: 1em;
+    height: 1em;
+    fill: none
+}
+
+.icon-notification {
+    width: .91em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-pause {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-pin {
+    width: .63em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-print {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-priority {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-refresh {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-reports {
+    width: 1.22em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-search-type-knowledge {
+    width: 1.2em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-search-type-team {
+    width: 1.41em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-search-type-templates {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-search-type-tickets {
+    width: .82em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-search {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-select {
+    width: .5em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-settings {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-smile-bad {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-smile-good {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-smile-neutral {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-star-filled {
+    width: 5.6em;
+    height: 1em;
+    fill: var(--yellow-1);
+}
+
+.icon-star-stroke {
+    width: 5.6em;
+    height: 1em;
+    fill: var(--white-7);
+}
+
+.icon-status {
+    width: .88em;
+    height: 1em;
+    fill: var(--gray-7);
+}
+
+.icon-submit-ticket {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-support {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-tag {
+    width: 1.33em;
+    height: 1em;
+    fill: var(--white-9);
+}
+
+.icon-team {
+    width: 1.41em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-templates {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-thumb-up {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-thumb-down {
+    width: 1em;
+    height: 1em;
+    fill: var(--gray-2);
+}
+
+.icon-tick {
+    width: 1.38em;
+    height: 1em;
+    fill: var(--primary);
+}
+
+.icon-tickets {
+    width: .82em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-tools {
+    width: 1em;
+    height: 1em;
+    fill: var(--white-1);
+}
+
+.icon-warning {
+    width: 1em;
+    height: 1em;
+    fill: initial
+}
+.icon {
+    transition: all var(--transition-time-sec) ease;
+}
+
+.icon-chevron-down {
+    font-size: 8px
+}
+.icon-in-circle {
+    width: 40px;
+    height: 40px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: var(--icon_circle__bg);
+    border-radius: 50%
+}
+
+.icon-in-circle .icon {
+    fill: var(--icon_circle__clr);
+    font-size: 20px
+}
+.icon-person {
+    width: .86em;
+    height: 1em;
+    fill: var(--gray-4);
+    flex-shrink: 0;
+}
+label .icon-person,
+.label .icon-person {
+    /* various labels/dropdowns, that are suggesting a user */
+    margin-right: 4px;
+    margin-top: -1px;
+}

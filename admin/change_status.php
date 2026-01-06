@@ -105,7 +105,7 @@ if ($status == 3) // Closed
         
         $ticket['email'] = implode(';', $customer_emails);
         $ticket['name'] = implode(';', $customer_names);
-        $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+        $ticket['last_reply_by'] = hesk_getReplierNameArray($ticket);
 		$ticket = hesk_ticketToPlain($ticket, 1, 0);
 
 		// Notify customer

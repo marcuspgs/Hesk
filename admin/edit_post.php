@@ -431,6 +431,10 @@ require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
                         break;
                     }
                 }
+
+                if ($requester['name'] == '') {
+                    $requester['name'] = ( ! empty($requester['email']) ? $requester['email'] : $hesklang['pde'] );
+                }
                 ?>
                 <div class="form-group">
                     <label for="create_customer">

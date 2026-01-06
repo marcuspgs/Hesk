@@ -40,7 +40,7 @@ try {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
         $langauges_json = curl_exec($ch);
-        curl_close($ch);
+        hesk_curl_close($ch);
         $available_languages = json_decode($langauges_json, true);
     }
 

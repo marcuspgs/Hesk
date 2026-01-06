@@ -11,12 +11,12 @@ function displayKbSearch() {
         <form action="knowledgebase.php" method="get" style="display: inline; margin: 0;" name="searchform">
             <div class="search__form">
                 <div class="form-group">
-                    <button class="btn search__submit">
+                    <button class="btn search__submit" aria-label="<?php echo $hesklang['search']; ?>">
                         <svg class="icon icon-search">
                             <use xlink:href="<?php echo TEMPLATE_PATH; ?>customer/img/sprite.svg#icon-search"></use>
                         </svg>
                     </button>
-                    <input id="kb_search" name="search" class="form-control" type="text" placeholder="<?php echo $hesklang['search_for_articles']; ?>">
+                    <input id="kb_search" name="search" class="form-control" for="searchform" type="text" aria-label="<?php echo $hesklang['search_for_articles']; ?>" placeholder="<?php echo $hesklang['search_for_articles']; ?>">
                     <?php if ($hesk_settings['kb_search'] === 1): ?>
                         <button id="search-button" type="submit" class="btn btn-full"><?php echo $hesklang['search']; ?></button>
                     <?php endif; ?>
@@ -59,7 +59,7 @@ function outputSearchJavascript() {
     <script>
         var noArticlesFoundText = <?php echo json_encode($hesklang['nsfo']); ?>;
 
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function() {
             HESK_FUNCTIONS.getKbSearchSuggestions($('#kb_search'), function(data) {
                 $('.kb-suggestions').show();
                 var $suggestionList = $('#kb-suggestion-list');

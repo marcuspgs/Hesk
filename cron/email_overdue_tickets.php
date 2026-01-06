@@ -77,8 +77,10 @@ if (!$number_of_tickets) {
 $user_rs = hesk_dbQuery("SELECT `id`, `isadmin`, `categories`, `email`, `name`, `notify_overdue_unassigned`, `notify_overdue_my`, `notify_collaborator_overdue`,
     CASE WHEN `heskprivileges` LIKE '%can_view_unassigned%' THEN 1 ELSE 0 END AS `can_view_unassigned`
     FROM `" . hesk_dbEscape($hesk_settings['db_pfix']) . "users`
-    WHERE (`notify_overdue_unassigned` = '1' OR `notify_overdue_my` = '1')
-        AND (`heskprivileges` LIKE '%can_view_tickets%' OR `isadmin` = '1')");
+    WHERE `active` = 1 AND (
+        (`notify_overdue_unassigned` = '1' OR `notify_overdue_my` = '1')
+            AND (`heskprivileges` LIKE '%can_view_tickets%' OR `isadmin` = '1')
+        )");
 
 $users = array();
 while ($row = hesk_dbFetchAssoc($user_rs)) {
@@ -93,7 +95,7 @@ while ($ticket = hesk_dbFetchAssoc($rs)) {
     // Make sure all values are properly formatted for email
     $ticket['dt'] = hesk_date($ticket['dt'], true);
     $ticket['lastchange'] = hesk_date($ticket['lastchange'], true);
-    $ticket['last_reply_by'] = hesk_getReplierName($ticket);
+    $ticket['last_reply_by'] = hesk_getReplierNameArray($ticket);
     $ticket['due_date_sql'] = $ticket['due_date'];
     $ticket['due_date'] = hesk_format_due_date($ticket['due_date']);
     $ticket['collaborators'] = hesk_getTicketsCollaboratorIDs($ticket['id']);

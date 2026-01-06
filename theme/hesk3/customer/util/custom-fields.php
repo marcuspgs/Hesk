@@ -23,6 +23,7 @@ function hesk3_output_custom_fields($customFields) {
                             <input type="radio" name="<?php echo $customField['name'] ?>"
                                    id="<?php echo $customField['name'].$i; ?>"
                                    value="<?php echo $option['value']; ?>"
+                                   <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                                    <?php echo $option['selected'] ? 'checked' : ''; ?>>
                             <label for="<?php echo $customField['name'].$i; ?>">
                                 <?php echo $option['value']; ?>
@@ -38,7 +39,7 @@ function hesk3_output_custom_fields($customFields) {
                 ?>
                 <section class="param blue-select">
                     <span class="label <?php echo $customField['req'] ? 'required' : '' ?>"><?php echo $customField['name:']; ?></span>
-                        <select name="<?php echo $customField['name']; ?>" id="<?php echo $customField['name']; ?>" class="<?php echo $customField['iserror'] ? 'isError' : '' ?>">
+                        <select name="<?php echo $customField['name']; ?>" id="<?php echo $customField['name']; ?>" class="<?php echo $customField['iserror'] ? 'isError' : '' ?>" <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>>
                             <?php if (!empty($customField['value']['show_select'])): ?>
                             <option value=""><?php echo $hesklang['select']; ?></option>
                             <?php
@@ -65,6 +66,7 @@ function hesk3_output_custom_fields($customFields) {
                     <div class="checkbox-custom">
                         <input type="checkbox" id="<?php echo $customField['name'].$i; ?>"
                                name="<?php echo $customField['name']; ?>[]" value="<?php echo $option['value']; ?>"
+                               <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                                <?php if ($customField['iserror']): ?>class="isError"<?php endif; ?>
                             <?php echo $option['selected'] ? 'checked' : ''; ?>>
                         <label for="<?php echo $customField['name'].$i; ?>"><?php echo $option['value']; ?></label>
@@ -84,6 +86,7 @@ function hesk3_output_custom_fields($customFields) {
                               rows="<?php echo intval($customField['value']['rows']); ?>"
                               cols="<?php echo intval($customField['value']['cols']); ?>"
                               class="form-control <?php if ($customField['iserror']): ?><?php endif; ?>"
+                              <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                               <?php echo $customField['req'] ? 'required' : '' ?>><?php echo $customField['original_value']; ?></textarea>
                 </div>
             <?php
@@ -105,6 +108,7 @@ function hesk3_output_custom_fields($customFields) {
                         <input name="<?php echo $customField['name']; ?>"
                                id="<?php echo $customField['name']; ?>"
                                value="<?php echo $customField['original_value']; ?>"
+                               <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                                type="text"
                                class="datepicker">
                     </div>
@@ -126,6 +130,7 @@ function hesk3_output_custom_fields($customFields) {
                     <input type="text" class="form-control <?php if ($customField['iserror']) { ?>isError<?php } ?>"
                            value="<?php echo $customField['original_value']; ?>"
                            name="<?php echo $customField['name']; ?>"
+                           <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                            <?php echo $customField['req'] ? 'required' : '' ?>>
                     <label class="label">
                         <?php echo $hesklang['d_format']; ?>: <?php echo date($customField['value']['date_format'], mktime(0, 0, 0, 12, 30, date('Y'))); ?>
@@ -148,9 +153,10 @@ function hesk3_output_custom_fields($customFields) {
                            class="form-control"
                            value="<?php echo $customField['original_value']; ?>"
                            name="<?php echo $customField['name']; ?>"
+                           <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                            <?php echo $customField['req'] ? 'required' : '' ?>
                             <?php echo $suggest; ?>>
-                    <div id="<?php echo $customField['name']; ?>_suggestions"></div>
+                    <div id="<?php echo $customField['name']; ?>_suggestions" class="email-suggestion"></div>
                 </div>
             <?php
                 break;
@@ -158,19 +164,22 @@ function hesk3_output_custom_fields($customFields) {
                 ?>
                 <input type="hidden"
                        name="<?php echo $customField['name']; ?>"
+                       <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                        value="<?php echo $customField['value']['default_value']; ?>">
             <?php
                 break;
             default:
                 ?>
                 <div class="form-group">
-                    <label class="label <?php echo $customField['req'] ? 'required' : '' ?>">
+                    <label for="<?php echo $customField['name']; ?>" class="label <?php echo $customField['req'] ? 'required' : '' ?>">
                         <?php echo $customField['name:']; ?>
                     </label>
                     <input type="text" class="form-control <?php if ($customField['iserror']) { ?>isError<?php } ?>"
                            value="<?php echo $customField['value']['default_value']; ?>"
                            name="<?php echo $customField['name']; ?>"
+                           id="<?php echo $customField['name']; ?>"
                            maxlength="<?php echo intval($customField['value']['max_length']); ?>"
+                           <?php echo $hesk_settings['disable_autofill_customer'] ? 'autocomplete="off" aria-autocomplete="none"' : ''; ?>
                            <?php echo $customField['req'] ? 'required' : '' ?>>
                 </div>
             <?php

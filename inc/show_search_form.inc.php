@@ -65,7 +65,7 @@ if ( isset($hesk_settings['categories']) && count($hesk_settings['categories']) 
 	foreach ($hesk_settings['categories'] as $row['id'] => $row['name'])
 	{
 		$row['name'] = (hesk_mb_strlen($row['name']) > 30) ? hesk_mb_substr($row['name'],0,30) . '...' : $row['name'];
-		$selected = ($row['id'] == $category) ? 'selected="selected"' : '';
+		$selected = (in_array($row['id'], $categories)) ? 'selected="selected"' : '';
 		$category_options .= '<option value="'.$row['id'].'" '.$selected.'>'.$row['name'].'</option>';
 	}
 }
@@ -75,7 +75,7 @@ else
 	while ($row=hesk_dbFetchAssoc($res2))
 	{
 		$row['name'] = (hesk_mb_strlen($row['name']) > 30) ? hesk_mb_substr($row['name'],0,30) . '...' : $row['name'];
-		$selected = ($row['id'] == $category) ? 'selected="selected"' : '';
+		$selected = (in_array($row['id'], $categories)) ? 'selected="selected"' : '';
 		$category_options .= '<option value="'.$row['id'].'" '.$selected.'>'.$row['name'].'</option>';
 	}
 }
@@ -84,7 +84,7 @@ else
 if (($can_view_ass_others || $can_view_ass_by) && ! isset($admins))
 {
 	$admins = array();
-	$res2 = hesk_dbQuery("SELECT `id`,`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `name` ASC");
+	$res2 = hesk_dbQuery("SELECT `id`,`name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `active` = 1 ORDER BY `name` ASC");
 	while ($row=hesk_dbFetchAssoc($res2))
 	{
 		$admins[$row['id']]=$row['name'];
@@ -290,13 +290,19 @@ $more2 = empty($_GET['more2']) ? 0 : 1;
                     </div>
                 </div>
             </div>
+            <script>
+                hesk_loadNoResultsSelectizePlugin('<?php echo hesk_jsString($hesklang['no_results_found']); ?>');
+            </script>
             <div class="search-option">
                 <div class="search-name">
                     <?php echo $hesklang['category']; ?>
                 </div>
                 <div class="search-options">
-                    <select name="category">
-                        <option value="0" ><?php echo $hesklang['any_cat']; ?></option>
+                    <select name="c[]"
+                            class="read-write"
+                            multiple
+                            auto-load-plugins="no_results,remove_button"
+                            placeholder="<?php echo hesk_addslashes($hesklang['search_by_category']); ?>">
                         <?php echo $category_options; ?>
                     </select>
                 </div>
@@ -473,13 +479,19 @@ $("#toggleAllShow").click(function(event) {
             </div>
         </div>
         <div id="divShow2" style="display:<?php echo $more2 ? 'block' : 'none' ; ?>">
+            <script>
+                hesk_loadNoResultsSelectizePlugin('<?php echo hesk_jsString($hesklang['no_results_found']); ?>');
+            </script>
             <div class="search-option">
                 <div class="search-name">
                     <?php echo $hesklang['category']; ?>
                 </div>
                 <div class="search-options">
-                    <select id="categoryfind" name="category">
-                        <option value="0" ><?php echo $hesklang['any_cat']; ?></option>
+                    <select id="categoryfind" name="c[]"
+                            class="read-write"
+                            multiple
+                            auto-load-plugins="no_results,remove_button"
+                            placeholder="<?php echo hesk_addslashes($hesklang['search_by_category']); ?>">
                         <?php echo $category_options; ?>
                     </select>
                 </div>

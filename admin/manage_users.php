@@ -44,6 +44,7 @@ $hesk_settings['features'] = array(
 'can_del_tickets',      /* User can delete tickets */
 'can_edit_tickets',     /* User can edit tickets */
 'can_merge_tickets',    /* User can merge tickets */
+'can_link_tickets',     /* User can not linked ticket*/
 'can_resolve',          /* User can resolve tickets */
 'can_submit_any_cat',   /* User can submit a ticket to any category/department */
 'can_del_notes',        /* User can delete ticket notes posted by other staff members */
@@ -71,12 +72,15 @@ $hesk_settings['features'] = array(
 'can_unban_emails',     /* User can delete email address bans. Also enables "can_ban_emails" */
 'can_ban_ips',          /* User can ban IP addresses */
 'can_unban_ips',        /* User can delete IP bans. Also enables "can_ban_ips" */
+'can_mute_emails',      /* User can mute email addresses */
+'can_unmute_emails',    /* User can delete email address muted. Also enables "can_mute_emails" */
 'can_privacy',          /* User can use privacy tools (Anonymize tickets) */
 'can_service_msg',      /* User can manage service messages shown in customer interface */
 'can_email_tpl',        /* User can manage email templates */
 'can_man_customers',    /* User can create and edit customer accounts */
+'can_merge_customers',  /* User can merge two or more customers*/
 'can_view_customers',   /* User can view customer accounts, but not create or edit them */
-'can_link_tickets',     /* User can not linked ticket*/
+'can_man_permission_groups' /* User can view and create permission groups */
 );
 
 /* Set default values */
@@ -85,6 +89,7 @@ $default_userdata = array(
 	// Profile info
 	'name' => '',
 	'email' => '',
+    'nickname' => '',
 	'cleanpass' => '',
 	'user' => '',
 	'autoassign' => 'Y',
@@ -96,6 +101,11 @@ $default_userdata = array(
 	'isadmin' => 1,
 	'categories' => array('1'),
 	'features' => array('can_view_tickets','can_reply_tickets','can_change_cat','can_assign_self','can_view_unassigned','can_view_online','can_resolve','can_submit_any_cat'),
+
+    // Permission Groups
+    'permission_groups' => [],
+    'pg_categories' => [],
+    'pg_features' => [],
 
 	// Preferences
 	'afterreply' => 0,
@@ -185,6 +195,7 @@ if ( $action = hesk_REQUEST('a') )
 	elseif ($action == 'remove')     {remove();}
 	elseif ($action == 'autoassign') {toggle_autoassign();}
     elseif ($action == 'resetmfa')   {reset_mfa();}
+    elseif ($action == 'active')     {toggle_activation();}
     else 							 {hesk_error($hesklang['invalid_action']);}
 }
 
@@ -219,7 +230,7 @@ if (!hesk_SESSION(array('userdata', 'errors'))) {
 // If POP3 fetching is active, no user should have the same email address
 if ($hesk_settings['pop3'] && hesk_validateEmail($hesk_settings['pop3_user'], 'ERR', 0))
 {
-    $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['pop3_user'])."'");
+    $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['pop3_user'])."' AND `active` = 1");
 
     if (hesk_dbNumRows($res) > 0)
     {
@@ -237,7 +248,7 @@ if ($hesk_settings['pop3'] && hesk_validateEmail($hesk_settings['pop3_user'], 'E
 // If IMAP fetching is active, no user should have the same email address
 if ($hesk_settings['imap'] && hesk_validateEmail($hesk_settings['imap_user'], 'ERR', 0))
 {
-    $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['imap_user'])."'");
+    $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['imap_user'])."' AND `active` = 1");
 
     if (hesk_dbNumRows($res) > 0)
     {
@@ -299,6 +310,45 @@ if (hesk_dbNumRows($res) > 0)
         <?php endif; ?>
     </section>
     <div class="table-wrap">
+        <?php
+        $query_sort_column = 'name';
+        if ($sort_column !== null && in_array($sort_column, ['name', 'email', 'nickname'])) {
+            $query_sort_column = $sort_column;
+        }
+        $query_sort_direction = $sort_direction === 'ASC' ? 'ASC' : 'DESC';
+        $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `{$query_sort_column}` {$query_sort_direction}");
+        $all_users = [];
+        $any_deactivated = false;
+        while ($row = hesk_dbFetchAssoc($res)) {
+            $all_users[] = $row;
+            if (!$row['active']) {
+                $any_deactivated = true;
+            }
+        }
+
+        $cannot_manage = array();
+
+        $tickets_per_user = array();
+        $tickets_per_user_rs = hesk_dbQuery('SELECT COUNT(1) AS `cnt`, `owner`, CASE WHEN `status` = 3 THEN 0 ELSE 1 END AS `open` 
+                    FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` 
+                    GROUP BY `owner`, CASE WHEN `status` = 3 THEN 0 ELSE 1 END');
+        while ($row = hesk_dbFetchAssoc($tickets_per_user_rs)) {
+            if (!isset($tickets_per_user[$row['owner']])) {
+                $tickets_per_user[$row['owner']] = array(
+                        'open' => 0,
+                        'closed' => 0,
+                        'total' => 0
+                );
+            }
+
+            $tickets_per_user[$row['owner']]['total'] += $row['cnt'];
+            if ($row['open']) {
+                $tickets_per_user[$row['owner']]['open'] += $row['cnt'];
+            } else {
+                $tickets_per_user[$row['owner']]['closed'] += $row['cnt'];
+            }
+        }
+        ?>
         <div class="table">
             <table id="default-table" class="table sindu-table">
                 <thead>
@@ -319,6 +369,16 @@ if (hesk_dbNumRows($res) > 0)
                             </div>
                         </a>
                     </th>
+                    <?php if ($hesk_settings['staff_nicknames']): ?>
+                    <th class="sindu-handle <?php echo $sort_column === 'nickname' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <a href="<?php echo build_sort_url($sort_column, 'nickname', $sort_direction); ?>">
+                            <div class="sort">
+                                <span><?php echo $hesklang['nickname']; ?></span>
+                                <i class="handle"></i>
+                            </div>
+                        </a>
+                    </th>
+                    <?php endif; ?>
                     <th><?php echo $hesklang['username']; ?></th>
                     <th><?php echo $hesklang['role']; ?></th>
                     <?php
@@ -342,43 +402,16 @@ if (hesk_dbNumRows($res) > 0)
                 </thead>
                 <tbody>
                 <?php
-                $tickets_per_user = array();
-                $tickets_per_user_rs = hesk_dbQuery('SELECT COUNT(1) AS `cnt`, `owner`, CASE WHEN `status` = 3 THEN 0 ELSE 1 END AS `open` 
-                    FROM `'.hesk_dbEscape($hesk_settings['db_pfix']).'tickets` 
-                    GROUP BY `owner`, CASE WHEN `status` = 3 THEN 0 ELSE 1 END');
-                while ($row = hesk_dbFetchAssoc($tickets_per_user_rs)) {
-                    if (!isset($tickets_per_user[$row['owner']])) {
-                        $tickets_per_user[$row['owner']] = array(
-                            'open' => 0,
-                            'closed' => 0,
-                            'total' => 0
-                        );
+                foreach ($all_users as $myuser) {
+                    if (!$myuser['active']) {
+                        continue;
                     }
-
-                    $tickets_per_user[$row['owner']]['total'] += $row['cnt'];
-                    if ($row['open']) {
-                        $tickets_per_user[$row['owner']]['open'] += $row['cnt'];
-                    } else {
-                        $tickets_per_user[$row['owner']]['closed'] += $row['cnt'];
-                    }
-                }
-
-                $query_sort_column = 'name';
-                if ($sort_column !== null && in_array($sort_column, ['name', 'email'])) {
-                    $query_sort_column = $sort_column;
-                }
-                $query_sort_direction = $sort_direction === 'ASC' ? 'ASC' : 'DESC';
-                $res = hesk_dbQuery("SELECT * FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` ORDER BY `{$query_sort_column}` {$query_sort_direction}");
-
-                $cannot_manage = array();
-
-                while ($myuser = hesk_dbFetchAssoc($res)) {
 
                     $can_manage_this_user = !$can_man_users ? false : compare_user_permissions($myuser['id'], $myuser['isadmin'], explode(',', $myuser['categories']) , explode(',', $myuser['heskprivileges']));
                     $can_view_this_user = ($can_manage_this_user || $can_view_users) ? true : false;
 
                     if (!$can_view_this_user) {
-                        $cannot_manage[$myuser['id']] = array('name' => $myuser['name'], 'user' => $myuser['user'], 'email' => $myuser['email']);
+                        $cannot_manage[$myuser['id']] = array('name' => $myuser['name'], 'user' => $myuser['user'], 'email' => $myuser['email'], 'nickname' => $myuser['nickname']);
                         continue;
                     }
 
@@ -430,6 +463,30 @@ if (hesk_dbNumRows($res) > 0)
                         $myuser['isadmin'] = $hesklang['administrator'];
                     } else {
                         $myuser['isadmin'] = $hesklang['staff'];
+                    }
+
+                    $deactivate_code = '';
+                    // Can only deactivate user if not default administrator, can manage the user, and it's not your own account
+                    if ($myuser['id'] != 1 && $can_manage_this_user && $myuser['id'] != $_SESSION['id']) {
+                        $modal_body = $hesklang['sure_deactivate_user'];
+                        if (isset($tickets_per_user[$myuser['id']]) && $tickets_per_user[$myuser['id']]['total'] > 0) {
+                            $total_tickets = $tickets_per_user[$myuser['id']]['total'];
+                            $open_tickets = $tickets_per_user[$myuser['id']]['open'];
+                            $modal_body .= '<br><br>'.
+                                    '<div class="notification orange">
+                                    <b>'.$hesklang['sm_notice'].'</b><br> '.sprintf($hesklang['deactivating_user_with_tickets'], $total_tickets, $open_tickets).'
+                                </div>';
+                        }
+                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deactivation'],
+                                $modal_body,
+                                'manage_users.php?a=active&amp;state=0&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0),
+                                $hesklang['deactivate_user']);
+                        $deactivate_code = '
+                            <a href="javascript:" data-modal="[data-modal-id=\''.$modal_id.'\']" class="edit tooltip" title="'.$hesklang['deactivate_user'].'">
+                                <svg class="icon icon-assign-no">
+                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-assign-no"></use>
+                                </svg>
+                            </a>';
                     }
 
                     /* Deleting user with ID 1 (default administrator) is not allowed */
@@ -508,14 +565,16 @@ if (hesk_dbNumRows($res) > 0)
                         $autoassign_code = '';
                     }
 
-                    echo <<<EOC
-<tr $table_row>
-<td>$myuser[name]</td>
-<td><a href="mailto:$myuser[email]">$myuser[email]</a></td>
-<td>$myuser[user]</td>
-<td>$myuser[isadmin]</td>
+                    echo '<tr '.$table_row.'>';
+                    echo '<td>'.$myuser['name'].'</td>';
+                    echo '<td><a href="mailto:'.$myuser['email'].'">'.$myuser['email'].'</a></td>';
 
-EOC;
+                    if ($hesk_settings['staff_nicknames']) {
+                        echo '<td>'.$myuser['nickname'].'</td>';
+                    }
+
+                    echo '<td>'.$myuser['user'].'</td>';
+                    echo '<td>'.$myuser['isadmin'].'</td>';
 
                     if ($hesk_settings['rating']) {
                         $alt = $myuser['rating'] ? sprintf($hesklang['rated'], sprintf("%01.1f", $myuser['rating']), ($myuser['ratingneg']+$myuser['ratingpos'])) : $hesklang['not_rated'];
@@ -569,7 +628,7 @@ EOC;
 
                     echo <<<EOC
 <td>$mfa_status $mfa_reset</td>
-<td class="nowrap buttons"><p>$edit_code $remove_code</p></td>
+<td class="nowrap buttons"><p>$edit_code $deactivate_code $remove_code</p></td>
 </tr>
 
 EOC;
@@ -579,6 +638,191 @@ EOC;
             </table>
         </div>
     </div>
+    <?php if ($any_deactivated): ?>
+    <br>
+    <section class="team__head">
+        <h3 class="cus_label">
+            <?php echo $hesklang['deactivated_users']; ?>
+        </h3>
+    </section>
+    <div class="table-wrap">
+        <div class="table">
+            <table id="deactivated-users" class="table sindu-table">
+                <thead>
+                <tr>
+                    <th class="sindu-handle <?php echo $sort_column === 'name' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <div class="sort">
+                            <span><?php echo $hesklang['name']; ?></span>
+                            <i class="handle"></i>
+                        </div>
+                    </th>
+                    <th class="sindu-handle <?php echo $sort_column === 'email' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                        <a href="<?php echo build_sort_url($sort_column, 'email', $sort_direction); ?>">
+                            <div class="sort">
+                                <span><?php echo $hesklang['email']; ?></span>
+                                <i class="handle"></i>
+                            </div>
+                        </a>
+                    </th>
+                    <?php if ($hesk_settings['staff_nicknames']): ?>
+                        <th class="sindu-handle <?php echo $sort_column === 'nickname' ? hesk_mb_strtolower($sort_direction) : '' ?>">
+                            <a href="<?php echo build_sort_url($sort_column, 'nickname', $sort_direction); ?>">
+                                <div class="sort">
+                                    <span><?php echo $hesklang['nickname']; ?></span>
+                                    <i class="handle"></i>
+                                </div>
+                            </a>
+                        </th>
+                    <?php endif; ?>
+                    <th><?php echo $hesklang['username']; ?></th>
+                    <th><?php echo $hesklang['role']; ?></th>
+                    <?php
+                    /* Is user rating enabled? */
+                    if ($hesk_settings['rating']) {
+                        ?>
+                        <th><?php echo $hesklang['rating']; ?></th>
+                        <?php
+                    }
+                    /* Is autoassign enabled? */
+                    if ($hesk_settings['autoassign']) {
+                        ?>
+                        <th><?php echo $hesklang['aass']; ?></th>
+                        <?php
+                    }
+                    ?>
+                    <th><?php echo $hesklang['mfa_short']; ?></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($all_users as $myuser) {
+                    if ($myuser['active']) {
+                        continue;
+                    }
+
+                    $can_manage_this_user = !$can_man_users ? false : compare_user_permissions($myuser['id'], $myuser['isadmin'], explode(',', $myuser['categories']) , explode(',', $myuser['heskprivileges']));
+                    $can_view_this_user = ($can_manage_this_user || $can_view_users) ? true : false;
+
+                    if (!$can_view_this_user) {
+                        $cannot_manage[$myuser['id']] = array('name' => $myuser['name'], 'user' => $myuser['user'], 'email' => $myuser['email'], 'nickname' => $myuser['nickname']);
+                        continue;
+                    }
+
+                    $table_row = '';
+                    if (isset($_SESSION['seluser']) && $myuser['id'] == $_SESSION['seluser']) {
+                        $table_row = 'class="ticket-new"';
+                        unset($_SESSION['seluser']);
+                    }
+
+                    $reactivate_code = '';
+                    /* To edit yourself go to "Profile" page, not here. */
+                    if ($can_manage_this_user) {
+                        $reactivate_code = '
+                            <a href="manage_users.php?a=active&amp;state=1&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0).'" class="edit tooltip" title="'.$hesklang['activate_user'].'">
+                                <svg class="icon icon-assign-plus">
+                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-assign-plus"></use>
+                                </svg>
+                            </a>';
+                    }
+
+                    if ($myuser['isadmin']) {
+                        $myuser['isadmin'] = $hesklang['administrator'];
+                    } else {
+                        $myuser['isadmin'] = $hesklang['staff'];
+                    }
+
+                    $edit_code = '';
+                    if ($can_manage_this_user) {
+                        $edit_code = '
+                            <a href="manage_users.php?a=edit&amp;id='.$myuser['id'].'" class="edit tooltip" title="'.$hesklang['edit'].'">
+                                <svg class="icon icon-edit-ticket">
+                                    <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-edit-ticket"></use>
+                                </svg>
+                            </a>';
+                    }
+
+                    /* Deleting user with ID 1 (default administrator) is not allowed */
+                    if ($myuser['id'] == 1) {
+                        $remove_code = '';
+                    } elseif ($can_manage_this_user) {
+                        $modal_body = $hesklang['sure_remove_user'];
+                        if (isset($tickets_per_user[$myuser['id']]) && $tickets_per_user[$myuser['id']]['total'] > 0) {
+                            $total_tickets = $tickets_per_user[$myuser['id']]['total'];
+                            $open_tickets = $tickets_per_user[$myuser['id']]['open'];
+                            $modal_body .= '<br><br>'.
+                                    '<div class="notification orange">
+                                    <b>'.$hesklang['sm_notice'].'</b><br> '.sprintf($hesklang['deleting_user_with_tickets'], $total_tickets, $open_tickets).'
+                                </div>';
+                        }
+
+                        $modal_id = hesk_generate_old_delete_modal($hesklang['confirm_deletion'],
+                                $modal_body,
+                                'manage_users.php?a=remove&amp;id='.$myuser['id'].'&amp;token='.hesk_token_echo(0));
+                        $remove_code = '
+                        <a href="javascript:" data-modal="[data-modal-id=\''.$modal_id.'\']"
+                            title="'.$hesklang['remove'].'"
+                            class="delete tooltip">
+                            <svg class="icon icon-delete">
+                                <use xlink:href="' . HESK_PATH . 'img/sprite.svg#icon-delete"></use>
+                            </svg>
+                        </a>';
+                    } else {
+                        $remove_code = '';
+                    }
+
+                    /* Is auto assign enabled? */
+                    if ($hesk_settings['autoassign']) {
+                        $autoassign_code = $myuser['autoassign'] ? $hesklang['yes'] : $hesklang['no'];
+                    } else {
+                        $autoassign_code = '';
+                    }
+
+                    echo '<tr '.$table_row.'>';
+                    echo '<td>'.$myuser['name'].'</td>';
+                    echo '<td><a href="mailto:'.$myuser['email'].'">'.$myuser['email'].'</a></td>';
+
+                    if ($hesk_settings['staff_nicknames']) {
+                        echo '<td>'.$myuser['nickname'].'</td>';
+
+                    }
+
+                    echo '<td>'.$myuser['user'].'</td>';
+                    echo '<td>'.$myuser['isadmin'].'</td>';
+
+                    if ($hesk_settings['rating']) {
+                        $alt = $myuser['rating'] ? sprintf($hesklang['rated'], sprintf("%01.1f", $myuser['rating']), ($myuser['ratingneg']+$myuser['ratingpos'])) : $hesklang['not_rated'];
+                        echo '<td style="text-align:center; white-space:nowrap;">
+                            '.hesk3_get_rating($myuser['rating']).'
+                        </td>';
+                    }
+
+                    if ($hesk_settings['autoassign']) {
+                        echo '<td>' . $autoassign_code . '</td>';
+                    }
+
+                    $mfa_enrollment = intval($myuser['mfa_enrollment']);
+                    $mfa_status = $hesklang['mfa_method_none'];
+
+                    if ($mfa_enrollment === 1) {
+                        $mfa_status = $hesklang['mfa_method_email'];
+                    } elseif ($mfa_enrollment === 2) {
+                        $mfa_status = $hesklang['mfa_method_auth_app_short'];
+                    }
+
+                    echo <<<EOC
+<td>$mfa_status</td>
+<td class="nowrap buttons"><p>$edit_code $reactivate_code $remove_code</p></td>
+</tr>
+
+EOC;
+                } // End while
+                ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php endif; ?>
 </div>
 <?php if ($can_man_users): ?>
 <div class="right-bar team-create" <?php echo hesk_SESSION(array('userdata','errors')) ? 'style="display: block"' : ''; ?>>
@@ -659,6 +903,22 @@ function compare_user_permissions($compare_id, $compare_isadmin = null, $compare
         $compare_categories = explode(',', $row['categories']);
     }
 
+    // Also fetch any features/categories included via permission groups
+    $permission_groups_rs = hesk_dbQuery("SELECT `category`.`category_id` AS `category_feature_value`, 'CATEGORY' AS `category_feature_type` 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` AS `category`
+        WHERE `category`.`group_id` IN (SELECT `group_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` WHERE `user_id` = ".intval($compare_id).")
+        UNION ALL
+        SELECT `feature`.`feature` AS `category_feature_value`, 'FEATURE' AS `category_feature_type` 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` AS `feature`
+        WHERE `feature`.`group_id` IN (SELECT `group_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` WHERE `user_id` = ".intval($compare_id).")");
+    while ($row = hesk_dbFetchAssoc($permission_groups_rs)) {
+        if ($row['category_feature_type'] === 'CATEGORY' && !in_array($row['category_feature_value'], $compare_categories)) {
+            $compare_categories[] = $row['category_feature_value'];
+        } elseif (!in_array($row['category_feature_value'], $compare_features)) {
+            $compare_features[] = $row['category_feature_value'];
+        }
+    }
+
 	/* Compare categories */
     foreach ($compare_categories as $catid)
     {
@@ -716,6 +976,33 @@ function edit_user()
 	        $_SESSION['userdata']['categories'] = explode(',',$_SESSION['userdata']['categories']);
         }
         $_SESSION['userdata']['cleanpass'] = '';
+        $_SESSION['userdata']['permission_groups'] = [];
+        $_SESSION['userdata']['pg_categories'] = [];
+        $_SESSION['userdata']['pg_features'] = [];
+
+        // Add any permission groups they may have
+        $permission_group_categories_rs = hesk_dbQuery("SELECT `group_id`,`category_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` WHERE `group_id` IN (
+            SELECT `group_id`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members`
+            WHERE `user_id` = ".intval($id)."
+        )");
+        while ($row = hesk_dbFetchAssoc($permission_group_categories_rs)) {
+            if (!in_array($row['group_id'], $_SESSION['userdata']['permission_groups'])) {
+                $_SESSION['userdata']['permission_groups'][] = $row['group_id'];
+            }
+            $_SESSION['userdata']['pg_categories'][] = intval($row['category_id']);
+        }
+        $permission_group_features_rs = hesk_dbQuery("SELECT `group_id`,`feature` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` WHERE `group_id` IN (
+            SELECT `group_id`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members`
+            WHERE `user_id` = ".intval($id)."
+        )");
+        while ($row = hesk_dbFetchAssoc($permission_group_features_rs)) {
+            if (!in_array($row['group_id'], $_SESSION['userdata']['permission_groups'])) {
+                $_SESSION['userdata']['permission_groups'][] = $row['group_id'];
+            }
+            $_SESSION['userdata']['pg_features'][] = $row['feature'];
+        }
     }
 
 	/* Make sure we have permission to edit this user */
@@ -796,12 +1083,22 @@ function new_user()
 		$myuser['features'] = '';
     }
 
+    if ($hesk_settings['staff_nicknames']) {
+        $nickname_where = '`nickname`,';
+        $nickname_sql = "'".hesk_dbEscape($myuser['nickname'])."',";
+    } else {
+        $nickname_where = '';
+        $nickname_sql = '';
+    }
+
 	hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."users` (
 	`user`,
 	`pass`,
 	`isadmin`,
+	`active`,
 	`name`,
 	`email`,
+    {$nickname_where}
 	`signature`,
 	`categories`,
 	`autoassign`,
@@ -832,8 +1129,10 @@ function new_user()
 	'".hesk_dbEscape($myuser['user'])."',
 	'".hesk_dbEscape($myuser['pass'])."',
 	'".intval($myuser['isadmin'])."',
+	1,
 	'".hesk_dbEscape($myuser['name'])."',
 	'".hesk_dbEscape($myuser['email'])."',
+    {$nickname_sql}
 	'".hesk_dbEscape($myuser['signature'])."',
 	'".hesk_dbEscape($myuser['categories'])."',
 	'".intval($myuser['autoassign'])."',
@@ -863,6 +1162,14 @@ function new_user()
 	)" );
 
     $_SESSION['seluser'] = hesk_dbInsertID();
+
+    if (count($myuser['permission_groups']) > 0) {
+        $permission_group_inserts = [];
+        foreach ($myuser['permission_groups'] as $permission_group) {
+            $permission_group_inserts[] = 'SELECT '.intval($permission_group).', '.intval($_SESSION['seluser']);
+        }
+        hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` (`group_id`, `user_id`) ".implode(' UNION ', $permission_group_inserts));
+    }
 
     unset($_SESSION['userdata']);
 
@@ -931,11 +1238,47 @@ function update_user()
 	    $myuser['categories'] = implode(',',$myuser['categories']);
 	    $myuser['features'] = implode(',',$myuser['features']);
 
-    	/* Unassign tickets from categories that the user had access before but doesn't anymore */
-        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
+        // Remove and insert permission groups
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` WHERE `user_id` = ".intval($myuser['id']));
 
         // Remove the user as collaborator from cateogries with no permission
-        hesk_dbQuery("DELETE `c` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `c` JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `t` ON `c`.`ticket_id` = `t`.`id` WHERE `c`.`user_id`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
+        if (strlen($myuser['categories'])) {
+            hesk_dbQuery("DELETE `c` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` AS `c` JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` AS `t` ON `c`.`ticket_id` = `t`.`id` WHERE `c`.`user_id`='".intval($myuser['id'])."' AND `category` NOT IN (".$myuser['categories'].")");
+        }
+
+        if (count($myuser['permission_groups']) > 0) {
+            $permission_group_inserts = [];
+            foreach ($myuser['permission_groups'] as $permission_group) {
+                $permission_group_inserts[] = 'SELECT '.intval($permission_group).', '.intval($myuser['id']);
+            }
+            hesk_dbQuery("INSERT INTO `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` (`group_id`, `user_id`) ".implode(' UNION ', $permission_group_inserts));
+        }
+
+
+        $individual_category_sql = '';
+        $permission_group_category_sql = '';
+        if ($myuser['categories'] !== '') {
+            $individual_category_sql = " AND `category` NOT IN (".$myuser['categories'].") ";
+        }
+        if (count($myuser['permission_groups']) > 0) {
+            $permission_group_category_sql = " AND `category` NOT IN (
+                SELECT `category_id`
+                FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories`
+                WHERE `group_id` IN (".implode(',', $myuser['permission_groups']).")
+            )";
+        }
+    	/* Unassign tickets from categories that the user had access before but doesn't anymore */
+        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets`
+            SET `owner`=0
+            WHERE `owner`='".intval($myuser['id'])."'
+            {$individual_category_sql}
+            {$permission_group_category_sql}");
+    }
+
+    if ($hesk_settings['staff_nicknames']) {
+        $nickname_sql = "`nickname`='".hesk_dbEscape($myuser['nickname'])."',";
+    } else {
+        $nickname_sql = '';
     }
 
 	hesk_dbQuery(
@@ -943,6 +1286,7 @@ function update_user()
     `user`='".hesk_dbEscape($myuser['user'])."',
     `name`='".hesk_dbEscape($myuser['name'])."',
     `email`='".hesk_dbEscape($myuser['email'])."',
+    {$nickname_sql}
     `signature`='".hesk_dbEscape($myuser['signature'])."'," . ( isset($myuser['pass']) ? "`pass`='".hesk_dbEscape($myuser['pass'])."'," : '' ) . "
     `categories`='".hesk_dbEscape($myuser['categories'])."',
     `isadmin`='".intval($myuser['isadmin'])."',
@@ -1014,9 +1358,11 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
         $errors[] = 'user';
     }
 
+    $myuser['nickname']   = hesk_input(hesk_POST('nickname'));
 	$myuser['isadmin']	  = empty($_POST['isadmin']) ? 0 : 1;
 	$myuser['signature']  = hesk_input( hesk_POST('signature') );
     $myuser['autoassign'] = hesk_POST('autoassign') == 'Y' ? 1 : 0;
+    $myuser['permission_groups'] = [];
 
     /* If it's not admin at least one category and fature is required */
     $myuser['categories']	= array();
@@ -1024,14 +1370,32 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 
     if ($myuser['isadmin']==0)
     {
-    	if (empty($_POST['categories']) || ! is_array($_POST['categories']) )
+        // Set permission groups if exists
+        foreach (hesk_POST_array('permissionGroups') as $permission_group) {
+            if ($tmp = intval($permission_group)) {
+                $myuser['permission_groups'][] = $tmp;
+            }
+        }
+
+        $has_pg_category = false;
+        $has_pg_feature = false;
+        if (count($myuser['permission_groups']) > 0) {
+            // Check if permission groups contain at least one category and/or feature
+            $has_pg_category_rs = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` WHERE `group_id` IN (".implode(',', $myuser['permission_groups']).")");
+            $has_pg_category = hesk_dbNumRows($has_pg_category_rs) > 0;
+            $has_pg_feature_rs = hesk_dbQuery("SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` WHERE `group_id` IN (".implode(',', $myuser['permission_groups']).")");
+            $has_pg_feature = hesk_dbNumRows($has_pg_feature_rs) > 0;
+        }
+
+
+    	if (!$has_pg_category && (empty($_POST['categories']) || !is_array($_POST['categories'])))
         {
 			$hesk_error_buffer .= '<li>' . $hesklang['asign_one_cat'] . '</li>';
 			$errors[] = 'categories';
         }
         else
         {
-			foreach ($_POST['categories'] as $tmp)
+			foreach (hesk_POST_array('categories') as $tmp)
 			{
             	if (is_array($tmp))
                 {
@@ -1045,14 +1409,14 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 			}
         }
 
-    	if (empty($_POST['features']) || ! is_array($_POST['features']) )
+    	if (!$has_pg_feature && (empty($_POST['features']) || !is_array($_POST['features'])))
         {
 			$hesk_error_buffer .= '<li>' . $hesklang['asign_one_feat'] . '</li>';
 			$errors[] = 'features';
         }
         else
         {
-			foreach ($_POST['features'] as $tmp)
+			foreach (hesk_POST_array('features') as $tmp)
 			{
 				if (in_array($tmp,$hesk_settings['features']))
 				{
@@ -1184,6 +1548,12 @@ function hesk_validateUserInfo($pass_required = 1, $redirect_to = './manage_user
 	{
     	$myuser['features'][] = 'can_ban_emails';
 	}
+
+    // "can_unmute_emails" feature also enables "can_mute_emails"
+    if ( in_array('can_unmute_emails', $myuser['features']) && ! in_array('can_mute_emails', $myuser['features']) )
+    {
+        $myuser['features'][] = 'can_mute_emails';
+    }
 
     // "can_unban_ips" feature also enables "can_ban_ips"
     if ( in_array('can_unban_ips', $myuser['features']) && ! in_array('can_ban_ips', $myuser['features']) )
@@ -1321,6 +1691,63 @@ function reset_mfa() {
 
     hesk_process_messages($hesklang['mfa_reset'], './manage_users.php', 'SUCCESS');
 }
+
+function toggle_activation()
+{
+    global $hesk_settings, $hesklang;
+
+    /* A security check */
+    hesk_token_check();
+
+    $myuser = intval( hesk_GET('id' ) ) or hesk_error($hesklang['no_valid_id']);
+    $_SESSION['seluser'] = $myuser;
+
+    /* You can't deactivate the default user */
+    if ($myuser == 1)
+    {
+        hesk_process_messages($hesklang['cant_deactivate_admin'],'./manage_users.php');
+    }
+
+    /* You can't delete your own account (the one you are logged in) */
+    if ($myuser == $_SESSION['id'])
+    {
+        hesk_process_messages($hesklang['cant_deactivate_own'],'./manage_users.php');
+    }
+
+    // Make sure we have permission to manage this user
+    if ( ! compare_user_permissions($myuser))
+    {
+        hesk_process_messages($hesklang['npea'],'manage_users.php');
+    }
+
+    if ( intval( hesk_GET('state') ) )
+    {
+        $active = 1;
+        $tmp = $hesklang['user_activated'];
+    }
+    else
+    {
+        $active = 0;
+        $tmp = $hesklang['user_deactivated'];
+    }
+
+    /* Update activation settings */
+    hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."users` SET `active`='{$active}' WHERE `id`='".intval($myuser)."'");
+    if (hesk_dbAffectedRows() != 1)
+    {
+        hesk_process_messages($hesklang['int_error'].': '.$hesklang['user_not_found'],'./manage_users.php');
+    }
+
+    // If user is deactivated, clean up some data
+    if (!$active) {
+        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0 WHERE `owner`='".intval($myuser)."' AND `status` <> '3'");
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."auth_tokens` WHERE `user_id`={$myuser} AND `user_type` = 'STAFF'");
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_collaborator` WHERE `user_id` = {$myuser}");
+        hesk_updateAutoassignConfigs();
+    }
+
+    hesk_process_messages($tmp,'./manage_users.php','SUCCESS');
+} // End toggle_autoassign()
 
 function build_sort_url($current_sort_field, $sort_field, $current_sort_direction) {
     $target_sort_direction = $current_sort_direction === 'ASC' && $sort_field === $current_sort_field ? 'DESC' : 'ASC';

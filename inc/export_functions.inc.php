@@ -16,7 +16,7 @@ if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 /*** FUNCTIONS ***/
 
-function hesk_export_to_XML($sql, $export_selected = false, $export_history = false)
+function hesk_export_to_XML($sql, $export_selected = false, $export_history = false, $export_replies = false)
 {
     global $hesk_settings, $hesklang, $ticket, $my_cat;
 
@@ -141,19 +141,24 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 	// Define column width
 	$tmp .= '
 	<Column ss:AutoFitWidth="0" ss:Width="50"/>
-	<Column ss:AutoFitWidth="0" ss:Width="84" ss:Span="1"/>
-	<Column ss:AutoFitWidth="0" ss:Width="110"/>
-	<Column ss:AutoFitWidth="0" ss:Width="110"/>
+	<Column ss:AutoFitWidth="0" ss:Width="84"/>
+	<Column ss:AutoFitWidth="0" ss:Width="100"/>
+	<Column ss:AutoFitWidth="0" ss:Width="100"/>
+	<Column ss:AutoFitWidth="0" ss:Width="100"/>
+	<Column ss:AutoFitWidth="0" ss:Width="100"/>
 	<Column ss:AutoFitWidth="0" ss:Width="90"/>
 	<Column ss:AutoFitWidth="0" ss:Width="90"/>
-	<Column ss:AutoFitWidth="0" ss:Width="87"/>
+	<Column ss:AutoFitWidth="0" ss:Width="90"/>
 	<Column ss:AutoFitWidth="0" ss:Width="87"/>
 	<Column ss:AutoFitWidth="0" ss:Width="57.75"/>
 	<Column ss:AutoFitWidth="0" ss:Width="57.75"/>
 	<Column ss:AutoFitWidth="0" ss:Width="100"/>
 	<Column ss:AutoFitWidth="0" ss:Width="100"/>
 	<Column ss:AutoFitWidth="0" ss:Width="80"/>
-	<Column ss:AutoFitWidth="0" ss:Width="80"/>
+	<Column ss:AutoFitWidth="0" ss:Width="50"/>
+	<Column ss:AutoFitWidth="0" ss:Width="50"/>
+	<Column ss:AutoFitWidth="0" ss:Width="70"/>
+	<Column ss:AutoFitWidth="0" ss:Width="70"/>
 	';
 
 	foreach ($hesk_settings['custom_fields'] as $k=>$v)
@@ -164,6 +169,15 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 		}
 	}
 
+    if ($export_history) {
+        $tmp .= '<Column ss:AutoFitWidth="0" ss:Width="100"/>' . "\n";
+    }
+
+    if ($export_replies) {
+        $tmp .= '<Column ss:AutoFitWidth="0" ss:Width="100"/>' . "\n";
+    }
+
+
 	// Define first row (header)
 	$tmp .= '
 	<Row>
@@ -171,6 +185,7 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 	<Cell><Data ss:Type="String">'.$hesklang['trackID'].'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['date'].'</Data></Cell>
     <Cell><Data ss:Type="String">'.$hesklang['last_update'].'</Data></Cell>
+    <Cell><Data ss:Type="String">'.$hesklang['first_reply_at'].'</Data></Cell>
     <Cell><Data ss:Type="String">'.$hesklang['resolved_at'].'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['name'].'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['email'].'</Data></Cell>
@@ -181,6 +196,8 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 	<Cell><Data ss:Type="String">'.$hesklang['subject'].'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['message'].'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['owner'].'</Data></Cell>
+	<Cell><Data ss:Type="String">'.$hesklang['replies'].'</Data></Cell>
+	<Cell><Data ss:Type="String">'.$hesklang['replies'] . ' (' . $hesklang['staff'] .')'.'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['ts'].'</Data></Cell>
 	<Cell><Data ss:Type="String">'.$hesklang['due_date'].'</Data></Cell>
 	';
@@ -195,6 +212,10 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 
     if ($export_history) {
         $tmp .= '<Cell><Data ss:Type="String">'.$hesklang['thist'].'</Data></Cell>' . "\n";
+    }
+
+    if ($export_replies) {
+        $tmp .= '<Cell><Data ss:Type="String">'.$hesklang['reply_messages'].'</Data></Cell>' . "\n";
     }
 
     $tmp .= '<Cell><Data ss:Type="String">'.$hesklang['ticket_url'].'</Data></Cell>' . "\n";
@@ -258,6 +279,7 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 <Cell><Data ss:Type="String"><![CDATA['.hesk_escape_CDATA($ticket['trackid']).']]></Data></Cell>
 <Cell ss:StyleID="s62"><Data ss:Type="DateTime">'.hesk_date($ticket['dt'], true).'</Data></Cell>
 <Cell ss:StyleID="s62"><Data ss:Type="DateTime">'.hesk_date($ticket['lastchange'], true).'</Data></Cell>
+<Cell ss:StyleID="s62"><Data ss:Type="DateTime">'.hesk_date($ticket['firstreply'], true).'</Data></Cell>
 ';
 
         if (empty($ticket['closedat'])) {
@@ -275,6 +297,8 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 <Cell><Data ss:Type="String"><![CDATA['.hesk_escape_CDATA($ticket['subject']).']]></Data></Cell>
 <Cell><Data ss:Type="String"><![CDATA['.hesk_escape_CDATA($ticket['message']).']]></Data></Cell>
 <Cell><Data ss:Type="String"><![CDATA['.hesk_escape_CDATA($ticket['owner']).']]></Data></Cell>
+<Cell><Data ss:Type="Number">'.$ticket['replies'].'</Data></Cell>
+<Cell><Data ss:Type="Number">'.$ticket['staffreplies'].'</Data></Cell>
 <Cell><Data ss:Type="String"><![CDATA['.hesk_escape_CDATA($ticket['time_worked']).']]></Data></Cell>
 ';
 
@@ -308,6 +332,49 @@ function hesk_export_to_XML($sql, $export_selected = false, $export_history = fa
 
         if ($export_history) {
             $tmp .= '<Cell><Data ss:Type="String"><![CDATA['.hesk_escape_CDATA($ticket['history']).']]></Data></Cell>' . "\n";
+        }
+
+        if ($export_replies) {
+
+            $tmp .= '<Cell><Data ss:Type="String"><![CDATA[';
+
+            if ($ticket['replies']) {
+                $replies = hesk_dbQuery("SELECT `replies`.*, `customers`.`name` AS `customer_name`, `customers`.`email` AS `customer_email`, `users`.`name` AS `staff_name`
+                    FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` AS `replies`
+                    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` AS `customers`
+                        ON `customers`.`id` = `replies`.`customer_id`
+                    LEFT JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `users`
+                        ON `users`.`id` = `replies`.`staffid`
+                    WHERE `replyto`='".intval($ticket['id'])."' ORDER BY `id` " . ($hesk_settings['new_top'] ? 'DESC' : 'ASC') );
+
+                while ($reply = hesk_dbFetchAssoc($replies)) {
+                    if ($reply['staffid']) {
+                        $reply['name'] = $reply['staff_name'] === null ?
+                            $hesklang['staff_deleted'] :
+                            $reply['staff_name'];
+                    } else {
+                        if ($reply['customer_name'] === null || $reply['customer_name'] == '') {
+                            if ($reply['customer_email'] !== null && strlen($reply['customer_email'])) {
+                                $reply['name'] = $reply['customer_email'];
+                            } else {
+                                $reply['name'] = $hesklang['anon_name'];
+                            }
+                        } else {
+                            $reply['name'] = $reply['customer_name'];
+                        }
+                    }
+
+                    $reply['message'] = hesk_msgToPlain($reply['message'], 1, 0);
+
+                    $tmp .= hesk_escape_CDATA(
+                        $hesklang['reply_by'] . ' ' . $reply['name'] . "\n" .
+                        $hesklang['date'] . ' ' . hesk_date($reply['dt'], true) . "\n" .
+                        $reply['message'] . "\n---\n"
+                    );
+                }
+            }
+
+            $tmp .= ']]></Data></Cell>'."\n";
         }
 
         // Include a link to ticket

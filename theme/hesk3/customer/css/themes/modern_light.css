@@ -1,0 +1,186 @@
+/*
+    Official Hesk Modern Light (light theme)
+
+    Create your own theme by adjusting the main theme variables.
+    TIPS:
+        1) Modern Light is the perfect starting base for creating any "light" theme, as it requires no additional CSS adjustments, besides just changing colors.
+            I.e. Things like inverted icon colors, or darker texts, softer shadows etc.
+        2) Instead of adjusting the existing theme files, please simply create a copy of this file, and renamed it to your new theme.
+            The theme will then automatically become available under Admin -> Settings -> General -> Customer Theme
+        3) Any theme can also have values overwritten in Admin Settings -> Look & Feel,
+        so if what you need is just some changes that are support by the existing theme colors, we suggest using that.
+
+        4) USAGE:
+        - By adjusting --primary, --secondary and --tertiary, most of other colors will be adjusted
+          programmatically based on these.
+        - Programmatic adjustments require support of the css function color-mix().
+          This is currently supported for roughly 93% browser users (growing yearly).
+          For the rest, there are fallbacks, but they might "not look as good", but keep things functional.
+        - For the active theme, a "theme_{theme_file_name}" class will be added to the HTML element.
+          This means you can easily override styling of any elements, by overriding the default CSS selector with a stronger specifier.
+          For example, say you wanted to override styling of the ".btn-full" selector only for this theme, you could do so by defining this below in this file:
+          .theme_modern_light .btn-full {
+            padding: 50px;
+          }
+*/
+
+/*
+This first :root section is for setting any values of the main theme variables found in the 0_00_default_theme_vars.css file.
+*/
+:root {
+    --primary: #1776EA;
+    --secondary: #1776ea;
+    --tertiary: #1776ea;
+
+    --surface: #ffffff;
+    --main-background: #ffffff;
+
+    --font__pri-clr: #26282a;
+    --font__sec-clr: #6b7480;
+
+    --header__bg: #fff;
+    --header_logo__clr: rgb(197, 202, 212);
+    --header_nav__clr: #1776ea;
+    --header_nav__hover_clr: var(--link__pri-hover-clr);
+
+    --search__bg: #ffefdc;
+
+    --breadcrumbs__a-hover-clr: #002d73;
+    --link__pri-hover-clr: #002d73;
+
+    --info: #002d73;
+    --info-2: #ebf8ff;
+
+    --input-bg: #fff;
+
+    --datepicker__clr: var(--gray-5);
+
+    --shadow-1-30: var(--shadow-1-10);
+
+    --notification__clr: var(--font__pri-clr);
+
+    --table_row__bg-hover: color-mix(in srgb, var(--surface) 90%, var(--secondary));
+
+    --navlink__title-clr: #002d73;
+    --navlink__hover-bg: #f1fbff;
+    --preview__clr: var(--font__pri-clr);
+    --preview__hover-bg: #f9fafd;
+    --preview__border-clr: #dfe4ec;
+    --suggest_preview__hover-icon-fill: var(--primary);
+
+    --ticket_response__bg: color-mix(in srgb, white 90.5%, var(--green-1));
+
+    --header_profile__clr: #1776ea;
+
+    --icon_circle__clr: var(--gray-2);
+    --icon_circle__bg: var(--white-2);
+    --navlink_icon_hover__clr: var(--white-2);
+    --navlink_icon_hover__bg: var(--gray-2);
+
+    --link__sec-hover-clr: #2c70a2;
+
+    --dropdown__clr: var(--font__pri-clr);
+}
+
+/* ADDITIONAL OVERWRITES BELOW - CSS helper vars, and general selector overwrites:
+(needed for specifically desired themes, which are currently not part of admin variables.
+They ALL require !important; to properly override followup loaded CSS!
+*/
+:root {
+    --header_border__clr: var(--white-7) !important;
+    --btn_full__hover_bg: var(--link__pri-hover-clr) !important;
+    --dropdown_input__border-clr: var(--white-7) !important;
+    --dropdown_label__border-clr: var(--white-7) !important;
+    --dropdown_list__border-clr:  var(--white-7) !important;
+}
+.preview {
+    box-shadow: none !important;
+}
+.preview .preview__text span:not(.lightgrey),
+.preview .preview__text .navlink__descr {
+    color: var(--gray-7) !important;
+}
+.tabbed__head .tabbed__head_tabs li.current {
+    background: none !important;
+    box-shadow: none !important;
+}
+.tabbed__tabs .tabbed__tabs_tab {
+    box-shadow: none !important;
+}
+.divider {
+    height: 1px !important;
+    margin: 30px 0 !important;
+}
+.ticket__block-footer {
+    border-top: none !important;
+}
+a.link {
+    text-decoration: none !important;
+}
+.ticket__params .params--block .row {
+    border-bottom: none !important;
+}
+.main__content .article .block__head {
+    background: none !important;
+    box-shadow: none !important;
+}
+.preview:hover .icon-in-circle .icon {
+    fill: var(--primary) !important;
+}
+.article__heading {
+    color: var(--navlink__title-clr) !important;
+}
+.tabbed__head .tabbed__head_tabs li.current {
+    color: var(--gray-7) !important;
+}
+.select__title {
+    color: var(--gray-7) !important;
+}
+
+.form input.form-control, .form textarea.form-control {
+    border-color: var(--white-7) !important;
+}
+.form input.form-control::placeholder, .form textarea.form-control::placeholder {
+    color: var(--gray-2) !important;
+}
+.divider {
+    background: var(--white-7) !important;
+}
+.ticket__block-footer {
+    color: var(--gray-2) !important;
+}
+.ticket__params .params--block .row .title {
+    color: var(--gray-2) !important;
+}
+.ticket__body_block h1,
+.ticket__body_block h2 {
+    color: var(--gray-7) !important;
+}
+.ticket__body_block.naked {
+    box-shadow: 0 2px 4px 0 var(--shadow-1-10), 0 -2px 4px 0 var(--shadow-1-10) !important;
+}
+.cust-help .h-3 {
+    color: var(--gray-7) !important;
+}
+.title-link {
+    color: var(--gray-7) !important;
+}
+.main__content .article .block__head .h-3 {
+    color: var(--gray-7) !important;
+}
+.header .header__nav .profile__user .profile__menu .profile--view a:hover {
+    color: var(--btn_full_clr) !important;
+}
+.dropdown-select .icon-chevron-down {
+    fill: var(--white-9);
+}
+.param.calendar .calendar--value {
+    color: var(--font__pri-clr) !important;
+}
+.radio-custom [type="radio"]:checked + label {
+    color: var(--font__sec-clr) !important;
+}
+.checkbox-custom [type="checkbox"]:not(:checked) + label,
+.checkbox-custom [type="checkbox"]:checked + label {
+    color: var(--font__sec-clr) !important;
+}

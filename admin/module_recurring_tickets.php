@@ -10,6 +10,7 @@
  * https://www.hesk.com/eula.php
  *
  */
+
 define('IN_SCRIPT',1);
 define('HESK_PATH','../');
 
@@ -33,28 +34,29 @@ require_once(HESK_PATH . 'inc/header.inc.php');
 /* Print main manage users page */
 require_once(HESK_PATH . 'inc/show_admin_nav.inc.php');
 
+// Hesk free version
 hesk_show_notice(sprintf($hesklang['modules_demo'], '<a href="https://www.hesk.com/get/hesk3-recurring">HESK Cloud</a>'), ' ', false);
 ?>
-
 <div class="main__content reports">
-    <form action="module_escalate.php" method="get" name="form1">
+    <form>
         <div class="reports__head">
-        <h2>
-            <?php echo $hesklang['recurring_tickets']['page_title']; ?>
-            <div class="tooltype right out-close">
-                <svg class="icon icon-info">
-                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
-                </svg>
-                <div class="tooltype__content">
-                    <div class="tooltype__wrapper">
-                        <?php echo $hesklang['recurring_tickets']['intro']; ?>
-                        <?php echo $hesklang['recurring_tickets']['intro2']; ?>
+            <h2>
+                <?php echo $hesklang['recurring_tickets']['page_title']; ?>
+                <div class="tooltype right out-close">
+                    <svg class="icon icon-info">
+                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                    </svg>
+                    <div class="tooltype__content">
+                        <div class="tooltype__wrapper">
+                            <?php echo $hesklang['recurring_tickets']['intro']; ?>
+                            <?php echo $hesklang['recurring_tickets']['intro2']; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </h2>
+            </h2>
         </div>
     </form>
+
     <p><?php echo $hesklang['recurring_tickets']['intro']; ?></p>
 
     <ul style="list-style-type: disc ! important; padding-left: 40px ! important; margin-top: 20px; margin-bottom: 20px;">

@@ -15,7 +15,7 @@
 <tr>
 <td width="50%" style="text-align:left;vertical-align:top">
  <ul class="nobullets">
- <li>Version: 3.6.4 from 17th August 2025</li>
+ <li>Version: 3.7.0 from 4th January 2026</li>
  <li><a href="https://www.hesk.com">Help Desk Software HESK</a></li>
  <li><a href="https://www.phpjunkyard.com">Free PHP Scripts</a></li>
  </ul>
@@ -32,6 +32,40 @@
 </table>
 
 <h2>HESK 3 CHANGELOG</h2>
+
+<p><b>Changes in 3.7.0</b> - 4th January 2026<br />
+- staff permission groups for easier application of permission combinations<br />
+- option to allow staff to use nicknames instead of their real names for customer interactions<br />
+- you can now deactivate help desk users (staff/administrators) instead of deleting them<br />
+- select which columns to display in the customer (public) side ticket list<br />
+- you can now modify customer (public) side colors from the admin panel<br />
+- improved handling of customer names when customer accounts are disabled<br />
+- improved detection of replying customer when multiple customers are copied on a ticket<br />
+- mute email addresses (accept tickets, but don't send any email notifications)<br />
+- in email to ticket functions, copied contacts (To and Cc) can be included as ticket followers<br />
+- automatically order categories by name or ID<br />
+- link selected tickets in bulk<br />
+- link tickets using ticket number or tracking ID<br />
+- merge customer accounts<br />
+- download or delete selected attachments<br />
+- work-around for PHP 8.5 depreciated functions<br />
+- show customer name in ticket history log instead of "Customer"<br />
+- option to show full email addresses in the staff tickets table<br />
+- you can now force extending staff and customer sessions using an iframe trick<br />
+- added a tool for clearing Hesk cache<br />
+- edit head/header/footer files from admin panel<br />
+- choose multiple categories in the "Show tickets" and "Find tickets" forms<br />
+- additional settings for browser autocomplete and remembering custom field data<br />
+- additional data included in ticket exports (number of replies, reply messages)<br />
+- fix: "Download all" ignoring files with duplicate names<br />
+- fix: processing incoming emails fails if the stream starts with a UTF-8 BOM<br />
+- fix: don't change the ticket last updated timestamp when a blank customer IP is updated<br />
+- fix: missing ticket customer data in an expired session with auto-login case<br />
+- fix: don't pass a non-string to password_verify<br />
+- fix: hard-coded admin path in email settings<br />
+- fix: the "Bookmarks" quick link is not colored when selected<br />
+- fix: priority drop-down selects are missing colored flag icons<br />
+- fix: SQL error when re-sending emails of an unassigned ticket without collaborators</p>
 
 <p><b>Changes in 3.6.4</b> - 17th August 2025<br />
 - fix: a public article in a private sub-category appears on the knowledgebase.php page<br />
@@ -1089,7 +1123,7 @@
 
 <p>&nbsp;</p>
 
-<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2025. All rights reserved.<br />
+<p style="text-align:center">&copy; Copyright <a href="https://www.hesk.com">HESK.COM</a> 2005-2026. All rights reserved.<br />
 &reg; HESK is a registered trademark of Klemen Stirn.</p>
 
 </div>

@@ -102,7 +102,7 @@ class ReCaptcha
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             $response = curl_exec($ch);
-            curl_close($ch);
+            hesk_curl_close($ch);
             return $response;
         }
 

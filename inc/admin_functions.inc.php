@@ -34,6 +34,7 @@ $hesk_settings['possible_ticket_list'] = array(
 );
 
 define('HESK_NO_ROBOTS', true);
+define('IS_ADMIN_PAGE', true);
 
 /*** FUNCTIONS ***/
 
@@ -565,7 +566,7 @@ function hesk_isLoggedIn()
         // hesk_session_regenerate_id();
 
 		// Let's make sure access data is up-to-date
-		$res = hesk_dbQuery( "SELECT `user`, `pass`, `isadmin`, `categories`, `heskprivileges`, `signature` FROM `".$hesk_settings['db_pfix']."users` WHERE `id` = '".intval($_SESSION['id'])."' LIMIT 1" );
+		$res = hesk_dbQuery( "SELECT `id`,`user`, `pass`, `isadmin`, `categories`, `heskprivileges`, `signature` FROM `".$hesk_settings['db_pfix']."users` WHERE `id` = '".intval($_SESSION['id'])."' AND `active` = 1 LIMIT 1" );
 
 		// Exit if user not found
 		if (hesk_dbNumRows($res) != 1)
@@ -596,6 +597,7 @@ function hesk_isLoggedIn()
 			$_SESSION['isadmin'] = 0;
 			$_SESSION['categories'] = explode(',', $me['categories']);
 			$_SESSION['heskprivileges'] = $me['heskprivileges'];
+            hesk_setPermissionGroupAccess($me['id']);
 		}
 
         $_SESSION['signature'] = $me['signature'];
@@ -611,6 +613,33 @@ function hesk_isLoggedIn()
     }
 
 } // END hesk_isLoggedIn()
+
+function hesk_setPermissionGroupAccess($user_id) {
+    global $hesk_settings;
+
+    // Set permissions obtained via permission groups
+    $permission_group_categories_rs = hesk_dbQuery("SELECT DISTINCT `category_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories`
+        WHERE `group_id` IN (
+            SELECT `group_id` 
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` 
+            WHERE `user_id` = ".intval($user_id).
+        ")");
+    while ($row = hesk_dbFetchAssoc($permission_group_categories_rs)) {
+        $_SESSION['categories'][] = $row['category_id'];
+    }
+    $_SESSION['categories'] = array_unique($_SESSION['categories']);
+    $permission_group_features_rs = hesk_dbQuery("SELECT DISTINCT `feature` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features`
+        WHERE `group_id` IN (
+            SELECT `group_id` 
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` 
+            WHERE `user_id` = ".intval($user_id).
+        ")");
+    $_SESSION['heskprivileges'] = explode(',', $_SESSION['heskprivileges']);
+    while ($row = hesk_dbFetchAssoc($permission_group_features_rs)) {
+        $_SESSION['heskprivileges'][] = $row['feature'];
+    }
+    $_SESSION['heskprivileges'] = implode(',', array_unique($_SESSION['heskprivileges']));
+}
 
 
 function hesk_Pass2Hash($plaintext) {
@@ -826,6 +855,11 @@ function hesk_purge_cache($type = '', $expire_after_seconds = 0)
         array_walk($files, 'hesk_unlink_callable', $expire_after_seconds);
     }
 
+    if ( function_exists('opcache_reset') )
+    {
+        opcache_reset();
+    }
+
     return true;
 
 } // END hesk_purge_cache()
@@ -902,6 +936,9 @@ function hesk_fullyDeleteTicket($ticket_id, $ticket_trackid)
     /* Delete bookmarks */
     hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."bookmarks` WHERE `ticket_id` = ".intval($ticket_id));
 
+    /* Delete ticket/email ID mappings */
+    hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."email_id_to_ticket` WHERE `ticket_id` = ".intval($ticket_id));
+
     return true;
 }
 
@@ -925,3 +962,144 @@ function hesk_json_exit($status = 'Error', $data = '') {
     exit;
 } // END hesk_json_exit()
 
+
+function hesk_mergeCustomers($merge_these, $merge_into)
+{
+    global $hesk_settings, $hesklang, $hesk_db_link;
+
+    // Target customer must not be in the "merge these" list
+    if ( in_array($merge_into, $merge_these) ) {
+        $merge_these = array_diff($merge_these, array( $merge_into ) );
+    }
+
+    // At least 1 customer needs to be merged with target customer
+    if ( count($merge_these) < 1 ) {
+        $_SESSION['error'] = $hesklang['merge_more_error'];
+        return false;
+    }
+
+    $merge_into = intval($merge_into);
+
+    // Make sure target customer exists
+    $res = hesk_dbQuery("SELECT `id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id`={$merge_into} LIMIT 1");
+    if (hesk_dbNumRows($res) != 1) {
+        $_SESSION['error'] = $hesklang['merge_target_error'];
+        return false;
+    }
+
+    foreach ($merge_these as $this_id)
+    {
+        // Validate ID
+        if ( is_array($this_id) ) {
+            continue;
+        }
+        $this_id = intval($this_id) or hesk_error($hesklang['id_not_valid']);
+
+        // Update customer tickets to new customer
+        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."ticket_to_customer` SET `customer_id`={$merge_into} WHERE `customer_id`={$this_id}");
+
+        // Migrate ticket replies to new customer
+        hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."replies` SET `customer_id`={$merge_into} WHERE `customer_id`={$this_id}");
+
+        // Remove old customer information
+        hesk_dbQuery("DELETE FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."customers` WHERE `id`={$this_id}");
+    }
+
+    return true;
+} // END hesk_mergeCustomers()
+
+
+function hesk_getUserIdsWithAccessToFeatureAndCategory($feature = null, $category = null)
+{
+    global $hesk_settings;
+
+    // Need to provide at least one of the two
+    if ($feature === null && $category === null) {
+        return [];
+    }
+
+    $permission_groups_sql = "SELECT 1 FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members` AS `member`
+        WHERE `user`.`id` = `member`.`user_id`";
+    $direct_user_parts = [];
+    if ($feature !== null) {
+        $permission_groups_sql .= " AND `member`.`group_id` IN (SELECT `group_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` WHERE `feature` = '".hesk_dbEscape($feature)."')";
+        $direct_user_parts[] = "FIND_IN_SET('".hesk_dbEscape($feature)."', `heskprivileges`) > 0";
+    }
+    if ($category !== null) {
+        $permission_groups_sql .= " AND `member`.`group_id` IN (SELECT `group_id` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` WHERE `category_id` = ".intval($category).")";
+        $direct_user_parts[] = "FIND_IN_SET('".intval($category)."', `categories`) > 0";
+    }
+    $direct_user_sql = implode(' AND ', $direct_user_parts);
+
+    $users_rs = hesk_dbQuery("SELECT `user`.`id` 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` AS `user`
+        WHERE `active` = 1 AND (
+            `isadmin` = '1'  
+            OR ({$direct_user_sql}) 
+            OR EXISTS ({$permission_groups_sql})
+        )");
+    $users = [];
+    while ($row = hesk_dbFetchAssoc($users_rs)) {
+        $users[] = intval($row['id']);
+    }
+
+    return $users;
+} // END hesk_getUserIdsWithAccessToFeatureAndCategory()
+
+
+function hesk_getCategoriesForUser($user_id)
+{
+    global $hesk_settings;
+
+    $categories = [];
+    $sanitized_user_id = intval($user_id);
+    $base_categories_rs = hesk_dbQuery("SELECT `categories` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$sanitized_user_id}' AND `active` = 1 LIMIT 1");
+    while ($row = hesk_dbFetchAssoc($base_categories_rs)) {
+        $categories = explode(',', $row['categories']);
+    }
+    $categories = array_map(function($category) { return intval($category); }, $categories);
+
+    $pg_categories = hesk_dbQuery("SELECT DISTINCT `category_id`
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories`
+        WHERE `group_id` IN (
+            SELECT `group_id`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members`
+            WHERE `user_id` = {$sanitized_user_id}
+        )");
+    while ($row = hesk_dbFetchAssoc($pg_categories)) {
+        $category_id = intval($row['category_id']);
+        if (!in_array($category_id, $categories)) {
+            $categories[] = $category_id;
+        }
+    }
+
+    return $categories;
+} // END hesk_getCategoriesForUser()
+
+
+function hesk_getFeaturesForUser($user_id)
+{
+    global $hesk_settings;
+
+    $features = [];
+    $sanitized_user_id = intval($user_id);
+    $base_features_rs = hesk_dbQuery("SELECT `heskprivileges` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$sanitized_user_id}' AND `active` = 1 LIMIT 1");
+    while ($row = hesk_dbFetchAssoc($base_features_rs)) {
+        $features = explode(',', $row['heskprivileges']);
+    }
+
+    $pg_features = hesk_dbQuery("SELECT DISTINCT `feature`
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features`
+        WHERE `group_id` IN (
+            SELECT `group_id`
+            FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_members`
+            WHERE `user_id` = {$sanitized_user_id}
+        )");
+    while ($row = hesk_dbFetchAssoc($pg_features)) {
+        if (!in_array($row, $features)) {
+            $features[] = $row;
+        }
+    }
+
+    return $features;
+} // END hesk_getFeaturesForUser()

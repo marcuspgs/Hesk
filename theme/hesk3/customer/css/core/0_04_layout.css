@@ -1,0 +1,36 @@
+/*
+Put general layout related  CSS in here, i.e. like flex, justify, columns, wrappers... etc.
+*/
+.d-flex {
+    display: -ms-flexbox;
+    display: flex
+}
+
+.d-flex-center {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.justify-content-center {
+    -ms-flex-pack: center;
+    justify-content: center
+}
+.text-center {
+    text-align: center
+}
+body.noscroll {
+    width: 100%;
+    height: 100%!important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    overflow: hidden
+}
+.clearfix {
+    overflow: auto
+}
+.flex {
+    display: flex;
+}

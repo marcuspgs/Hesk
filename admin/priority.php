@@ -42,12 +42,18 @@ if ( ! isset($hesk_settings['priorities'][$priority])) {
     hesk_error($hesklang['priority_e_id']);
 }
 
-$revision = sprintf($hesklang['thist8'],hesk_date(),$hesk_settings['priorities'][$priority]['name'],addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
-
-hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `priority`='{$priority}', `history`=CONCAT(`history`,'".hesk_dbEscape($revision)."') WHERE `trackid`='".hesk_dbEscape($trackingID)."'");
-if (hesk_dbAffectedRows() != 1)
-{
-	hesk_process_messages($hesklang['inpr'],'admin_ticket.php?track='.$trackingID.'&Refresh='.mt_rand(10000,99999),'NOTICE');
+// Get original ticket details
+$res = hesk_dbQuery("SELECT `id`, `priority` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` WHERE `trackid`='".hesk_dbEscape($trackingID)."' LIMIT 1");
+if (hesk_dbNumRows($res) != 1) {
+    hesk_error($hesklang['ticket_not_found']);
 }
+$ticket = hesk_dbFetchAssoc($res);
+
+if ($ticket['priority'] == $priority) {
+    hesk_process_messages(sprintf($hesklang['ticket_already_priority'], $hesk_settings['priorities'][$priority]['name']),'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'NOTICE');
+}
+
+$revision = sprintf($hesklang['thist8'],hesk_date(),$hesk_settings['priorities'][$priority]['name'],addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
+hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `priority`='{$priority}', `history`=CONCAT(`history`,'".hesk_dbEscape($revision)."') WHERE `id`='".intval($ticket['id'])."'");
 
 hesk_process_messages(sprintf($hesklang['chpri2'],$hesk_settings['priorities'][$priority]['name']),'admin_ticket.php?track='.$trackingID.'&Refresh='.mt_rand(10000,99999),'SUCCESS');

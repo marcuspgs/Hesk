@@ -412,7 +412,10 @@ hesk_handle_messages();
                 </button>
 
                 <?php if (!$enable_save_settings): ?>
-                    <div class="error"><?php echo $hesklang['e_save_settings']; ?></div>
+                    <p>&nbsp;</p>
+                    <div role="alert" class="notification red">
+                        <?php echo $hesklang['e_save_settings']; ?>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

@@ -55,6 +55,10 @@ $owner = intval( hesk_REQUEST('owner') );
 /* If ID is -1 the ticket will be unassigned */
 if ($owner == -1)
 {
+    if ($ticket['owner'] == 0) {
+        hesk_process_messages($hesklang['ticket_already_unassigned'],'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'NOTICE');
+    }
+
 	$revision = sprintf($hesklang['thist2'],hesk_date(),'<i>'.$hesklang['unas'].'</i>',addslashes($_SESSION['name']).' ('.$_SESSION['user'].')');
 	$res = hesk_dbQuery("UPDATE `".hesk_dbEscape($hesk_settings['db_pfix'])."tickets` SET `owner`=0, `assignedby`=NULL, `history`=CONCAT(`history`,'".hesk_dbEscape($revision)."') WHERE `trackid`='".hesk_dbEscape($trackingID)."'");
 
@@ -66,13 +70,13 @@ elseif ($owner < 1)
 }
 
 /* Verify the new owner and permissions */
-$res = hesk_dbQuery("SELECT `id`,`user`,`name`,`email`,`isadmin`,`categories`,`notify_assigned` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$owner}' LIMIT 1");
+$res = hesk_dbQuery("SELECT `id`,`user`,`name`,`email`,`isadmin`,`categories`,`notify_assigned` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$owner}' AND `active` = 1 LIMIT 1");
 $row = hesk_dbFetchAssoc($res);
 
 /* Has new owner access to the category? */
 if ( ! $row['isadmin'])
 {
-	$row['categories']=explode(',',$row['categories']);
+	$row['categories']= hesk_getCategoriesForUser($row['id']);
 	if (!in_array($ticket['category'],$row['categories']))
 	{
 		hesk_error($hesklang['unoa']);
@@ -84,7 +88,7 @@ if ($ticket['owner'] && $ticket['owner'] != $owner && hesk_REQUEST('unassigned')
 {
 	$new_owner = ($owner == $_SESSION['id']) ? $hesklang['scoy'] : sprintf($hesklang['scot'], $row['name']);
 
-	$res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$ticket['owner']}' LIMIT 1");
+	$res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `id`='{$ticket['owner']}' AND `active` = 1 LIMIT 1");
 
 	if (hesk_dbNumRows($res) == 1)
 	{
@@ -100,6 +104,10 @@ if ($ticket['owner'] && $ticket['owner'] != $owner && hesk_REQUEST('unassigned')
 			$_SERVER['PHP_SELF'], 'NOTICE'
 		);
 	}
+}
+
+if ($ticket['owner'] == $owner) {
+    hesk_process_messages(sprintf($hesklang['taat'],$row['name']),'admin_ticket.php?track='.$trackingID.'&Refresh='.rand(10000,99999),'NOTICE');
 }
 
 /* Assigning to self? */
@@ -154,7 +162,7 @@ $info = array(
 'due_date'      => hesk_format_due_date($ticket['due_date']),
 'id'			=> $ticket['id'],
 'time_worked'   => $ticket['time_worked'],
-'last_reply_by' => hesk_getReplierName($ticket),
+'last_reply_by' => hesk_getReplierNameArray($ticket),
 );
 
 // 2. Add custom fields to the array

@@ -72,7 +72,7 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') )
     // If POP3 fetching is active, no user should have the same email address
     if ($hesk_settings['pop3'] && hesk_validateEmail($hesk_settings['pop3_user'], 'ERR', 0))
     {
-        $res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['pop3_user'])."'");
+        $res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['pop3_user'])."' AND `active` = 1");
 
         if (hesk_dbNumRows($res) > 0)
         {
@@ -83,7 +83,7 @@ if ($hesk_settings['attachments']['use'] && ! defined('HESK_DEMO') )
     // If IMAP fetching is active, no user should have the same email address
     if ($hesk_settings['imap'] && hesk_validateEmail($hesk_settings['imap_user'], 'ERR', 0))
     {
-        $res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['imap_user'])."'");
+        $res = hesk_dbQuery("SELECT `name` FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."users` WHERE `email` LIKE '".hesk_dbEscape($hesk_settings['imap_user'])."' AND `active` = 1");
 
         if (hesk_dbNumRows($res) > 0)
         {
@@ -402,7 +402,7 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     else:
                                         echo $hesklang['email_authentication_method_oauth_disabled']; ?>
                                     <?php endif; ?>
-                                    &nbsp; (<a href="<?php echo HESK_PATH; ?>admin/oauth_providers.php"><?php echo $hesklang['email_authentication_method_oauth_link']; ?></a>)
+                                    &nbsp; (<a href="<?php echo HESK_PATH . $hesk_settings['admin_dir']; ?>/oauth_providers.php"><?php echo $hesklang['email_authentication_method_oauth_link']; ?></a>)
                                 </label>
                             </div>
                         </div>
@@ -788,7 +788,7 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     else:
                                         echo $hesklang['email_authentication_method_oauth_disabled']; ?>
                                     <?php endif; ?>
-                                    &nbsp; (<a href="<?php echo HESK_PATH; ?>admin/oauth_providers.php"><?php echo $hesklang['email_authentication_method_oauth_link']; ?></a>)
+                                    &nbsp; (<a href="<?php echo HESK_PATH . $hesk_settings['admin_dir']; ?>/oauth_providers.php"><?php echo $hesklang['email_authentication_method_oauth_link']; ?></a>)
                                 </label>
                             </div>
                         </div>
@@ -1116,7 +1116,7 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                                     else:
                                         echo $hesklang['email_authentication_method_oauth_disabled']; ?>
                                     <?php endif; ?>
-                                    &nbsp; (<a href="<?php echo HESK_PATH; ?>admin/oauth_providers.php"><?php echo $hesklang['email_authentication_method_oauth_link']; ?></a>)
+                                    &nbsp; (<a href="<?php echo HESK_PATH . $hesk_settings['admin_dir']; ?>/oauth_providers.php"><?php echo $hesklang['email_authentication_method_oauth_link']; ?></a>)
                                 </label>
                             </div>
                         </div>
@@ -1288,6 +1288,52 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                     <div class="checkbox-custom">
                         <input type="checkbox" id="s_save_embedded1" name="s_save_embedded" value="1" <?php if ($hesk_settings['save_embedded']) {echo 'checked';} ?>>
                         <label for="s_save_embedded1"><?php echo $hesklang['embed2']; ?></label>
+                    </div>
+                </div>
+                <div class="checkbox-group row">
+                    <h5>
+                        <span><?php echo $hesklang['setting_process_to_cc']; ?></span>
+                        <a onclick="hesk_window('<?php echo $help_folder; ?>370.html#1','400','500')">
+                            <div class="tooltype right">
+                                <svg class="icon icon-info">
+                                    <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-info"></use>
+                                </svg>
+                            </div>
+                        </a>
+                    </h5>
+                    <div style="display:block;">
+                        <?php if ( ! $hesk_settings['multi_eml']) {
+                            hesk_show_info(sprintf($hesklang['setting_process_to_cc_notice'], $hesklang['ticket_followers'], $hesklang['settings'], $hesklang['tab_2'], $hesklang['features']), ' ', false, '" style="padding-top: 0px; padding-left: 24px');
+                        } ?>
+                        <label class="switch-checkbox">
+                            <input type="checkbox" name="s_email_include_to" value="1" <?php if ($hesk_settings['email_include_to']) { echo 'checked'; } ?>>
+                            <div class="switch-checkbox__bullet">
+                                <i>
+                                    <svg class="icon icon-close">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                    </svg>
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </i>
+                            </div>
+                            <span><?php echo $hesklang['email_include_to']; ?></span>
+                        </label>
+                        <br>
+                        <label class="switch-checkbox">
+                            <input type="checkbox" name="s_email_include_cc" <?php if ($hesk_settings['email_include_cc']) { echo 'checked'; } ?>>
+                            <div class="switch-checkbox__bullet">
+                                <i>
+                                    <svg class="icon icon-close">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-close"></use>
+                                    </svg>
+                                    <svg class="icon icon-tick">
+                                        <use xlink:href="<?php echo HESK_PATH; ?>img/sprite.svg#icon-tick"></use>
+                                    </svg>
+                                </i>
+                            </div>
+                            <span><?php echo $hesklang['email_include_cc']; ?></span>
+                        </label>
                     </div>
                 </div>
             </section>
@@ -1538,7 +1584,10 @@ while ($row = hesk_dbFetchAssoc($oauth_providers_rs)) {
                 </button>
 
                 <?php if (!$enable_save_settings): ?>
-                    <div class="error"><?php echo $hesklang['e_save_settings']; ?></div>
+                    <p>&nbsp;</p>
+                    <div role="alert" class="notification red">
+                        <?php echo $hesklang['e_save_settings']; ?>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

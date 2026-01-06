@@ -3,6 +3,10 @@
     position: absolute;
     z-index: 8000;
     pointer-events: none;
+
+    /* Just enforce it's max content to be done dynamically based of CSS size,
+     as that way arrow at bottom will work better and more accurately. */
+    height: max-content !important;
 }
 .Zebra_Tooltip .Zebra_Tooltip_Message {
     background: #000;
@@ -12,7 +16,17 @@
     font-family: Tahoma,Arial,Helvetica,sans-serif;
     line-height: 1.4;
     *margin-right: 0;
-    max-width: 250px;
+    /*max-width: 250px;*/
+    /*
+    Above is original max-width just as a future reference - in case new problematic edge cases are discovered.
+    The width and max width overrides below, help resolve a Chrome edge case, where it seems dynamic calculation
+    of width of the tooltip, can round up in Chrome, thus causing a text wrap when not needed.
+
+    So by adding even a 0.01px to it, it should force that double overflow calculation to round properly.
+    Max width set to 96vw ensures that the tooltip DOES wrap if necessary - i.e. if a lot of text.
+    */
+    width: calc(100% + 0.05px);
+    max-width: 96vw !important;
     padding: 10px;
     position: relative;
     _width: expression(document.body.clientWidth > 250px ? '250px': 'auto');
@@ -28,7 +42,10 @@
     overflow: hidden
 }
 .Zebra_Tooltip .Zebra_Tooltip_Arrow.Zebra_Tooltip_Arrow_Bottom {
-    bottom: 0
+    /*bottom: 0*/
+    /* Original is bottom 0, but that's inaccurate, as it should be offset based on top,
+    so that the arrow starts at the very bottom of the DIV size */
+    top: 100%;
 }
 .Zebra_Tooltip .Zebra_Tooltip_Arrow.Zebra_Tooltip_Arrow_Bottom div {
     top: 0;

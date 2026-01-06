@@ -1,0 +1,223 @@
+
+.rate {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    margin-left: auto;
+    font-size: 12px;
+    letter-spacing: .1px
+}
+
+.rate .star-rate+span {
+    font-size: 12px;
+    margin-left: 8px
+}
+
+
+.kb-suggestions { margin: 0 auto; width: 100%; display: none; margin-top: 10px; }
+
+.kb-suggestions.boxed { max-width: 752px; padding: 10px; background-color: var(--surface); }
+
+.kb-suggestions h6 { padding: 0px 8px 8px 8px; font-size: 16px; font-weight: bold; letter-spacing: 0.1px; color: var(--article_preview_suggestion_clr); }
+
+.suggest-preview { display: -ms-flexbox; display: flex; width: 100%; padding: 8px 8px; border-bottom: 1px solid var(--suggest_preview__border-clr); background-color: var(--suggest_preview__bg); overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-all; word-break: break-word; }
+
+.suggest-preview:last-of-type { border-bottom: none;}
+
+a.suggest-preview { color: var(--suggest_preview__clr);}
+
+a.suggest-preview:hover { background-color: var(--suggest_preview__hover-bg);}
+
+a.suggest-preview:hover .icon-in-circle .icon { fill: var(--suggest_preview__hover-icon-fill); }
+
+a.suggest-preview:hover .suggest-preview__title { font-weight: bold;}
+
+.suggest-preview .icon-in-circle { margin-top: 6px; margin-right: 12px; }
+
+.suggest-preview .suggest-preview__title { margin-bottom: 6px; font-size: 100%; line-height: 1.38; letter-spacing: 0.11px; color: var(--suggest_preview__title-clr); }
+
+.suggest-preview__text p { margin-top: 6px; }
+
+.no-articles-found { list-style-type: none; margin-left: 8px; }
+
+.block__head {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    text-align: center
+}
+
+.content {
+    margin: 28px 0
+}
+
+.topics {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 32px 22px 0;
+    border-radius: 2px;
+    box-shadow: var(--shadow_small) var(--shadow-1-30);
+    background-color: var(--surface);
+}
+
+@media screen and (max-width:580px) {
+    .topics {
+        box-shadow: none;
+        padding: 32px 0 0
+    }
+    .topics .topics__list {
+        padding-left: 16px
+    }
+}
+
+.topics__block {
+    width: 50%;
+    margin-bottom: 16px
+}
+
+@media screen and (max-width:580px) {
+    .topics__block {
+        width: 100%
+    }
+}
+
+.topics__title {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.38;
+    letter-spacing: .11px;
+    color: var(--secondary);
+}
+
+.topics__title .icon {
+    font-size: 18px;
+    /*fill: var(--secondary);*/
+    fill: var(--link__pri-clr); /* we want it to follow same color as link next to ti! */
+    margin-right: 8px
+}
+
+.topics__list {
+    color: var(--secondary);
+    padding-left: 46px
+}
+
+.topics__list li {
+    position: relative
+}
+
+.topics__list li:before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: .7em;
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--font__sec-clr);
+}
+
+.topics__list li.text-bold::before {
+    display: none
+}
+
+.topics__list a {
+    display: -ms-flexbox;
+    display: flex;
+    margin: 16px 0;
+    line-height: 1.57;
+    letter-spacing: .1px;
+    color: var(--font__sec-clr);
+}
+
+.topics__list a:hover {
+    color: var(--primary);
+}
+
+.title-link {
+    text-decoration: underline!important
+}
+
+.title-link:hover {
+    text-decoration: none!important
+}
+
+.ticket--article {
+    margin-top: 40px
+}
+
+.kb--folder {
+    font-size: 16px!important;
+    font-weight: 400!important
+}
+
+.kb--folder a {
+    color: var(--secondary);
+    font-weight: 400
+}
+
+.kb--folder a:hover {
+    color: var(--primary) !important
+}
+
+.kb--folder>.icon-folder, .kb--folder>.icon-knowledge {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: text-bottom;
+    margin-right: 4px;
+    margin-left: 2px;
+    fill: var(--gray-2);
+}
+
+.kb--folder>.icon-chevron-right {
+    font-size: 16px;
+    width: .8em;
+    height: 1.1em;
+    vertical-align: text-bottom;
+    margin-right: 0;
+    margin-left: 0;
+    fill: var(--gray-2);
+}
+.go-back {
+    width: 20px;
+    height: .7em;
+    fill: var(--secondary);
+    margin-right: 10px
+}
+
+.go-back.w {
+    fill: var(--white-1);
+}
+.rate .icon {
+    height: 1.5em
+}
+
+.article .block__head .h-3 {
+    color: var(--surface) !important
+}
+
+.go-back-button {
+    background-color: var(--secondary);
+    color: var(--surface) !important;
+    height: 27px;
+    padding: 3px 10px 0 0
+}
+
+.go-back-button .link {
+    color: var(--surface) !important
+}
+
+.go-back-button:hover {
+    background-color: var(--primary);
+}
+.topics__list a {
+    margin: 5px 0;
+}

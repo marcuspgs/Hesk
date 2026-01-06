@@ -26,6 +26,15 @@ hesk_dbConnect();
 $hesk_settings['db_failure_response'] = 'json';
 hesk_isLoggedIn();
 
+if ( defined('HESK_DEMO') )
+{
+    http_response_code(400);
+    print json_encode([
+        'message' => $hesklang['ddemo']
+    ]);
+    exit();
+}
+
 //-- Grab search query params
 $name = hesk_input(hesk_POST('name'));
 $email = hesk_input(hesk_POST('email'));
@@ -53,7 +62,7 @@ $existing_customer = empty($email) ?
 if ($existing_customer !== null) {
     http_response_code(400);
     print json_encode([
-        'message' => empty($email) ? $hesklang['customer_name_with_no_email_exists'] : $hesklang['customer_email_exists']
+        'message' => empty($email) ? $hesklang['customer_name_with_no_email_exists'] : $hesklang['customer_name_email_exists']
     ]);
     exit();
 }

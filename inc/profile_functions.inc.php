@@ -36,7 +36,46 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
 
 	$errors = hesk_SESSION(array($session_array, 'errors'));
 	$errors = is_array($errors) ? $errors : array();
-	?>
+
+
+    $permission_groups_rs = hesk_dbQuery("SELECT `group`.`id` AS `group_id`, `group`.`name` AS `group_name`, `category`.`category_id` AS `category_feature_value`, 'CATEGORY' AS `category_feature_type`
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_groups` AS `group`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_categories` AS `category`
+            ON `group`.`id` = `category`.`group_id`
+        UNION ALL
+        SELECT `group`.`id` AS `group_id`, `group`.`name` AS `group_name`, `feature`.`feature` AS `category_feature_value`, 'FEATURE' AS `category_feature_type` 
+        FROM `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_groups` AS `group`
+        INNER JOIN `".hesk_dbEscape($hesk_settings['db_pfix'])."permission_group_features` AS `feature`
+            ON `group`.`id` = `feature`.`group_id`");
+    $permission_groups = [];
+    while ($row = hesk_dbFetchAssoc($permission_groups_rs)) {
+        if (!key_exists($row['group_id'], $permission_groups)) {
+            $permission_groups[$row['group_id']] = [
+                'id' => $row['group_id'],
+                'name' => $row['group_name'],
+                'categories' => [],
+                'features' => []
+            ];
+        }
+        if ($row['category_feature_type'] === 'CATEGORY') {
+            $permission_groups[$row['group_id']]['categories'][] = intval($row['category_feature_value']);
+        } else {
+            $permission_groups[$row['group_id']]['features'][] = $row['category_feature_value'];
+        }
+    }
+
+    if ( ! isset($_SESSION[$session_array]['permission_groups'])) {
+        $_SESSION[$session_array]['permission_groups'] = array();
+    }
+
+    if ( ! isset($_SESSION[$session_array]['pg_categories'])) {
+        $_SESSION[$session_array]['pg_categories'] = array();
+    }
+
+    if ( ! isset($_SESSION[$session_array]['pg_features'])) {
+        $_SESSION[$session_array]['pg_features'] = array();
+    }
+    ?>
 	<!-- TABS -->
     <ul class="step-bar">
         <?php
@@ -59,18 +98,40 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
             </div>
             <div class="form-group">
                 <label for="prof_email"><?php echo $hesklang['email']; ?></label>
-                <input type="text" class="form-control <?php echo in_array('email', $errors) ? 'isError' : ''; ?>" name="email" maxlength="255" id="prof_user"
+                <input type="text" class="form-control <?php echo in_array('email', $errors) ? 'isError' : ''; ?>" name="email" maxlength="255" id="prof_email"
                        value="<?php echo $_SESSION[$session_array]['email']; ?>">
             </div>
+            <?php if ($hesk_settings['staff_nicknames']): ?>
+            <div class="form-group">
+                <label for="prof_nickname">
+                    <?php echo $hesklang['nickname']; ?>
+                    <div class="tooltype right out-close" style="vertical-align: text-bottom;">
+                        <svg class="icon icon-info">
+                            <use xlink:href="../img/sprite.svg#icon-info"></use>
+                        </svg>
+                        <div class="tooltype__content">
+                            <div class="tooltype__wrapper"><?php echo $hesklang['what_cust_see']; ?></div>
+                        </div>
+                    </div>
+                </label>
+                <input type="text" class="form-control <?php echo in_array('nickname', $errors) ? 'isError' : ''; ?>" name="nickname" maxlength="255" id="prof_nickname"
+                       value="<?php echo isset($_SESSION[$session_array]['nickname']) ? $_SESSION[$session_array]['nickname'] : ''; ?>">
+            </div>
+            <?php endif; ?>
             <?php
             if ( ! $is_profile_page || $_SESSION['isadmin'])
             {
                 ?>
+                <section class="item--section">
+                <h4>
+                    <?php echo $hesklang['login_credentials']; ?>
+                </h4>
                 <div class="form-group">
                     <label for="prof_user"><?php echo $hesklang['username']; ?></label>
                     <input type="text" class="form-control <?php echo in_array('user', $errors) ? 'isError' : ''; ?>" name="user" autocomplete="off" id="prof_user" maxlength="20"
                            value="<?php echo $_SESSION[$session_array]['user']; ?>">
                 </div>
+                </section>
                 <?php
             }
 
@@ -78,9 +139,6 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
             ?>
             <section class="item--section">
                 <?php if ( ! $is_profile_page): ?>
-                <h4>
-                    <?php echo $hesklang['pass']; ?>
-                </h4>
                 <div class="form-group">
                     <label for="prof_newpass"><?php echo (empty($_SESSION[$session_array]['id']) ? $hesklang['pass'] : $hesklang['new_pass']); ?></label>
                     <input type="password" id="prof_newpass" name="newpass" autocomplete="off" class="form-control <?php echo in_array('passwords', $errors) ? 'isError' : ''; ?>"
@@ -99,6 +157,8 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
                         </div>
                     </div>
                 </div>
+                <?php else: ?>
+                <?php hesk_show_info($hesklang['change_pass_info']); ?>
                 <?php endif; ?>
                 <?php if (!$is_profile_page && $hesk_settings['autoassign']): ?>
                     <div class="form-switcher">
@@ -155,12 +215,27 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
                 ?>
             </div>
             <div id="options" style="display: <?php echo ($_SESSION['isadmin'] && $_SESSION[$session_array]['isadmin']) ? 'none' : 'block'; ?>;">
+                <h4><?php echo $hesklang['permission_groups_title']; ?></h4>
+                <section class="item--section">
+                    <?php foreach ($permission_groups as $permission_group): ?>
+                    <div class="checkbox-custom <?php echo in_array('permission_groups', $errors) ? 'isError' : ''; ?>">
+                        <input type="checkbox" id="prof_permission_group_<?php echo $permission_group['id'] ?>"
+                               data-categories="<?php echo implode(',', $permission_group['categories']); ?>"
+                               data-features="<?php echo implode(',', $permission_group['features']); ?>"
+                               name="permissionGroups[]"
+                               value="<?php echo $permission_group['id']; ?>"
+                            <?php if (in_array($permission_group['id'],$_SESSION[$session_array]['permission_groups'])) { echo 'checked'; } ?>>
+                        <label for="prof_permission_group_<?php echo $permission_group['id'] ?>"><?php echo $permission_group['name']; ?></label>
+                    </div>
+                    <?php endforeach; ?>
+                </section>
                 <h4><?php echo $hesklang['allowed_cat']; ?></h4>
                 <section class="item--section">
                     <?php foreach ($hesk_settings['categories'] as $catid => $catname): ?>
                     <div class="checkbox-custom <?php echo in_array('categories', $errors) ? 'isError' : ''; ?>">
-                        <input type="checkbox" id="prof_category_<?php echo $catid; ?>" name="categories[]" value="<?php echo $catid; ?>"
-                            <?php if (in_array($catid,$_SESSION[$session_array]['categories'])) { echo 'checked'; } ?>>
+                        <input type="checkbox" id="prof_category_<?php echo $catid; ?>" name="temp_categories[]" value="<?php echo $catid; ?>"
+                            <?php if (in_array($catid,$_SESSION[$session_array]['categories']) || in_array($catid,$_SESSION[$session_array]['pg_categories'])) { echo 'checked'; } ?>
+                            <?php if (in_array($catid,$_SESSION[$session_array]['pg_categories'])) { echo ' disabled'; } ?>>
                         <label for="prof_category_<?php echo $catid; ?>"><?php echo $catname; ?></label>
                     </div>
                     <?php endforeach; ?>
@@ -169,12 +244,21 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
                 <section class="item--section">
                     <?php foreach ($hesk_settings['features'] as $k): ?>
                         <div class="checkbox-custom <?php echo in_array('features', $errors) ? 'isError' : ''; ?>">
-                            <input type="checkbox" id="<?php echo $k; ?>" name="features[]" value="<?php echo $k; ?>"
-                                <?php if (in_array($k,$_SESSION[$session_array]['features'])) { echo 'checked'; } ?>>
-                            <label for="<?php echo $k ?>"><?php echo $hesklang[$k]; ?></label>
+                            <input type="checkbox" id="<?php echo $k; ?>" name="temp_features[]" value="<?php echo $k; ?>"
+                                <?php if (in_array($k,$_SESSION[$session_array]['features']) || in_array($k,$_SESSION[$session_array]['pg_features'])) { echo 'checked'; } ?>
+                                <?php if (in_array($k,$_SESSION[$session_array]['pg_features'])) { echo ' disabled'; } ?>>
+                            <label for="<?php echo $k; ?>"><?php echo $hesklang[$k]; ?></label>
                         </div>
                     <?php endforeach; ?>
                 </section>
+                <div id="selected-user-permissions" style="display: none">
+                    <?php foreach ($_SESSION[$session_array]['categories'] as $catid): ?>
+                    <input type="hidden" name="categories[]" value="<?php echo $catid; ?>">
+                    <?php endforeach; ?>
+                    <?php foreach ($_SESSION[$session_array]['features'] as $k): ?>
+                        <input type="hidden" name="features[]" value="<?php echo $k; ?>">
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
         <?php endif; ?>
@@ -405,6 +489,94 @@ function hesk_profile_tab($session_array='new',$is_profile_page=true)
             }
         });
     });
+
+    const permissionGroups = [];
+    const userCategories = [];
+    const userFeatures = [];
+    <?php
+    foreach ($permission_groups as $permission_group):
+        $categories = count($permission_group['categories']) === 0 ? '[]' : "[".implode(",", $permission_group['categories'])."]";
+        $features = count($permission_group['features']) === 0 ? '[]' : "['".implode("','", $permission_group['features'])."']";
+
+    ?>
+    permissionGroups.push({
+        id: <?php echo $permission_group['id']; ?>,
+        categories: <?php echo $categories; ?>,
+        features: <?php echo $features; ?>,
+        selected: <?php echo in_array($permission_group['id'],$_SESSION[$session_array]['permission_groups']) ? 'true' : 'false'; ?>
+    });
+    <?php endforeach; ?>
+    <?php foreach ($_SESSION[$session_array]['categories'] as $catid): ?>
+    userCategories.push(<?php echo $catid; ?>);
+    <?php endforeach; ?>
+    <?php foreach ($_SESSION[$session_array]['features'] as $feature): ?>
+    userFeatures.push('<?php echo hesk_makeJsString($feature); ?>');
+    <?php endforeach; ?>
+
+    $('input[name="permissionGroups[]"]').change(function() {
+        const permissionGroup = permissionGroups.find(x => x.id === parseInt(this.value));
+        permissionGroup.selected = this.checked;
+        updateCheckboxState();
+    });
+    const $categoryCheckboxes = $('input[type="checkbox"][name="temp_categories[]"]');
+    const $featureCheckboxes = $('input[type="checkbox"][name="temp_features[]"]');
+    $categoryCheckboxes.change(function() {
+        const categoryId = parseInt(this.value);
+        if (this.checked) {
+            userCategories.push(categoryId);
+        } else {
+            userCategories.splice(userCategories.indexOf(categoryId), 1);
+        }
+        updateCheckboxState();
+    });
+    $featureCheckboxes.change(function() {
+        const feature = this.value;
+        if (this.checked) {
+            userFeatures.push(feature);
+        } else {
+            userFeatures.splice(userFeatures.indexOf(feature), 1);
+        }
+        updateCheckboxState();
+    });
+
+
+    function updateCheckboxState() {
+        $categoryCheckboxes.each((_, element) => {
+            const categoryId = parseInt(element.value);
+            element.disabled = permissionGroups.some(group => group.selected && group.categories.includes(categoryId));
+            if (element.disabled) {
+                element.checked = true;
+            } else {
+                element.checked = userCategories.includes(categoryId);
+            }
+        });
+        $featureCheckboxes.each((_, element) => {
+            const feature = element.value;
+            element.disabled = permissionGroups.some(group => group.selected && group.features.includes(feature));
+            if (element.disabled) {
+                element.checked = true;
+            } else {
+                element.checked = userFeatures.includes(feature);
+            }
+        });
+
+        const selectedUserPermissions = document.getElementById('selected-user-permissions');
+        selectedUserPermissions.innerHTML = '';
+        userCategories.forEach(category => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'categories[]');
+            input.setAttribute('value', category);
+            selectedUserPermissions.appendChild(input);
+        });
+        userFeatures.forEach(feature => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'features[]');
+            input.setAttribute('value', feature);
+            selectedUserPermissions.appendChild(input);
+        })
+    }
 
     </script>
 	<?php

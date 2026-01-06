@@ -15,7 +15,7 @@
 if (!defined('IN_SCRIPT')) {die('Invalid attempt');}
 
 // We will be installing this HESK version:
-define('HESK_NEW_VERSION','3.6.4');
+define('HESK_NEW_VERSION','3.7.0');
 define('REQUIRE_PHP_VERSION','5.6.0');
 define('REQUIRE_MYSQL_VERSION','5.0.7');
 
@@ -26,8 +26,23 @@ define('HIDE_ONLINE',1);
 require(HESK_PATH . 'hesk_settings.inc.php');
 
 $hesk_settings['debug_mode'] = 1;
-$hesk_settings['language']='English';
-$hesk_settings['languages']=array('English' => array('folder'=>'en','hr'=>'------ Reply above this line ------'));
+
+// Save existing language values
+if (isset($hesk_settings['language'])) {
+    $hesk_settings['language_backup'] = $hesk_settings['language'];
+} else {
+    $hesk_settings['language_backup'] = 'English';
+}
+
+if (isset($hesk_settings['languages'])) {
+    $hesk_settings['languages_backup'] = $hesk_settings['languages'];
+} else {
+    $hesk_settings['languages_backup'] = array('English' => array('folder'=>'en','hr'=>'------ Reply above this line ------'));
+}
+
+// Set default just in case we are upgrading from a very old version
+$hesk_settings['language'] = 'English';
+$hesk_settings['languages'] = array('English' => array('folder'=>'en','hr'=>'------ Reply above this line ------'));
 
 if (!isset($hesk_settings['x_frame_opt']))
 {
@@ -256,8 +271,7 @@ $hesk_settings[\'admin_js_url\']=\'' . $set['admin_js_url'] . '\';
 $hesk_settings[\'can_sel_lang\']=' . $set['can_sel_lang'] . ';
 $hesk_settings[\'language\']=\'' . $set['language'] . '\';
 $hesk_settings[\'languages\']=array(
-\'English\' => array(\'folder\'=>\'en\',\'hr\'=>\'------ Reply above this line ------\'),
-);
+'.hesk_getLanguageForFile($set, 'languages').');
 
 // --> Database settings
 $hesk_settings[\'db_host\']=\'' . $set['db_host'] . '\';
@@ -301,10 +315,16 @@ $hesk_settings[\'list_users\']=' . $set['list_users'] . ';
 $hesk_settings[\'debug_mode\']=' . $set['debug_mode'] . ';
 $hesk_settings[\'short_link\']=' . $set['short_link'] . ';
 $hesk_settings[\'submitting_wait\']=' . $set['submitting_wait'] . ';
+$hesk_settings[\'remember_custom_field_values\']=' . $set['remember_custom_field_values'] . ';
+$hesk_settings[\'disable_autofill_admin\']=' . $set['disable_autofill_admin'] . ';
+$hesk_settings[\'disable_autofill_customer\']=' . $set['disable_autofill_customer'] . ';
+$hesk_settings[\'extend_admin\']=' . $set['extend_admin'] . ';
+$hesk_settings[\'extend_customer\']=' . $set['extend_customer'] . ';
 $hesk_settings[\'select_cat\']=' . $set['select_cat'] . ';
 $hesk_settings[\'select_pri\']=' . $set['select_pri'] . ';
 $hesk_settings[\'cat_show_select\']=' . $set['cat_show_select'] . ';
 $hesk_settings[\'staff_ticket_formatting\']=' . $set['staff_ticket_formatting'] . ';
+$hesk_settings[\'staff_nicknames\']=' . $set['staff_nicknames'] . ';
 
 // --> Barcode
 $hesk_settings[\'barcode\']=array(
@@ -437,6 +457,8 @@ $hesk_settings[\'pop3_oauth_provider\']=' . $set['pop3_oauth_provider'] . ';
 $hesk_settings[\'strip_quoted\']=' . $set['strip_quoted'] . ';
 $hesk_settings[\'eml_req_msg\']=' . $set['eml_req_msg'] . ';
 $hesk_settings[\'save_embedded\']=' . $set['save_embedded'] . ';
+$hesk_settings[\'email_include_to\']=' . $set['email_include_to'] . ';
+$hesk_settings[\'email_include_cc\']=' . $set['email_include_cc'] . ';
 
 // --> Ignore emails
 $hesk_settings[\'pipe_block_noreply\']=' . $set['pipe_block_noreply'] . ';
@@ -466,12 +488,14 @@ $hesk_settings[\'open_only\']=' . $set['open_only'] . ';
 // ==> TICKET LIST
 
 $hesk_settings[\'ticket_list\']=array(\'' . implode('\',\'',$set['ticket_list']) . '\');
+$hesk_settings[\'customer_ticket_list\']=array(\'' . implode('\',\'',$set['customer_ticket_list']) . '\');
 
 // --> Other
 $hesk_settings[\'submittedformat\']=' . $set['submittedformat'] . ';
 $hesk_settings[\'updatedformat\']=' . $set['updatedformat'] . ';
 $hesk_settings[\'format_submitted\']=\'' . $set['format_submitted'] . '\';
 $hesk_settings[\'format_updated\']=\'' . $set['format_updated'] . '\';
+$hesk_settings[\'email_column\']=' . $set['email_column'] . ';
 
 
 // ==> MISC
@@ -493,6 +517,11 @@ $hesk_settings[\'submit_notice\']=' . $set['submit_notice'] . ';
 $hesk_settings[\'online\']=' . $set['online'] . ';
 $hesk_settings[\'online_min\']=' . $set['online_min'] . ';
 $hesk_settings[\'check_updates\']=' . $set['check_updates'] . ';
+
+
+// ==> LOOK & FEEL
+$hesk_settings[\'customer_theme\']=\'' . $set['customer_theme'] . '\';
+$hesk_settings[\'theme_overrides\']=array(\'' . implode('\',\'',$set['theme_overrides']) . '\');
 
 
 #############################
@@ -1415,3 +1444,15 @@ function is__writable($path)
         unlink($path);
     return true;
 } // END is__writable()
+
+
+function hesk_getLanguageForFile($set) {
+    global $hesk_settings;
+
+    $languages = '';
+    foreach ($hesk_settings['languages'] as $name => $info) {
+        $languages .= "'".addslashes($name)."' => array('folder'=>'".$info['folder']."','hr'=>'".addslashes($info['hr'])."'),\n";
+    }
+
+    return $languages;
+} // END hesk_getLanguageForFile()

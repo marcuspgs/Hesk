@@ -85,6 +85,7 @@ else
 
 // Options
 $history = hesk_GET('history') ? 1 : 0;
+$replies = hesk_GET('replies') ? 1 : 0;
 
 # Uncomment for debugging purposes
 # echo "SQL: $sql<br>";
